@@ -1,14 +1,14 @@
 {
   "name": "r_map",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-scripts": "1.0.14",
     "jquery": "^3.2.1",
-    "proj4": "*",    
-    "openlayers": "*",        
+    "proj4": "*",
+    "openlayers": "*",
     "maplib": "https://github.com/kartverket/MapLib.git#exports"
   },
   "scripts": {
@@ -16,5 +16,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kartverket/r_map.git"
   }
 }
