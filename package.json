@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "react-scripts": "1.0.14",
-    "jquery": "^3.2.1",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-scripts": "1.1.5",
+    "jquery": "^3.3.1",
     "proj4": "*",
     "openlayers": "*",
     "maplib": "https://github.com/kartverket/MapLib.git#exports"
