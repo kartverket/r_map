@@ -335,10 +335,10 @@ mapConfig.proxyHost = '/?'
 
 const eventHandler = new ISY.Events.EventHandler()
 const mapImplementation = new ISY.MapImplementation.OL3.Map(null, eventHandler)
+export const olMap = ISY.MapImplementation.OL3.olMap
 const layerHandler = new ISY.MapAPI.Layers(mapImplementation)
 const groupHandler = new ISY.MapAPI.Groups()
 const categoryHandler = new ISY.MapAPI.Categories()
-
 export const map = new ISY.MapAPI.Map(
   mapImplementation,
   eventHandler,
