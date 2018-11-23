@@ -14,7 +14,7 @@ let notDummyGroup = false
 const config = {
   groups: [],
   coordinate_system: 'EPSG:25833',
-  center: [396722, 7197864],
+  center: [396722, 7197860],
   extent: [-2500000.0, 3500000.0, 3045984.0, 9045984.0],
   zoom: 4,
   mapbackgroundcolor: '#FFFFFF',

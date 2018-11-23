@@ -6,6 +6,7 @@ import queryString from "query-string";
 import setQuery from "set-query-string";
 
 class Map extends Component {
+
   static propTypes = {
     lon: PropTypes.number,
     lat: PropTypes.number,
@@ -22,22 +23,29 @@ class Map extends Component {
     onChangeLon: () => {},
     onChangeLat: () => {},
     onChangeZoom: () => {},
-    lon: 1563279.49,
-    lat: 9620923.39,
-    zoom: 5
+    lon: 396722,
+    lat: 7197860,
+    zoom: 4
   };
+
   constructor(props) {
     super(props)
     const queryValues = queryString.parse(window.location.search);
-    let lon = Number(queryValues["lon"] || 1563279.49);
-    let lat = Number(queryValues["lat"] || 9620923.39);
-    let zoom = Number(queryValues["zoom"] || 5);
+    
+    let lon = Number(queryValues["lon"] || props.lon)
+    let lat = Number(queryValues["lat"] || props.lat);
+    let zoom = Number(queryValues["zoom"] || props.zoom);
+
     this.wms = queryValues["wms"] || '';
+    this.layers = Array(queryValues["layers"] || []);
+    
     let wmts = Array(queryValues["wmts"] || []);
     let wfs = Array(queryValues["wfs"] || []);
-    this.layers = Array(queryValues["layers"] || []);
     let projectName = queryValues["project"] || "norgeskart";
     let epsg = queryValues["epsg"] || "EPSG:3857";    
+
+    this.props = { lon: lon, lat: lat, zoom: zoom };
+    this.newMapConfig = Object.assign({}, mapConfig, {center:[this.props.lon,this.props.lat], zoom: this.props.zoom})
     this.state = {init: false};
   }
 
@@ -45,13 +53,14 @@ class Map extends Component {
     if(this.wms) {
       this.addWMS(this.wms, this.layers)
     }
-    map.Init('map', mapConfig) 
+    map.Init('map', this.newMapConfig) 
     map.AddZoom()
     map.AddScaleLine()
     eventHandler.RegisterEvent('MapMoveend', this.updateMapInfoState);    
 
     this.setState({init: true});
   }
+
   addWMS = (url,layers) => {
     if (url) {
       let newUrl = mergeDefaultParams(url, {
@@ -86,8 +95,8 @@ class Map extends Component {
                 visibility: 'true'
               }
             }
-            let test = addLayer2('WMS', layerConfig)
-            map.AddLayer(test)
+            let newLayerConfig = addLayer2(Service.Name, layerConfig)
+            map.AddLayer(newLayerConfig)
           } else {
             console.log('No capabilities!')
           }          
@@ -96,6 +105,7 @@ class Map extends Component {
       console.log("No wms parameter given");
     }    
   }
+
   updateMapInfoState = () => {
     let center = map.GetCenter();
     const queryValues = queryString.parse(window.location.search);
