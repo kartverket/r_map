@@ -1,13 +1,6 @@
 import proj4 from "proj4";
-import {
-    transformExtent,
-    get
-} from 'ol/proj';
-import TileLayer from "ol/layer/Tile";
-import ImageLayer from "ol/layer/Image";
-import ImageWMS from 'ol/source/ImageWMS.js';
-import TileWMS from "ol/source/TileWMS";
 import queryString from 'query-string'
+import parser from "fast-xml-parser";
 /**
  * @ngdoc method
  * @name addWmsToMapFromCap
@@ -105,7 +98,7 @@ export const createOlWMSFromCap = (map, getCapLayer, project) => {
 
         var projCode = map.getView().getProjection().getCode();
 
-        var layer = createOlWMS(map, layerParam, {
+        var layer/* = createOlWMS(map, layerParam, {
             url: getCapLayer.url,
             label: getCapLayer.title,
             attribution: attribution,
@@ -122,7 +115,7 @@ export const createOlWMSFromCap = (map, getCapLayer, project) => {
             maxResolution: getResolutionFromScale(
                 map.getView().getProjection(),
                 getCapLayer.MaxScaleDenominator)
-        });
+        });*/
 
         if (Array.isArray(getCapLayer.Dimension)) {
             for (var i = 0; i < getCapLayer.Dimension.length; i++) {
@@ -165,6 +158,110 @@ export const createOlWMSFromCap = (map, getCapLayer, project) => {
 
 }
 
+export const mergeDefaultParams = (url, defaultParams) => {
+    //merge URL parameters with default ones
+    var parsedUrl = queryString.parseUrl(url);
+    var urlParams = parsedUrl.query;
+
+    for (var p in urlParams) {
+        defaultParams[p] = urlParams[p];
+        if (
+            defaultParams.hasOwnProperty(p.toLowerCase()) &&
+            p !== p.toLowerCase()
+        ) {
+            delete defaultParams[p.toLowerCase()];
+        }
+    }
+    return parsedUrl.url + "?" + queryString.stringify(defaultParams);
+};
+export const parseWmsCapabilities = (data) => {
+    if (data && parser.validate(data) === true) { //optional
+        var parsed = parseCapabilities(data);
+
+        var layers = [];
+        if (parsed.WMS_Capabilities) {
+            let url =
+                parsed.WMS_Capabilities.Capability.Request.GetMap.DCPType.HTTP.Get
+                .OnlineResource["xlink:href"];
+
+            // Push all leaves into a flat array of Layers.
+            var getFlatLayers = function (layer) {
+                if (Array.isArray(layer)) {
+                    for (var i = 0, len = layer.length; i < len; i++) {
+                        getFlatLayers(layer[i]);
+                    }
+                } else if (layer) {
+                    layer.url = url;
+                    layers.push(layer);
+                    getFlatLayers(layer.Layer);
+                }
+            };
+
+            // Make sur Layer property is an array even if
+            // there is only one element.
+            var setLayerAsArray = function (node) {
+                if (node) {
+                    if (node.Layer && !Array.isArray(node.Layer)) {
+                        node.Layer = [node.Layer];
+                    }
+                    if (node.Layer) {
+                        for (var i = 0; i < node.Layer.length; i++) {
+                            setLayerAsArray(node.Layer[i]);
+                        }
+                    }
+                }
+            };
+            getFlatLayers(parsed.WMS_Capabilities.Capability.Layer);
+            setLayerAsArray(parsed.WMS_Capabilities.Capability);
+            parsed.WMS_Capabilities.Capability.layers = layers;
+            parsed.WMS_Capabilities.Capability.version =
+                parsed.WMS_Capabilities.version;
+            return parsed.WMS_Capabilities;
+        } else {
+            return {};
+        }
+    } else {
+        return {}
+    }
+};
+const parseCapabilities = xml => {
+    return parser.parse(xml, {
+        ignoreAttributes: false,
+        attributeNamePrefix: "",
+        allowBooleanAttributes: true
+    });
+};
+
+async function getInfo(url) {
+    let info
+    try {
+        let response = await fetch(url);
+        info = await response.text();
+    } catch (e) {
+        console.log('Error!', e);
+    }
+    return info
+}
+export const getWMSCapabilities = async (url) => {
+    console.log(url);
+    if (url) {
+      let newUrl = mergeDefaultParams(url, {
+        service: "WMS",
+        request: "GetCapabilities"
+      });
+      console.log(newUrl);
+      fetch(newUrl)
+        .then(function (response) {
+          return Promise.resolve(response.text());
+        })
+        .then(function (text) {
+          let resultText = parseWmsCapabilities(text);
+          return resultText;
+        });
+    } else {
+      console.log("No wms parameter given");
+    }
+};
 const getLayerExtentFromGetCap = (map, getCapLayer) => {
     var extent = null;
     var layer = getCapLayer;
@@ -200,7 +297,7 @@ const getLayerExtentFromGetCap = (map, getCapLayer) => {
                 bboxProp = layer[prop];
             }
         });
-
+/*
     if (bboxProp) {
         extent = transformExtent(bboxProp, 'EPSG:4326', proj);
     } else if (Array.isArray(layer.BoundingBox)) {
@@ -208,7 +305,7 @@ const getLayerExtentFromGetCap = (map, getCapLayer) => {
             var bbox = layer.BoundingBox[i];
             if (!get(bbox.crs)) {
                 // eslint-disable-next-line
-                setProjectionFromEPSG(bbox).then( () => {
+                setProjectionFromEPSG(bbox).then(() => {
                     extent = transformExtent(bbox.extent, bbox.crs || 'EPSG:4326', proj);
                 });
             } else {
@@ -219,6 +316,7 @@ const getLayerExtentFromGetCap = (map, getCapLayer) => {
             }
         }
     }
+    */
     return extent;
 }
 
@@ -234,86 +332,9 @@ export const getResolutionFromScale = (projection, scale) => {
     return scale && scale * 0.00028 / projection.getMetersPerUnit();
 }
 
-/**
- * @description
- * Create a new ol.Layer object, based on given options.
- *
- * @param {ol.Map} map to add the layer
- * @param {Object} layerParams contains the PARAMS that is given to
- *  the ol.source object
- * @param {Object} layerOptions options to pass to layer constructor
- * @param {Object} layerOptions options to pass to layer constructor
- */
-export const createOlWMS = (map, layerParams, layerOptions) => {
-    var options = layerOptions || {};
-
-    var source, olLayer;
-    const singleTileWMS = false; // testing singleTile
-    if (singleTileWMS) {
-        source = new ImageWMS({
-            params: layerParams,
-            url: options.url,
-            crossOrigin: 'anonymous',
-            projection: layerOptions.projection,
-            ratio: getImageSourceRatio(map, 2048)
-        });
-    } else {
-        source = new TileWMS({
-            params: layerParams,
-            url: options.url,
-            crossOrigin: 'anonymous',
-            projection: layerOptions.projection
-            // ,gutter: 15
-        });
-    }
-
-    layerOptions = {
-        url: options.url,
-        type: 'WMS',
-        opacity: options.opacity,
-        visible: options.visible,
-        preload: Infinity,
-        source: source,
-        legend: options.legend,
-        attribution: options.attribution,
-        attributionUrl: options.attributionUrl,
-        label: options.label,
-        group: options.group,
-        advanced: options.advanced,
-        minResolution: options.minResolution,
-        maxResolution: options.maxResolution,
-        cextent: options.extent,
-        name: layerParams.LAYERS
-    };
-    if (singleTileWMS) {
-        olLayer = new TileLayer(layerOptions);
-    } else {
-        olLayer = new ImageLayer(layerOptions);
-    }
-
-    if (options.metadata) {
-        olLayer.set('metadataUrl', options.metadata);
-        var params = queryString.parse(options.metadata);
-        var uuid = params.uuid || params.id;
-        if (!uuid) {
-            var res = new RegExp(/#\/metadata\/(.*)/g).exec(options.metadata);
-            if (Array.isArray(res) && res.length === 2) {
-                uuid = res[1];
-            }
-        }
-        if (uuid) {
-            olLayer.set('metadataUuid', uuid);
-        }
-    }
-    // ngeoDecorateLayer(olLayer);
-    olLayer.displayInLayerManager = true;
-
-    return olLayer;
-}
-
 const getImageSourceRatio = (map, maxWidth) => {
     var width = (map.getSize() && map.getSize()[0])
     var ratio = maxWidth / width;
     ratio = Math.floor(ratio * 100) / 100;
     return Math.min(1.5, Math.max(1, ratio));
-  };
+};

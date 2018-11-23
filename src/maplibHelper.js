@@ -14,7 +14,7 @@ let notDummyGroup = false
 const config = {
   groups: [],
   coordinate_system: 'EPSG:25833',
-  center: [396722, 7197864],
+  center: [396722, 7197860],
   extent: [-2500000.0, 3500000.0, 3045984.0, 9045984.0],
   zoom: 4,
   mapbackgroundcolor: '#FFFFFF',
@@ -38,26 +38,9 @@ const config = {
     options: {
       isbaselayer: 'true',
       singletile: 'false',
-      visibility: 'true'
-    },
-    thumbnail: 'land'
-  }, {
-    type: 'map',
-    gatekeeper: 'true',
-    name: 'Rasterkart',
-    url: 'https://gatekeeper1.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?|https://gatekeeper2.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?',
-    params: {
-      layers: 'toporaster3',
-      format: 'image/png'
-    },
-    matrixprefix: 'true',
-    guid: '0.toporaster3',
-    options: {
-      isbaselayer: 'true',
-      singletile: 'false',
       visibility: 'false'
     },
-    thumbnail: 'raster'
+    thumbnail: 'land'
   }, {
     type: 'map',
     gatekeeper: 'true',
@@ -72,7 +55,7 @@ const config = {
     options: {
       isbaselayer: 'true',
       singletile: 'false',
-      visibility: 'false'
+      visibility: 'true'
     }
   }, {
     type: 'map',
@@ -298,6 +281,74 @@ export const addLayer = (sourceType, source) => {
   mapConfig.languages.en[newIsyLayer.id] = source.name
   mapConfig.languages.no[newIsyLayer.id] = source.namelng
 }
+export const addLayer2 = (sourceType, source) => {
+  let catIds = [999]
+  if (source.groupid !== undefined) {
+    catIds = source.groupid.toString().split(',').map((item) => {
+      return parseInt(item, 10)
+    })
+    createNotExistGroup(catIds, source.name, source.namelng)
+  } else {
+    if (source.options.isbaselayer === 'false') {
+      createDummyGroup()
+    }
+  }
+  const newIsyLayer = new ISY.Domain.Layer({
+    subLayers: [{
+      title: source.name,
+      name: source.params.layers || source.name,
+      providerName: source.params.layers || source.name,
+      source: sourceType,
+      gatekeeper: source.gatekeeper === 'true',
+      url: getWmsUrl(source.url),
+      format: source.params.format,
+      coordinate_system: source.epsg || mapConfig.coordinate_system,
+      extent: mapConfig.extent,
+      extentUnits: mapConfig.extentUnits,
+      matrixPrefix: source.matrixprefix === 'true',
+      matrixSet: source.matrixset,
+      numZoomLevels: mapConfig.numZoomLevels,
+      id: sourceType === 'VECTOR' ? mapConfig.layers.length + 8001 : mapConfig.layers.length + 1001,
+      transparent: true,
+      layerIndex: -1,
+      legendGraphicUrl: source.legendurl,
+      minScale: source.options.minscale,
+      maxScale: source.options.maxscale,
+      sortingIndex: -1,
+      featureInfo: {
+        supportsGetFeatureInfo: true,
+        getFeatureInfoFormat: 'application/vnd.ogc.gml',
+        getFeatureInfoCrs: '',
+        supportsGetFeature: true,
+        getFeatureBaseUrl: '',
+        getFeatureFormat: 'application/json',
+        getFeatureCrs: 'EPSG:4326',
+        includedFields: source.includedfields
+      },
+      tiled: source.options.singletile !== 'true',
+      crossOrigin: null,
+      style: source.style,
+      wmtsExtent: source.wmtsextent,
+      getCapabilities: (source.getcapabilities === 'true'),
+      styles: source.params.styles,
+      minResolution: source.minresolution,
+      maxResolution: source.maxresolution
+    }],
+    guid: source.guid,
+    name: source.name,
+    groupId: catIds,
+    visibleOnLoad: (source.options.visibility === 'true'),
+    id: sourceType === 'VECTOR' ? mapConfig.layers.length + 8001 : mapConfig.layers.length + 1001,
+    isBaseLayer: (source.options.isbaselayer === 'true'),
+    previewActive: false,
+    opacity: 1,
+    mapLayerIndex: -1,
+    legendGraphicUrls: [],
+    selectedLayerOpen: false,
+    thumbnail: source.thumbnail
+  })
+  return newIsyLayer
+}
 const updateMapConfigWithImageLayers = (mapConfig) => {
   if (mapConfig.wmts !== undefined) {
     if (mapConfig.wmts.length !== undefined) {
@@ -333,7 +384,7 @@ mapConfig = new ISY.Repository.MapConfig(mapConfig)
 mapConfig.instance = 'geoportal'
 mapConfig.proxyHost = '/?'
 
-const eventHandler = new ISY.Events.EventHandler()
+export const eventHandler = new ISY.Events.EventHandler()
 const mapImplementation = new ISY.MapImplementation.OL3.Map(null, eventHandler)
 export const olMap = ISY.MapImplementation.OL3.olMap
 const layerHandler = new ISY.MapAPI.Layers(mapImplementation)
