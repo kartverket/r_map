@@ -118,10 +118,7 @@ class Map extends Component {
 
   render() {
     return (
-      <div>
-        <div id="map" style={{height: '800px'}} >
-        </div>
-      </div>
+        <div id="map" style={{height: '800px'}} />
     );
   }
 }
