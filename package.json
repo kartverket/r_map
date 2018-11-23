@@ -7,9 +7,12 @@
     "maplib": "https://github.com/kartverket/MapLib.git#exports",
     "openlayers": "*",
     "proj4": "*",
+    "prop-types": "^15.6.2",
+    "query-string": "^6.2.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "react-scripts": "^2.1.1"
+    "react-scripts": "^2.1.1",
+    "set-query-string": "^2.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -20,5 +23,11 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/kartverket/r_map.git"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

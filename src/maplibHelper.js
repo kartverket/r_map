@@ -333,7 +333,7 @@ mapConfig = new ISY.Repository.MapConfig(mapConfig)
 mapConfig.instance = 'geoportal'
 mapConfig.proxyHost = '/?'
 
-const eventHandler = new ISY.Events.EventHandler()
+export const eventHandler = new ISY.Events.EventHandler()
 const mapImplementation = new ISY.MapImplementation.OL3.Map(null, eventHandler)
 export const olMap = ISY.MapImplementation.OL3.olMap
 const layerHandler = new ISY.MapAPI.Layers(mapImplementation)

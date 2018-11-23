@@ -164,6 +164,98 @@ export const createOlWMSFromCap = (map, getCapLayer, project) => {
     }
 
 }
+export const getWMSCapabilities= (url) =>{
+    var defer = $q.defer();
+    var counter = 0;
+    var newUrl;
+    var request = function (url) {
+      if (url) {
+        if (counter === 0) {
+          newUrl = mergeDefaultParams(url, {
+            service: 'WMS',
+            request: 'GetCapabilities'
+          });
+        } else {                
+          newUrl = gnUrlUtils.append('//www.norgeskart.no/ws/px.py', url);
+        }
+
+        //send request and decode result
+        $http.get(newUrl)
+          .then(function (result) {
+            try {
+              defer.resolve(displayFileContent(result.data));
+            } catch (e) {
+              defer.reject('capabilitiesParseError');
+            }
+          }, function errorCallback() {
+            if (counter < 1) {
+              counter++;
+              request(newUrl);
+            } else {
+              defer.reject('capabilities error');
+            }
+          });
+      } else {
+        defer.reject();
+      }
+    };
+    request(url);
+    return defer.promise;
+  },
+
+  export const getWMTSCapabilities = (url) => {
+    var defer = $q.defer();
+    if (url) {
+      url = mergeDefaultParams(url, {
+        REQUEST: 'GetCapabilities',
+        service: 'WMTS'
+      });
+
+      if (gnUrlUtils.isValid(url)) {
+        $http.get(url, {
+            cache: true
+          })
+          .then(function (result) {
+            if (data) {
+              defer.resolve(parseWMTSCapabilities(result.data));
+            } else {
+              defer.reject();
+            }
+          });
+      }
+    }
+    return defer.promise;
+  },
+
+  export const getWFSCapabilities = (url, version) => {
+    var defer = $q.defer();
+    if (url) {
+      defaultVersion = '1.1.0';
+      version = version || defaultVersion;
+      url = mergeDefaultParams(url, {
+        REQUEST: 'GetCapabilities',
+        service: 'WFS',
+        version: version
+      });
+
+      $http.get(url, {
+          cache: true
+        })
+        .then(function (result) {
+          var xfsCap = parseWFSCapabilities(result.data);
+
+          if (!xfsCap || xfsCap.exception !== undefined) {
+            defer.reject({
+              msg: 'wfsGetCapabilitiesFailed',
+              owsExceptionReport: xfsCap
+            });
+          } else {
+            defer.resolve(xfsCap);
+          }
+        });
+    }
+    return defer.promise;
+  },
 
 const getLayerExtentFromGetCap = (map, getCapLayer) => {
     var extent = null;
