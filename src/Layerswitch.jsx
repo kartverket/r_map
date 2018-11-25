@@ -1,23 +1,25 @@
 import React, { Component } from "react";
-import { map, eventHandler, olMap, mapConfig, addLayer2 } from "./maplibHelper";
-import {
-  getWMSCapabilities,
-  mergeDefaultParams,
-  parseWmsCapabilities
-} from "./Utils/MapHelper";
-import PropTypes from "prop-types";
-import queryString from "query-string";
-import setQuery from "set-query-string";
 
 class Layerswitch extends Component {
   constructor(props) {
     super(props);
+    this.state = { map: '' };
   }
-  componentDidMount() {}
+  componentWillReceiveProps(props) {
+    this.setState({ map: props.map })
+    console.log(this.state.map);
+  }
   render() {
-    return (
-      <div className="Layerswitch">Test</div>
-    );
+    let baseLayerList = <li />;
+    if (this.state.map) {
+      console.log(this.state.map.GetBaseLayers());
+      this.baseLayers = this.state.map.GetBaseLayers();
+      baseLayerList = this.baseLayers.map(function (baseLayer, index) {
+        return <li key={index}>{baseLayer.name}</li>;
+      });
+    } 
+  
+    return <ul>{baseLayerList}</ul>;
   }
 }
 
