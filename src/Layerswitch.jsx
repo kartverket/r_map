@@ -15,7 +15,9 @@ class Layerswitch extends Component {
   }
   componentDidMount() {}
   render() {
-    return <div className="Layerswitch">Test</div>;
+    return (
+      <div className="Layerswitch">Test</div>
+    );
   }
 }
 

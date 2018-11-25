@@ -4,9 +4,9 @@ import {getWMSCapabilities,mergeDefaultParams, parseWmsCapabilities} from './Uti
 import PropTypes from "prop-types";
 import queryString from "query-string";
 import setQuery from "set-query-string";
+import 'ol/ol.css'; 
 
 class Map extends Component {
-
   static propTypes = {
     lon: PropTypes.number,
     lat: PropTypes.number,

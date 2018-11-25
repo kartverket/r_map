@@ -1,13 +1,20 @@
-import $ from 'jquery'
-import proj4 from 'proj4'
-import ol from 'openlayers'
-import 'openlayers/dist/ol.css'
-import * as ISY from 'maplib'
+import {
+  Category, MapConfig
+} from './maplib/Repository'
+
+import {
+  Layer
+} from './maplib/Domain'
+import {
+  EventHandler
+} from './maplib/EventHandler'
+import {OLMap} from './maplib/OLMap'
+import {Layers} from './maplib/Layers'
+import {Groups} from './maplib/Groups'
+import {Categories} from './maplib/Categories'
+import {Map} from './maplib/Map'
 
 // export for others scripts to use
-window.$ = $;
-window.proj4 = proj4;
-window.ol = ol;
 
 let groupIds = []
 let notDummyGroup = false
@@ -160,7 +167,7 @@ export let mapConfig = {
 }
 mapConfig = Object.assign({}, mapConfig, config)
 const createGroup = (groupId, groupNameLng1, groupNameLng2, visibleOnLoad) => {
-  var newGroup = new ISY.Repository.Category({
+  var newGroup = new Category({
     groupId: groupId,
     name: groupNameLng1,
     parentId: groupNameLng2,
@@ -223,7 +230,7 @@ export const addLayer = (sourceType, source) => {
       createDummyGroup()
     }
   }
-  const newIsyLayer = new ISY.Domain.Layer({
+  const newIsyLayer = new Layer({
     subLayers: [{
       title: source.name,
       name: source.params.layers || source.name,
@@ -241,7 +248,7 @@ export const addLayer = (sourceType, source) => {
       id: sourceType === 'VECTOR' ? mapConfig.layers.length + 8001 : mapConfig.layers.length + 1001,
       transparent: true,
       layerIndex: -1,
-      legendGraphicUrl: source.legendurl,
+      legendGraphicUrl: source.legendurl || '',
       minScale: source.options.minscale,
       maxScale: source.options.maxscale,
       sortingIndex: -1,
@@ -293,7 +300,7 @@ export const addLayer2 = (sourceType, source) => {
       createDummyGroup()
     }
   }
-  const newIsyLayer = new ISY.Domain.Layer({
+  const newIsyLayer = new Layer({
     subLayers: [{
       title: source.name,
       name: source.params.layers || source.name,
@@ -380,17 +387,16 @@ const updateMapConfigWithImageLayers = (mapConfig) => {
 }
 updateMapConfigWithGroups(mapConfig)
 updateMapConfigWithImageLayers(mapConfig)
-mapConfig = new ISY.Repository.MapConfig(mapConfig)
+mapConfig = new MapConfig(mapConfig)
 mapConfig.instance = 'geoportal'
 mapConfig.proxyHost = '/?'
 
-export const eventHandler = new ISY.Events.EventHandler()
-const mapImplementation = new ISY.MapImplementation.OL3.Map(null, eventHandler)
-export const olMap = ISY.MapImplementation.OL3.olMap
-const layerHandler = new ISY.MapAPI.Layers(mapImplementation)
-const groupHandler = new ISY.MapAPI.Groups()
-const categoryHandler = new ISY.MapAPI.Categories()
-export const map = new ISY.MapAPI.Map(
+export const eventHandler = new EventHandler()
+const mapImplementation = new OLMap(null, eventHandler)
+const layerHandler = new Layers(mapImplementation)
+const groupHandler = new Groups()
+const categoryHandler = new Categories()
+export const map = new Map(
   mapImplementation,
   eventHandler,
   null,
