@@ -34,7 +34,14 @@ export const LegendGraphic = (config) => {
 
     function getLegendGraphicUrl() {
         if (instance.url !== "?") {
-            return instance.url + "Service=" + instance.service + "&Request=" + instance.request + "&Version=" + instance.version + "&Format=" + instance.format + "&Width=" + instance.width + "&Height=" + instance.height + "&Layer=" + instance.layer;
+            return instance.url + 
+                "Service=" + instance.service + 
+                "&Request=" + instance.request + 
+                "&Version=" + instance.version + 
+                "&Format=" + instance.format + 
+                "&Width=" + instance.width + 
+                "&Height=" + instance.height + 
+                "&Layer=" + instance.layer;
         } else {
             return "";
         }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { map, eventHandler, olMap, mapConfig, addLayer2 } from "./maplibHelper";
+import { map, eventHandler, mapConfig, addLayer2 } from "./maplibHelper";
 import {getWMSCapabilities,mergeDefaultParams, parseWmsCapabilities} from './Utils/MapHelper'
 import PropTypes from "prop-types";
 import queryString from "query-string";
@@ -98,11 +98,11 @@ class Map extends Component {
             let newLayerConfig = addLayer2(Service.Name, layerConfig)
             map.AddLayer(newLayerConfig)
           } else {
-            console.log('No capabilities!')
+            // console.log('No capabilities!')
           }          
         });
     } else {
-      console.log("No wms parameter given");
+      // console.log("No wms parameter given");
     }    
   }
 

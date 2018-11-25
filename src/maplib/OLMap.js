@@ -4,9 +4,6 @@ import View from 'ol/View'
 import {
     defaults as defaultInteractions,
 } from 'ol/interaction'
-import {
-    defaults as defaultControls
-} from 'ol/control.js';
 import MousePosition from 'ol/control/MousePosition.js';
 import {
     GeoJSON as GeoJSONFormat,
@@ -76,7 +73,10 @@ import {
 
 import $ from "jquery";
 
-export const OLMap = (repository, eventHandler, httpHelper, measure, featureInfo, mapExport, hoverInfo, measureLine, drawFeature, offline, addLayerFeature, modifyFeature, addFeatureGps, printBoxSelect, addLayerUrl) => {
+export const OLMap = (repository, eventHandler, httpHelper, measure,
+    featureInfo, mapExport, hoverInfo, measureLine, drawFeature,
+    offline, addLayerFeature, modifyFeature, addFeatureGps, printBoxSelect, addLayerUrl) => {
+
     var map;
     var layerPool = [];
     var isySubLayerPool = [];
@@ -265,7 +265,9 @@ export const OLMap = (repository, eventHandler, httpHelper, measure, featureInfo
                     }
                 }
                 if (geographic) {
-                    mousehtml += Math.round(coord[1] * 10000) / 10000 + translateOptions['north'] + Math.round(coord[0] * 10000) / 10000 + translateOptions['east'];
+                    mousehtml += Math.round(coord[1] * 10000) / 10000 +
+                        translateOptions['north'] + Math.round(coord[0] * 10000) / 10000 +
+                        translateOptions['east'];
                 } else {
                     mousehtml += parseInt(coord[1], 10) + translateOptions['north'] + parseInt(coord[0], 10) + translateOptions['east'];
                 }
@@ -508,32 +510,33 @@ export const OLMap = (repository, eventHandler, httpHelper, measure, featureInfo
         return newLayerUrl;
     }
 
-     function _getToken() {
-         if (!tokenHost) {
-             return null;
-         } else if (!globalGkt || _checkGlobalGktTokenExpired()) {
-             globalGkt = $.ajax({
-                 type: "GET",
-                 url: tokenHost,
-                 async: false
-             }).responseText.trim().replace(/"/g, "");
-             lastGlobalGktCheck = (new Date()).getTime();
-         }
-         return globalGkt;
-     }
- function _getTicket() {
-     if (!ticketHost) {
-         return null;
-     } else if (!globalTicket || _checkGlobalTicketExpired()) {
-         globalTicket = $.ajax({
-             type: "GET",
-             url: ticketHost,
-             async: false
-         }).responseText.trim().replace(/"/g, "");
-         lastGlobalTicketCheck = (new Date()).getTime();
-     }
-     return globalTicket;
- }
+    function _getToken() {
+        if (!tokenHost) {
+            return null;
+        } else if (!globalGkt || _checkGlobalGktTokenExpired()) {
+            globalGkt = $.ajax({
+                type: "GET",
+                url: tokenHost,
+                async: false
+            }).responseText.trim().replace(/"/g, "");
+            lastGlobalGktCheck = (new Date()).getTime();
+        }
+        return globalGkt;
+    }
+
+    function _getTicket() {
+        if (!ticketHost) {
+            return null;
+        } else if (!globalTicket || _checkGlobalTicketExpired()) {
+            globalTicket = $.ajax({
+                type: "GET",
+                url: ticketHost,
+                async: false
+            }).responseText.trim().replace(/"/g, "");
+            lastGlobalTicketCheck = (new Date()).getTime();
+        }
+        return globalTicket;
+    }
 
 
     function _checkGlobalGktTokenExpired() {
@@ -1421,11 +1424,11 @@ export const OLMap = (repository, eventHandler, httpHelper, measure, featureInfo
         }
         url += 'request=DescribeFeatureType&' +
             'version=' + isySubLayer.version + '&typename=' + isySubLayer.name;
-         $.ajax({
-             url: url
-         }).done(function (response) {
-             _parseResponse(response);
-         });
+        $.ajax({
+            url: url
+        }).done(function (response) {
+            _parseResponse(response);
+        });
 
     }
 
@@ -1916,7 +1919,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure, featureInfo
 
     function addZoomToExtent(extent) {
         var zoomToExtent = new ZoomToExtent({
-            "extent": extent
+            extent: extent
         });
         map.addControl(zoomToExtent);
     }

@@ -291,7 +291,9 @@ export const Wmts = (isySubLayer, parameters) => {
 
     var matrixSet = isySubLayer.matrixSet;
     if (matrixSet === null || matrixSet === '' || matrixSet === undefined) {
-        matrixSet = isySubLayer.matrixPrefix ? isySubLayer.coordinate_system : parseInt(isySubLayer.coordinate_system.substr(isySubLayer.coordinate_system.indexOf(':') + 1), 10);
+        matrixSet = isySubLayer.matrixPrefix ? 
+            isySubLayer.coordinate_system : 
+            parseInt(isySubLayer.coordinate_system.substr(isySubLayer.coordinate_system.indexOf(':') + 1), 10);
     }
 
     var urls = isySubLayer.url;

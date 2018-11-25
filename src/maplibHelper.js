@@ -14,8 +14,6 @@ import {Groups} from './maplib/Groups'
 import {Categories} from './maplib/Categories'
 import {Map} from './maplib/Map'
 
-// export for others scripts to use
-
 let groupIds = []
 let notDummyGroup = false
 const config = {

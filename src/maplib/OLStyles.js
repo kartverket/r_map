@@ -331,8 +331,12 @@ export const OLStylesSLD = () => {
                                         color: self.getColorValue(pointstyle.fontColor, pointstyle.fontOpacity)
                                     }),
                                     stroke: new style.Stroke({
-                                        color: pointstyle.outlineColor ? self.getColorValue(pointstyle.outlineColor) : self.getColorValue(pointstyle.fontColor, pointstyle.fontOpacity),
-                                        width: pointstyle.outlineWidth ? parseInt(pointstyle.outlineWidth, 10) : undefined
+                                        color: pointstyle.outlineColor ? 
+                                            self.getColorValue(pointstyle.outlineColor) : 
+                                            self.getColorValue(pointstyle.fontColor, pointstyle.fontOpacity),
+                                        width: pointstyle.outlineWidth ? 
+                                            parseInt(pointstyle.outlineWidth, 10) : 
+                                            undefined
                                     }),
                                     offsetX: pointstyle.labelXOffset ? parseInt(pointstyle.labelXOffset, 10) : undefined,
                                     offsetY: pointstyle.labelYOffset ? parseInt(pointstyle.labelYOffset, 10) : undefined,
