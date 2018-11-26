@@ -11,9 +11,9 @@ class Layerswitch extends Component {
   }
   getBaseLayerStyle(baseLayer) {
     if (baseLayer.isVisible) {
-      return "icon-radio-checked pointer-cursor";
+      return "icon-radio-checked";
     } else {
-      return "icon-radio-unchecked pointer-cursor";
+      return "icon-radio-unchecked";
     }
   }
   setAsBaseLayer(baseLayer) {
@@ -22,17 +22,18 @@ class Layerswitch extends Component {
     this.setState({ baseLayers: map.GetBaseLayers() });
   }
   renderBaseLayers(baseLayers) {
+    let that = this;
     return baseLayers.map(function(baseLayer, index) {
-      return <li key={index} onClick={() => this.setAsBaseLayer(baseLayer)} >
-      <div className="row">
-                <div className="col-xs-1">
-                    <span style={this.getBaseLayerStyle(baseLayer)}></span>
-                </div>
-                <div className="col-xs-11">
-                    <span>{baseLayer.name}</span>
-                </div>
+      return <li style={{ listStyleType: "none" }} key={index} onClick={() => that.setAsBaseLayer(baseLayer)}>
+          <div className="row">
+            <div className="col-xs-1">
+              <span className={that.getBaseLayerStyle(baseLayer)} />
             </div>
-      </li>;
+            <div className="col-xs-11">
+              <span>{baseLayer.name}</span>
+            </div>
+          </div>
+        </li>;
     });
   }
   render() {
