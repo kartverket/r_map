@@ -123,7 +123,16 @@ class Map extends Component {
   render() {
     return (
       <div>
-        <Layerswitch map={map} />
+        <div className="menu">
+        <div className="menuContent">
+        <div className="panel">
+              <Layerswitch map={map} />
+        </div>
+
+        </div>
+        <button className="showHide">Show Hide Menu</button>
+         
+        </div>
         <div id="map" style={{ height: "800px" }} />
       </div>
     );
