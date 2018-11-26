@@ -390,7 +390,7 @@ mapConfig.instance = 'geoportal'
 mapConfig.proxyHost = '/?'
 
 export const eventHandler = new EventHandler()
-const mapImplementation = new OLMap(null, eventHandler)
+export const mapImplementation = new OLMap(null, eventHandler)
 const layerHandler = new Layers(mapImplementation)
 const groupHandler = new Groups()
 const categoryHandler = new Categories()

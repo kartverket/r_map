@@ -3,7 +3,7 @@ import { map, eventHandler } from "./maplibHelper";
 import { Radio } from "antd";
 
 const RadioGroup = Radio.Group;
-
+const RadioButton = Radio.Button;
 class Layerswitch extends Component {
   constructor(props) {
     super(props);
@@ -19,13 +19,15 @@ class Layerswitch extends Component {
     this.setState({value: e.target.value });
   }
   renderBaseLayers(baseLayers) {
+    const radioStyle = { display: "block", height: "30px", lineHeight: "30px" };
     return baseLayers.map(function(baseLayer, index) {
-      return <Radio key={index} value={baseLayer}>
+      return <RadioButton style={radioStyle} key={index} value={baseLayer}>
           {baseLayer.name}
-        </Radio>;
+      </RadioButton>;
     });
   }
   render() {
+
     return <RadioGroup onChange={this.setAsBaseLayer} value={this.state.value}>
         {this.renderBaseLayers(this.state.baseLayers)}
       </RadioGroup>;

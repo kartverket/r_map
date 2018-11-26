@@ -169,6 +169,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
             _registerMousePositionControl(mapConfig.mouseProjectionPrefix);
         }
         _registerMessageHandler();
+        return map;
     }
 
     function _registerMapCallbacks() {

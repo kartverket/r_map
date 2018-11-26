@@ -18,12 +18,13 @@ export const Map = (mapImplementation, eventHandler, featureInfo, layerHandler, 
         _loadCustomCrs();
 
         mapConfiguration = mapConfig;
-        mapImplementation.InitMap(targetId, mapConfig);
+        var olMap = mapImplementation.InitMap(targetId, mapConfig);
         layerHandler.Init(mapConfig);
         groupHandler.Init(mapConfig);
         categoryHandler.Init(mapConfig);
 
         eventHandler.TriggerEvent(EventTypes.MapLoaded);
+        return olMap;
     }
 
     function _loadCustomCrs() {

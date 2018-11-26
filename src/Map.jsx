@@ -1,16 +1,27 @@
 import React, { Component } from "react";
 import { map, eventHandler, mapConfig, addLayer2 } from "./maplibHelper";
-import {
-  mergeDefaultParams,
-  parseWmsCapabilities
-} from "./Utils/MapHelper";
+import { mergeDefaultParams, parseWmsCapabilities } from "./Utils/MapHelper";
 import PropTypes from "prop-types";
 import queryString from "query-string";
 import setQuery from "set-query-string";
 import "ol/ol.css";
 import Layerswitch from "./Layerswitch";
+//import { Menu } from "antd";
+import AddWmsPanel from "./Container/AddWmsPanel/AddWmsPanel";
+import SimpleButton from "./Button/SimpleButton/SimpleButton"
+import { CapabilitiesUtil } from "@terrestris/ol-util";
+
+const WMS_CAPABILITIES_URL =
+  "https://openwms.statkart.no/skwms1/wms.adm_enheter?request=GetCapabilities&service=WMS";
 
 class Map extends Component {
+  // submenu keys of first level
+  rootSubmenuKeys = ["sub1", "sub2"];
+
+  state = {
+    collapsed: true,
+    layers: [],
+  };
   static propTypes = {
     lon: PropTypes.number,
     lat: PropTypes.number,
@@ -42,7 +53,7 @@ class Map extends Component {
 
     this.wms = queryValues["wms"] || "";
     this.layers = Array(queryValues["layers"] || []);
-/*
+    /*
     let wmts = Array(queryValues["wmts"] || []);
     let wfs = Array(queryValues["wfs"] || []);
     let projectName = queryValues["project"] || "norgeskart";
@@ -53,19 +64,34 @@ class Map extends Component {
       center: [this.props.lon, this.props.lat],
       zoom: this.props.zoom
     });
-    this.state = { init: false };
+    this.olMap = null
   }
-
+  onOpenChange = openKeys => {
+    const latestOpenKey = openKeys.find(
+      key => this.state.openKeys.indexOf(key) === -1
+    );
+    if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+      this.setState({ openKeys });
+    } else {
+      this.setState({
+        openKeys: latestOpenKey ? [latestOpenKey] : []
+      });
+    }
+  };
+  toggleCollapsed = () => {
+    this.setState({
+      collapsed: !this.state.collapsed
+    });
+  };
   componentDidMount() {
     if (this.wms) {
       this.addWMS(this.wms, this.layers);
     }
-    map.Init("map", this.newMapConfig);
+    this.olMap = map.Init("map", this.newMapConfig);
     map.AddZoom();
     map.AddScaleLine();
     eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState);
-
-    this.props = { map: map };
+    this.props = { map: map};
   }
 
   addWMS = (url, layers) => {
@@ -119,23 +145,57 @@ class Map extends Component {
     queryValues.zoom = center.zoom;
     setQuery(queryValues);
   };
+  onClick() {
+    CapabilitiesUtil.parseWmsCapabilities(WMS_CAPABILITIES_URL)
+      .then(CapabilitiesUtil.getLayersFromWmsCapabilties)
+      .then(layers => {
+        this.setState({
+          layers: layers
+        });
+      })
+      .catch(() => alert("Could not parse capabilities document."));
+  }
 
   render() {
-    return (
-      <div>
-        <div className="menu">
-        <div className="menuContent">
-        <div className="panel">
-              <Layerswitch map={map} />
-        </div>
+    const { layers } = this.state;
 
-        </div>
-        <button className="showHide">Show Hide Menu</button>
-         
-        </div>
-        <div id="map" style={{ height: "800px" }} />
-      </div>
-    );
+    return <div style={{ width: 256 }}>
+        {/* Menu for later
+        <Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16 }}>
+          <Icon type={this.state.collapsed ? "menu-unfold" : "menu-fold"} />
+        </Button>
+      <Menu
+        defaultSelectedKeys={['1']}
+        defaultOpenKeys={['sub1']}
+        mode="inline"
+        theme="dark"
+        inlineCollapsed={this.state.collapsed}
+      >
+          <SubMenu key="sub1" title={<span>
+                <Icon type="appstore" />
+                <span>Navigation One</span>
+              </span>}>
+            <Menu.Item key="1">Option 1</Menu.Item>
+            <Menu.Item key="2">Option 2</Menu.Item>
+            <Menu.Item key="3">Option 3</Menu.Item>
+          </SubMenu>
+          <SubMenu key="sub2" title={<span>
+                <Icon type="setting" />
+                <span>Navigation Three</span>
+              </span>}>
+            <Menu.Item key="9">Option 9</Menu.Item>
+            <Menu.Item key="10">Option 10</Menu.Item>
+            <Menu.Item key="11">Option 11</Menu.Item>
+          </SubMenu>
+        </Menu>
+        */}
+        <Layerswitch map={map} />
+        <div id="map" style={{ height: "800px", width: "800px" }} />
+        <SimpleButton onClick={this.onClick.bind(this)}>
+          Fetch capabilities of const
+        </SimpleButton>
+        <AddWmsPanel style={{ position: "relative", height: "500px" }} key="1" map={this.olMap} wmsLayers={layers} draggable={true} width={500} height={400} x={0} y={100} />
+      </div>;
   }
 }
 
