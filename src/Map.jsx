@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { map, eventHandler, mapConfig, addLayer2 } from "./maplibHelper";
 import {
-  getWMSCapabilities,
   mergeDefaultParams,
   parseWmsCapabilities
 } from "./Utils/MapHelper";
@@ -43,12 +42,12 @@ class Map extends Component {
 
     this.wms = queryValues["wms"] || "";
     this.layers = Array(queryValues["layers"] || []);
-
+/*
     let wmts = Array(queryValues["wmts"] || []);
     let wfs = Array(queryValues["wfs"] || []);
     let projectName = queryValues["project"] || "norgeskart";
     let epsg = queryValues["epsg"] || "EPSG:3857";
-
+*/
     this.props = { lon: lon, lat: lat, zoom: zoom };
     this.newMapConfig = Object.assign({}, mapConfig, {
       center: [this.props.lon, this.props.lat],
@@ -119,7 +118,6 @@ class Map extends Component {
     queryValues.lat = center.lat;
     queryValues.zoom = center.zoom;
     setQuery(queryValues);
-    console.log(map.GetBaseLayers());
   };
 
   render() {

@@ -13,7 +13,6 @@
   "plugins": ["import", "react"],
   "rules": {
     "no-undef": 1,
-    "linebreak-style": "warn",
     "max-len": [
       1,
       160,
