@@ -6,10 +6,9 @@ import queryString from "query-string";
 import setQuery from "set-query-string";
 import "ol/ol.css";
 import Layerswitch from "./Layerswitch";
-//import { Menu } from "antd";
-import AddWmsPanel from "./Container/AddWmsPanel/AddWmsPanel";
-import SimpleButton from "./Button/SimpleButton/SimpleButton"
+import AddWmsPanel from "./components/AddWmsPanel";
 import { CapabilitiesUtil } from "@terrestris/ol-util";
+import { Button } from 'react-bootstrap';
 
 const WMS_CAPABILITIES_URL =
   "https://openwms.statkart.no/skwms1/wms.adm_enheter?request=GetCapabilities&service=WMS";
@@ -66,23 +65,7 @@ class Map extends Component {
     });
     this.olMap = null
   }
-  onOpenChange = openKeys => {
-    const latestOpenKey = openKeys.find(
-      key => this.state.openKeys.indexOf(key) === -1
-    );
-    if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-      this.setState({ openKeys });
-    } else {
-      this.setState({
-        openKeys: latestOpenKey ? [latestOpenKey] : []
-      });
-    }
-  };
-  toggleCollapsed = () => {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
-  };
+
   componentDidMount() {
     if (this.wms) {
       this.addWMS(this.wms, this.layers);
@@ -149,6 +132,7 @@ class Map extends Component {
     CapabilitiesUtil.parseWmsCapabilities(WMS_CAPABILITIES_URL)
       .then(CapabilitiesUtil.getLayersFromWmsCapabilties)
       .then(layers => {
+        console.log(layers)
         this.setState({
           layers: layers
         });
@@ -191,10 +175,11 @@ class Map extends Component {
         */}
         <Layerswitch map={map} />
         <div id="map" style={{ height: "800px", width: "800px" }} />
-        <SimpleButton onClick={this.onClick.bind(this)}>
+        <Button onClick={this.onClick.bind(this)}>
           Fetch capabilities of const
-        </SimpleButton>
-        <AddWmsPanel style={{ position: "relative", height: "500px" }} key="1" map={this.olMap} wmsLayers={layers} draggable={true} width={500} height={400} x={0} y={100} />
+        </Button>
+        <AddWmsPanel style={{ position: "relative", height: "500px" }} key="1" 
+          map={this.olMap} wmsLayers={layers} draggable={true} width={500} height={400} x={0} y={100} />
       </div>;
   }
 }
