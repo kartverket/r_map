@@ -227,7 +227,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                             mousehtml = '';
                             geographic = true;
                             break;
-                        case 'm':
+                        default:
                             switch (epsg) {
                                 case 'EPSG:25831':
                                 case 'EPSG:32631':

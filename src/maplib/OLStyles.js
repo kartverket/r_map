@@ -120,7 +120,7 @@ export const OLStylesJson = (style) => {
             if (pos0 < 0) {
                 return text;
             }
-            if (text == '{_id}') {
+            if (text === '{_id}') {
                 return feature.getId();
             }
             var label = '';

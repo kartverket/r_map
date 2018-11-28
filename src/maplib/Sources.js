@@ -363,6 +363,7 @@ export const Wmts = (isySubLayer, parameters) => {
 export const Vector = (isySubLayer) => {
     var source;
     switch (isySubLayer.format) {
+        default:
         case FORMATS.geoJson:
             source = new VectorSource({
                 format: new GeoJSONFormat({

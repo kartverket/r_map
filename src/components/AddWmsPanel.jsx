@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormControl, Button, ButtonGroup, Panel } from "react-bootstrap";
+import { Button, ButtonGroup, Panel } from "react-bootstrap";
 
 import OlLayerTile from 'ol/layer/Tile';
 import OlLayerImage from 'ol/layer/Image';
@@ -192,9 +192,7 @@ export class AddWmsPanel extends React.Component {
     render() {
         const {
             wmsLayers,
-            onCancel,
             titleText,
-            cancelText,
             addAllLayersText,
             addSelectedLayersText,
             ...passThroughOpts
@@ -205,11 +203,11 @@ export class AddWmsPanel extends React.Component {
         } = this.state;
 
         return wmsLayers && wmsLayers.length > 0 ? <Panel title={titleText} bounds="#main" className="add-wms-panel" {...passThroughOpts}>
-            <FormControl onClick={this.onSelectedLayersChange}>
+            <div onClick={this.onSelectedLayersChange}>
               {wmsLayers.map((layer, idx) => (
                 <AddWmsLayerEntry wmsLayer={layer} key={idx} />
               ))}
-            </FormControl>
+            </div>
             <ButtonGroup>
               <Button size="small" key="useSelectedBtn" disabled={selectedWmsLayers.length === 0} onClick={this.onAddSelectedLayers}>
                 {addSelectedLayersText}
