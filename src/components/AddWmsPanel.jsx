@@ -49,12 +49,6 @@ export class AddWmsPanel extends React.Component {
         onLayerAddToMap: PropTypes.func,
 
         /**
-         * Optional function that is called if cancel button is clicked
-         * @type {Function}
-         */
-        onCancel: PropTypes.func,
-
-        /**
          * Optional function that is called if selection has changed.
          * @type {Function}
          */
@@ -71,12 +65,6 @@ export class AddWmsPanel extends React.Component {
          * @type {String}
          */
         addSelectedLayersText: PropTypes.string,
-
-        /**
-         * Optional text to be shown in cancel button
-         * @type {String}
-         */
-        cancelText: PropTypes.string,
 
         /**
          * Optional text to be shown in panel title
@@ -104,7 +92,6 @@ export class AddWmsPanel extends React.Component {
     static defaultProps = {
         addAllLayersText: 'Add all layers',
         addSelectedLayersText: 'Add selected layers',
-        cancelText: 'Cancel',
         titleText: 'Add WMS layer'
     }
 
@@ -115,8 +102,6 @@ export class AddWmsPanel extends React.Component {
      * in state
      */
     onSelectedLayersChange = (selectedWmsLayers) => {
-        console.log("onSelectedLayersChange");
-
         const {
             onSelectionChange
         } = this.props;
@@ -124,8 +109,14 @@ export class AddWmsPanel extends React.Component {
         if (isFunction(onSelectionChange)) {
             onSelectionChange(selectedWmsLayers);
         }
-
-        this.setState({ selectedWmsLayers });
+        if (selectedWmsLayers.target.value) {
+            this.setState({
+              selectedWmsLayers: [
+                ...this.state.selectedWmsLayers,
+                    selectedWmsLayers.target.value
+              ]
+            });
+        }
     }
 
     /**
@@ -134,7 +125,6 @@ export class AddWmsPanel extends React.Component {
      * state
      */
     onAddSelectedLayers = () => {
-        console.log("onAddSelectedLayers");
         const {
             selectedWmsLayers
         } = this.state;
