@@ -6,6 +6,11 @@ import OlLayerTile from 'ol/layer/Tile';
 import OlLayerImage from 'ol/layer/Image';
 import OlMap from 'ol/Map';
 
+import {
+    map,
+    addLayer2
+  } from "../Maplib/maplibHelper";
+  
 import isFunction from 'lodash/isFunction';
 
 import {AddWmsLayerEntry} from './AddWmsLayerEntry';
@@ -119,6 +124,30 @@ export class AddWmsPanel extends React.Component {
         }
     }
 
+    addLayers = (layers)=>{
+        console.log(layers)
+        let Capability = layers[0]
+        if (Capability) {
+            let layerConfig = {
+              type: "map",
+              name: Capability.Layer[0].Abstract,
+              url: Capability.Layer[0].url,
+              params: {
+                layers: layers,
+                format: "image/png"
+              },
+              guid: "1.temakart",
+              options: {
+                isbaselayer: "true",
+                singletile: "false",
+                visibility: "true"
+              }
+            };
+            let ServiceName = 'WMS'
+            let newLayerConfig = addLayer2(ServiceName, layerConfig);
+            map.AddLayer(newLayerConfig);
+        }
+    }
     /**
      * onAddSelectedLayers - function called if button with key useSelectedBtn is
      * clicked filters wmsLayers given in props by those in selectedWmsLayers of

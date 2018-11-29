@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { map, eventHandler } from "../maplib/maplibHelper";
+import { map, eventHandler } from "../Maplib/maplibHelper";
 import { NavItem, Nav } from "react-bootstrap";
 
 export class Layerswitch extends Component {

@@ -4,7 +4,7 @@ import {
   eventHandler,
   mapConfig,
   addLayer2
-} from "../maplib/maplibHelper";
+} from "../Maplib/maplibHelper";
 import { mergeDefaultParams, parseWmsCapabilities } from "../Utils/MapHelper";
 import PropTypes from "prop-types";
 import queryString from "query-string";
@@ -13,7 +13,7 @@ import "ol/ol.css";
 import { Layerswitch } from "./Layerswitch";
 import { AddWmsPanel } from "./AddWmsPanel";
 import { CapabilitiesUtil } from "@terrestris/ol-util";
-import { Nav, Navbar, NavItem } from "react-bootstrap";
+import { Navbar } from "react-bootstrap";
 
 const EXAMPEL_WMS =
   "https://openwms.statkart.no/skwms1/wms.adm_enheter?request=GetCapabilities&service=WMS";
@@ -72,7 +72,8 @@ export class Map extends React.Component {
     onChangeZoom: () => {},
     lon: 396722,
     lat: 7197860,
-    zoom: 4
+    zoom: 4,
+    wms: EXAMPEL_WMS
   };
 
   /**
@@ -103,8 +104,11 @@ export class Map extends React.Component {
     this.olMap = null;
   }
 
+  /**
+   * 
+   */
   componentDidMount() {
-    if (this.wms) {
+    if (this.props.wms) {
       this.addWMS(this.wms, this.layers);
     }
     this.olMap = map.Init("map", this.newMapConfig);
@@ -114,7 +118,10 @@ export class Map extends React.Component {
     this.props = { map: map };
   }
 
-  addWMS = (url, layers) => {
+  /**
+   * 
+   */
+  addWMS_ = (url, layers) => {
     if (url) {
       let newUrl = mergeDefaultParams(url, {
         service: "WMS",
@@ -156,6 +163,9 @@ export class Map extends React.Component {
     }
   };
 
+  /**
+   * 
+   */
   updateMapInfoState = () => {
     let center = map.GetCenter();
     const queryValues = queryString.parse(window.location.search);
@@ -165,8 +175,11 @@ export class Map extends React.Component {
     queryValues.zoom = center.zoom;
     setQuery(queryValues);
   };
-  onClick() {
-    CapabilitiesUtil.parseWmsCapabilities(WMS_CAPABILITIES_URL)
+  /**
+   * 
+   */
+  addWMS() {
+    CapabilitiesUtil.parseWmsCapabilities(this.props.wms)
       .then(CapabilitiesUtil.getLayersFromWmsCapabilties)
       .then(layers => {
         this.setState({
@@ -175,18 +188,14 @@ export class Map extends React.Component {
       })
       .catch(() => alert("Could not parse capabilities document."));
   }
-
+/**
+ * 
+ */
   render() {
     const { layers } = this.state;
-
     return (
       <div>
         <Navbar>
-          <Nav>
-            <NavItem onClick={this.onClick.bind(this)}>
-              Fetch capabilities
-            </NavItem>
-          </Nav>
           <Layerswitch map={map} />
         </Navbar>
         <div id="map" style={{ height: "500px", width: "700px" }} />
