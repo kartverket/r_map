@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { map, eventHandler } from "./maplibHelper";
+import { map, eventHandler } from "../maplib/maplibHelper";
 import { NavItem, Nav } from "react-bootstrap";
 
-class Layerswitch extends Component {
+export class Layerswitch extends Component {
   constructor(props) {
     super(props);
     this.state = { baseLayers: [] };
@@ -29,4 +29,3 @@ class Layerswitch extends Component {
   }
 }
 
-export default Layerswitch;

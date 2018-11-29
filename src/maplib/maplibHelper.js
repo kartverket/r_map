@@ -1,18 +1,18 @@
 import {
   Category, MapConfig
-} from './maplib/Repository'
+} from './Repository'
 
 import {
   Layer
-} from './maplib/Domain'
+} from './Domain'
 import {
   EventHandler
-} from './maplib/EventHandler'
-import {OLMap} from './maplib/OLMap'
-import {Layers} from './maplib/Layers'
-import {Groups} from './maplib/Groups'
-import {Categories} from './maplib/Categories'
-import {Map} from './maplib/Map'
+} from './EventHandler'
+import {OLMap} from './OLMap'
+import {Layers} from './Layers'
+import {Groups} from './Groups'
+import {Categories} from './Categories'
+import {Map} from './Map'
 
 let groupIds = []
 let notDummyGroup = false

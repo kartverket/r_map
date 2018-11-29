@@ -102,4 +102,3 @@ export class AddWmsLayerEntry extends React.Component {
     }
 }
 
-export default AddWmsLayerEntry;

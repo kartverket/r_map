@@ -8,7 +8,7 @@ import OlMap from 'ol/Map';
 
 import isFunction from 'lodash/isFunction';
 
-import AddWmsLayerEntry from './AddWmsLayerEntry';
+import {AddWmsLayerEntry} from './AddWmsLayerEntry';
 
 /**
  * Panel containing a (checkable) list of AddWmsLayerEntry instances.
@@ -210,4 +210,3 @@ export class AddWmsPanel extends React.Component {
     }
 }
 
-export default AddWmsPanel;

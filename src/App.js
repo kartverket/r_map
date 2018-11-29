@@ -1,15 +1,19 @@
-import React, { Component } from 'react';
+import React, {
+  Component
+} from 'react';
 import './App.css';
-import Map from './Map';
+import {
+  Map
+} from './components/Map';
 
-class App extends Component {
+export default class App extends Component {
   render() {
-    return (
-      <div className="App">
-        <Map/>
-      </div>
+    return ( <
+      div className = "App" >
+      <
+      Map / >
+      <
+      /div>
     );
   }
 }
-
-export default App;

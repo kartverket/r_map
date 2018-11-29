@@ -1,25 +1,26 @@
 import React, { Component } from "react";
-import { map, eventHandler, mapConfig, addLayer2 } from "./maplibHelper";
-import { mergeDefaultParams, parseWmsCapabilities } from "./Utils/MapHelper";
+import {
+  map,
+  eventHandler,
+  mapConfig,
+  addLayer2
+} from "../maplib/maplibHelper";
+import { mergeDefaultParams, parseWmsCapabilities } from "../Utils/MapHelper";
 import PropTypes from "prop-types";
 import queryString from "query-string";
 import setQuery from "set-query-string";
 import "ol/ol.css";
-import Layerswitch from "./Layerswitch";
-import AddWmsPanel from "./components/AddWmsPanel";
+import { Layerswitch } from "./Layerswitch";
+import { AddWmsPanel } from "./AddWmsPanel";
 import { CapabilitiesUtil } from "@terrestris/ol-util";
-import { Nav, Navbar, NavItem } from 'react-bootstrap';
+import { Nav, Navbar, NavItem } from "react-bootstrap";
 
 const WMS_CAPABILITIES_URL =
   "https://openwms.statkart.no/skwms1/wms.adm_enheter?request=GetCapabilities&service=WMS";
 
-class Map extends Component {
-  // submenu keys of first level
-  rootSubmenuKeys = ["sub1", "sub2"];
-
+export class Map extends Component {
   state = {
-    collapsed: true,
-    layers: [],
+    layers: []
   };
   static propTypes = {
     lon: PropTypes.number,
@@ -63,7 +64,7 @@ class Map extends Component {
       center: [this.props.lon, this.props.lat],
       zoom: this.props.zoom
     });
-    this.olMap = null
+    this.olMap = null;
   }
 
   componentDidMount() {
@@ -74,7 +75,7 @@ class Map extends Component {
     map.AddZoom();
     map.AddScaleLine();
     eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState);
-    this.props = { map: map};
+    this.props = { map: map };
   }
 
   addWMS = (url, layers) => {
@@ -142,21 +143,30 @@ class Map extends Component {
   render() {
     const { layers } = this.state;
 
-    return <div>
+    return (
+      <div>
         <Navbar>
           <Nav>
-          <NavItem onClick={this.onClick.bind(this)}>
-            Fetch capabilities
-        </NavItem>
-        </Nav>
+            <NavItem onClick={this.onClick.bind(this)}>
+              Fetch capabilities
+            </NavItem>
+          </Nav>
           <Layerswitch map={map} />
         </Navbar>
         <div id="map" style={{ height: "500px", width: "700px" }} />
-        <AddWmsPanel style={{ position: "relative", height: "400px" }} key="1" 
-          map={this.olMap} wmsLayers={layers} draggable={true} width={500} height={400} x={0} y={100} 
+        <AddWmsPanel
+          style={{ position: "relative", height: "400px" }}
+          key="1"
+          map={this.olMap}
+          wmsLayers={layers}
+          draggable={true}
+          width={500}
+          height={400}
+          x={0}
+          y={100}
         />
-      </div>;
+      </div>
+    );
   }
 }
 
-export default Map;
