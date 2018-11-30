@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   map,
   eventHandler,
@@ -13,24 +13,56 @@ import "ol/ol.css";
 import { Layerswitch } from "./Layerswitch";
 import { AddWmsPanel } from "./AddWmsPanel";
 import { CapabilitiesUtil } from "@terrestris/ol-util";
-import { Nav, Navbar, NavItem } from "react-bootstrap";
+import { Navbar } from "react-bootstrap";
 
-const WMS_CAPABILITIES_URL =
+const EXAMPEL_WMS =
   "https://openwms.statkart.no/skwms1/wms.adm_enheter?request=GetCapabilities&service=WMS";
 
-export class Map extends Component {
+/**
+ * @class The Map Component
+ * @extends React.Component
+ */
+export class Map extends React.Component {
   state = {
     layers: []
   };
+  /**
+   * The prop types.
+   * @type {Object}
+   */
   static propTypes = {
+    /**
+     * @type {Number}
+     */
     lon: PropTypes.number,
+    /**
+     * @type {Number}
+     */
     lat: PropTypes.number,
+    /**
+     * @type {Number}
+     */
     zoom: PropTypes.number,
-
+    /**
+     * @type {Function}
+     */
     onChangeLon: PropTypes.func,
+    /** 
+     * @type {Function}
+     */
     onChangeLat: PropTypes.func,
+    /** 
+     * @type {Function}
+     */
     onChangeZoom: PropTypes.func,
-    onMapViewChanges: PropTypes.func
+    /**
+     * @type {Function} 
+     */
+    onMapViewChanges: PropTypes.func,
+    /**
+     * @type {String}
+     */
+    wms: PropTypes.string
   };
 
   static defaultProps = {
@@ -40,9 +72,14 @@ export class Map extends Component {
     onChangeZoom: () => {},
     lon: 396722,
     lat: 7197860,
-    zoom: 4
+    zoom: 4,
+    wms: EXAMPEL_WMS
   };
 
+  /**
+   * 
+   *@constructs Map
+   */
   constructor(props) {
     super(props);
     const queryValues = queryString.parse(window.location.search);
@@ -67,8 +104,11 @@ export class Map extends Component {
     this.olMap = null;
   }
 
+  /**
+   * 
+   */
   componentDidMount() {
-    if (this.wms) {
+    if (this.props.wms) {
       this.addWMS(this.wms, this.layers);
     }
     this.olMap = map.Init("map", this.newMapConfig);
@@ -78,7 +118,10 @@ export class Map extends Component {
     this.props = { map: map };
   }
 
-  addWMS = (url, layers) => {
+  /**
+   * 
+   */
+  addWMS_ = (url, layers) => {
     if (url) {
       let newUrl = mergeDefaultParams(url, {
         service: "WMS",
@@ -120,6 +163,9 @@ export class Map extends Component {
     }
   };
 
+  /**
+   * 
+   */
   updateMapInfoState = () => {
     let center = map.GetCenter();
     const queryValues = queryString.parse(window.location.search);
@@ -129,8 +175,11 @@ export class Map extends Component {
     queryValues.zoom = center.zoom;
     setQuery(queryValues);
   };
-  onClick() {
-    CapabilitiesUtil.parseWmsCapabilities(WMS_CAPABILITIES_URL)
+  /**
+   * 
+   */
+  addWMS() {
+    CapabilitiesUtil.parseWmsCapabilities(this.props.wms)
       .then(CapabilitiesUtil.getLayersFromWmsCapabilties)
       .then(layers => {
         this.setState({
@@ -139,18 +188,14 @@ export class Map extends Component {
       })
       .catch(() => alert("Could not parse capabilities document."));
   }
-
+/**
+ * 
+ */
   render() {
     const { layers } = this.state;
-
     return (
       <div>
         <Navbar>
-          <Nav>
-            <NavItem onClick={this.onClick.bind(this)}>
-              Fetch capabilities
-            </NavItem>
-          </Nav>
           <Layerswitch map={map} />
         </Navbar>
         <div id="map" style={{ height: "500px", width: "700px" }} />
@@ -169,4 +214,3 @@ export class Map extends Component {
     );
   }
 }
-
