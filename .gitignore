@@ -18,7 +18,5 @@ yarn-debug.log*
 yarn-error.log*
 
 /demo/dist
-/es
-/lib
 /umd
 npm-debug.log*

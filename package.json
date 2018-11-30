@@ -7,8 +7,7 @@
   "files": [
     "css",
     "es",
-    "lib",
-    "umd"
+    "lib"
   ],
   "dependencies": {
     "@terrestris/ol-util": "^1.6.0",
@@ -36,9 +35,7 @@
     "react": "16.x"
   },
   "devDependencies": {
-    "nwb": "0.23.x",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3"
+    "nwb": "0.23.x"
   },
   "scripts": {
     "build": "nwb build-react-component",
