@@ -20,6 +20,10 @@
     "proj4": "*",
     "prop-types": "^15.6.2",
     "query-string": "^6.2.0",
+    "set-query-string": "^2.2.0"
+  },
+  "devDependencies": {
+    "nwb": "0.23.x",
     "react": "^16.6.3",
     "react-bootstrap": "^0.31.5",
     "react-dom": "^16.6.3",
@@ -28,14 +32,7 @@
     "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "^4.2.2",
     "react-scripts": "^2.1.1",
-    "rimraf": "^2.6.2",
-    "set-query-string": "^2.2.0"
-  },
-  "peerDependencies": {
-    "react": "16.x"
-  },
-  "devDependencies": {
-    "nwb": "0.23.x"
+    "rimraf": "^2.6.2"
   },
   "scripts": {
     "build": "nwb build-react-component",
