@@ -14,9 +14,23 @@ import setQuery from "set-query-string";
 import "ol/ol.css";
 import { Layerswitch } from "./Components/Layerswitch";
 import { AddWmsPanel } from "./Components/AddWmsPanel";
-import { CapabilitiesUtil } from "@terrestris/ol-util";
 import { Navbar } from "react-bootstrap";
 
+class ListItem extends React.Component {
+  render() {
+    return ( 
+      <AddWmsPanel
+          style={{ position: "relative" }}
+          key="1"
+          map={map}
+          services = {
+            this.props.listItem
+          }
+          draggable={true}
+        />
+    );
+  }
+}
 /**
  * @class The Map Component
  * @extends React.Component
@@ -61,7 +75,12 @@ export default class Map extends React.Component {
     /**
      * @type {String}
      */
-    wms: PropTypes.string
+    wms: PropTypes.string,
+    /**
+     * @type {Array}
+     */
+    services: PropTypes.arrayOf(PropTypes.object),
+
   };
 
   static defaultProps = {
@@ -174,22 +193,29 @@ export default class Map extends React.Component {
     queryValues.zoom = center.zoom;
     setQuery(queryValues);
   };
-  /**
-   * 
-   */
+
   addWMS() {
-    CapabilitiesUtil.parseWmsCapabilities(this.props.wms)
+    CapabilitiesUtil.parseWmsCapabilities(this.props.services.GetCapabilitiesUrl)
       .then(CapabilitiesUtil.getLayersFromWmsCapabilties)
       .then(layers => {
         this.setState({
-          layers: layers
+          wmsLayers: layers
         });
       })
       .catch(() => alert("Could not parse capabilities document."));
   }
-/**
- * 
- */
+
+  renderServiceList(){
+    console.log(this.props.services)
+    let listItems = this.props.services.map( function(listItem, i) {
+      return <ListItem listItem = {listItem} key = {i} map={map}/>;
+    });
+    let listElement = React.createElement('div', {}, listItems);
+    return listElement;
+  }
+  /**
+   * 
+   */
   render() {
     const { layers } = this.state;
     return (
@@ -198,17 +224,7 @@ export default class Map extends React.Component {
           <Layerswitch map={map} />
         </Navbar>
         <div id="map" style={{ height: "500px", width: "700px" }} />
-        <AddWmsPanel
-          style={{ position: "relative", height: "400px" }}
-          key="1"
-          map={this.olMap}
-          wmsLayers={layers}
-          draggable={true}
-          width={500}
-          height={400}
-          x={0}
-          y={100}
-        />
+        { this.renderServiceList() }
       </div>
     );
   }
