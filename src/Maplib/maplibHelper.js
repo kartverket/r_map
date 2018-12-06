@@ -164,7 +164,7 @@ export let mapConfig = {
   isOffline: false
 }
 mapConfig = Object.assign({}, mapConfig, config)
-const createGroup = (groupId, groupNameLng1, groupNameLng2, visibleOnLoad) => {
+export const createGroup = (groupId, groupNameLng1, groupNameLng2, visibleOnLoad) => {
   var newGroup = new Category({
     groupId: groupId,
     name: groupNameLng1,
@@ -202,14 +202,14 @@ const createNotExistGroup = (grpIds, groupNameLng1, groupNameLng2) => {
     createGroup(grpId, groupNameLng1, groupNameLng2)
   })
 }
-const createDummyGroup = () => {
+export const createDummyGroup = () => {
   // dummy category for layers without group id
   if (notDummyGroup === false) {
     createGroup(999, 'Other layers', 'Andre lag')
     notDummyGroup = true
   }
 }
-const getWmsUrl = (url) => {
+export const getWmsUrl = (url) => {
   if (url.indexOf('|')) {
     return url.split('|')
   } else {

@@ -8,7 +8,7 @@ import OlMap from 'ol/Map';
 
 import {
     CapabilitiesUtil
-} from "@terrestris/ol-util";
+} from "../Maplib/CapabilitiesUtil"
 
 import {
     map,
@@ -84,6 +84,12 @@ export class AddWmsPanel extends React.Component {
     }
 
     getCapabilitites() {
+        /*
+        CapabilitiesUtil.parseWMTS(this.props.services.GetCapabilitiesUrl)
+        .then(layers => {
+            console.log(layers)
+        });
+        */
         CapabilitiesUtil.parseWmsCapabilities(this.props.services.GetCapabilitiesUrl)
             .then(CapabilitiesUtil.getLayersFromWmsCapabilties)
             .then(layers => {
