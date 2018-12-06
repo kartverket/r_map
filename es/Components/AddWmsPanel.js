@@ -1,7 +1,5 @@
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _class, _temp;
-
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -18,6 +16,8 @@ import OlLayerTile from 'ol/layer/Tile';
 import OlLayerImage from 'ol/layer/Image';
 import OlMap from 'ol/Map';
 
+import { CapabilitiesUtil } from "../Maplib/CapabilitiesUtil";
+
 import { map, addLayer2 } from "../Maplib/maplibHelper";
 
 import isFunction from 'lodash/isFunction';
@@ -32,7 +32,7 @@ import { AddWmsLayerEntry } from './AddWmsLayerEntry';
  * @class The AddWmsPanel
  * @extends React.Component
  */
-export var AddWmsPanel = (_temp = _class = function (_React$Component) {
+export var AddWmsPanel = function (_React$Component) {
     _inherits(AddWmsPanel, _React$Component);
 
     /**
@@ -83,15 +83,18 @@ export var AddWmsPanel = (_temp = _class = function (_React$Component) {
             }
         };
 
-        _this.onAddSelectedLayers = function () {
-            var selectedWmsLayers = _this.state.selectedWmsLayers;
+        _this.onAddSelectedLayers = function (selectedWmsLayers) {
             var _this$props = _this.props,
                 onLayerAddToMap = _this$props.onLayerAddToMap,
                 map = _this$props.map;
 
 
-            var filteredLayers = _this.props.wmsLayers.filter(function (layer) {
-                return selectedWmsLayers.includes(layer.get('title'));
+            var layerName = selectedWmsLayers.target.value;
+            console.log(_this.state);
+            console.log(layerName);
+
+            var filteredLayers = _this.state.wmsLayers.filter(function (layer) {
+                return layerName == layer.name;
             });
 
             if (onLayerAddToMap) {
@@ -99,29 +102,8 @@ export var AddWmsPanel = (_temp = _class = function (_React$Component) {
             } else if (map) {
                 filteredLayers.forEach(function (layer) {
                     // Add layer to map if it is not added yet
-                    if (!map.getLayers().getArray().includes(layer)) {
-                        map.addLayer(layer);
-                    }
-                });
-            } else {
-                console.warn('Neither map nor onLayerAddToMap given in props. Will do nothing.');
-            }
-        };
-
-        _this.onAddAllLayers = function () {
-            var _this$props2 = _this.props,
-                onLayerAddToMap = _this$props2.onLayerAddToMap,
-                wmsLayers = _this$props2.wmsLayers,
-                map = _this$props2.map;
-
-
-            if (onLayerAddToMap) {
-                onLayerAddToMap(wmsLayers);
-            } else if (map) {
-                wmsLayers.forEach(function (layer) {
-                    // Add layer to map if it is not added yet
-                    if (!map.getLayers().getArray().includes(layer)) {
-                        map.addLayer(layer);
+                    if (!map.GetOverlayLayers().includes(layer)) {
+                        map.AddLayer(layer);
                     }
                 });
             } else {
@@ -132,14 +114,9 @@ export var AddWmsPanel = (_temp = _class = function (_React$Component) {
         _this.state = {
             selectedWmsLayers: []
         };
+        _this.getCapabilitites();
         return _this;
     }
-
-    /**
-     * The defaultProps.
-     * @type {Object}
-     */
-
 
     /**
      * The prop types.
@@ -147,6 +124,23 @@ export var AddWmsPanel = (_temp = _class = function (_React$Component) {
      */
 
 
+    AddWmsPanel.prototype.getCapabilitites = function getCapabilitites() {
+        var _this2 = this;
+
+        /*
+        CapabilitiesUtil.parseWMTS(this.props.services.GetCapabilitiesUrl)
+        .then(layers => {
+            console.log(layers)
+        });
+        */
+        CapabilitiesUtil.parseWmsCapabilities(this.props.services.GetCapabilitiesUrl).then(CapabilitiesUtil.getLayersFromWmsCapabilties).then(function (layers) {
+            _this2.setState({
+                wmsLayers: layers
+            });
+        }).catch(function (e) {
+            return console.log(e);
+        });
+    };
     /**
      * onSelectedLayersChange - set state for selectedWmsLayers
      *
@@ -162,63 +156,38 @@ export var AddWmsPanel = (_temp = _class = function (_React$Component) {
 
 
     /**
-     * onAddAllLayers - pass all wmsLayers of props to onLayerAddToMap function
-     */
-
-
-    /**
      * The render function.
      */
     AddWmsPanel.prototype.render = function render() {
         var _props = this.props,
-            wmsLayers = _props.wmsLayers,
             titleText = _props.titleText,
-            addAllLayersText = _props.addAllLayersText,
             addSelectedLayersText = _props.addSelectedLayersText,
-            passThroughOpts = _objectWithoutProperties(_props, ['wmsLayers', 'titleText', 'addAllLayersText', 'addSelectedLayersText']);
+            passThroughOpts = _objectWithoutProperties(_props, ['titleText', 'addSelectedLayersText']);
 
-        var selectedWmsLayers = this.state.selectedWmsLayers;
-
+        var _state = this.state,
+            wmsLayers = _state.wmsLayers,
+            selectedWmsLayers = _state.selectedWmsLayers;
 
         return wmsLayers && wmsLayers.length > 0 ? React.createElement(
             Panel,
             _extends({ title: titleText, bounds: '#main', className: 'add-wms-panel' }, passThroughOpts),
             React.createElement(
                 'div',
-                { onClick: this.onSelectedLayersChange },
+                { onClick: this.onAddSelectedLayers },
                 wmsLayers.map(function (layer, idx) {
                     return React.createElement(AddWmsLayerEntry, { wmsLayer: layer, key: idx });
                 })
-            ),
-            React.createElement(
-                ButtonGroup,
-                null,
-                React.createElement(
-                    Button,
-                    { size: 'small', key: 'useSelectedBtn', disabled: selectedWmsLayers.length === 0, onClick: this.onAddSelectedLayers },
-                    addSelectedLayersText
-                ),
-                React.createElement(
-                    Button,
-                    { size: 'small', key: 'useAllBtn', onClick: this.onAddAllLayers },
-                    addAllLayersText
-                )
             )
         ) : null;
     };
 
     return AddWmsPanel;
-}(React.Component), _class.defaultProps = {
-    addAllLayersText: 'Add all layers',
-    addSelectedLayersText: 'Add selected layers',
-    titleText: 'Add WMS layer' }, _temp);
+}(React.Component);
 AddWmsPanel.propTypes = process.env.NODE_ENV !== "production" ? {
     /**
-     * Array containing layers (e.g. `Capability.Layer.Layer` of ol capabilities
-     * parser)
-     * @type {Array} -- required
+     * @type {Object} -- required
      */
-    wmsLayers: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.instanceOf(OlLayerTile), PropTypes.instanceOf(OlLayerImage)])).isRequired,
+    services: PropTypes.object.isRequired,
 
     /**
      * Optional instance of OlMap which is used if onLayerAddToMap is not provided
@@ -227,7 +196,7 @@ AddWmsPanel.propTypes = process.env.NODE_ENV !== "production" ? {
     map: PropTypes.instanceOf(OlMap),
 
     /**
-     * Optional function being called when onAddSelectedLayers or onAddAllLayers
+     * Optional function being called when onAddSelectedLayers 
      * is triggered
      * @type {Function}
      */
@@ -238,12 +207,6 @@ AddWmsPanel.propTypes = process.env.NODE_ENV !== "production" ? {
      * @type {Function}
      */
     onSelectionChange: PropTypes.func,
-
-    /**
-     * Optional text to be shown in button to add all layers
-     * @type {String}
-     */
-    addAllLayersText: PropTypes.string,
 
     /**
      * Optional text to be shown in button to add selected layers

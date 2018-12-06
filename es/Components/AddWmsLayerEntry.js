@@ -35,8 +35,8 @@ export var AddWmsLayerEntry = (_temp = _class = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, _React$Component.call(this, props));
 
         _this.state = {
-            copyright: props.wmsLayer.getSource().getAttributions(),
-            queryable: props.wmsLayer.get('queryable')
+            // copyright: props.wmsLayer.getSource().getAttributions(),
+            // queryable: props.wmsLayer.get('queryable')
         };
         return _this;
     }
@@ -66,7 +66,7 @@ export var AddWmsLayerEntry = (_temp = _class = function (_React$Component) {
             queryable = _state.queryable;
 
 
-        var title = wmsLayer.get('title');
+        var title = wmsLayer.name;
         var layerTextSpan = layerTextTemplateFn(wmsLayer);
 
         return React.createElement(
@@ -90,8 +90,8 @@ export var AddWmsLayerEntry = (_temp = _class = function (_React$Component) {
 }(React.Component), _class.defaultProps = {
     layerQueryableText: 'Layer is queryable',
     layerTextTemplateFn: function layerTextTemplateFn(wmsLayer) {
-        var title = wmsLayer.get('title');
-        var abstract = wmsLayer.get('abstract');
+        var title = wmsLayer.name;
+        var abstract = wmsLayer.abstract || '';
         var abstractTextSpan = abstract ? React.createElement(
             'span',
             null,

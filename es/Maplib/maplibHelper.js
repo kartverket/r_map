@@ -158,7 +158,7 @@ export var mapConfig = {
   isOffline: false
 };
 mapConfig = Object.assign({}, mapConfig, config);
-var createGroup = function createGroup(groupId, groupNameLng1, groupNameLng2, visibleOnLoad) {
+export var createGroup = function createGroup(groupId, groupNameLng1, groupNameLng2, visibleOnLoad) {
   var newGroup = new Category({
     groupId: groupId,
     name: groupNameLng1,
@@ -196,14 +196,14 @@ var createNotExistGroup = function createNotExistGroup(grpIds, groupNameLng1, gr
     createGroup(grpId, groupNameLng1, groupNameLng2);
   });
 };
-var createDummyGroup = function createDummyGroup() {
+export var createDummyGroup = function createDummyGroup() {
   // dummy category for layers without group id
   if (notDummyGroup === false) {
     createGroup(999, 'Other layers', 'Andre lag');
     notDummyGroup = true;
   }
 };
-var getWmsUrl = function getWmsUrl(url) {
+export var getWmsUrl = function getWmsUrl(url) {
   if (url.indexOf('|')) {
     return url.split('|');
   } else {

@@ -19,15 +19,37 @@ import setQuery from "set-query-string";
 import "ol/ol.css";
 import { Layerswitch } from "./Components/Layerswitch";
 import { AddWmsPanel } from "./Components/AddWmsPanel";
-import { CapabilitiesUtil } from "@terrestris/ol-util";
 import { Navbar } from "react-bootstrap";
 
+var ListItem = function (_React$Component) {
+  _inherits(ListItem, _React$Component);
+
+  function ListItem() {
+    _classCallCheck(this, ListItem);
+
+    return _possibleConstructorReturn(this, _React$Component.apply(this, arguments));
+  }
+
+  ListItem.prototype.render = function render() {
+    return React.createElement(AddWmsPanel, {
+      style: { position: "relative" },
+      key: '1',
+      map: map,
+      services: this.props.listItem,
+      draggable: true
+    });
+  };
+
+  return ListItem;
+}(React.Component);
 /**
  * @class The Map Component
  * @extends React.Component
  */
-var Map = (_temp = _class = function (_React$Component) {
-  _inherits(Map, _React$Component);
+
+
+var Map = (_temp = _class = function (_React$Component2) {
+  _inherits(Map, _React$Component2);
 
   /**
    * 
@@ -36,9 +58,9 @@ var Map = (_temp = _class = function (_React$Component) {
   function Map(props) {
     _classCallCheck(this, Map);
 
-    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props));
+    var _this2 = _possibleConstructorReturn(this, _React$Component2.call(this, props));
 
-    _initialiseProps.call(_this);
+    _initialiseProps.call(_this2);
 
     var queryValues = queryString.parse(window.location.search);
 
@@ -46,21 +68,21 @@ var Map = (_temp = _class = function (_React$Component) {
     var lat = Number(queryValues["lat"] || props.lat);
     var zoom = Number(queryValues["zoom"] || props.zoom);
 
-    _this.wms = queryValues["wms"] || "";
-    _this.layers = Array(queryValues["layers"] || []);
+    _this2.wms = queryValues["wms"] || "";
+    _this2.layers = Array(queryValues["layers"] || []);
     /*
     let wmts = Array(queryValues["wmts"] || []);
     let wfs = Array(queryValues["wfs"] || []);
     let projectName = queryValues["project"] || "norgeskart";
     let epsg = queryValues["epsg"] || "EPSG:3857";
     */
-    _this.props = { lon: lon, lat: lat, zoom: zoom };
-    _this.newMapConfig = Object.assign({}, mapConfig, {
-      center: [_this.props.lon, _this.props.lat],
-      zoom: _this.props.zoom
+    _this2.props = { lon: lon, lat: lat, zoom: zoom };
+    _this2.newMapConfig = Object.assign({}, mapConfig, {
+      center: [_this2.props.lon, _this2.props.lat],
+      zoom: _this2.props.zoom
     });
-    _this.olMap = null;
-    return _this;
+    _this2.olMap = null;
+    return _this2;
   }
 
   /**
@@ -94,19 +116,25 @@ var Map = (_temp = _class = function (_React$Component) {
    */
 
 
-  /**
-   * 
-   */
   Map.prototype.addWMS = function addWMS() {
-    var _this2 = this;
+    var _this3 = this;
 
-    CapabilitiesUtil.parseWmsCapabilities(this.props.wms).then(CapabilitiesUtil.getLayersFromWmsCapabilties).then(function (layers) {
-      _this2.setState({
-        layers: layers
+    CapabilitiesUtil.parseWmsCapabilities(this.props.services.GetCapabilitiesUrl).then(CapabilitiesUtil.getLayersFromWmsCapabilties).then(function (layers) {
+      _this3.setState({
+        wmsLayers: layers
       });
     }).catch(function () {
       return alert("Could not parse capabilities document.");
     });
+  };
+
+  Map.prototype.renderServiceList = function renderServiceList() {
+    console.log(this.props.services);
+    var listItems = this.props.services.map(function (listItem, i) {
+      return React.createElement(ListItem, { listItem: listItem, key: i, map: map });
+    });
+    var listElement = React.createElement('div', {}, listItems);
+    return listElement;
   };
   /**
    * 
@@ -125,17 +153,7 @@ var Map = (_temp = _class = function (_React$Component) {
         React.createElement(Layerswitch, { map: map })
       ),
       React.createElement('div', { id: 'map', style: { height: "500px", width: "700px" } }),
-      React.createElement(AddWmsPanel, {
-        style: { position: "relative", height: "400px" },
-        key: '1',
-        map: this.olMap,
-        wmsLayers: layers,
-        draggable: true,
-        width: 500,
-        height: 400,
-        x: 0,
-        y: 100
-      })
+      this.renderServiceList()
     );
   };
 
@@ -150,7 +168,7 @@ var Map = (_temp = _class = function (_React$Component) {
   zoom: 4,
   wms: ''
 }, _initialiseProps = function _initialiseProps() {
-  var _this3 = this;
+  var _this4 = this;
 
   this.state = {
     layers: []
@@ -201,7 +219,7 @@ var Map = (_temp = _class = function (_React$Component) {
   this.updateMapInfoState = function () {
     var center = map.GetCenter();
     var queryValues = queryString.parse(window.location.search);
-    _this3.props = { lon: center.lon, lat: center.lat, zoom: center.zoom };
+    _this4.props = { lon: center.lon, lat: center.lat, zoom: center.zoom };
     queryValues.lon = center.lon;
     queryValues.lat = center.lat;
     queryValues.zoom = center.zoom;
@@ -241,5 +259,10 @@ Map.propTypes = process.env.NODE_ENV !== "production" ? {
   /**
    * @type {String}
    */
-  wms: PropTypes.string
+  wms: PropTypes.string,
+  /**
+   * @type {Array}
+   */
+  services: PropTypes.arrayOf(PropTypes.object)
+
 } : {};
