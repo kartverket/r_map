@@ -23,7 +23,7 @@ export class BackgroundChooser extends Component {
     });
   }
   render() {
-    return <NavDropdown onSelect={this.setAsBaseLayer} value={this.state.value} title="Backgound">
+    return <NavDropdown onSelect={this.setAsBaseLayer} value={this.state.value} title="Backgound" id="Backgound">
         {this.renderBaseLayers(this.state.baseLayers)}
       </NavDropdown>;
   }

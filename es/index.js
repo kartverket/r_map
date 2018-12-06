@@ -32,7 +32,6 @@ var ListItem = function (_React$Component) {
 
   ListItem.prototype.render = function render() {
     return React.createElement(AddWmsPanel, {
-      style: { position: "relative" },
       key: '1',
       map: map,
       services: this.props.listItem,
@@ -129,12 +128,9 @@ var Map = (_temp = _class = function (_React$Component2) {
   };
 
   Map.prototype.renderServiceList = function renderServiceList() {
-    console.log(this.props.services);
-    var listItems = this.props.services.map(function (listItem, i) {
+    return this.props.services.map(function (listItem, i) {
       return React.createElement(ListItem, { listItem: listItem, key: i, map: map });
     });
-    var listElement = React.createElement('div', {}, listItems);
-    return listElement;
   };
   /**
    * 
@@ -150,10 +146,10 @@ var Map = (_temp = _class = function (_React$Component2) {
       React.createElement(
         Nav,
         null,
-        React.createElement(BackgroundChooser, { map: map })
+        React.createElement(BackgroundChooser, { map: map }),
+        this.renderServiceList()
       ),
-      React.createElement('div', { id: 'map', style: { height: "500px", width: "700px" } }),
-      this.renderServiceList()
+      React.createElement('div', { id: 'map', style: { height: "500px", width: "700px" } })
     );
   };
 

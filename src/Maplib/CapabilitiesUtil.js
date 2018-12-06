@@ -34,7 +34,7 @@ export const newMaplibLayer = (sourceType, source) => {
         matrixPrefix: source.matrixprefix === 'true',
         matrixSet: source.matrixset,
         numZoomLevels: mapConfig.numZoomLevels,
-        id: sourceType === 'VECTOR' ? mapConfig.layers.length + 8001 : mapConfig.layers.length + 1001,
+        id: sourceType === 'VECTOR' ? source.name + 8001 : source.name + 1001,
         transparent: true,
         layerIndex: -1,
         legendGraphicUrl: source.legendurl || '',
@@ -52,26 +52,28 @@ export const newMaplibLayer = (sourceType, source) => {
           includedFields: source.includedfields
         },
         tiled: source.options.singletile !== 'true',
-        crossOrigin: null,
+        crossOrigin: 'anonymous',
         style: source.style,
         wmtsExtent: source.wmtsextent,
         getCapabilities: (source.getcapabilities === 'true'),
         styles: source.params.styles,
         minResolution: source.minresolution,
-        maxResolution: source.maxresolution
+        maxResolution: source.maxresolution || 21664
       }],
       guid: source.guid,
       name: source.name,
       groupId: catIds,
       visibleOnLoad: (source.options.visibility === 'true'),
-      id: sourceType === 'VECTOR' ? mapConfig.layers.length + 8001 : mapConfig.layers.length + 1001,
+      id: sourceType === 'VECTOR' ? source.name + 8001 : source.name + 1001,
       isBaseLayer: (source.options.isbaselayer === 'true'),
       previewActive: false,
       opacity: 1,
       mapLayerIndex: -1,
       legendGraphicUrls: [],
       selectedLayerOpen: false,
-      thumbnail: source.thumbnail
+      thumbnail: source.thumbnail,
+      label: source.name,
+      value: source.name
     })
     return newIsyLayer
   }

@@ -1,11 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonGroup, Panel } from "react-bootstrap";
+import {
+    NavDropdown
+} from "react-bootstrap";
+import DropdownTreeSelect from 'react-dropdown-tree-select'
+import 'react-dropdown-tree-select/dist/styles.css'
 
 import OlLayerTile from 'ol/layer/Tile';
 import OlLayerImage from 'ol/layer/Image';
 import OlMap from 'ol/Map';
-
+import isFunction from 'lodash/isFunction';
 import {
     CapabilitiesUtil
 } from "../Maplib/CapabilitiesUtil"
@@ -15,9 +19,6 @@ import {
     addLayer2
   } from "../Maplib/maplibHelper";
   
-import isFunction from 'lodash/isFunction';
-
-import {AddWmsLayerEntry} from './AddWmsLayerEntry';
 
 /**
  * Panel containing a (checkable) list of AddWmsLayerEntry instances.
@@ -40,10 +41,10 @@ export class AddWmsPanel extends React.Component {
         services: PropTypes.object.isRequired,
 
         /**
-         * Optional instance of OlMap which is used if onLayerAddToMap is not provided
-         * @type {OlMap}
+         * Optional instance of Map which is used if onLayerAddToMap is not provided
+         * @type {Object}
          */
-        map: PropTypes.instanceOf(OlMap),
+        map: PropTypes.object,
 
         /**
          * Optional function being called when onAddSelectedLayers 
@@ -58,17 +59,6 @@ export class AddWmsPanel extends React.Component {
          */
         onSelectionChange: PropTypes.func,
 
-        /**
-         * Optional text to be shown in button to add selected layers
-         * @type {String}
-         */
-        addSelectedLayersText: PropTypes.string,
-
-        /**
-         * Optional text to be shown in panel title
-         * @type {String}
-         */
-        titleText: PropTypes.string
     }
 
     /**
@@ -77,9 +67,7 @@ export class AddWmsPanel extends React.Component {
      */
     constructor(props) {
         super(props);
-        this.state = {
-            selectedWmsLayers: []
-        };
+        this.state = {};
         this.getCapabilitites()
     }
 
@@ -99,32 +87,8 @@ export class AddWmsPanel extends React.Component {
             })
             .catch((e) => console.log(e));
     }
-    /**
-     * onSelectedLayersChange - set state for selectedWmsLayers
-     *
-     * @param {Array} selectedWmsLayers titles of selected WMS layers to set
-     * in state
-     */
-    onSelectedLayersChange = (selectedWmsLayers) => {
-        const {
-            onSelectionChange
-        } = this.props;
-
-        if (isFunction(onSelectionChange)) {
-            onSelectionChange(selectedWmsLayers);
-        }
-        if (selectedWmsLayers.target.value) {
-            this.setState({
-              selectedWmsLayers: [
-                ...this.state.selectedWmsLayers,
-                    selectedWmsLayers.target.value
-              ]
-            });
-        }
-    }
 
     addLayers = (layers)=>{
-        console.log(layers)
         let Capability = layers[0]
         if (Capability) {
             let layerConfig = {
@@ -147,61 +111,34 @@ export class AddWmsPanel extends React.Component {
             map.AddLayer(newLayerConfig);
         }
     }
-    /**
-     * onAddSelectedLayers - function called if button with key useSelectedBtn is
-     * clicked filters wmsLayers given in props by those in selectedWmsLayers of
-     * state
-     */
-    onAddSelectedLayers = (selectedWmsLayers) => {
-        const {
-            onLayerAddToMap,
-            map
-        } = this.props;
 
-        let layerName = selectedWmsLayers.target.value
-        console.log(this.state)
-        console.log(layerName)
-
-        const filteredLayers = this.state.wmsLayers.filter(
-            layer => layerName == layer.name
-        );
-
-        if (onLayerAddToMap) {
-            onLayerAddToMap(filteredLayers);
-        } else if (map) {
-            filteredLayers.forEach(layer => {
-                // Add layer to map if it is not added yet
-                if (!map.GetOverlayLayers().includes(layer)) {
-                    map.AddLayer(layer);
-                }
-            });
-        } else {
-            console.warn('Neither map nor onLayerAddToMap given in props. Will do nothing.');
-        }
+    onSelectionChange = (currentNode, selectedNodes) => {
+        console.log('onChange::', currentNode, selectedNodes)
+         if (!map.GetOverlayLayers().includes(currentNode)) {
+             map.AddLayer(currentNode);
+         }
     }
-
+ 
+    onAction = ({action, node}) => {
+        console.log(`onAction:: [${action}]`, node)
+    }
+    
+    onNodeToggle = currentNode => {
+        console.log('onNodeToggle::', currentNode)
+    }
 
     /**
      * The render function.
      */
     render() {
         const {
-            titleText,
-            addSelectedLayersText,
             ...passThroughOpts
         } = this.props;
-
-        const {
-            wmsLayers,
-            selectedWmsLayers
-        } = this.state;
-        return wmsLayers && wmsLayers.length > 0 ? <Panel title={titleText} bounds="#main" className="add-wms-panel" {...passThroughOpts}>
-            <div onClick = { this.onAddSelectedLayers } >
-              {wmsLayers.map((layer, idx) => (
-                <AddWmsLayerEntry wmsLayer={layer} key={idx} />
-              ))}
-            </div>
-          </Panel> : null;
+        const { wmsLayers } = this.state;
+        
+        return wmsLayers && wmsLayers.length > 0 ?
+            <DropdownTreeSelect placeholderText="Choose layers" data={wmsLayers} onChange={this.onSelectionChange} onAction={this.onAction} onNodeToggle={this.onNodeToggle} /> : 
+            null;
     }
 }
 

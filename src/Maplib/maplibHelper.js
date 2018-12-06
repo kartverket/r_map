@@ -244,13 +244,13 @@ export const addLayer = (sourceType, source) => {
         includedFields: source.includedfields
       },
       tiled: source.options.singletile !== 'true',
-      crossOrigin: null,
+      crossOrigin: 'anonymous',
       style: source.style,
       wmtsExtent: source.wmtsextent,
       getCapabilities: (source.getcapabilities === 'true'),
       styles: source.params.styles,
       minResolution: source.minresolution,
-      maxResolution: source.maxresolution
+      maxResolution: source.maxresolution || 21664
     }],
     guid: source.guid,
     name: source.name,
@@ -314,13 +314,13 @@ export const addLayer2 = (sourceType, source) => {
         includedFields: source.includedfields
       },
       tiled: source.options.singletile !== 'true',
-      crossOrigin: null,
+      crossOrigin: 'anonymous',
       style: source.style,
       wmtsExtent: source.wmtsextent,
       getCapabilities: (source.getcapabilities === 'true'),
       styles: source.params.styles,
       minResolution: source.minresolution,
-      maxResolution: source.maxresolution
+      maxResolution: source.maxresolution || 21664
     }],
     guid: source.guid,
     name: source.name,

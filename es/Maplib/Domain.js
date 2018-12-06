@@ -60,7 +60,7 @@ export var SubLayer = function SubLayer(config) {
         transparent: true,
         layerIndex: -1,
         legendGraphicUrl: '',
-        crossOrigin: 'anonymous',
+        Origin: 'anonymous',
         featureInfoTitle: '',
         tooltipTemplate: '',
         showDialog: true,
@@ -118,7 +118,7 @@ export var Layer = function Layer(config) {
         opacity: 1,
         mapLayerIndex: -1,
         minResolution: 0,
-        maxResolution: Infinity,
+        maxResolution: 21664,
         legendGraphicUrls: [],
         selectedLayerOpen: false //todo johben temp
     };

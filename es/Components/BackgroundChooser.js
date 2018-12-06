@@ -42,7 +42,7 @@ export var BackgroundChooser = function (_Component) {
   BackgroundChooser.prototype.render = function render() {
     return React.createElement(
       NavDropdown,
-      { onSelect: this.setAsBaseLayer, value: this.state.value, title: "Backgound" },
+      { onSelect: this.setAsBaseLayer, value: this.state.value, title: "Backgound", id: "Backgound" },
       this.renderBaseLayers(this.state.baseLayers)
     );
   };

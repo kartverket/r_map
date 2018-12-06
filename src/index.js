@@ -20,12 +20,9 @@ class ListItem extends React.Component {
   render() {
     return ( 
       <AddWmsPanel
-          style={{ position: "relative" }}
           key="1"
           map={map}
-          services = {
-            this.props.listItem
-          }
+          services = { this.props.listItem }
           draggable={true}
         />
     );
@@ -206,12 +203,9 @@ export default class Map extends React.Component {
   }
 
   renderServiceList(){
-    console.log(this.props.services)
-    let listItems = this.props.services.map( function(listItem, i) {
+    return this.props.services.map( (listItem, i) =>  {
       return <ListItem listItem = {listItem} key = {i} map={map}/>;
     });
-    let listElement = React.createElement('div', {}, listItems);
-    return listElement;
   }
   /**
    * 
@@ -222,9 +216,9 @@ export default class Map extends React.Component {
       <div>
         <Nav>
           <BackgroundChooser map={map} />
+          { this.renderServiceList() }
         </Nav>
         <div id="map" style={{ height: "500px", width: "700px" }} />
-        { this.renderServiceList() }
       </div>
     );
   }
