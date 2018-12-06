@@ -138,24 +138,7 @@ export let mapConfig = {
     no: {},
     en: {}
   },
-  layers: [{
-    id: 1992,
-    isBaseLayer: true,
-    name: 'norges_grunnkart',
-    subLayers: [{
-      title: 'norges_grunnkart',
-      source: 'WMS',
-      url: ['http://opencache.statkart.no/gatekeeper/gk/gk.open?LAYERS=norges_grunnkart'],
-      legendurl: '',
-      gatekeeper: true,
-      name: 'norges_grunnkart',
-      format: 'image/png',
-      coordinate_system: 'EPSG:25833',
-      id: '1992',
-      tiled: true
-    }],
-    visibleOnLoad: false
-  }],
+  layers: [],
   hoverOptions: {
     multiSelect: true,
     mmultiSelect: false

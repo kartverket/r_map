@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { map, eventHandler } from "../Maplib/maplibHelper";
-import { NavItem, Nav } from "react-bootstrap";
+import { MenuItem, NavDropdown } from "react-bootstrap";
 
-export class Layerswitch extends Component {
+export class BackgroundChooser extends Component {
   constructor(props) {
     super(props);
     this.state = { baseLayers: [] };
@@ -17,15 +17,15 @@ export class Layerswitch extends Component {
   }
   renderBaseLayers(baseLayers) {
     return baseLayers.map(function(baseLayer, index) {
-      return <NavItem key={index} eventKey={baseLayer}>
+      return <MenuItem key={index} eventKey={baseLayer}>
           {baseLayer.name}
-      </NavItem>;
+      </MenuItem>;
     });
   }
   render() {
-    return <Nav bsStyle="pills" stacked onSelect={this.setAsBaseLayer} value={this.state.value}>
+    return <NavDropdown onSelect={this.setAsBaseLayer} value={this.state.value} title="Backgound">
         {this.renderBaseLayers(this.state.baseLayers)}
-      </Nav>;
+      </NavDropdown>;
   }
 }
 

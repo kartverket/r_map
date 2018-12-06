@@ -12,9 +12,9 @@ import PropTypes from "prop-types";
 import queryString from "query-string";
 import setQuery from "set-query-string";
 import "ol/ol.css";
-import { Layerswitch } from "./Components/Layerswitch";
+import { BackgroundChooser } from "./Components/BackgroundChooser";
 import { AddWmsPanel } from "./Components/AddWmsPanel";
-import { Navbar } from "react-bootstrap";
+import { Nav } from "react-bootstrap";
 
 class ListItem extends React.Component {
   render() {
@@ -220,9 +220,9 @@ export default class Map extends React.Component {
     const { layers } = this.state;
     return (
       <div>
-        <Navbar>
-          <Layerswitch map={map} />
-        </Navbar>
+        <Nav>
+          <BackgroundChooser map={map} />
+        </Nav>
         <div id="map" style={{ height: "500px", width: "700px" }} />
         { this.renderServiceList() }
       </div>
