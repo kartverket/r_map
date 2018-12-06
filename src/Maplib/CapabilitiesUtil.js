@@ -6,7 +6,7 @@ import {
   } from './Domain'
   
 import get from 'lodash/get.js';
-import {createDummyGroup, getWmsUrl} from './maplibHelper'
+import {createDummyGroup, getWmsUrl, mapConfig}  from './maplibHelper'
 export const newMaplibLayer = (sourceType, source) => {
     let catIds = [999]
     if (source.groupid !== undefined) {
@@ -37,7 +37,7 @@ export const newMaplibLayer = (sourceType, source) => {
         id: sourceType === 'VECTOR' ? mapConfig.layers.length + 8001 : mapConfig.layers.length + 1001,
         transparent: true,
         layerIndex: -1,
-        legendGraphicUrl: source.legendurl,
+        legendGraphicUrl: source.legendurl || '',
         minScale: source.options.minscale,
         maxScale: source.options.maxscale,
         sortingIndex: -1,

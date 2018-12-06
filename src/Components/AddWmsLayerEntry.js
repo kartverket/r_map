@@ -51,8 +51,8 @@ export class AddWmsLayerEntry extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            copyright: props.wmsLayer.getSource().getAttributions(),
-            queryable: props.wmsLayer.get('queryable')
+            // copyright: props.wmsLayer.getSource().getAttributions(),
+            // queryable: props.wmsLayer.get('queryable')
         };
     }
 
@@ -63,8 +63,8 @@ export class AddWmsLayerEntry extends React.Component {
     static defaultProps = {
         layerQueryableText: 'Layer is queryable',
         layerTextTemplateFn: (wmsLayer) => {
-            const title = wmsLayer.get('title');
-            const abstract = wmsLayer.get('abstract');
+            const title = wmsLayer.name;
+            const abstract = wmsLayer.abstract || '';
             const abstractTextSpan = abstract ?
                 <span>{`${title} - ${abstract}:`}</span> :
                 <span>{`${title}`}</span>;
@@ -87,7 +87,7 @@ export class AddWmsLayerEntry extends React.Component {
             queryable
         } = this.state;
 
-        const title = wmsLayer.get('title');
+        const title = wmsLayer.name;
         const layerTextSpan = layerTextTemplateFn(wmsLayer);
 
         return <Checkbox value={title} className="add-wms-layer-checkbox-line">

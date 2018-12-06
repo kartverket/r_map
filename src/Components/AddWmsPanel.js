@@ -97,7 +97,7 @@ export class AddWmsPanel extends React.Component {
                     wmsLayers: layers
                 });
             })
-            .catch(() => alert("Could not parse capabilities document."));
+            .catch((e) => console.log(e));
     }
     /**
      * onSelectedLayersChange - set state for selectedWmsLayers
@@ -163,7 +163,7 @@ export class AddWmsPanel extends React.Component {
         console.log(layerName)
 
         const filteredLayers = this.state.wmsLayers.filter(
-            layer => layerName == layer.get('title')
+            layer => layerName == layer.name
         );
 
         if (onLayerAddToMap) {
@@ -171,8 +171,8 @@ export class AddWmsPanel extends React.Component {
         } else if (map) {
             filteredLayers.forEach(layer => {
                 // Add layer to map if it is not added yet
-                if (!map.getLayers().getArray().includes(layer)) {
-                    map.addLayer(layer);
+                if (!map.GetOverlayLayers().includes(layer)) {
+                    map.AddLayer(layer);
                 }
             });
         } else {
