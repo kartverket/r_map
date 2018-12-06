@@ -17,9 +17,9 @@ import PropTypes from "prop-types";
 import queryString from "query-string";
 import setQuery from "set-query-string";
 import "ol/ol.css";
-import { Layerswitch } from "./Components/Layerswitch";
+import { BackgroundChooser } from "./Components/BackgroundChooser";
 import { AddWmsPanel } from "./Components/AddWmsPanel";
-import { Navbar } from "react-bootstrap";
+import { Nav } from "react-bootstrap";
 
 var ListItem = function (_React$Component) {
   _inherits(ListItem, _React$Component);
@@ -148,9 +148,9 @@ var Map = (_temp = _class = function (_React$Component2) {
       'div',
       null,
       React.createElement(
-        Navbar,
+        Nav,
         null,
-        React.createElement(Layerswitch, { map: map })
+        React.createElement(BackgroundChooser, { map: map })
       ),
       React.createElement('div', { id: 'map', style: { height: "500px", width: "700px" } }),
       this.renderServiceList()
