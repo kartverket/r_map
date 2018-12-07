@@ -959,7 +959,7 @@ export var OLStylesSLD = function OLStylesSLD() {
         //console.log(sld);
         /*
          var userStyles = response.getElementsByTagName('UserStyle');
-          var thisstyle = [];
+           var thisstyle = [];
          $(userStyles).each(function(index, userstyle){
          if (index === 0) {
          thisstyle.push(parseStyle(userstyle));
