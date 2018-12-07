@@ -5,7 +5,7 @@ import {
   map,
   eventHandler,
   mapConfig,
-  addLayer2
+  addLayer
 } from "./Maplib/maplibHelper";
 import { mergeDefaultParams, parseWmsCapabilities } from "./Utils/MapHelper";
 import PropTypes from "prop-types";
@@ -167,7 +167,7 @@ export default class Map extends React.Component {
                 visibility: "true"
               }
             };
-            let newLayerConfig = addLayer2(Service.Name, layerConfig);
+            let newLayerConfig = addLayer(Service.Name, layerConfig);
             map.AddLayer(newLayerConfig);
           } else {
             // console.log('No capabilities!')

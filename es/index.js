@@ -11,7 +11,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import React from "react";
-import { map, eventHandler, mapConfig, addLayer2 } from "./Maplib/maplibHelper";
+import { map, eventHandler, mapConfig, addLayer } from "./Maplib/maplibHelper";
 import { mergeDefaultParams, parseWmsCapabilities } from "./Utils/MapHelper";
 import PropTypes from "prop-types";
 import queryString from "query-string";
@@ -201,7 +201,7 @@ var Map = (_temp = _class = function (_React$Component2) {
               visibility: "true"
             }
           };
-          var newLayerConfig = addLayer2(Service.Name, layerConfig);
+          var newLayerConfig = addLayer(Service.Name, layerConfig);
           map.AddLayer(newLayerConfig);
         } else {
           // console.log('No capabilities!')

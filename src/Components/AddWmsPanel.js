@@ -16,7 +16,7 @@ import {
 
 import {
     map,
-    addLayer2
+    addLayer
   } from "../Maplib/maplibHelper";
   
 
@@ -107,13 +107,12 @@ export class AddWmsPanel extends React.Component {
               }
             };
             let ServiceName = 'WMS'
-            let newLayerConfig = addLayer2(ServiceName, layerConfig);
+            let newLayerConfig = addLayer(ServiceName, layerConfig);
             map.AddLayer(newLayerConfig);
         }
     }
 
     onSelectionChange = (currentNode, selectedNodes) => {
-        console.log('onChange::', currentNode, selectedNodes)
         if (!map.GetOverlayLayers().includes(currentNode)) {
              map.AddLayer(currentNode);
          } else {

@@ -18,7 +18,7 @@ import OlMap from 'ol/Map';
 import isFunction from 'lodash/isFunction';
 import { CapabilitiesUtil } from "../Maplib/CapabilitiesUtil";
 
-import { map, addLayer2 } from "../Maplib/maplibHelper";
+import { map, addLayer } from "../Maplib/maplibHelper";
 
 /**
  * Panel containing a (checkable) list of AddWmsLayerEntry instances.
@@ -59,7 +59,7 @@ export var AddWmsPanel = function (_React$Component) {
                     }
                 };
                 var ServiceName = 'WMS';
-                var newLayerConfig = addLayer2(ServiceName, layerConfig);
+                var newLayerConfig = addLayer(ServiceName, layerConfig);
                 map.AddLayer(newLayerConfig);
             }
         };
