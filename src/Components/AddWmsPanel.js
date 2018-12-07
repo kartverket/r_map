@@ -116,6 +116,12 @@ export class AddWmsPanel extends React.Component {
         console.log('onChange::', currentNode, selectedNodes)
          if (!map.GetOverlayLayers().includes(currentNode)) {
              map.AddLayer(currentNode);
+         } else {
+            if (!map.GetVisibleSubLayers().includes(currentNode)) {
+                map.HideLayer(currentNode);
+            } else {
+                map.ShowLayer(currentNode);
+            }
          }
     }
  
