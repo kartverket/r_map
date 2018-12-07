@@ -6,7 +6,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 import React, { Component } from "react";
 import { map, eventHandler } from "../Maplib/maplibHelper";
-import { MenuItem, NavDropdown } from "react-bootstrap";
+import { ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 
 export var BackgroundChooser = function (_Component) {
   _inherits(BackgroundChooser, _Component);
@@ -32,17 +32,19 @@ export var BackgroundChooser = function (_Component) {
   BackgroundChooser.prototype.renderBaseLayers = function renderBaseLayers(baseLayers) {
     return baseLayers.map(function (baseLayer, index) {
       return React.createElement(
-        MenuItem,
-        { key: index, eventKey: baseLayer },
-        baseLayer.name
+        ToggleButton,
+        { key: index, value: baseLayer },
+        " ",
+        baseLayer.name,
+        " "
       );
     });
   };
 
   BackgroundChooser.prototype.render = function render() {
     return React.createElement(
-      NavDropdown,
-      { onSelect: this.setAsBaseLayer, value: this.state.value, title: "Backgound", id: "Backgound" },
+      ToggleButtonGroup,
+      { type: "radio", name: "Backgound", onChange: this.setAsBaseLayer, value: this.state.value },
       this.renderBaseLayers(this.state.baseLayers)
     );
   };

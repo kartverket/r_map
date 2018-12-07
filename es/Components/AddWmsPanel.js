@@ -65,7 +65,6 @@ export var AddWmsPanel = function (_React$Component) {
         };
 
         _this.onSelectionChange = function (currentNode, selectedNodes) {
-            console.log('onChange::', currentNode, selectedNodes);
             if (!map.GetOverlayLayers().includes(currentNode)) {
                 map.AddLayer(currentNode);
             } else {

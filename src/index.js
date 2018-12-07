@@ -1,12 +1,7 @@
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap-theme.css';
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/css/bootstrap-theme.css";
 import React from "react";
-import {
-  map,
-  eventHandler,
-  mapConfig,
-  addLayer
-} from "./Maplib/maplibHelper";
+import { map, eventHandler, mapConfig, addLayer } from "./Maplib/maplibHelper";
 import { mergeDefaultParams, parseWmsCapabilities } from "./Utils/MapHelper";
 import PropTypes from "prop-types";
 import queryString from "query-string";
@@ -14,17 +9,24 @@ import setQuery from "set-query-string";
 import "ol/ol.css";
 import { BackgroundChooser } from "./Components/BackgroundChooser";
 import { AddWmsPanel } from "./Components/AddWmsPanel";
-import { Nav } from "react-bootstrap";
+import {
+  Nav,
+  Panel,
+  PanelGroup,
+  Collapse,
+  Button,
+  ButtonGroup
+} from "react-bootstrap";
 
 class ListItem extends React.Component {
   render() {
-    return ( 
+    return (
       <AddWmsPanel
-          key="1"
-          map={map}
-          services = { this.props.listItem }
-          draggable={true}
-        />
+        key="1"
+        map={map}
+        services={this.props.listItem}
+        draggable={true}
+      />
     );
   }
 }
@@ -57,16 +59,16 @@ export default class Map extends React.Component {
      * @type {Function}
      */
     onChangeLon: PropTypes.func,
-    /** 
+    /**
      * @type {Function}
      */
     onChangeLat: PropTypes.func,
-    /** 
+    /**
      * @type {Function}
      */
     onChangeZoom: PropTypes.func,
     /**
-     * @type {Function} 
+     * @type {Function}
      */
     onMapViewChanges: PropTypes.func,
     /**
@@ -76,8 +78,7 @@ export default class Map extends React.Component {
     /**
      * @type {Array}
      */
-    services: PropTypes.arrayOf(PropTypes.object),
-
+    services: PropTypes.arrayOf(PropTypes.object)
   };
 
   static defaultProps = {
@@ -88,15 +89,22 @@ export default class Map extends React.Component {
     lon: 396722,
     lat: 7197860,
     zoom: 4,
-    wms: ''
+    wms: ""
   };
 
   /**
-   * 
+   *
    *@constructs Map
    */
   constructor(props) {
     super(props);
+    this.handleSelect = this.handleSelect.bind(this);
+
+    this.state = {
+      activeKey: "1",
+      open: false
+    };
+
     const queryValues = queryString.parse(window.location.search);
 
     let lon = Number(queryValues["lon"] || props.lon);
@@ -120,7 +128,7 @@ export default class Map extends React.Component {
   }
 
   /**
-   * 
+   *
    */
   componentDidMount() {
     if (this.props.wms) {
@@ -134,7 +142,7 @@ export default class Map extends React.Component {
   }
 
   /**
-   * 
+   *
    */
   addWMS_ = (url, layers) => {
     if (url) {
@@ -179,7 +187,7 @@ export default class Map extends React.Component {
   };
 
   /**
-   * 
+   *
    */
   updateMapInfoState = () => {
     let center = map.GetCenter();
@@ -192,7 +200,9 @@ export default class Map extends React.Component {
   };
 
   addWMS() {
-    CapabilitiesUtil.parseWmsCapabilities(this.props.services.GetCapabilitiesUrl)
+    CapabilitiesUtil.parseWmsCapabilities(
+      this.props.services.GetCapabilitiesUrl
+    )
       .then(CapabilitiesUtil.getLayersFromWmsCapabilties)
       .then(layers => {
         this.setState({
@@ -202,23 +212,76 @@ export default class Map extends React.Component {
       .catch(() => alert("Could not parse capabilities document."));
   }
 
-  renderServiceList(){
-    return this.props.services.map( (listItem, i) =>  {
-      return <ListItem listItem = {listItem} key = {i} map={map}/>;
+  renderServiceList() {
+    return this.props.services.map((listItem, i) => {
+      return <ListItem listItem={listItem} key={i} map={map} />;
     });
   }
+  handleSelect(activeKey) {
+    this.setState({
+      activeKey
+    });
+  }
+
   /**
-   * 
+   *
    */
   render() {
     const { layers } = this.state;
     return (
       <div>
-        <Nav>
-          <BackgroundChooser map={map} />
-          { this.renderServiceList() }
-        </Nav>
-        <div id="map" style={{ height: "500px", width: "700px" }} />
+        <div className = "pulldown-content"
+        style = {
+          {
+            position: "absolute",
+            right: 0,
+            width: "320px",
+            zIndex: 600
+          }
+        } >
+          <Collapse in={this.state.open}>
+            <PanelGroup
+              accordion
+              id="accordion-controlled-example"
+              activeKey={this.state.activeKey}
+              onSelect={this.handleSelect}
+            >
+              <Panel eventKey="1">
+                <Panel.Heading>
+                  <Panel.Title toggle>Background Chooser</Panel.Title>
+                </Panel.Heading>
+                <Panel.Body collapsible>
+                  <ButtonGroup vertical>
+                    <BackgroundChooser map={map} />
+                  </ButtonGroup>
+                </Panel.Body>
+              </Panel>
+              <Panel eventKey="2">
+                <Panel.Heading>
+                  <Panel.Title toggle>Layer Chooser</Panel.Title>
+                </Panel.Heading>
+                <Panel.Body collapsible>
+                  <Nav bsStyle="pills" pullLeft>
+                    {this.renderServiceList()}
+                  </Nav>
+                </Panel.Body>
+              </Panel>
+            </PanelGroup>
+          </Collapse>
+          <Button bsStyle="primary"
+            onClick={() => this.setState({ open: !this.state.open })} >
+            {this.state.open ? 'Close Menu' : 'Open Menu'}
+          </Button>
+        </div>
+        <div id="map" style = {
+          {
+            position: "relative",
+            width: "100%",
+            height: "100%",
+            zIndex: 0
+          }
+        }
+        />
       </div>
     );
   }

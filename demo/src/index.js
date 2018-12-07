@@ -38,7 +38,6 @@ class Demo extends Component {
   
   render() {
     return <div>
-      <h1>mapComponent Demo</h1>
       <Map services = { this.state.services } />
     </div>
   }
