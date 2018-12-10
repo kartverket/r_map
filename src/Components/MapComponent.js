@@ -84,6 +84,10 @@ export default class Map extends React.Component {
      * @type {Array}
      */
     services: PropTypes.arrayOf(PropTypes.object),
+    /**
+     * @type {Boolean}
+     */
+    menu: PropTypes.bool
   };
 
   static defaultProps = {
@@ -94,7 +98,8 @@ export default class Map extends React.Component {
     lon: 396722,
     lat: 7197860,
     zoom: 4,
-    wms: ''
+    wms: '',
+    menu:true
   };
 
   /**
@@ -108,7 +113,8 @@ export default class Map extends React.Component {
 
     this.state = {
       activeKey: "1",
-      open: false
+      open: false,
+      menu: this.props.menu
     };
 
     const queryValues = queryString.parse(window.location.search);
@@ -233,7 +239,7 @@ export default class Map extends React.Component {
     const { layers } = this.state;
     return (
       <div>
-        <div className = "pulldown-content" style = {
+        <div className = {this.state.menu === true ? 'pulldown-content' : 'hide'} style = {
           {
             position: "absolute",
             right: 0,

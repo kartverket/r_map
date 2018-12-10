@@ -65,7 +65,8 @@ var Map = (_temp = _class = function (_React$Component2) {
 
     _this2.state = {
       activeKey: "1",
-      open: false
+      open: false,
+      menu: _this2.props.menu
     };
 
     var queryValues = queryString.parse(window.location.search);
@@ -160,7 +161,7 @@ var Map = (_temp = _class = function (_React$Component2) {
       null,
       React.createElement(
         'div',
-        { className: 'pulldown-content', style: {
+        { className: this.state.menu === true ? 'pulldown-content' : 'hide', style: {
             position: "absolute",
             right: 0,
             width: "320px",
@@ -251,7 +252,8 @@ var Map = (_temp = _class = function (_React$Component2) {
   lon: 396722,
   lat: 7197860,
   zoom: 4,
-  wms: ''
+  wms: '',
+  menu: true
 }, _initialiseProps = function _initialiseProps() {
   var _this5 = this;
 
@@ -348,5 +350,9 @@ Map.propTypes = process.env.NODE_ENV !== "production" ? {
   /**
    * @type {Array}
    */
-  services: PropTypes.arrayOf(PropTypes.object)
+  services: PropTypes.arrayOf(PropTypes.object),
+  /**
+   * @type {Boolean}
+   */
+  menu: PropTypes.bool
 } : {};
