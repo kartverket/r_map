@@ -19,7 +19,7 @@ import setQuery from "set-query-string";
 import "ol/ol.css";
 import BackgroundChooser from "./BackgroundChooser";
 import AddWmsPanel from "./AddWmsPanel";
-import { Nav } from "react-bootstrap";
+import { Nav, Panel, PanelGroup, Collapse, Button, ButtonGroup } from "react-bootstrap";
 
 var ListItem = function (_React$Component) {
   _inherits(ListItem, _React$Component);
@@ -60,6 +60,13 @@ var Map = (_temp = _class = function (_React$Component2) {
     var _this2 = _possibleConstructorReturn(this, _React$Component2.call(this, props));
 
     _initialiseProps.call(_this2);
+
+    _this2.handleSelect = _this2.handleSelect.bind(_this2);
+
+    _this2.state = {
+      activeKey: "1",
+      open: false
+    };
 
     var queryValues = queryString.parse(window.location.search);
 
@@ -132,24 +139,106 @@ var Map = (_temp = _class = function (_React$Component2) {
       return React.createElement(ListItem, { listItem: listItem, key: i, map: map });
     });
   };
+
+  Map.prototype.handleSelect = function handleSelect(activeKey) {
+    this.setState({
+      activeKey: activeKey
+    });
+  };
   /**
    * 
    */
 
 
   Map.prototype.render = function render() {
+    var _this4 = this;
+
     var layers = this.state.layers;
 
     return React.createElement(
       'div',
       null,
       React.createElement(
-        Nav,
-        null,
-        React.createElement(BackgroundChooser, { map: map }),
-        this.renderServiceList()
+        'div',
+        { className: 'pulldown-content', style: {
+            position: "absolute",
+            right: 0,
+            width: "320px",
+            zIndex: 600
+          } },
+        React.createElement(
+          Collapse,
+          { 'in': this.state.open },
+          React.createElement(
+            PanelGroup,
+            {
+              accordion: true,
+              id: 'accordion-controlled-example',
+              activeKey: this.state.activeKey,
+              onSelect: this.handleSelect
+            },
+            React.createElement(
+              Panel,
+              { eventKey: '1' },
+              React.createElement(
+                Panel.Heading,
+                null,
+                React.createElement(
+                  Panel.Title,
+                  { toggle: true },
+                  'Background Chooser'
+                )
+              ),
+              React.createElement(
+                Panel.Body,
+                { collapsible: true },
+                React.createElement(
+                  ButtonGroup,
+                  { vertical: true },
+                  React.createElement(BackgroundChooser, { map: map })
+                )
+              )
+            ),
+            React.createElement(
+              Panel,
+              { eventKey: '2' },
+              React.createElement(
+                Panel.Heading,
+                null,
+                React.createElement(
+                  Panel.Title,
+                  { toggle: true },
+                  'Layer Chooser'
+                )
+              ),
+              React.createElement(
+                Panel.Body,
+                { collapsible: true },
+                React.createElement(
+                  Nav,
+                  { bsStyle: 'pills', pullLeft: true },
+                  this.renderServiceList()
+                )
+              )
+            )
+          )
+        ),
+        React.createElement(
+          Button,
+          { bsStyle: 'primary',
+            onClick: function onClick() {
+              return _this4.setState({ open: !_this4.state.open });
+            } },
+          this.state.open ? 'Close Menu' : 'Open Menu'
+        )
       ),
-      React.createElement('div', { id: 'map', style: { height: "500px", width: "700px" } })
+      React.createElement('div', { id: 'map', style: {
+          position: "relative",
+          width: "100%",
+          height: "100%",
+          zIndex: 0
+        }
+      })
     );
   };
 
@@ -164,7 +253,7 @@ var Map = (_temp = _class = function (_React$Component2) {
   zoom: 4,
   wms: ''
 }, _initialiseProps = function _initialiseProps() {
-  var _this4 = this;
+  var _this5 = this;
 
   this.state = {
     layers: []
@@ -215,7 +304,7 @@ var Map = (_temp = _class = function (_React$Component2) {
   this.updateMapInfoState = function () {
     var center = map.GetCenter();
     var queryValues = queryString.parse(window.location.search);
-    _this4.props = { lon: center.lon, lat: center.lat, zoom: center.zoom };
+    _this5.props = { lon: center.lon, lat: center.lat, zoom: center.zoom };
     queryValues.lon = center.lon;
     queryValues.lat = center.lat;
     queryValues.zoom = center.zoom;
@@ -260,5 +349,4 @@ Map.propTypes = process.env.NODE_ENV !== "production" ? {
    * @type {Array}
    */
   services: PropTypes.arrayOf(PropTypes.object)
-
 } : {};

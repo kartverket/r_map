@@ -14,7 +14,14 @@ import setQuery from "set-query-string";
 import "ol/ol.css";
 import BackgroundChooser from "./BackgroundChooser";
 import AddWmsPanel from "./AddWmsPanel";
-import { Nav } from "react-bootstrap";
+import {
+  Nav,
+  Panel,
+  PanelGroup,
+  Collapse,
+  Button,
+  ButtonGroup
+} from "react-bootstrap";
 
 class ListItem extends React.Component {
   render() {
@@ -77,7 +84,6 @@ export default class Map extends React.Component {
      * @type {Array}
      */
     services: PropTypes.arrayOf(PropTypes.object),
-
   };
 
   static defaultProps = {
@@ -97,6 +103,14 @@ export default class Map extends React.Component {
    */
   constructor(props) {
     super(props);
+
+    this.handleSelect = this.handleSelect.bind(this);
+
+    this.state = {
+      activeKey: "1",
+      open: false
+    };
+
     const queryValues = queryString.parse(window.location.search);
 
     let lon = Number(queryValues["lon"] || props.lon);
@@ -207,6 +221,11 @@ export default class Map extends React.Component {
       return <ListItem listItem = {listItem} key = {i} map={map}/>;
     });
   }
+  handleSelect(activeKey) {
+    this.setState({
+      activeKey
+    });
+  }
   /**
    * 
    */
@@ -214,12 +233,58 @@ export default class Map extends React.Component {
     const { layers } = this.state;
     return (
       <div>
-        <Nav>
-          <BackgroundChooser map={map} />
-          { this.renderServiceList() }
-        </Nav>
-        <div id="map" style={{ height: "500px", width: "700px" }} />
-      </div>
+        <div className = "pulldown-content" style = {
+          {
+            position: "absolute",
+            right: 0,
+            width: "320px",
+            zIndex: 600
+          }
+        } >
+          <Collapse in={this.state.open}>
+            <PanelGroup
+              accordion
+              id="accordion-controlled-example"
+              activeKey={this.state.activeKey}
+              onSelect={this.handleSelect}
+            >
+              <Panel eventKey="1">
+                <Panel.Heading>
+                  <Panel.Title toggle>Background Chooser</Panel.Title>
+                </Panel.Heading>
+                <Panel.Body collapsible>
+                  <ButtonGroup vertical>
+                    <BackgroundChooser map={map} />
+                  </ButtonGroup>
+                </Panel.Body>
+              </Panel>
+              <Panel eventKey="2">
+                <Panel.Heading>
+                  <Panel.Title toggle>Layer Chooser</Panel.Title>
+                </Panel.Heading>
+                <Panel.Body collapsible>
+                  <Nav bsStyle="pills" pullLeft>
+                    {this.renderServiceList()}
+                  </Nav>
+                </Panel.Body>
+              </Panel>
+            </PanelGroup>
+          </Collapse>
+          <Button bsStyle="primary"
+            onClick={() => this.setState({ open: !this.state.open })} >
+            {this.state.open ? 'Close Menu' : 'Open Menu'}
+          </Button>
+        </div>
+        <div id="map" style = {
+          {
+            position: "relative",
+            width: "100%",
+            height: "100%",
+            zIndex: 0
+          }
+        }
+        />
+        </div>
     );
   }
 }
