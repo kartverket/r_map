@@ -1,29 +1,21 @@
-'use strict';
+import {
+  Category, MapConfig
+} from './Repository'
 
-exports.__esModule = true;
-exports.map = exports.mapImplementation = exports.eventHandler = exports.addLayer = exports.getWmsUrl = exports.createDummyGroup = exports.createGroup = exports.mapConfig = undefined;
+import {
+  Layer
+} from './Domain'
+import {
+  EventHandler
+} from './EventHandler'
+import {OLMap} from './OLMap'
+import Layers from './Layers'
+import Groups from './Groups'
+import {Map} from './Map'
 
-var _mapConfig;
-
-var _Repository = require('./Repository');
-
-var _Domain = require('./Domain');
-
-var _EventHandler = require('./EventHandler');
-
-var _OLMap = require('./OLMap');
-
-var _Layers = require('./Layers');
-
-var _Groups = require('./Groups');
-
-var _Categories = require('./Categories');
-
-var _Map = require('./Map');
-
-var groupIds = [];
-var notDummyGroup = false;
-var mapConfig = exports.mapConfig = (_mapConfig = {
+let groupIds = []
+let notDummyGroup = false
+export let mapConfig = {
   groups: [],
   coordinate_system: 'EPSG:25833',
   center: [396722, 7197860],
@@ -206,80 +198,88 @@ var mapConfig = exports.mapConfig = (_mapConfig = {
   comment: '',
   numZoomLevels: 18,
   newMaxRes: 21664,
-  extentUnits: 'm'
-}, _mapConfig['proxyHost'] = '', _mapConfig.searchHost = '', _mapConfig.searchpointzoom = 12, _mapConfig.languages = {
-  no: {},
-  en: {}
-}, _mapConfig.layers = [], _mapConfig.hoverOptions = {
-  multiSelect: true,
-  mmultiSelect: false
-}, _mapConfig.onlyOneGroup = false, _mapConfig.isOffline = false, _mapConfig);
+  extentUnits: 'm',
+  proxyHost: '',
+  searchHost: '',
+  searchpointzoom: 12,
+  languages: {
+    no: {},
+    en: {}
+  },
+  layers: [],
+  hoverOptions: {
+    multiSelect: true,
+    mmultiSelect: false
+  },
+  onlyOneGroup: false,
+  isOffline: false
+}
 
-var createGroup = exports.createGroup = function createGroup(groupId, groupNameLng1, groupNameLng2, visibleOnLoad) {
-  var newGroup = new _Repository.Category({
+export const createGroup = (groupId, groupNameLng1, groupNameLng2, visibleOnLoad) => {
+  var newGroup = new Category({
     groupId: groupId,
     name: groupNameLng1,
     parentId: groupNameLng2,
     visibleOnLoad: visibleOnLoad
-  });
-  groupIds.push(groupId);
-  mapConfig.groups.push(newGroup);
-  mapConfig.languages.en[newGroup.groupId] = groupNameLng1; // has to be fix with correct value!
-  mapConfig.languages.no[newGroup.groupId] = groupNameLng2;
-};
-var updateMapConfigWithGroups = function updateMapConfigWithGroups(mapConfig) {
+  })
+  groupIds.push(groupId)
+  mapConfig.groups.push(newGroup)
+  mapConfig.languages.en[newGroup.groupId] = groupNameLng1 // has to be fix with correct value!
+  mapConfig.languages.no[newGroup.groupId] = groupNameLng2
+}
+const updateMapConfigWithGroups = (mapConfig) => {
   if (mapConfig.maplayer !== undefined) {
     if (mapConfig.maplayer.length !== undefined) {
       mapConfig.maplayer.forEach(function (group) {
-        createGroup(group.groupid, group.name, group.namelng, group.display);
-      });
+        createGroup(group.groupid, group.name, group.namelng, group.display)
+      })
     } else {
-      createGroup(mapConfig.maplayer.groupid, mapConfig.maplayer.name, mapConfig.maplayer.namelng, mapConfig.maplayer.display);
+      createGroup(mapConfig.maplayer.groupid, mapConfig.maplayer.name, mapConfig.maplayer.namelng, mapConfig.maplayer.display)
     }
   }
-};
-var findGroupExistance = function findGroupExistance(grpIds) {
-  var notExistGroups = [];
-  grpIds.forEach(function (grpId) {
+}
+const findGroupExistance = (grpIds) => {
+  let notExistGroups = []
+  grpIds.forEach((grpId) => {
     if (groupIds.indexOf(grpId) === -1) {
-      notExistGroups.push(grpId);
+      notExistGroups.push(grpId)
     }
-  });
-  return notExistGroups;
-};
-var createNotExistGroup = function createNotExistGroup(grpIds, groupNameLng1, groupNameLng2) {
-  var notExistGroups = findGroupExistance(grpIds);
-  notExistGroups.forEach(function (grpId) {
-    createGroup(grpId, groupNameLng1, groupNameLng2);
-  });
-};
-var createDummyGroup = exports.createDummyGroup = function createDummyGroup() {
+  })
+  return notExistGroups
+}
+const createNotExistGroup = (grpIds, groupNameLng1, groupNameLng2) => {
+  let notExistGroups = findGroupExistance(grpIds)
+  notExistGroups.forEach((grpId) => {
+    createGroup(grpId, groupNameLng1, groupNameLng2)
+  })
+}
+export const createDummyGroup = () => {
   // dummy category for layers without group id
   if (notDummyGroup === false) {
-    createGroup(999, 'Other layers', 'Andre lag');
-    notDummyGroup = true;
+    createGroup(999, 'Other layers', 'Andre lag')
+    notDummyGroup = true
   }
-};
-var getWmsUrl = exports.getWmsUrl = function getWmsUrl(url) {
+}
+export const getWmsUrl = (url) => {
   if (url.indexOf('|')) {
-    return url.split('|');
+    return url.split('|')
   } else {
-    return url;
+    return url
   }
-};
-var addLayer = exports.addLayer = function addLayer(sourceType, source) {
-  var catIds = [999];
+}
+export const addLayer = (sourceType, source) => {
+  let catIds = [999]
   if (source.groupid !== undefined) {
-    catIds = source.groupid.toString().split(',').map(function (item) {
-      return parseInt(item, 10);
-    });
-    createNotExistGroup(catIds, source.name, source.namelng);
+    catIds = source.groupid.toString().split(',').map((item) => {
+      return parseInt(item, 10)
+    })
+    createNotExistGroup(catIds, source.name, source.namelng)
   } else {
     if (source.options.isbaselayer === 'false') {
-      createDummyGroup();
+      createDummyGroup()
     }
   }
-  var newIsyLayer = new _Domain.Layer({
+  const newIsyLayer = new Layer({
     subLayers: [{
       title: source.name,
       name: source.params.layers || source.name,
@@ -315,7 +315,7 @@ var addLayer = exports.addLayer = function addLayer(sourceType, source) {
       crossOrigin: 'anonymous',
       style: source.style,
       wmtsExtent: source.wmtsextent,
-      getCapabilities: source.getcapabilities === 'true',
+      getCapabilities: (source.getcapabilities === 'true'),
       styles: source.params.styles,
       minResolution: source.minresolution,
       maxResolution: source.maxresolution || 21664
@@ -323,62 +323,63 @@ var addLayer = exports.addLayer = function addLayer(sourceType, source) {
     guid: source.guid,
     name: source.name,
     groupId: catIds,
-    visibleOnLoad: source.options.visibility === 'true',
+    visibleOnLoad: (source.options.visibility === 'true'),
     id: sourceType === 'VECTOR' ? mapConfig.layers.length + 8001 : mapConfig.layers.length + 1001,
-    isBaseLayer: source.options.isbaselayer === 'true',
+    isBaseLayer: (source.options.isbaselayer === 'true'),
     previewActive: false,
     opacity: 1,
     mapLayerIndex: -1,
     legendGraphicUrls: [],
     selectedLayerOpen: false,
     thumbnail: source.thumbnail
-  });
+  })
   return newIsyLayer;
-};
+}
 
-var addLayerToConfig = function addLayerToConfig(newIsyLayer, source) {
-  mapConfig.layers.push(newIsyLayer);
-  mapConfig.languages.en[newIsyLayer.id] = source.name;
-  mapConfig.languages.no[newIsyLayer.id] = source.namelng;
-};
-var updateMapConfigWithImageLayers = function updateMapConfigWithImageLayers(mapConfig) {
+const addLayerToConfig = (newIsyLayer, source) => {
+  mapConfig.layers.push(newIsyLayer)
+  mapConfig.languages.en[newIsyLayer.id] = source.name
+  mapConfig.languages.no[newIsyLayer.id] = source.namelng
+}
+const updateMapConfigWithImageLayers = (mapConfig) => {
   if (mapConfig.wmts !== undefined) {
     if (mapConfig.wmts.length !== undefined) {
-      mapConfig.wmts.forEach(function (wmts) {
-        addLayerToConfig(addLayer('WMTS', wmts), wmts);
-      });
+      mapConfig.wmts.forEach((wmts) => {        
+        addLayerToConfig(addLayer('WMTS', wmts), wmts)
+      })
     } else {
-      addLayerToConfig(addLayer('WMTS', mapConfig.wmts), mapConfig.wmts);
+      addLayerToConfig(addLayer('WMTS', mapConfig.wmts), mapConfig.wmts)
     }
   }
   if (mapConfig.wms !== undefined) {
     if (mapConfig.wms.length !== undefined) {
-      mapConfig.wms.forEach(function (wms) {
-        addLayerToConfig(addLayer('WMS', wms), wms);
-      });
+      mapConfig.wms.forEach((wms) => {
+        addLayerToConfig(addLayer('WMS', wms), wms)
+      })
     } else {
-      addLayerToConfig(addLayer('WMS', mapConfig.wms), mapConfig.wms);
+      addLayerToConfig(addLayer('WMS', mapConfig.wms), mapConfig.wms)
     }
   }
   if (mapConfig.vector !== undefined) {
     if (mapConfig.vector.length !== undefined) {
       mapConfig.vector.forEach(function (vector) {
-        addLayerToConfig(addLayer('VECTOR', vector), vector);
-      });
+        addLayerToConfig(addLayer('VECTOR', vector), vector)
+      })
     } else {
-      addLayerToConfig(addLayer('VECTOR', mapConfig.vector), mapConfig.vector);
+      addLayerToConfig(addLayer('VECTOR', mapConfig.vector), mapConfig.vector)
     }
   }
-};
-updateMapConfigWithGroups(mapConfig);
-updateMapConfigWithImageLayers(mapConfig);
-exports.mapConfig = mapConfig = new _Repository.MapConfig(mapConfig);
-mapConfig.instance = 'geoportal';
-mapConfig.proxyHost = '/?';
+}
+updateMapConfigWithGroups(mapConfig)
+updateMapConfigWithImageLayers(mapConfig)
+mapConfig = new MapConfig(mapConfig)
+mapConfig.instance = 'geoportal'
+mapConfig.proxyHost = '/?'
 
-var eventHandler = exports.eventHandler = new _EventHandler.EventHandler();
-var mapImplementation = exports.mapImplementation = new _OLMap.OLMap(null, eventHandler);
-var layerHandler = new _Layers.Layers(mapImplementation);
-var groupHandler = new _Groups.Groups();
-var categoryHandler = new _Categories.Categories();
-var map = exports.map = new _Map.Map(mapImplementation, eventHandler, null, layerHandler, groupHandler, categoryHandler);
+export const eventHandler = new EventHandler()
+export const mapImplementation = new OLMap(null, eventHandler)
+export const map = new Map(
+  mapImplementation,
+  eventHandler,
+  null
+)

@@ -1,11 +1,6 @@
-'use strict';
+import Guid from './Utils';
 
-exports.__esModule = true;
-exports.Layer = exports.FORMATS = exports.SOURCES = exports.SubLayer = exports.LegendGraphic = exports.FeatureInfo = undefined;
-
-var _Utils = require('./Utils');
-
-var FeatureInfo = exports.FeatureInfo = function FeatureInfo(config) {
+export var FeatureInfo = function FeatureInfo(config) {
     var defaults = {
         // single select via WMS GetFeatureInfo
         supportsGetFeatureInfo: true,
@@ -22,7 +17,7 @@ var FeatureInfo = exports.FeatureInfo = function FeatureInfo(config) {
     return Object.assign({}, defaults, config);
 };
 
-var LegendGraphic = exports.LegendGraphic = function LegendGraphic(config) {
+export var LegendGraphic = function LegendGraphic(config) {
     var defaults = {
         width: "20",
         height: "20",
@@ -48,8 +43,8 @@ var LegendGraphic = exports.LegendGraphic = function LegendGraphic(config) {
         GetLegendGraphicUrl: getLegendGraphicUrl
     };
 };
-var SubLayer = exports.SubLayer = function SubLayer(config) {
-    var id = new _Utils.Guid().NewGuid();
+export var SubLayer = function SubLayer(config) {
+    var id = Guid.newGuid();
 
     var defaults = {
         name: '',
@@ -95,7 +90,7 @@ var SubLayer = exports.SubLayer = function SubLayer(config) {
     return instance;
 };
 
-var SOURCES = exports.SOURCES = {
+export var SOURCES = {
     wmts: "WMTS",
     wms: "WMS",
     vector: "VECTOR",
@@ -105,12 +100,12 @@ var SOURCES = exports.SOURCES = {
     wfs: "WFS"
 };
 
-var FORMATS = exports.FORMATS = {
+export var FORMATS = {
     imagepng: "image/png",
     imagejpeg: "image/jpeg",
     geoJson: "application/json"
 };
-var Layer = exports.Layer = function Layer(config) {
+export var Layer = function Layer(config) {
     var defaults = {
         guid: '',
         subLayers: [],
@@ -118,7 +113,7 @@ var Layer = exports.Layer = function Layer(config) {
         categoryId: 0,
         visibleOnLoad: true,
         isVisible: false, // Holds current state, will be set to true on factory.Init if VisibleOnLoad = true
-        id: new _Utils.Guid().NewGuid(),
+        id: Guid.newGuid(),
         isBaseLayer: false,
         previewActive: false,
         opacity: 1,

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { map, eventHandler } from "../Maplib/maplibHelper";
+import { map, eventHandler } from "../MapUtil/maplibHelper";
 import { MenuItem, NavDropdown } from "react-bootstrap";
 
-export class BackgroundChooser extends Component {
+export default class BackgroundChooser extends Component {
   constructor(props) {
     super(props);
     this.state = { baseLayers: [] };

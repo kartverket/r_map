@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import Map from '../../src'
+import { Map } from '../../src'
 
 const TEST_DATA = [
   {

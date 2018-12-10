@@ -1,6 +1,5 @@
-import {
-    Guid
-} from './Utils'
+import Guid from './Utils'
+
 export const FeatureInfo = (config) => {
     var defaults = {
         // single select via WMS GetFeatureInfo
@@ -53,7 +52,7 @@ export const LegendGraphic = (config) => {
     };
 }
 export const SubLayer = (config) => {
-    var id = new Guid().NewGuid();
+    var id = Guid.newGuid();
 
     var defaults = {
         name: '',
@@ -122,7 +121,7 @@ export const Layer = (config) => {
         categoryId: 0,
         visibleOnLoad: true,
         isVisible: false, // Holds current state, will be set to true on factory.Init if VisibleOnLoad = true
-        id: new Guid().NewGuid(),
+        id: Guid.newGuid(),
         isBaseLayer: false,
         previewActive: false,
         opacity: 1,

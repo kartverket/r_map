@@ -12,12 +12,12 @@ import OlMap from 'ol/Map';
 import isFunction from 'lodash/isFunction';
 import {
     CapabilitiesUtil
-} from "../Maplib/CapabilitiesUtil"
+} from "../MapUtil/CapabilitiesUtil"
 
 import {
     map,
     addLayer
-  } from "../Maplib/maplibHelper";
+  } from "../MapUtil/maplibHelper";
   
 
 /**
@@ -28,7 +28,7 @@ import {
  * @class The AddWmsPanel
  * @extends React.Component
  */
-export class AddWmsPanel extends React.Component {
+export default class AddWmsPanel extends React.Component {
 
     /**
      * The prop types.

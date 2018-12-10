@@ -1,7 +1,14 @@
-import proj4 from 'proj4';
+import proj4 from 'proj4'
+import { Projection, addProjection } from 'ol/proj';
 
-export var CustomCrsLoader = function CustomCrsLoader() {
-    function loadCustomCrs() {
+/**
+ * Helper class for projection handling. Makes use of
+ * [Proj4js](http://proj4js.org/).
+ *
+ * @class ProjectionUtil
+ */
+export default class ProjectionUtil {
+    static loadCustomCrs() {
         // proj4 is on the global scope
         //proj4.defs("EPSG:25832", '+proj=utm +zone=32 +ellps=GRS80 +units=m +no_defs');
         //proj4.defs("EPSG:25833", '+proj=utm +zone=33 +ellps=GRS80 +units=m +no_defs');
@@ -54,8 +61,12 @@ export var CustomCrsLoader = function CustomCrsLoader() {
         //proj4.defs("http://www.opengis.net/gml/srs/epsg.xml#32633", '+proj=utm +zone=33 +ellps=WGS84 +datum=WGS84 +units=m +no_defs');
         //proj4.defs("http://www.opengis.net/gml/srs/epsg.xml#32635", '+proj=utm +zone=35 +ellps=WGS84 +datum=WGS84 +units=m +no_defs');
     }
+    static addCustomProj(code) {
+        var proj = new Projection({
+            code: code,
+            units: 'm'
+        });
 
-    return {
-        LoadCustomCrs: loadCustomCrs
-    };
+        addProjection(proj);
+    }
 };

@@ -16,9 +16,9 @@ import OlLayerTile from 'ol/layer/Tile';
 import OlLayerImage from 'ol/layer/Image';
 import OlMap from 'ol/Map';
 import isFunction from 'lodash/isFunction';
-import { CapabilitiesUtil } from "../Maplib/CapabilitiesUtil";
+import { CapabilitiesUtil } from "../MapUtil/CapabilitiesUtil";
 
-import { map, addLayer } from "../Maplib/maplibHelper";
+import { map, addLayer } from "../MapUtil/maplibHelper";
 
 /**
  * Panel containing a (checkable) list of AddWmsLayerEntry instances.
@@ -28,7 +28,8 @@ import { map, addLayer } from "../Maplib/maplibHelper";
  * @class The AddWmsPanel
  * @extends React.Component
  */
-export var AddWmsPanel = function (_React$Component) {
+
+var AddWmsPanel = function (_React$Component) {
     _inherits(AddWmsPanel, _React$Component);
 
     /**
@@ -65,7 +66,6 @@ export var AddWmsPanel = function (_React$Component) {
         };
 
         _this.onSelectionChange = function (currentNode, selectedNodes) {
-            console.log('onChange::', currentNode, selectedNodes);
             if (!map.GetOverlayLayers().includes(currentNode)) {
                 map.AddLayer(currentNode);
             } else {
@@ -133,6 +133,8 @@ export var AddWmsPanel = function (_React$Component) {
 
     return AddWmsPanel;
 }(React.Component);
+
+export { AddWmsPanel as default };
 AddWmsPanel.propTypes = process.env.NODE_ENV !== "production" ? {
     /**
      * @type {Object} -- required

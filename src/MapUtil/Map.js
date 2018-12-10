@@ -1,61 +1,52 @@
-import { EventTypes } from './EventHandler';
-import { CustomCrsLoader } from './CustomCrsLoader';
-import { Projection, addProjection } from 'ol/proj';
-export var Map = function Map(mapImplementation, eventHandler, featureInfo, layerHandler, groupHandler, categoryHandler) {
+import {
+    EventTypes
+} from './EventHandler'
+import ProjectionUtil from './ProjectionUtil'
+import {
+    Projection
+} from 'ol/proj';
+import Categories from './Categories'
+import Groups from './Groups'
+import Layers from './Layers'
+
+export const Map = (mapImplementation, eventHandler, featureInfo) => {
     /*
         Start up functions Start
      */
 
     var mapConfiguration;
+    var categoryHandler;
+    var groupHandler;
+    var layerHandler;
 
     function init(targetId, mapConfig) {
         _loadCustomCrs();
 
         mapConfiguration = mapConfig;
         var olMap = mapImplementation.InitMap(targetId, mapConfig);
-        layerHandler.Init(mapConfig);
-        groupHandler.Init(mapConfig);
-        categoryHandler.Init(mapConfig);
+
+        layerHandler = new Layers(mapConfig, mapImplementation)
+        groupHandler = new Groups(mapConfig)
+        categoryHandler = new Categories(mapConfig)
 
         eventHandler.TriggerEvent(EventTypes.MapLoaded);
         return olMap;
     }
 
     function _loadCustomCrs() {
-        var customCrsLoader = new CustomCrsLoader();
-        customCrsLoader.LoadCustomCrs();
+        ProjectionUtil.loadCustomCrs();
 
-        addCustomProj('EPSG:25832');
-        addCustomProj('EPSG:25833');
-        addCustomProj('EPSG:25834');
-        addCustomProj('EPSG:25835');
-        addCustomProj('EPSG:25836');
-        addCustomProj('EPSG:32632');
-        addCustomProj('EPSG:32633');
-        addCustomProj('EPSG:32634');
-        addCustomProj('EPSG:32635');
-        addCustomProj('EPSG:32636');
-        addCustomProj('EPSG:4258');
-        // TODO: Geoserver
-        //addCustomProj('http://www.opengis.net/gml/srs/epsg.xml#25832');
-        //addCustomProj('http://www.opengis.net/gml/srs/epsg.xml#25833');
-        //addCustomProj('http://www.opengis.net/gml/srs/epsg.xml#25835');
-        //addCustomProj('http://www.opengis.net/gml/srs/epsg.xml#32632');
-        //addCustomProj('http://www.opengis.net/gml/srs/epsg.xml#32633');
-        //addCustomProj('http://www.opengis.net/gml/srs/epsg.xml#32635');
-    }
-
-    function addCustomProj(code) {
-        if (typeof ol === "undefined") {
-            // TODO: Never create ol-stuff in general code!!!
-            return;
-        }
-        var proj = new Projection({
-            code: code,
-            units: 'm'
-        });
-
-        addProjection(proj);
+        ProjectionUtil.addCustomProj('EPSG:25832');
+        ProjectionUtil.addCustomProj('EPSG:25833');
+        ProjectionUtil.addCustomProj('EPSG:25834');
+        ProjectionUtil.addCustomProj('EPSG:25835');
+        ProjectionUtil.addCustomProj('EPSG:25836');
+        ProjectionUtil.addCustomProj('EPSG:32632');
+        ProjectionUtil.addCustomProj('EPSG:32633');
+        ProjectionUtil.addCustomProj('EPSG:32634');
+        ProjectionUtil.addCustomProj('EPSG:32635');
+        ProjectionUtil.addCustomProj('EPSG:32636');
+        ProjectionUtil.addCustomProj('EPSG:4258');
     }
 
     function changeView(viewPropertyObject) {
@@ -83,7 +74,7 @@ export var Map = function Map(mapImplementation, eventHandler, featureInfo, laye
      */
 
     function addLayer(isyLayer) {
-        layerHandler.AddLayer(isyLayer);
+        layerHandler.addLayer(isyLayer);
     }
 
     function addDataToLayer(isyLayer, data) {
@@ -99,11 +90,11 @@ export var Map = function Map(mapImplementation, eventHandler, featureInfo, laye
     }
 
     function showLayer(isyLayer) {
-        layerHandler.ShowLayer(isyLayer);
+        layerHandler.showLayer(isyLayer);
     }
 
     function hideLayer(isyLayer) {
-        layerHandler.HideLayer(isyLayer);
+        layerHandler.hideLayer(isyLayer);
     }
 
     function setLayerOpacity(isyLayer, value) {
@@ -116,43 +107,43 @@ export var Map = function Map(mapImplementation, eventHandler, featureInfo, laye
     }
 
     function setBaseLayer(isyLayer) {
-        layerHandler.SetBaseLayer(isyLayer);
+        layerHandler.setBaseLayer(isyLayer);
     }
 
     function getBaseLayers() {
-        return layerHandler.GetBaseLayers();
+        return layerHandler.getBaseLayers();
     }
 
     function getFirstVisibleBaseLayer() {
-        return layerHandler.GetVisibleBaseLayers()[0];
+        return layerHandler.getVisibleBaseLayers()[0];
     }
 
     function getOverlayLayers() {
-        return layerHandler.GetOverlayLayers();
+        return layerHandler.getOverlayLayers();
     }
 
     function getVisibleSubLayers() {
-        return layerHandler.GetVisibleSubLayers();
+        return layerHandler.getVisibleSubLayers();
     }
 
     function getLayerById(id) {
-        return layerHandler.GetLayerById(id);
+        return layerHandler.getLayerById(id);
     }
 
     function moveLayerToIndex(isyLayer, index) {
-        layerHandler.MoveLayerToIndex(isyLayer, index);
+        layerHandler.moveLayerToIndex(isyLayer, index);
     }
 
     function moveLayerToIndexInGroup() {
-        layerHandler.MoveLayerToIndexInGroup();
+        layerHandler.moveLayerToIndexInGroup();
     }
 
     function moveLayerAbove(isySourceLayer, isyTargetLayer) {
-        layerHandler.MoveLayerAbove(isySourceLayer, isyTargetLayer);
+        layerHandler.moveLayerAbove(isySourceLayer, isyTargetLayer);
     }
 
     function _shouldBeVisible(subLayer) {
-        return layerHandler.ShouldBeVisible(subLayer);
+        return layerHandler.shouldBeVisible(subLayer);
     }
 
     /*
@@ -164,11 +155,11 @@ export var Map = function Map(mapImplementation, eventHandler, featureInfo, laye
      */
 
     function getCategoryById(id) {
-        return categoryHandler.GetCategoryById(id);
+        return categoryHandler.getCategoryById(id);
     }
 
     function getCategories() {
-        return categoryHandler.GetCategories();
+        return categoryHandler.getCategories();
     }
 
     /*
@@ -310,7 +301,7 @@ export var Map = function Map(mapImplementation, eventHandler, featureInfo, laye
 
     function arrangeLayers() {
         if (getConfigLayerCount() === getLayerCount()) {
-            layerHandler.ArrangeLayers();
+            layerHandler.arrangeLayers();
         }
     }
 
@@ -522,6 +513,7 @@ export var Map = function Map(mapImplementation, eventHandler, featureInfo, laye
     /*
      HoverInfo End
      */
+
 
     /*
      PrintBoxSelect Start
