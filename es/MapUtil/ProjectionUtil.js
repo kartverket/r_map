@@ -2,7 +2,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 import proj4 from 'proj4';
 import { Projection, addProjection } from 'ol/proj';
-
+import { register } from 'ol/proj/proj4.js';
 /**
  * Helper class for projection handling. Makes use of
  * [Proj4js](http://proj4js.org/).
@@ -67,6 +67,7 @@ var ProjectionUtil = function () {
                 //proj4.defs("http://www.opengis.net/gml/srs/epsg.xml#32632", '+proj=utm +zone=32 +ellps=WGS84 +datum=WGS84 +units=m +no_defs');
                 //proj4.defs("http://www.opengis.net/gml/srs/epsg.xml#32633", '+proj=utm +zone=33 +ellps=WGS84 +datum=WGS84 +units=m +no_defs');
                 //proj4.defs("http://www.opengis.net/gml/srs/epsg.xml#32635", '+proj=utm +zone=35 +ellps=WGS84 +datum=WGS84 +units=m +no_defs');
+                register(proj4);
         };
 
         ProjectionUtil.addCustomProj = function addCustomProj(code) {
