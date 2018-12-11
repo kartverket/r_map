@@ -11,7 +11,6 @@ import { mergeDefaultParams, parseWmsCapabilities } from "../Utils/MapHelper";
 import PropTypes from "prop-types";
 import queryString from "query-string";
 import setQuery from "set-query-string";
-import "ol/ol.css";
 import BackgroundChooser from "./BackgroundChooser";
 import AddWmsPanel from "./AddWmsPanel";
 import {
@@ -22,6 +21,8 @@ import {
   Button,
   ButtonGroup
 } from "react-bootstrap";
+
+import '../assets/sass/dist.scss'
 
 class ListItem extends React.Component {
   render() {
@@ -242,7 +243,6 @@ export default class Map extends React.Component {
         <div className = {this.state.menu === true ? 'pulldown-content' : 'hide'} style = {
           {
             position: "absolute",
-            right: 0,
             width: "320px",
             zIndex: 600
           }

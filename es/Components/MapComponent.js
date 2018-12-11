@@ -16,10 +16,11 @@ import { mergeDefaultParams, parseWmsCapabilities } from "../Utils/MapHelper";
 import PropTypes from "prop-types";
 import queryString from "query-string";
 import setQuery from "set-query-string";
-import "ol/ol.css";
 import BackgroundChooser from "./BackgroundChooser";
 import AddWmsPanel from "./AddWmsPanel";
 import { Nav, Panel, PanelGroup, Collapse, Button, ButtonGroup } from "react-bootstrap";
+
+import '../assets/sass/dist.scss';
 
 var ListItem = function (_React$Component) {
   _inherits(ListItem, _React$Component);
@@ -163,7 +164,6 @@ var Map = (_temp = _class = function (_React$Component2) {
         'div',
         { className: this.state.menu === true ? 'pulldown-content' : 'hide', style: {
             position: "absolute",
-            right: 0,
             width: "320px",
             zIndex: 600
           } },

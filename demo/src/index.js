@@ -38,7 +38,7 @@ class Demo extends Component {
   
   render() {
     return <div>
-      <Map services = { this.state.services }  menu = {false}/>
+      <Map services = { this.state.services }  menu = {true}/>
     </div>
   }
 }
