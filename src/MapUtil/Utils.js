@@ -2,9 +2,9 @@ export default class Guid {
     static s4() {
         return Math.floor((1 + Math.random()) * 0x10000)
             .toString(16)
-            .substring(1)
+            .substring(1);
     }
-    static newGuid () {
-        return this.s4() + this.s4() + '-' + this.s4() + '-' + this.s4() + '-' + this.s4() + '-' + this.s4() + this.s4() + this.s4()
+    static newGuid() {
+        return `${this.s4() + this.s4()}-${this.s4()}-${this.s4()}-${this.s4()}-${this.s4()}${this.s4()}${this.s4()}`;
     }
 }

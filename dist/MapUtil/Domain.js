@@ -1,6 +1,17 @@
-import Guid from './Utils'
+'use strict';
 
-export const FeatureInfo = (config) => {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Layer = exports.FORMATS = exports.SOURCES = exports.SubLayer = exports.LegendGraphic = exports.FeatureInfo = undefined;
+
+var _Utils = require('./Utils');
+
+var _Utils2 = _interopRequireDefault(_Utils);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var FeatureInfo = exports.FeatureInfo = function FeatureInfo(config) {
     var defaults = {
         // single select via WMS GetFeatureInfo
         supportsGetFeatureInfo: true,
@@ -14,10 +25,10 @@ export const FeatureInfo = (config) => {
         getFeatureCrs: 'EPSG:4326'
     };
 
-    return Object.assign({}, defaults, config)
+    return Object.assign({}, defaults, config);
 };
 
-export const LegendGraphic = (config) => {
+var LegendGraphic = exports.LegendGraphic = function LegendGraphic(config) {
     var defaults = {
         width: "20",
         height: "20",
@@ -29,30 +40,22 @@ export const LegendGraphic = (config) => {
         url: ''
     };
 
-    var instance = Object.assign({}, defaults, config)
+    var instance = Object.assign({}, defaults, config);
 
     function getLegendGraphicUrl() {
         if (instance.url !== "?") {
-            return instance.url + 
-                "Service=" + instance.service + 
-                "&Request=" + instance.request + 
-                "&Version=" + instance.version + 
-                "&Format=" + instance.format + 
-                "&Width=" + instance.width + 
-                "&Height=" + instance.height + 
-                "&Layer=" + instance.layer;
+            return instance.url + "Service=" + instance.service + "&Request=" + instance.request + "&Version=" + instance.version + "&Format=" + instance.format + "&Width=" + instance.width + "&Height=" + instance.height + "&Layer=" + instance.layer;
         } else {
             return "";
         }
-
     }
 
     return {
         GetLegendGraphicUrl: getLegendGraphicUrl
     };
-}
-export const SubLayer = (config) => {
-    var id = Guid.newGuid();
+};
+var SubLayer = exports.SubLayer = function SubLayer(config) {
+    var id = _Utils2.default.newGuid();
 
     var defaults = {
         name: '',
@@ -82,7 +85,7 @@ export const SubLayer = (config) => {
         featureNS: '',
         geometryName: 'geometry'
     };
-    var instance = Object.assign({}, defaults, config) // subLayerInstance
+    var instance = Object.assign({}, defaults, config); // subLayerInstance
 
     if (instance.legendGraphicUrl.indexOf('?') === -1) {
         instance.legendGraphicUrl += '?';
@@ -96,9 +99,9 @@ export const SubLayer = (config) => {
     }
 
     return instance;
-}
+};
 
-export const SOURCES = {
+var SOURCES = exports.SOURCES = {
     wmts: "WMTS",
     wms: "WMS",
     vector: "VECTOR",
@@ -106,14 +109,14 @@ export const SOURCES = {
     proxyWms: "proxyWms",
     tms: "TMS",
     wfs: "WFS"
-}
+};
 
-export const FORMATS = {
+var FORMATS = exports.FORMATS = {
     imagepng: "image/png",
     imagejpeg: "image/jpeg",
     geoJson: "application/json"
-}
-export const Layer = (config) => {
+};
+var Layer = exports.Layer = function Layer(config) {
     var defaults = {
         guid: '',
         subLayers: [],
@@ -121,7 +124,7 @@ export const Layer = (config) => {
         categoryId: 0,
         visibleOnLoad: true,
         isVisible: false, // Holds current state, will be set to true on factory.Init if VisibleOnLoad = true
-        id: Guid.newGuid(),
+        id: _Utils2.default.newGuid(),
         isBaseLayer: false,
         previewActive: false,
         opacity: 1,
@@ -131,7 +134,7 @@ export const Layer = (config) => {
         legendGraphicUrls: [],
         selectedLayerOpen: false //todo johben temp
     };
-    var layerInstance = Object.assign({}, defaults, config) // layerInstance
+    var layerInstance = Object.assign({}, defaults, config); // layerInstance
 
     var subLayers = [];
     for (var i = 0; i < config.subLayers.length; i++) {

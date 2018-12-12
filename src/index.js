@@ -1,9 +1,5 @@
-import AddWmsPanel from './Components/AddWmsPanel'
-import BackgroundChooser from './Components/BackgroundChooser'
-import Map from './Components/MapComponent'
+import AddWmsPanel from './components/AddWmsPanel/AddWmsPanel';
+import BackgroundChooser from './components/BackgroundChooser/BackgroundChooser';
+import Map from './components/MapComponent/MapComponent';
 
-export {
-  AddWmsPanel,
-  BackgroundChooser,
-  Map
-}
+export { AddWmsPanel, BackgroundChooser, Map };

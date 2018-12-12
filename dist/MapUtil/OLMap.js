@@ -1,79 +1,93 @@
-import Map from 'ol/Map'
-import Projection from 'ol/proj/Projection'
-import View from 'ol/View'
-import {
-    defaults as defaultInteractions,
-} from 'ol/interaction'
-import MousePosition from 'ol/control/MousePosition.js';
-import {
-    GeoJSON as GeoJSONFormat,
-    GML as GMLFormat,
-    WFS as WFSFormat,
-    WMSCapabilities
-} from 'ol/format';
-import GML2Format from 'ol/format/GML2'
-import GML3Format from 'ol/format/GML3'
-import style from 'ol/style/Style'
-import {
-    Tile as TileLayer,
-    Vector as VectorLayer,
-    Image as ImageLayer
-} from 'ol/layer'
-import {
-    Vector as VectorSource
-} from 'ol/source'
-import {
-    transform,
-    transformExtent,
-    get as getProjection
-} from 'ol/proj.js';
-import {
-    Zoom,
-    ZoomSlider,
-    ZoomToExtent,
-    ScaleLine
-} from 'ol/control'
-import {
-    Point,
-    Circle
-} from 'ol/geom.js'
-import GeometryCollection from 'ol/geom/GeometryCollection'
-import Feature from 'ol/Feature.js'
-import {
-    getCenter as OLGetCenterFromExtent,
-    containsCoordinate
-} from 'ol/extent'
-import OlGeolocation from 'ol/Geolocation'
-import proj4 from 'proj4'
+'use strict';
 
-import {
-    EventTypes
-} from './EventHandler'
-import {
-    Vector as MaplibVectorSource,
-    Wmts as MaplibWMTSSource,
-    Wms as MaplibWMSSource,
-    MaplibCustomMessageHandler,
-    Wfs as MaplibWfsSource
-} from './Sources'
-import Guid from './Utils'
-import {
-    OLProgressBar
-} from './OLProgessBar'
-import {
-    FORMATS,
-    SOURCES
-} from './Domain'
-import {
-    OLStylesJson,
-    OLStylesSLD
-} from './OLStyles'
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.MapRENDERERS = exports.OLMap = undefined;
 
-import $ from "jquery";
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-export const OLMap = (repository, eventHandler, httpHelper, measure,
-    featureInfo, mapExport, hoverInfo, measureLine, drawFeature,
-    offline, addLayerFeature, modifyFeature, addFeatureGps, printBoxSelect, addLayerUrl) => {
+var _Map = require('ol/Map');
+
+var _Map2 = _interopRequireDefault(_Map);
+
+var _Projection = require('ol/proj/Projection');
+
+var _Projection2 = _interopRequireDefault(_Projection);
+
+var _View = require('ol/View');
+
+var _View2 = _interopRequireDefault(_View);
+
+var _interaction = require('ol/interaction');
+
+var _MousePosition = require('ol/control/MousePosition.js');
+
+var _MousePosition2 = _interopRequireDefault(_MousePosition);
+
+var _format = require('ol/format');
+
+var _GML = require('ol/format/GML2');
+
+var _GML2 = _interopRequireDefault(_GML);
+
+var _GML3 = require('ol/format/GML3');
+
+var _GML4 = _interopRequireDefault(_GML3);
+
+var _Style = require('ol/style/Style');
+
+var _Style2 = _interopRequireDefault(_Style);
+
+var _layer = require('ol/layer');
+
+var _source = require('ol/source');
+
+var _proj = require('ol/proj.js');
+
+var _control = require('ol/control');
+
+var _geom = require('ol/geom.js');
+
+var _GeometryCollection = require('ol/geom/GeometryCollection');
+
+var _GeometryCollection2 = _interopRequireDefault(_GeometryCollection);
+
+var _Feature = require('ol/Feature.js');
+
+var _Feature2 = _interopRequireDefault(_Feature);
+
+var _extent = require('ol/extent');
+
+var _Geolocation = require('ol/Geolocation');
+
+var _Geolocation2 = _interopRequireDefault(_Geolocation);
+
+var _proj2 = require('proj4');
+
+var _proj3 = _interopRequireDefault(_proj2);
+
+var _EventHandler = require('./EventHandler');
+
+var _Sources = require('./Sources');
+
+var _Utils = require('./Utils');
+
+var _Utils2 = _interopRequireDefault(_Utils);
+
+var _OLProgessBar = require('./OLProgessBar');
+
+var _Domain = require('./Domain');
+
+var _OLStyles = require('./OLStyles');
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var OLMap = exports.OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featureInfo, mapExport, hoverInfo, measureLine, drawFeature, offline, addLayerFeature, modifyFeature, addFeatureGps, printBoxSelect, addLayerUrl) {
 
     var map;
     var layerPool = [];
@@ -124,24 +138,24 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
             mapScales[t] = mapScales[t - 1] / 2;
         }
         mapResolutions = newMapRes;
-        var sm = new Projection({
+        var sm = new _Projection2.default({
             code: mapConfig.coordinate_system,
             extent: mapConfig.extent,
             units: mapConfig.extentUnits
         });
 
-        var interactions = defaultInteractions({
+        var interactions = (0, _interaction.defaults)({
             altShiftDragRotate: false,
             pinchRotate: false
         });
 
-        map = new Map({
+        map = new _Map2.default({
             target: targetId,
             renderer: mapConfig.renderer,
             layers: [],
             loadTilesWhileAnimating: true, // Improve user experience by loading tiles while animating. Will make animations stutter on mobile or slow devices.
             loadTilesWhileInteracting: true,
-            view: new View({
+            view: new _View2.default({
                 projection: sm,
                 //constrainRotation: 4,
                 enableRotation: false,
@@ -173,21 +187,21 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
     function _registerMapCallbacks() {
         var view = map.getView();
 
-        var changeCenter = function () {
+        var changeCenter = function changeCenter() {
             var mapViewChangedObj = _getUrlObject();
-            eventHandler.TriggerEvent(EventTypes.ChangeCenter, mapViewChangedObj);
+            eventHandler.TriggerEvent(_EventHandler.EventTypes.ChangeCenter, mapViewChangedObj);
         };
 
-        var changeResolution = function () {
+        var changeResolution = function changeResolution() {
             var mapViewChangedObj = _getUrlObject();
-            eventHandler.TriggerEvent(EventTypes.ChangeResolution, mapViewChangedObj);
+            eventHandler.TriggerEvent(_EventHandler.EventTypes.ChangeResolution, mapViewChangedObj);
         };
 
-        var mapMoveend = function () {
+        var mapMoveend = function mapMoveend() {
             _checkGktToken();
             _checkTicket();
             var mapViewChangedObj = _getUrlObject();
-            eventHandler.TriggerEvent(EventTypes.MapMoveend, mapViewChangedObj);
+            eventHandler.TriggerEvent(_EventHandler.EventTypes.MapMoveend, mapViewChangedObj);
         };
 
         view.on('change:center', changeCenter);
@@ -196,15 +210,15 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
     }
 
     function _registerMessageHandler() {
-        var layerMessageHandler =  MaplibCustomMessageHandler(eventHandler, _getIsySubLayerFromPool);
+        var layerMessageHandler = (0, _Sources.MaplibCustomMessageHandler)(eventHandler, _getIsySubLayerFromPool);
         layerMessageHandler.Init(map);
 
-        customMessageHandler = MaplibCustomMessageHandler();
+        customMessageHandler = (0, _Sources.MaplibCustomMessageHandler)();
         customMessageHandler.InitMessage('');
     }
 
     function _registerProgressBar() {
-        var progressBar = OLProgressBar(eventHandler);
+        var progressBar = (0, _OLProgessBar.OLProgressBar)(eventHandler);
         progressBar.Init(map);
     }
 
@@ -216,7 +230,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
             if (prefix === undefined) {
                 prefix = '';
             }
-            var coordinate2string = function (coord) {
+            var coordinate2string = function coordinate2string(coord) {
                 var mousehtml = '' + prefix;
                 var geographic = false;
                 if (mousehtml.length > 0) {
@@ -264,15 +278,13 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                     }
                 }
                 if (geographic) {
-                    mousehtml += Math.round(coord[1] * 10000) / 10000 +
-                        translateOptions['north'] + Math.round(coord[0] * 10000) / 10000 +
-                        translateOptions['east'];
+                    mousehtml += Math.round(coord[1] * 10000) / 10000 + translateOptions['north'] + Math.round(coord[0] * 10000) / 10000 + translateOptions['east'];
                 } else {
                     mousehtml += parseInt(coord[1], 10) + translateOptions['north'] + parseInt(coord[0], 10) + translateOptions['east'];
                 }
                 return mousehtml;
             };
-            var mousePositionControl = new MousePosition({
+            var mousePositionControl = new _MousePosition2.default({
                 coordinateFormat: coordinate2string,
                 projection: epsg,
                 //undefinedHTML: '&nbsp;',
@@ -286,8 +298,8 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
     }
 
     function _checkGktToken() {
-        var currentTime = (new Date()).getTime();
-        if (currentTime < (lastGktCheck + 60000)) {
+        var currentTime = new Date().getTime();
+        if (currentTime < lastGktCheck + 60000) {
             // check if token has expired each minute
             return;
         }
@@ -313,8 +325,8 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
     }
 
     function _checkTicket() {
-        var currentTime = (new Date()).getTime();
-        if (currentTime < (lastTicketCheck + 60000)) {
+        var currentTime = new Date().getTime();
+        if (currentTime < lastTicketCheck + 60000) {
             // check if token has expired each minute
             return;
         }
@@ -343,14 +355,14 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         source.updateParams({
             GKT: _getToken()
         });
-        source.set("timestamp", (new Date()).getTime());
+        source.set("timestamp", new Date().getTime());
     }
 
     function _setTicket(source) {
         source.updateParams({
             ticket: _getTicket()
         });
-        source.set("timestamp", (new Date()).getTime());
+        source.set("timestamp", new Date().getTime());
     }
 
     function changeView(viewPropertyObject) {
@@ -368,8 +380,8 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
             }
 
             if (lon !== undefined && lat !== undefined) {
-                var latitude = typeof (lat) === 'number' ? lat : parseFloat(lat.replace(/,/g, '.'));
-                var longitude = typeof (lon) === 'number' ? lon : parseFloat(lon.replace(/,/g, '.'));
+                var latitude = typeof lat === 'number' ? lat : parseFloat(lat.replace(/,/g, '.'));
+                var longitude = typeof lon === 'number' ? lon : parseFloat(lon.replace(/,/g, '.'));
                 if (isFinite(latitude) && isFinite(longitude)) {
                     view.setCenter([longitude, latitude]);
                 }
@@ -391,9 +403,9 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
 
     function addDataToLayer(isySubLayer, data) {
         var layer = _getLayerFromPool(isySubLayer);
-        if (isySubLayer.format === FORMATS.geoJson) {
+        if (isySubLayer.format === _Domain.FORMATS.geoJson) {
             var geoJson = JSON.parse(data);
-            var geoJsonParser = new GeoJSONFormat();
+            var geoJsonParser = new _format.GeoJSON();
             var features = geoJsonParser.readFeatures(geoJson);
 
             //for (var i = 0; i < features.length; ++i) {
@@ -405,7 +417,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                 for (var i = 0; i < features.length; ++i) {
                     if (features[i].getProperties().Guid === undefined) {
                         features[i].setProperties({
-                            Guid: Guid.newGuid()
+                            Guid: _Utils2.default.newGuid()
                         });
                     }
                     features[i].setId(isySubLayer.name + '.' + features[i].getProperties().Guid);
@@ -418,9 +430,9 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
 
     function removeDataFromLayer(isySubLayer, data) {
         var layer = _getLayerFromPool(isySubLayer);
-        if (isySubLayer.format === FORMATS.geoJson) {
+        if (isySubLayer.format === _Domain.FORMATS.geoJson) {
             var geoJson = JSON.parse(data);
-            var geoJsonParser = new GeoJSONFormat();
+            var geoJsonParser = new _format.GeoJSON();
             var features = geoJsonParser.readFeatures(geoJson);
             for (var i = 0; i < features.length; ++i) {
                 if (features[i].getProperties().Guid) {
@@ -513,12 +525,12 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         if (!tokenHost) {
             return null;
         } else if (!globalGkt || _checkGlobalGktTokenExpired()) {
-            globalGkt = $.ajax({
+            globalGkt = _jquery2.default.ajax({
                 type: "GET",
                 url: tokenHost,
                 async: false
             }).responseText.trim().replace(/"/g, "");
-            lastGlobalGktCheck = (new Date()).getTime();
+            lastGlobalGktCheck = new Date().getTime();
         }
         return globalGkt;
     }
@@ -527,20 +539,19 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         if (!ticketHost) {
             return null;
         } else if (!globalTicket || _checkGlobalTicketExpired()) {
-            globalTicket = $.ajax({
+            globalTicket = _jquery2.default.ajax({
                 type: "GET",
                 url: ticketHost,
                 async: false
             }).responseText.trim().replace(/"/g, "");
-            lastGlobalTicketCheck = (new Date()).getTime();
+            lastGlobalTicketCheck = new Date().getTime();
         }
         return globalTicket;
     }
 
-
     function _checkGlobalGktTokenExpired() {
-        var currentTime = (new Date()).getTime();
-        if (currentTime < (lastGlobalGktCheck + (gktLifetime * 1000))) {
+        var currentTime = new Date().getTime();
+        if (currentTime < lastGlobalGktCheck + gktLifetime * 1000) {
             lastGlobalGktCheck = currentTime;
             return false;
         }
@@ -548,8 +559,8 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
     }
 
     function _checkGlobalTicketExpired() {
-        var currentTime = (new Date()).getTime();
-        if (currentTime < (lastGlobalTicketCheck + (ticketLifetime * 1000))) {
+        var currentTime = new Date().getTime();
+        if (currentTime < lastGlobalTicketCheck + ticketLifetime * 1000) {
             lastGlobalTicketCheck = currentTime;
             return false;
         }
@@ -566,7 +577,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
             // usikker på om render er riktig funksjon...
             if (layer.get('loading')) {
                 layer.set('loading', undefined);
-                eventHandler.TriggerEvent(EventTypes.LoadingLayerEnd, layer);
+                eventHandler.TriggerEvent(_EventHandler.EventTypes.LoadingLayerEnd, layer);
             }
         }, layer);
     }
@@ -583,7 +594,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
             };
         }
 
-        var styleCallback = function (response) {
+        var styleCallback = function styleCallback(response) {
             // For caching, remember layer config
             layer.set('config', isySubLayer);
             var scales = sldstyles[isySubLayer.id].ParseSld(response, parseInt(isySubLayer.id, 10));
@@ -597,7 +608,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
             layerPool.push(layer);
             layer.sortingIndex = isySubLayer.sortingIndex;
             map.addLayer(layer);
-            eventHandler.TriggerEvent(EventTypes.LayerCreated, layerPool);
+            eventHandler.TriggerEvent(_EventHandler.EventTypes.LayerCreated, layerPool);
             sortLayerBySortIndex();
             _trigLayersChanged();
         };
@@ -608,8 +619,8 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
             layer.set('config', isySubLayer);
         } else {
             switch (isySubLayer.source) {
-                case SOURCES.wmts:
-                    if (isySubLayer.gatekeeper && isySubLayer.tiled && ((offline === undefined) ? true : !offline.IsActive())) {
+                case _Domain.SOURCES.wmts:
+                    if (isySubLayer.gatekeeper && isySubLayer.tiled && (offline === undefined ? true : !offline.IsActive())) {
                         if (parameters) {
                             parameters['gkt'] = _getToken();
                         } else {
@@ -618,64 +629,60 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                             };
                         }
                     }
-                    source = MaplibWMTSSource(isySubLayer, parameters);
+                    source = (0, _Sources.Wmts)(isySubLayer, parameters);
                     break;
-                case SOURCES.proxyWmts:
+                case _Domain.SOURCES.proxyWmts:
                     isySubLayer.url = _getProxyUrl(isySubLayer.url);
-                    source = MaplibWMTSSource(isySubLayer, parameters);
+                    source = (0, _Sources.Wmts)(isySubLayer, parameters);
                     break;
-                case SOURCES.wms:
-                    source = MaplibWMSSource(isySubLayer, parameters);
-                    if (isySubLayer.gatekeeper && isySubLayer.tiled && ((offline === undefined) ? true : !offline.IsActive())) {
+                case _Domain.SOURCES.wms:
+                    source = (0, _Sources.Wms)(isySubLayer, parameters);
+                    if (isySubLayer.gatekeeper && isySubLayer.tiled && (offline === undefined ? true : !offline.IsActive())) {
                         _setToken(source);
                     }
-                    if (isySubLayer.ticket && ((offline === undefined) ? true : !offline.IsActive())) {
+                    if (isySubLayer.ticket && (offline === undefined ? true : !offline.IsActive())) {
                         _setTicket(source);
                     }
                     break;
-                case SOURCES.proxyWms:
+                case _Domain.SOURCES.proxyWms:
                     isySubLayer.url = _getProxyUrl(isySubLayer.url);
-                    source = MaplibWMSSource(isySubLayer, parameters);
+                    source = (0, _Sources.Wms)(isySubLayer, parameters);
                     break;
-                case SOURCES.vector:
-                    source = MaplibVectorSource(isySubLayer);
+                case _Domain.SOURCES.vector:
+                    source = (0, _Sources.Vector)(isySubLayer);
                     if (isySubLayer.url !== "") {
                         if (!isySubLayer.noProxy) {
                             isySubLayer.url = _getProxyUrl(isySubLayer.url);
                         }
                         // _loadVectorLayer(isySubLayer, source);
-
                     }
                     break;
-                case SOURCES.wfs:
+                case _Domain.SOURCES.wfs:
                     if (!isySubLayer.noProxy) {
                         isySubLayer.url = _getProxyUrl(isySubLayer.url, true);
                     }
-                    source = MaplibWfsSource(isySubLayer, offline, parameters);
+                    source = (0, _Sources.Wfs)(isySubLayer, offline, parameters);
                     break;
 
                 default:
-                    throw "Unsupported source: SOURCES.'" +
-                        isySubLayer.source +
-                        "'. For SubLayer with url " + isySubLayer.url +
-                        " and name " + isySubLayer.name + ".";
+                    throw "Unsupported source: SOURCES.'" + isySubLayer.source + "'. For SubLayer with url " + isySubLayer.url + " and name " + isySubLayer.name + ".";
             }
 
-            if (isySubLayer.source === SOURCES.vector) {
+            if (isySubLayer.source === _Domain.SOURCES.vector) {
                 if (isySubLayer.style) {
-                    if (typeof isySubLayer.style === "object" || isySubLayer.style.indexOf("http") < 0) {
-                        sldstyles[isySubLayer.id] = OLStylesJson(isySubLayer.style);
-                        layer = new VectorLayer({
+                    if (_typeof(isySubLayer.style) === "object" || isySubLayer.style.indexOf("http") < 0) {
+                        sldstyles[isySubLayer.id] = (0, _OLStyles.OLStylesJson)(isySubLayer.style);
+                        layer = new _layer.Vector({
                             source: source,
-                            style: function (feature, resolution) {
+                            style: function style(feature, resolution) {
                                 return sldstyles[isySubLayer.id].GetStyle(feature, _getScaleByResolution(resolution));
                             }
                         });
                     } else {
-                        sldstyles[isySubLayer.id] = new OLStylesSLD();
-                        layer = new VectorLayer({
+                        sldstyles[isySubLayer.id] = new _OLStyles.OLStylesSLD();
+                        layer = new _layer.Vector({
                             source: source,
-                            style: function (feature, resolution) {
+                            style: function style(feature, resolution) {
                                 return sldstyles[isySubLayer.id].GetStyle(feature, _getScaleByResolution(resolution));
                             }
                         });
@@ -686,9 +693,9 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                         _setLayerProperties(layer, isySubLayer);
                     }
                 } else {
-                    layer = new VectorLayer({
-                        source: new VectorSource({
-                            format: new GeoJSONFormat({
+                    layer = new _layer.Vector({
+                        source: new _source.Vector({
+                            format: new _format.GeoJSON({
                                 defaultDataProjection: isySubLayer.coordinate_system
                             }),
                             url: isySubLayer.url
@@ -696,11 +703,11 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                         })
                     });
                 }
-            } else if (isySubLayer.source === SOURCES.wfs) {
-                sldstyles[isySubLayer.id] = new OLStylesSLD();
-                layer = new VectorLayer({
+            } else if (isySubLayer.source === _Domain.SOURCES.wfs) {
+                sldstyles[isySubLayer.id] = new _OLStyles.OLStylesSLD();
+                layer = new _layer.Vector({
                     source: source,
-                    style: function (feature, resolution) {
+                    style: function style(feature, resolution) {
                         return sldstyles[isySubLayer.id].GetStyle(feature, _getScaleByResolution(resolution));
                     }
                 });
@@ -710,13 +717,13 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                 }
                 _setLayerProperties(layer, isySubLayer);
             } else if (isySubLayer.tiled) {
-                layer = new TileLayer({
+                layer = new _layer.Tile({
                     extent: isySubLayer.extent,
                     opacity: isySubLayer.opacity,
                     source: source
                 });
             } else {
-                layer = new ImageLayer({
+                layer = new _layer.Image({
                     extent: isySubLayer.extent,
                     opacity: isySubLayer.opacity,
                     source: source
@@ -752,7 +759,8 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         }
     }
 
-    function _setLayerMinresolution(layer, scale) { //}, debuginfo) {
+    function _setLayerMinresolution(layer, scale) {
+        //}, debuginfo) {
         if (layer && scale) {
             var minRes = layer.getMinResolution();
             if (minRes && minRes >= scale) {
@@ -764,7 +772,8 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         }
     }
 
-    function _setLayerMaxresolution(layer, scale) { //, debuginfo) {
+    function _setLayerMaxresolution(layer, scale) {
+        //, debuginfo) {
         if (layer && scale) {
             var maxRes = layer.getMaxResolution();
             if (maxRes && maxRes <= scale) {
@@ -777,9 +786,9 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
     }
 
     function _loadVectorLayer(isySubLayer, source) {
-        var callback = function (data) {
-            data = typeof data === 'object' ? data : JSON.parse(data);
-            var format = new GeoJSONFormat();
+        var callback = function callback(data) {
+            data = (typeof data === 'undefined' ? 'undefined' : _typeof(data)) === 'object' ? data : JSON.parse(data);
+            var format = new _format.GeoJSON();
             for (var i = 0; i < data.features.length; i++) {
                 var feature = data.features[i];
                 if (feature.type) {
@@ -787,7 +796,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                 }
             }
         };
-        $.ajax({
+        _jquery2.default.ajax({
             url: isySubLayer.url,
             async: false
         }).done(function (response) {
@@ -874,7 +883,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         return null;
     }
 
-    var _getScaleByResolution = function (resolution) {
+    var _getScaleByResolution = function _getScaleByResolution(resolution) {
         if (resolution === undefined) {
             return;
         }
@@ -888,7 +897,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         return scale;
     };
 
-    var _getResolutionByScale = function (scale) {
+    var _getResolutionByScale = function _getResolutionByScale(scale) {
         if (scale === undefined) {
             scale = getScale();
         }
@@ -951,7 +960,9 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
     }
 
     function _getLayersWithGuid() {
-        return map.getLayers().getArray().filter( (elem) => elem.guid !== undefined);
+        return map.getLayers().getArray().filter(function (elem) {
+            return elem.guid !== undefined;
+        });
     }
 
     function _getLayerByGuid(guid) {
@@ -1011,7 +1022,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         return array.sort(function (a, b) {
             var x = a[key];
             var y = b[key];
-            return ((x > y) ? -1 : ((x < y) ? 1 : 0));
+            return x > y ? -1 : x < y ? 1 : 0;
         });
     }
 
@@ -1044,7 +1055,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
 
     function _trigLayersChanged() {
         var eventObject = _getUrlObject();
-        eventHandler.TriggerEvent(EventTypes.ChangeLayers, eventObject);
+        eventHandler.TriggerEvent(_EventHandler.EventTypes.ChangeLayers, eventObject);
     }
 
     function _getGuidsForVisibleLayers() {
@@ -1084,7 +1095,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         Functionality in ISY.;ap.OL3.Export
      */
 
-    var _resizeEvent = function () {
+    var _resizeEvent = function _resizeEvent() {
         mapExport.WindowResized(map);
     };
 
@@ -1142,33 +1153,33 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         }
         var source;
         switch (isySubLayer.source) {
-            case SOURCES.wmts:
-                source = new MaplibWMTSSource(isySubLayer, parameters);
-                if (isySubLayer.gatekeeper && ((offline === undefined) ? true : !offline.IsActive())) {
+            case _Domain.SOURCES.wmts:
+                source = new _Sources.Wmts(isySubLayer, parameters);
+                if (isySubLayer.gatekeeper && (offline === undefined ? true : !offline.IsActive())) {
                     _setToken(source);
                 }
                 break;
-            case SOURCES.proxyWmts:
-                source = new MaplibWMTSSource(isySubLayer, parameters);
+            case _Domain.SOURCES.proxyWmts:
+                source = new _Sources.Wmts(isySubLayer, parameters);
                 break;
-            case SOURCES.wms:
-                source = new MaplibWMSSource(isySubLayer, parameters);
-                if (isySubLayer.gatekeeper && isySubLayer.tiled && ((offline === undefined) ? true : !offline.IsActive())) {
+            case _Domain.SOURCES.wms:
+                source = new _Sources.Wms(isySubLayer, parameters);
+                if (isySubLayer.gatekeeper && isySubLayer.tiled && (offline === undefined ? true : !offline.IsActive())) {
                     _setToken(source);
                 }
                 break;
-            case SOURCES.proxyWms:
-                source = new MaplibWMSSource(isySubLayer, parameters);
+            case _Domain.SOURCES.proxyWms:
+                source = new _Sources.Wms(isySubLayer, parameters);
                 break;
-            case SOURCES.vector:
-                source = new MaplibVectorSource(isySubLayer);
+            case _Domain.SOURCES.vector:
+                source = new _Sources.Vector(isySubLayer);
                 if (isySubLayer.url !== "") {
                     _loadVectorLayer(isySubLayer, source);
                 }
                 break;
-            case SOURCES.wfs:
+            case _Domain.SOURCES.wfs:
                 parameters._olSalt = Math.random();
-                source = new MaplibWfsSource(isySubLayer, offline, parameters, featureObj, eventHandler);
+                source = new _Sources.Wfs(isySubLayer, offline, parameters, featureObj, eventHandler);
                 break;
         }
         if (source) {
@@ -1176,7 +1187,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         }
     }
 
-    var setIsyToken = function (token) {
+    var setIsyToken = function setIsyToken(token) {
         if (token.length === 0) {
             return;
         }
@@ -1194,22 +1205,22 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
             var layer = _getLayerFromPool(isySubLayer);
             var isVector = false;
             switch (isySubLayer.source) {
-                case SOURCES.wms:
-                case SOURCES.wmts:
-                case SOURCES.proxyWms:
-                case SOURCES.proxyWmts:
+                case _Domain.SOURCES.wms:
+                case _Domain.SOURCES.wmts:
+                case _Domain.SOURCES.proxyWms:
+                case _Domain.SOURCES.proxyWmts:
                     source = layer.getSource();
                     break;
-                case SOURCES.vector:
+                case _Domain.SOURCES.vector:
                     isVector = true;
-                    source = new MaplibVectorSource(isySubLayer);
+                    source = new _Sources.Vector(isySubLayer);
                     if (isySubLayer.url !== "") {
                         _loadVectorLayer(isySubLayer, source);
                     }
                     break;
-                case SOURCES.wfs:
+                case _Domain.SOURCES.wfs:
                     isVector = true;
-                    source = new MaplibWfsSource(isySubLayer, offline, parameters);
+                    source = new _Sources.Wfs(isySubLayer, offline, parameters);
                     break;
             }
             if (source) {
@@ -1221,7 +1232,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
             }
         }
     };
-    var removeIsyToken = function () {
+    var removeIsyToken = function removeIsyToken() {
         isyToken = undefined;
         var parameters = {
             isyToken: ''
@@ -1233,22 +1244,22 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
             var layer = _getLayerFromPool(isySubLayer);
             var isVector = false;
             switch (isySubLayer.source) {
-                case SOURCES.wms:
-                case SOURCES.wmts:
-                case SOURCES.proxyWms:
-                case SOURCES.proxyWmts:
+                case _Domain.SOURCES.wms:
+                case _Domain.SOURCES.wmts:
+                case _Domain.SOURCES.proxyWms:
+                case _Domain.SOURCES.proxyWmts:
                     source = layer.getSource();
                     break;
-                case SOURCES.vector:
+                case _Domain.SOURCES.vector:
                     isVector = true;
-                    source = new MaplibVectorSource(isySubLayer);
+                    source = new _Sources.Vector(isySubLayer);
                     if (isySubLayer.url !== "") {
                         _loadVectorLayer(isySubLayer, source);
                     }
                     break;
-                case SOURCES.wfs:
+                case _Domain.SOURCES.wfs:
                     isVector = true;
-                    source = new MaplibWfsSource(isySubLayer, offline);
+                    source = new _Sources.Wfs(isySubLayer, offline);
                     break;
             }
             if (source) {
@@ -1326,7 +1337,6 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         featureInfo.DeactivateBoxSelect(map);
     }
 
-
     Array.prototype.where = function (matcher) {
         var result = [];
         for (var i = 0; i < this.length; i++) {
@@ -1341,7 +1351,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         //Get elements and convert to array
         var elems = Array.prototype.slice.call(response.getElementsByTagName(tag), 0);
 
-        var matcher = function (el) {
+        var matcher = function matcher(el) {
             if (exactName) {
                 return el.getAttribute(attr).toLowerCase() === attrValue.toLowerCase();
             } else {
@@ -1351,7 +1361,6 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
 
         return elems.where(matcher);
     }
-
 
     function _parseResponse(response) {
 
@@ -1378,20 +1387,20 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
             var gmlFormat;
             switch (describedSubLayer.version) {
                 case '1.0.0':
-                    gmlFormat = new GML2Format();
+                    gmlFormat = new _GML2.default();
                     break;
                 case '1.1.0':
-                    gmlFormat = new GML3Format();
+                    gmlFormat = new _GML4.default();
                     break;
                 case '2.0.0':
-                    gmlFormat = new GML3Format();
+                    gmlFormat = new _GML4.default();
                     break;
                 default:
-                    gmlFormat = new GMLFormat();
+                    gmlFormat = new _format.GML();
                     break;
             }
 
-            describedSource.format = new WFSFormat({
+            describedSource.format = new _format.WFS({
                 featureType: describedSubLayer.providerName,
                 featureNS: featureNamespace,
                 gmlFormat: gmlFormat
@@ -1401,14 +1410,14 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         describedSubLayer.featureNS = featureNamespace;
         describedSubLayer.geometryName = elementGeometryName;
 
-        eventHandler.TriggerEvent(EventTypes.FeatureHasBeenDescribed, [describedSubLayer, describedSource]);
+        eventHandler.TriggerEvent(_EventHandler.EventTypes.FeatureHasBeenDescribed, [describedSubLayer, describedSource]);
     }
 
     function describeFeature(isySubLayer, geometryType) {
         describedSubLayer = isySubLayer;
         isyLayerGeometryType = geometryType;
-        var projection = getProjection(isySubLayer.coordinate_system);
-        describedSource = new VectorSource({
+        var projection = (0, _proj.get)(isySubLayer.coordinate_system);
+        describedSource = new _source.Vector({
             projection: projection
         });
         describedSource.set('type', 'ol.source.Vector');
@@ -1419,14 +1428,12 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         if (url.toLowerCase().indexOf("service=wfs") < 0) {
             url += "service=WFS&";
         }
-        url += 'request=DescribeFeatureType&' +
-            'version=' + isySubLayer.version + '&typename=' + isySubLayer.name;
-        $.ajax({
+        url += 'request=DescribeFeatureType&' + 'version=' + isySubLayer.version + '&typename=' + isySubLayer.name;
+        _jquery2.default.ajax({
             url: url
         }).done(function (response) {
             _parseResponse(response);
         });
-
     }
 
     function getExtentForCoordinate(coordinate, pixelTolerance) {
@@ -1474,7 +1481,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         }
         var scale = _getScaleByResolution(map.getView().getResolution());
         var feature;
-        var featureAttribute = function (attr) {
+        var featureAttribute = function featureAttribute(attr) {
             for (var j = 0; j < feature.attributes.length; j++) {
                 if (attr === feature.attributes[j][0]) {
                     return feature.attributes[j][1];
@@ -1532,7 +1539,6 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
     function activateMeasureLine(callback, options) {
         measureLine.Activate(map, callback, options);
         //var vector = measure.Activate(map, callback);
-
     }
 
     function deactivateMeasureLine() {
@@ -1579,7 +1585,6 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
      AddLayerFeature End
      */
 
-
     /*
      Modify Feature Start
      */
@@ -1595,7 +1600,6 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
     /*
      Modify Feature End
      */
-
 
     /*
      DrawFeature Start
@@ -1672,8 +1676,6 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         }
     }
 
-
-
     function getLayerResource(key, name, url) {
         if (offline) {
             offline.GetLayerResource(key, name, url);
@@ -1690,15 +1692,14 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
      Offline End
      */
 
-
     /*
       PrintBoxSelect Start
      */
-    var activatePrintBoxSelect = function (options) {
+    var activatePrintBoxSelect = function activatePrintBoxSelect(options) {
         printBoxSelect.Activate(map, options);
     };
 
-    var deactivatePrintBoxSelect = function () {
+    var deactivatePrintBoxSelect = function deactivatePrintBoxSelect() {
         printBoxSelect.Deactivate(map);
     };
 
@@ -1706,15 +1707,14 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
      PrintBoxSelect End
      */
 
-
     /*
      AddLayerUrl Start
      */
-    var activateAddLayerUrl = function (options) {
+    var activateAddLayerUrl = function activateAddLayerUrl(options) {
         addLayerUrl.Activate(map, options);
     };
 
-    var deactivateAddLayerUrl = function () {
+    var deactivateAddLayerUrl = function deactivateAddLayerUrl() {
         addLayerUrl.Deactivate(map);
     };
 
@@ -1722,13 +1722,11 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
      AddLayerUrl End
      */
 
-
-
     /*
         Utility functions start
      */
 
-    var _getUrlObject = function () {
+    var _getUrlObject = function _getUrlObject() {
         if (map !== undefined) {
             var retVal = {
                 layers: _getGuidsForVisibleLayers()
@@ -1748,7 +1746,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         }
     };
 
-    var zoomToLayer = function (isySubLayer) {
+    var zoomToLayer = function zoomToLayer(isySubLayer) {
         var layer = _getLayerFromPool(isySubLayer);
         if (layer) {
             var extent;
@@ -1758,16 +1756,16 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                 extent = layer.getSource().getTileGrid().getExtent();
             }
             if (Array.isArray(extent) && extent[0] !== Infinity) {
-                if (!containsCoordinate(extent, map.getView().getCenter())) {
+                if (!(0, _extent.containsCoordinate)(extent, map.getView().getCenter())) {
                     map.getView().fit(extent, map.getSize());
                 }
             }
         }
     };
 
-    var zoomToLayers = function (isySubLayers) {
+    var zoomToLayers = function zoomToLayers(isySubLayers) {
         var layersExtent = [Infinity, Infinity, -Infinity, -Infinity];
-        var setNewExtent = function (newExtent) {
+        var setNewExtent = function setNewExtent(newExtent) {
             if (layersExtent[0] > newExtent[0]) {
                 layersExtent[0] = newExtent[0];
             }
@@ -1795,11 +1793,11 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         }
     };
 
-    var fitExtent = function (extent) {
+    var fitExtent = function fitExtent(extent) {
         map.getView().fit(extent, map.getSize());
     };
 
-    var getCenter = function () {
+    var getCenter = function getCenter() {
         var retVal;
         var view = map.getView();
         var center = view.getCenter();
@@ -1812,7 +1810,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         return retVal;
     };
 
-    var setCenter = function (center) {
+    var setCenter = function setCenter(center) {
         var view = map.getView();
         if (center.epsg) {
             center = transformEpsgCoordinate(center, getEpsgCode());
@@ -1823,22 +1821,22 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         }
     };
 
-    var getZoom = function () {
+    var getZoom = function getZoom() {
         var view = map.getView();
         return view.getZoom();
     };
 
-    var setZoom = function (zoom) {
+    var setZoom = function setZoom(zoom) {
         var view = map.getView();
         return view.setZoom(zoom);
     };
 
-    var getRotation = function () {
+    var getRotation = function getRotation() {
         var view = map.getView();
         return view.getRotation();
     };
 
-    var setRotation = function (angle, anchor) {
+    var setRotation = function setRotation(angle, anchor) {
         var view = map.getView();
         if (anchor) {
             view.rotate(angle, anchor);
@@ -1847,7 +1845,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         }
     };
 
-    var getEpsgCode = function () {
+    var getEpsgCode = function getEpsgCode() {
         var view = map.getView();
         var projection = view.getProjection();
         return projection.getCode();
@@ -1857,7 +1855,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         if (coord.epsg !== "" && toCrs !== "" && coord.epsg !== toCrs) {
             //var fromProj = getProjection(coord.epsg);
             //var toProj = getProjection(toCrs);
-            var transformedCoord = transform([coord.lon, coord.lat], coord.epsg, toCrs);
+            var transformedCoord = (0, _proj.transform)([coord.lon, coord.lat], coord.epsg, toCrs);
 
             if (toCrs === "EPSG:4326") {
                 transformedCoord = [transformedCoord[1], transformedCoord[0]];
@@ -1876,7 +1874,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
             //var fromProj = getProjection(fromCrs);
             //var toProj = getProjection(toCrs);
             //var transformedExtent = transformExtent(boxExtent, fromProj, toProj);
-            var transformedExtent = transformExtent(boxExtent, fromCrs, toCrs);
+            var transformedExtent = (0, _proj.transformExtent)(boxExtent, fromCrs, toCrs);
 
             returnExtent = transformedExtent;
             if (toCrs === "EPSG:4326") {
@@ -1888,50 +1886,50 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
     }
 
     function convertGmlToGeoJson(gml) {
-        var xmlParser = new WMSCapabilities();
+        var xmlParser = new _format.WMSCapabilities();
         var xmlFeatures = xmlParser.read(gml);
-        var gmlParser = new GMLFormat();
+        var gmlParser = new _format.GML();
         var features = gmlParser.readFeatures(xmlFeatures);
-        var jsonParser = new GeoJSONFormat();
+        var jsonParser = new _format.GeoJSON();
         return jsonParser.writeFeatures(features);
     }
 
     function extentToGeoJson(x, y) {
-        var point = new Point([x, y]);
-        var feature = new Feature();
+        var point = new _geom.Point([x, y]);
+        var feature = new _Feature2.default();
         feature.setGeometry(point);
-        var geoJson = new GeoJSONFormat();
+        var geoJson = new _format.GeoJSON();
         return geoJson.writeFeature(feature);
     }
 
     function addZoom() {
-        var zoom = new Zoom();
+        var zoom = new _control.Zoom();
         map.addControl(zoom);
     }
 
     function addZoomSlider() {
-        var zoomslider = new ZoomSlider();
+        var zoomslider = new _control.ZoomSlider();
         map.addControl(zoomslider);
     }
 
     function addZoomToExtent(extent) {
-        var zoomToExtent = new ZoomToExtent({
+        var zoomToExtent = new _control.ZoomToExtent({
             extent: extent
         });
         map.addControl(zoomToExtent);
     }
 
     function addScaleLine() {
-        var scaleLine = new ScaleLine();
+        var scaleLine = new _control.ScaleLine();
         map.addControl(scaleLine);
     }
 
-    var getVectorLayers = function (isySubLayer, data) {
+    var getVectorLayers = function getVectorLayers(isySubLayer, data) {
         var vectors = [];
-        var source = MaplibVectorSource(isySubLayer.subLayers[0], map.getView().getProjection());
+        var source = (0, _Sources.Vector)(isySubLayer.subLayers[0], map.getView().getProjection());
 
-        var fromProj = getProjection(isySubLayer.subLayers[0].coordinate_system);
-        var toProj = getProjection(source.getProjection().getCode());
+        var fromProj = (0, _proj.get)(isySubLayer.subLayers[0].coordinate_system);
+        var toProj = (0, _proj.get)(source.getProjection().getCode());
         var features = source.parser.readFeatures(data);
         for (var i = 0; i < features.length; i++) {
             var feature = features[i];
@@ -1942,22 +1940,22 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         return vectors;
     };
 
-    var getLayerCount = function () {
+    var getLayerCount = function getLayerCount() {
         if (map) {
             return map.getLayers().getArray().length;
         }
         return 0;
     };
 
-    var getCenterFromExtent = function (extent) {
-        return OLGetCenterFromExtent(extent);
+    var getCenterFromExtent = function getCenterFromExtent(extent) {
+        return (0, _extent.getCenter)(extent);
     };
 
-    var getScale = function () {
+    var getScale = function getScale() {
         return mapScales[map.getView().getZoom()];
     };
 
-    var getLegendStyleFromLayer = function (layer) {
+    var getLegendStyleFromLayer = function getLegendStyleFromLayer(layer) {
         if (sldstyles[layer.guid] !== undefined) {
             return sldstyles[layer.guid].GetStyleForLegend();
         } else {
@@ -1965,17 +1963,17 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         }
     };
 
-    var getExtent = function () {
+    var getExtent = function getExtent() {
         return map.getView().calculateExtent(map.getSize());
     };
 
-    var getUrlObject = function () {
+    var getUrlObject = function getUrlObject() {
         return _getUrlObject();
     };
 
     function _addGeolocationLayer(guid) {
-        var geolocationLayer = new VectorLayer({
-            source: new VectorSource(),
+        var geolocationLayer = new _layer.Vector({
+            source: new _source.Vector(),
             projection: map.getView().getProjection()
         });
         geolocationLayer.guid = guid;
@@ -1988,27 +1986,24 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         if (geolocationLayer !== null) {
             var geolocationSource = geolocationLayer.getSource();
             geolocationSource.clear();
-            var geolocationStyle = new style.Style({
-                image: new style.Circle({
+            var geolocationStyle = new _Style2.default.Style({
+                image: new _Style2.default.Circle({
                     radius: 6,
-                    stroke: new style.Stroke({
+                    stroke: new _Style2.default.Stroke({
                         color: 'rgba(255,255,255,0.8)',
                         width: 2
                     }),
-                    fill: new style.Fill({
+                    fill: new _Style2.default.Fill({
                         color: 'rgba(32,170,172,0.8)'
                     })
                 }),
-                fill: new style.Fill({
+                fill: new _Style2.default.Fill({
                     color: 'rgba(0,102,204,0.15)'
                 }),
                 zIndex: Infinity
             });
-            var geolocationFeature = new Feature({
-                geometry: new GeometryCollection([
-                    new Point(center),
-                    new Circle(center, parseInt(radius, 10))
-                ]),
+            var geolocationFeature = new _Feature2.default({
+                geometry: new _GeometryCollection2.default([new _geom.Point(center), new _geom.Circle(center, parseInt(radius, 10))]),
                 name: 'geolocation_center'
             });
             geolocationFeature.setStyle(geolocationStyle);
@@ -2041,13 +2036,13 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
             heading: geolocation.getHeading(),
             speed: geolocation.getSpeed()
         };
-        eventHandler.TriggerEvent(EventTypes.GeolocationUpdated, geolocationObject);
+        eventHandler.TriggerEvent(_EventHandler.EventTypes.GeolocationUpdated, geolocationObject);
     }
 
-    var getGeolocation = function () {
+    var getGeolocation = function getGeolocation() {
         var view = map.getView();
         var mapProjection = view.getProjection();
-        geolocation = new OlGeolocation({
+        geolocation = new _Geolocation2.default({
             projection: mapProjection,
             tracking: true,
             trackingOptions: {
@@ -2065,7 +2060,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         geolocation.on('change:accuracy', _geolocationChange);
     };
 
-    var removeGeolocation = function () {
+    var removeGeolocation = function removeGeolocation() {
         var geolocationLayer = _getLayerByGuid(99999);
         if (geolocationLayer !== null) {
             map.removeLayer(geolocationLayer);
@@ -2079,39 +2074,39 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         }
     };
 
-    var getProxyHost = function () {
+    var getProxyHost = function getProxyHost() {
         return proxyHost;
     };
 
-    var setTranslateOptions = function (translate) {
+    var setTranslateOptions = function setTranslateOptions(translate) {
         translateOptions = translate;
     };
 
-    var transformCoordinates = function (fromEpsg, toEpsg, coordinates) {
-        if (proj4.defs(fromEpsg) && proj4.defs(toEpsg)) {
-            var transformObject = proj4(fromEpsg, toEpsg);
+    var transformCoordinates = function transformCoordinates(fromEpsg, toEpsg, coordinates) {
+        if (_proj3.default.defs(fromEpsg) && _proj3.default.defs(toEpsg)) {
+            var transformObject = (0, _proj3.default)(fromEpsg, toEpsg);
             return transformObject.forward(coordinates);
         }
     };
 
-    var transformFromGeographic = function (coordinates) {
+    var transformFromGeographic = function transformFromGeographic(coordinates) {
         // If no coordinates are given an object with two methods is returned,
         // its methods are forward which projects from the first projection to
         // the second and inverse which projects from the second to the first.
         var fromEpsg = getEpsgCode();
-        if (proj4.defs(fromEpsg)) {
-            var transformObject = proj4(fromEpsg);
+        if (_proj3.default.defs(fromEpsg)) {
+            var transformObject = (0, _proj3.default)(fromEpsg);
             return transformObject.forward(coordinates);
         }
     };
 
-    var transformToGeographic = function (coordinates) {
+    var transformToGeographic = function transformToGeographic(coordinates) {
         // If no coordinates are given an object with two methods is returned,
         // its methods are forward which projects from the first projection to
         // the second and inverse which projects from the second to the first.
         var fromEpsg = getEpsgCode();
-        if (proj4.defs(fromEpsg)) {
-            var transformObject = proj4(fromEpsg);
+        if (_proj3.default.defs(fromEpsg)) {
+            var transformObject = (0, _proj3.default)(fromEpsg);
             return transformObject.inverse(coordinates);
         }
     };
@@ -2260,7 +2255,6 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
 
         /***********************************/
 
-
         // AddLayerUrl Start
         ActivateAddLayerUrl: activateAddLayerUrl,
         DeactivateAddLayerUrl: deactivateAddLayerUrl,
@@ -2309,7 +2303,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
     };
 };
 
-export const MapRENDERERS = {
+var MapRENDERERS = exports.MapRENDERERS = {
     canvas: 'canvas',
     webgl: 'webgl'
 };
