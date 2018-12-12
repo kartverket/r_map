@@ -46,22 +46,22 @@
     "less-loader": "4.1.0",
     "np": "3.0.4",
     "ol": "5.3.0",
-    "react-styleguidist": "8.0.6",
-    "react-test-renderer": "16.6.3",
-    "regenerator-runtime": "0.13.1",
-    "style-loader": "0.23.1",
-    "url-loader": "1.1.2",
-    "webpack": "4.27.1",
-    "whatwg-fetch": "3.0.0",
     "react": "^16.6.3",
     "react-bootstrap": "^0.32.4",
-    "react-dropdown-tree-select": "^1.14.0",
     "react-dom": "^16.6.3",
+    "react-dropdown-tree-select": "^1.14.0",
     "react-fa": "^5.0.0",
     "react-rnd": "^9.0.4",
     "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "^4.3.1",
-    "rimraf": "^2.6.2"
+    "react-styleguidist": "^8.0.6",
+    "react-test-renderer": "16.6.3",
+    "regenerator-runtime": "0.13.1",
+    "rimraf": "^2.6.2",
+    "style-loader": "0.23.1",
+    "url-loader": "1.1.2",
+    "webpack": "4.27.1",
+    "whatwg-fetch": "3.0.0"
   },
   "peerDependencies": {
     "ol": "~5.0",
@@ -79,7 +79,9 @@
     "build:dist": "npm run clean:dist && babel src --out-dir dist --copy-files --ignore spec.js,example.js,.md",
     "build:all": "npm run build:dist",
     "build": "npm run test -- --coverage && npm run build:all",
-    "release": "np --no-yarn && git push https://github.com/terrestris/react-geo.git master --tags"
+    "release": "np --no-yarn && git push https://github.com/terrestris/react-geo.git master --tags",
+    "styleguide": "styleguidist server",
+    "styleguide:build": "styleguidist build"
   },
   "repository": {
     "type": "git",
