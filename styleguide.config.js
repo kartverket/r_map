@@ -3,7 +3,7 @@ const fs = require('fs');
 const webpackCommonConf = require('./webpack.common.config.js');
 
 module.exports = {
-  title: 'react-geo',
+  title: 'rMapComponent',
   styleguideDir: './dist/styleguide',
   ignore: [
     '**/__tests__/**',

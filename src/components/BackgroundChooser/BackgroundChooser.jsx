@@ -2,6 +2,12 @@ import React, { Component } from "react";
 import { map, eventHandler } from "../../MapUtil/maplibHelper";
 import { ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 
+/**
+ * Panel containing a list of backgroundLayers.
+ *
+ * @class The AddWmsPanel
+ * @extends React.Component
+ */
 export default class BackgroundChooser extends Component {
   constructor(props) {
     super(props);
@@ -14,7 +20,7 @@ export default class BackgroundChooser extends Component {
     map.SetBaseLayer(baseLayer);
     map.ZoomToLayer(baseLayer);
     this.setState({ value: baseLayer });
-  };
+  }
   renderBaseLayers(baseLayers) {
     return baseLayers.map((baseLayer, index) => {
       return (

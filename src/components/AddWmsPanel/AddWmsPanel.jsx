@@ -13,7 +13,7 @@ import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
 import { map, addLayer } from "../../MapUtil/maplibHelper";
 
 /**
- * Panel containing a (checkable) list of AddWmsLayerEntry instances.
+ * Panel containing a (checkable) list.
  * This class can be used e.g with a result obtained by ol WMS capabilities
  * parser, in particular objects in `Capability.Layer.Layer`
  *
@@ -102,7 +102,7 @@ export default class AddWmsPanel extends React.Component {
       let newLayerConfig = addLayer(ServiceName, layerConfig);
       map.AddLayer(newLayerConfig);
     }
-  };
+  }
 
   onSelectionChange = (currentNode, selectedNodes) => {
     if (!map.GetOverlayLayers().includes(currentNode)) {
@@ -114,15 +114,15 @@ export default class AddWmsPanel extends React.Component {
         map.ShowLayer(currentNode);
       }
     }
-  };
+  }
 
   onAction = ({ action, node }) => {
     console.log(`onAction:: [${action}]`, node);
-  };
+  }
 
   onNodeToggle = currentNode => {
     console.log("onNodeToggle::", currentNode);
-  };
+  }
 
   /**
    * The render function.
