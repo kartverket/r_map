@@ -38,7 +38,7 @@ class ListItem extends React.Component {
  * @class The Map Component
  * @extends React.Component
  */
-export default class MapComponent extends React.Component {
+export class MapComponent extends React.Component {
   state = {
     layers: []
   };
@@ -297,3 +297,5 @@ export default class MapComponent extends React.Component {
     );
   }
 }
+
+export default MapComponent;
