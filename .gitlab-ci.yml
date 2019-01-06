@@ -1,2 +1,6 @@
+image: node:4.2.2
+
 job1:
-  script: "npm build"
+  script: 
+    - npm install
+    - npm build
