@@ -3,4 +3,4 @@ image: node:4.2.2
 job1:
   script: 
     - npm install
-    - npm build
+    - npm run build
