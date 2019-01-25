@@ -15,7 +15,8 @@
     "proj4": "*",
     "query-string": "^6.2.0",
     "prop-types": "^15.6.2",
-    "set-query-string": "^2.2.0"
+    "set-query-string": "^2.2.0",
+    "react-dropdown-tree-select": "^1.14.0"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
@@ -46,8 +47,7 @@
     "ol": "5.3.0",
     "react": "^16.6.3",
     "react-bootstrap": "^0.32.4",
-    "react-dom": "^16.6.3",
-    "react-dropdown-tree-select": "^1.14.0",
+    "react-dom": "^16.6.3",    
     "react-fa": "^5.0.0",
     "react-rnd": "^9.0.4",
     "react-router-bootstrap": "^0.24.4",
