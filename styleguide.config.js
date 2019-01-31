@@ -4,7 +4,7 @@ const webpackCommonConf = require('./webpack.common.config.js');
 
 module.exports = {
   title: 'rMapComponent',
-  styleguideDir: './buldi/styleguide',
+  styleguideDir: './dist/styleguide',
   ignore: [
     '**/__tests__/**',
     '**/*.test.{js,jsx,ts,tsx}',
@@ -14,7 +14,7 @@ module.exports = {
   ],
   usageMode: 'expand',
   theme: {
-    sidebarWidth: 350
+    sidebarWidth: 300
   },
   getExampleFilename(componentPath) {
     return componentPath.replace(/\.jsx?$/, '.example.md')

@@ -53,7 +53,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /**
- * Panel containing a (checkable) list of AddWmsLayerEntry instances.
+ * Panel containing a (checkable) list.
  * This class can be used e.g with a result obtained by ol WMS capabilities
  * parser, in particular objects in `Capability.Layer.Layer`
  *
