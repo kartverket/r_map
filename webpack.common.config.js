@@ -1,6 +1,9 @@
 const path = require('path');
 
 module.exports = {
+  devServer: {
+    https: false
+  },
   module: {
     rules: [{
       test: /\.jsx?$/,
@@ -13,13 +16,16 @@ module.exports = {
         'css-loader'
       ]
     }, {
-      test: /\.less$/,
+      test: /\.scss$/,
       use: [
         'style-loader',
         'css-loader',
+        'resolve-url-loader',
         {
-          loader: 'less-loader',
+          loader: 'sass-loader',
           options: {
+            sourceMap: true,
+            sourceMapContents: false,
             javascriptEnabled: true
           }
         }

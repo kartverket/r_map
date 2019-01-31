@@ -25,7 +25,7 @@ import {
   ButtonGroup
 } from "react-bootstrap";
 
-import "./MapComponent.css";
+import "./MapComponent.scss";
 
 class ListItem extends React.Component {
   render() {

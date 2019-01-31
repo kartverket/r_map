@@ -4,7 +4,7 @@ const webpackCommonConf = require('./webpack.common.config.js');
 
 module.exports = {
   title: 'rMapComponent',
-  styleguideDir: './dist/styleguide',
+  styleguideDir: './buldi/styleguide',
   ignore: [
     '**/__tests__/**',
     '**/*.test.{js,jsx,ts,tsx}',
@@ -12,13 +12,17 @@ module.exports = {
     '**/*.d.ts',
     '**/src/**/*.example.jsx'
   ],
-  showUsage: true,
+  usageMode: 'expand',
+  theme: {
+    sidebarWidth: 350
+  },
   getExampleFilename(componentPath) {
     return componentPath.replace(/\.jsx?$/, '.example.md')
   },
   getComponentPathLine(componentPath) {
     const name = path.basename(componentPath, '.jsx')
-    return `import { ${name} } from 'r_map';`
+    const dir = path.dirname(componentPath).replace('src', 'dist');
+    return `import ${name} from 'r_map/${dir}/${name}';`
   },
   require: [
     'babel-polyfill',

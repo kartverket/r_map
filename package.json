@@ -42,8 +42,7 @@
     "eslint-plugin-react": "7.11.1",
     "file-loader": "2.0.0",
     "jest": "23.6.0",
-    "less": "3.9.0",
-    "less-loader": "4.1.0",
+    "node-sass": "^4.11.0",
     "ol": "5.3.0",
     "react": "^16.6.3",
     "react-bootstrap": "^0.32.4",
@@ -56,10 +55,12 @@
     "react-styleguidist": "^8.0.6",
     "react-test-renderer": "16.6.3",
     "regenerator-runtime": "0.13.1",
+    "resolve-url-loader": "^3.0.0",
     "rimraf": "^2.6.2",
+    "sass-loader": "^7.1.0",
     "style-loader": "0.23.1",
     "url-loader": "1.1.2",
-    "webpack": "4.27.1",
+    "webpack": "^4.29.0",
     "whatwg-fetch": "3.0.0"
   },
   "peerDependencies": {
@@ -78,8 +79,8 @@
     "build:dist": "npm run clean:dist && babel src --out-dir dist --copy-files --ignore spec.js,example.js,.md",
     "build": "npm run build:dist",
     "build:test": "npm run test -- --coverage && npm run build:all",
-    "styleguide": "styleguidist server",
-    "styleguide:build": "styleguidist build"
+    "start:styleguide": "styleguidist server",
+    "build:styleguide": "npm run clean:build && styleguidist build"
   },
   "repository": {
     "type": "git",
