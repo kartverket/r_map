@@ -13,7 +13,7 @@ var _BackgroundChooser = require('./components/BackgroundChooser/BackgroundChoos
 
 var _BackgroundChooser2 = _interopRequireDefault(_BackgroundChooser);
 
-var _MapComponent = require('./components/MapComponent/MapComponent.jsx');
+var _MapComponent = require('./components/MapComponent/MapComponent');
 
 var _MapComponent2 = _interopRequireDefault(_MapComponent);
 
