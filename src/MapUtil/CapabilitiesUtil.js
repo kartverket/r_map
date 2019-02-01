@@ -1,6 +1,5 @@
 import OlWMSCapabilities from 'ol/format/WMSCapabilities';
 import WMTSCapabilities from 'ol/format/WMTSCapabilities.js';
-import OlSourceImageWMS from 'ol/source/ImageWMS';
 import {
   Layer
 } from './Domain'

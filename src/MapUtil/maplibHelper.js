@@ -12,8 +12,6 @@ import {
 import {
   OLMap
 } from './OLMap'
-import Layers from './Layers'
-import Groups from './Groups'
 import {
   Map
 } from './Map'

@@ -2,9 +2,6 @@ import {
     EventTypes
 } from './EventHandler'
 import ProjectionUtil from './ProjectionUtil'
-import {
-    Projection
-} from 'ol/proj';
 import Categories from './Categories'
 import Groups from './Groups'
 import Layers from './Layers'
