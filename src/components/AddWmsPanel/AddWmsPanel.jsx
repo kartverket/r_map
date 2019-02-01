@@ -1,13 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { NavDropdown } from "react-bootstrap";
 import DropdownTreeSelect from "react-dropdown-tree-select";
 import "react-dropdown-tree-select/dist/styles.css";
 
-import OlLayerTile from "ol/layer/Tile";
-import OlLayerImage from "ol/layer/Image";
-import OlMap from "ol/Map";
-import isFunction from "lodash/isFunction";
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
 
 import { map, addLayer } from "../../MapUtil/maplibHelper";
