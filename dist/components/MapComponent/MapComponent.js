@@ -188,13 +188,12 @@ var MapComponent = exports.MapComponent = function (_React$Component2) {
   }, {
     key: "render",
     value: function render() {
-      var _this4 = this;
-
       var layers = this.state.layers;
 
       return _react2.default.createElement(
         "div",
-        null,
+        { className: "mapContainer" },
+        _react2.default.createElement(_BackgroundChooser2.default, { map: _maplibHelper.map }),
         _react2.default.createElement(
           "div",
           {
@@ -206,71 +205,26 @@ var MapComponent = exports.MapComponent = function (_React$Component2) {
             }
           },
           _react2.default.createElement(
-            _reactBootstrap.Collapse,
-            { "in": this.state.open },
+            _reactBootstrap.Panel,
+            { eventKey: "2" },
             _react2.default.createElement(
-              _reactBootstrap.PanelGroup,
-              {
-                accordion: true,
-                id: "accordion-controlled-example",
-                activeKey: this.state.activeKey,
-                onSelect: this.handleSelect
-              },
+              _reactBootstrap.Panel.Heading,
+              null,
               _react2.default.createElement(
-                _reactBootstrap.Panel,
-                { eventKey: "1" },
-                _react2.default.createElement(
-                  _reactBootstrap.Panel.Heading,
-                  null,
-                  _react2.default.createElement(
-                    _reactBootstrap.Panel.Title,
-                    { toggle: true },
-                    "Background Chooser"
-                  )
-                ),
-                _react2.default.createElement(
-                  _reactBootstrap.Panel.Body,
-                  { collapsible: true },
-                  _react2.default.createElement(
-                    _reactBootstrap.ButtonGroup,
-                    { vertical: true },
-                    _react2.default.createElement(_BackgroundChooser2.default, { map: _maplibHelper.map })
-                  )
-                )
-              ),
+                _reactBootstrap.Panel.Title,
+                { toggle: true },
+                "Kartlag"
+              )
+            ),
+            _react2.default.createElement(
+              _reactBootstrap.Panel.Body,
+              { collapsible: true },
               _react2.default.createElement(
-                _reactBootstrap.Panel,
-                { eventKey: "2" },
-                _react2.default.createElement(
-                  _reactBootstrap.Panel.Heading,
-                  null,
-                  _react2.default.createElement(
-                    _reactBootstrap.Panel.Title,
-                    { toggle: true },
-                    "Layer Chooser"
-                  )
-                ),
-                _react2.default.createElement(
-                  _reactBootstrap.Panel.Body,
-                  { collapsible: true },
-                  _react2.default.createElement(
-                    _reactBootstrap.Nav,
-                    { bsStyle: "pills", pullLeft: true },
-                    this.renderServiceList()
-                  )
-                )
+                _reactBootstrap.Nav,
+                { bsStyle: "pills", pullLeft: true },
+                this.renderServiceList()
               )
             )
-          ),
-          _react2.default.createElement(
-            _reactBootstrap.Button,
-            {
-              bsStyle: "primary",
-              onClick: function onClick() {
-                return _this4.setState({ open: !_this4.state.open });
-              }
-            },
-            this.state.open ? "Close Menu" : "Open Menu"
           )
         ),
         _react2.default.createElement("div", {
@@ -344,7 +298,7 @@ MapComponent.defaultProps = {
 };
 
 var _initialiseProps = function _initialiseProps() {
-  var _this5 = this;
+  var _this4 = this;
 
   this.state = {
     layers: []
@@ -395,7 +349,7 @@ var _initialiseProps = function _initialiseProps() {
   this.updateMapInfoState = function () {
     var center = _maplibHelper.map.GetCenter();
     var queryValues = _queryString2.default.parse(window.location.search);
-    _this5.props = { lon: center.lon, lat: center.lat, zoom: center.zoom };
+    _this4.props = { lon: center.lon, lat: center.lat, zoom: center.zoom };
     queryValues.lon = center.lon;
     queryValues.lat = center.lat;
     queryValues.zoom = center.zoom;

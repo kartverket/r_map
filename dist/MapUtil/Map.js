@@ -11,8 +11,6 @@ var _ProjectionUtil = require('./ProjectionUtil');
 
 var _ProjectionUtil2 = _interopRequireDefault(_ProjectionUtil);
 
-var _proj = require('ol/proj');
-
 var _Categories = require('./Categories');
 
 var _Categories2 = _interopRequireDefault(_Categories);

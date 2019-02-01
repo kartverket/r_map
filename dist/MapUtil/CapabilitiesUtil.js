@@ -15,10 +15,6 @@ var _WMTSCapabilities = require('ol/format/WMTSCapabilities.js');
 
 var _WMTSCapabilities2 = _interopRequireDefault(_WMTSCapabilities);
 
-var _ImageWMS = require('ol/source/ImageWMS');
-
-var _ImageWMS2 = _interopRequireDefault(_ImageWMS);
-
 var _Domain = require('./Domain');
 
 var _get = require('lodash/get.js');

@@ -14,29 +14,11 @@ var _propTypes = require("prop-types");
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactBootstrap = require("react-bootstrap");
-
 var _reactDropdownTreeSelect = require("react-dropdown-tree-select");
 
 var _reactDropdownTreeSelect2 = _interopRequireDefault(_reactDropdownTreeSelect);
 
 require("react-dropdown-tree-select/dist/styles.css");
-
-var _Tile = require("ol/layer/Tile");
-
-var _Tile2 = _interopRequireDefault(_Tile);
-
-var _Image = require("ol/layer/Image");
-
-var _Image2 = _interopRequireDefault(_Image);
-
-var _Map = require("ol/Map");
-
-var _Map2 = _interopRequireDefault(_Map);
-
-var _isFunction = require("lodash/isFunction");
-
-var _isFunction2 = _interopRequireDefault(_isFunction);
 
 var _CapabilitiesUtil = require("../../MapUtil/CapabilitiesUtil");
 

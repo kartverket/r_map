@@ -15,17 +15,7 @@ var _EventHandler = require('./EventHandler');
 
 var _OLMap = require('./OLMap');
 
-var _Layers = require('./Layers');
-
-var _Layers2 = _interopRequireDefault(_Layers);
-
-var _Groups = require('./Groups');
-
-var _Groups2 = _interopRequireDefault(_Groups);
-
 var _Map = require('./Map');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 

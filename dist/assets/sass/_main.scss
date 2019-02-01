@@ -129,19 +129,14 @@ ul {
   -webkit-transition: color 0.15s linear; /*safari and chrome */
 }
 
-body{
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow: hidden;
-}
+
 
 .header-move{
   cursor: move;
 }
-
+.mapContainer {
+  position: relative;
+}
 .overlayContent{
   max-height: 100%;
   overflow: auto;

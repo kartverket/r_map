@@ -14,6 +14,8 @@ var _maplibHelper = require("../../MapUtil/maplibHelper");
 
 var _reactBootstrap = require("react-bootstrap");
 
+require("./BackgroundChooser.scss");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -53,13 +55,8 @@ var BackgroundChooser = function (_Component) {
     key: "renderBaseLayers",
     value: function renderBaseLayers(baseLayers) {
       return baseLayers.map(function (baseLayer, index) {
-        return _react2.default.createElement(
-          _reactBootstrap.ToggleButton,
-          { key: index, value: baseLayer },
-          " ",
-          baseLayer.name,
-          " "
-        );
+
+        return _react2.default.createElement(_reactBootstrap.ToggleButton, { key: index, className: 'icon_' + baseLayer.id, value: baseLayer });
       });
     }
   }, {
@@ -70,6 +67,7 @@ var BackgroundChooser = function (_Component) {
         {
           type: "radio",
           name: "Backgound",
+          className: "backgroundChooser",
           onChange: this.setAsBaseLayer,
           value: this.state.value
         },
