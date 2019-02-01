@@ -239,7 +239,8 @@ export class MapComponent extends React.Component {
   render() {
     const { layers } = this.state;
     return (
-      <div>
+      <div className="mapContainer">
+        <BackgroundChooser map={map} />    
         <div
           className={this.state.menu === true ? "pulldown-content" : "hide"}
           style={{
@@ -248,41 +249,17 @@ export class MapComponent extends React.Component {
             zIndex: 600
           }}
         >
-          <Collapse in={this.state.open}>
-            <PanelGroup
-              accordion
-              id="accordion-controlled-example"
-              activeKey={this.state.activeKey}
-              onSelect={this.handleSelect}
-            >
-              <Panel eventKey="1">
-                <Panel.Heading>
-                  <Panel.Title toggle>Background Chooser</Panel.Title>
-                </Panel.Heading>
-                <Panel.Body collapsible>
-                  <ButtonGroup vertical>
-                    <BackgroundChooser map={map} />
-                  </ButtonGroup>
-                </Panel.Body>
-              </Panel>
+                       
               <Panel eventKey="2">
                 <Panel.Heading>
-                  <Panel.Title toggle>Layer Chooser</Panel.Title>
+                  <Panel.Title toggle>Kartlag</Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
                   <Nav bsStyle="pills" pullLeft>
                     {this.renderServiceList()}
                   </Nav>
                 </Panel.Body>
-              </Panel>
-            </PanelGroup>
-          </Collapse>
-          <Button
-            bsStyle="primary"
-            onClick={() => this.setState({ open: !this.state.open })}
-          >
-            {this.state.open ? "Close Menu" : "Open Menu"}
-          </Button>
+              </Panel>                              
         </div>
         <div
           id="map"
@@ -292,7 +269,7 @@ export class MapComponent extends React.Component {
             height: "100%",
             zIndex: 0
           }}
-        />
+        />        
       </div>
     );
   }

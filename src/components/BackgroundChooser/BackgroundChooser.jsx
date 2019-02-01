@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { map, eventHandler } from "../../MapUtil/maplibHelper";
 import { ToggleButton, ToggleButtonGroup } from "react-bootstrap";
-
+import "./BackgroundChooser.scss";
 /**
  * Panel containing a list of backgroundLayers.
  *
@@ -14,20 +14,21 @@ export default class BackgroundChooser extends Component {
     this.state = { baseLayers: [] };
     eventHandler.RegisterEvent("MapLoaded", () =>
       this.setState({ baseLayers: map.GetBaseLayers() })
+      
     );
-  }
+  }  
   setAsBaseLayer = baseLayer => {
     map.SetBaseLayer(baseLayer);
     map.ZoomToLayer(baseLayer);
     this.setState({ value: baseLayer });
   }
   renderBaseLayers(baseLayers) {
-    return baseLayers.map((baseLayer, index) => {
-      return (
-        <ToggleButton key={index} value={baseLayer}>
-          {" "}
-          {baseLayer.name}{" "}
-        </ToggleButton>
+    return baseLayers.map((baseLayer, index) => {   
+      
+      return (        
+        <ToggleButton key={index} className={'icon_' + baseLayer.id} value={baseLayer}>
+          
+        </ToggleButton>  
       );
     });
   }
@@ -36,6 +37,7 @@ export default class BackgroundChooser extends Component {
       <ToggleButtonGroup
         type="radio"
         name="Backgound"
+        className="backgroundChooser"
         onChange={this.setAsBaseLayer}
         value={this.state.value}
       >
