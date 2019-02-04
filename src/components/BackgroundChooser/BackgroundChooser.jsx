@@ -27,7 +27,8 @@ export default class BackgroundChooser extends Component {
       
       return (        
         <ToggleButton key={index} className={'icon_' + baseLayer.id} value={baseLayer}>
-          
+          <span>{" "}
+          {baseLayer.name}{" "} </span>
         </ToggleButton>  
       );
     });

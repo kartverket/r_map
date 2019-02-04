@@ -18,6 +18,10 @@ label.btn,label.btn-default {
         background-color: transparent;
         cursor: pointer;
         border-color: #e87722;
+        > span {
+            visibility: visible;
+            color: #333;
+        }
         
     }    
     &.icon_1001 {
@@ -30,9 +34,13 @@ label.btn,label.btn-default {
         background: url('../../assets/img/land.png') no-repeat 0 0;
     }
     &.icon_1004 {
-        background: url('../../assets/img/land.png') no-repeat 0 0;
+        background: url('../../assets/img/terreng.png') no-repeat 0 0;
     }
     &.icon_1005 {
-        background: url('../../assets/img/land.png') no-repeat 0 0;
+        background: url('../../assets/img/seamap.jpg') no-repeat 0 0;
+    }
+    > span {
+        visibility: hidden;
+
     }
 }
