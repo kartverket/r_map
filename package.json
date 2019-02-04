@@ -13,10 +13,11 @@
     "lodash": "^4.17.11",
     "ol": "*",
     "proj4": "*",
-    "query-string": "^6.2.0",
     "prop-types": "^15.6.2",
+    "query-string": "^6.2.0",
+    "react-dropdown-tree-select": "^1.14.0",
     "set-query-string": "^2.2.0",
-    "react-dropdown-tree-select": "^1.14.0"
+    "webfontloader": "^1.6.28"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
