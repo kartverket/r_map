@@ -24,8 +24,8 @@ $btn-border: 1px solid;
 $btn-border-radius: 4px;
 
 // Font families
-$font-special-normal: 'Titillium', 'Roboto Slab', arial, helvetica, sans-serif;
-$font-default: 'Titillium', 'Open sans', Arial, Helvetica, sans-serif;
+$font-special-normal: 'Open Sans', sans-serif;
+$font-default: 'Open sans', sans-serif;
 
 // Font sizes
 $font-xsmall: 14px;
@@ -1014,7 +1014,7 @@ input::-ms-clear {
   height: 26px;
   padding: 0 0;
   font-size: 15px;
-  font-family: 'Titillium';
+  font-family: $font-default;
   text-align: left;
 }
 

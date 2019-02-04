@@ -25,7 +25,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _webfontloader2.default.load({
     google: {
-        families: ['Titillium web:300,400,700', 'sans-serif']
+        families: ['Open Sans:400,600,700', 'sans-serif']
     }
 });
 
