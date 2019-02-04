@@ -56,7 +56,18 @@ var BackgroundChooser = function (_Component) {
     value: function renderBaseLayers(baseLayers) {
       return baseLayers.map(function (baseLayer, index) {
 
-        return _react2.default.createElement(_reactBootstrap.ToggleButton, { key: index, className: 'icon_' + baseLayer.id, value: baseLayer });
+        return _react2.default.createElement(
+          _reactBootstrap.ToggleButton,
+          { key: index, className: 'icon_' + baseLayer.id, value: baseLayer },
+          _react2.default.createElement(
+            "span",
+            null,
+            " ",
+            baseLayer.name,
+            " ",
+            " "
+          )
+        );
       });
     }
   }, {
