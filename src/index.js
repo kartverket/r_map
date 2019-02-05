@@ -2,6 +2,7 @@ import AddWmsPanel from './components/AddWmsPanel/AddWmsPanel';
 import BackgroundChooser from './components/BackgroundChooser/BackgroundChooser';
 import Map from './components/MapComponent/MapComponent';
 import WebFont from 'webfontloader';
+import './Utils/icons';
 
 WebFont.load({
     google: {

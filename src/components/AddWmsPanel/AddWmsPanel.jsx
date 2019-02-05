@@ -6,6 +6,7 @@ import "react-dropdown-tree-select/dist/styles.css";
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
 
 import { map, addLayer } from "../../MapUtil/maplibHelper";
+import "./AddWmsPanel.scss";
 
 /**
  * Panel containing a (checkable) list.
@@ -127,13 +128,15 @@ export default class AddWmsPanel extends React.Component {
     const { wmsLayers } = this.state;
 
     return wmsLayers && wmsLayers.length > 0 ? (
-      <DropdownTreeSelect
-        placeholderText="Choose layers"
-        data={wmsLayers}
-        onChange={this.onSelectionChange}
-        onAction={this.onAction}
-        onNodeToggle={this.onNodeToggle}
-      />
+      <div>{this.props.services.Title}<button className="btn btn-link" onClick={this.props.services.slett}>Fjern</button>
+        <DropdownTreeSelect       
+          placeholderText="Velg kartlag"
+          data={wmsLayers}
+          onChange={this.onSelectionChange}
+          onAction={this.onAction}
+          onNodeToggle={this.onNodeToggle}
+        />
+      </div>
     ) : null;
   }
 }

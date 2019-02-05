@@ -16,16 +16,8 @@ import queryString from "query-string";
 import setQuery from "set-query-string";
 import BackgroundChooser from "../BackgroundChooser/BackgroundChooser";
 import AddWmsPanel from "../AddWmsPanel/AddWmsPanel";
-import {
-  Nav,
-  Panel,
-  PanelGroup,
-  Collapse,
-  Button,
-  ButtonGroup
-} from "react-bootstrap";
-
-import "./MapComponent.scss";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import style from "./MapComponent.scss";
 
 class ListItem extends React.Component {
   render() {
@@ -236,30 +228,25 @@ export class MapComponent extends React.Component {
   /**
    *
    */
+
+   toogleLayers() {
+    this.setState({
+      isExpanded: !this.state.isExpanded
+    })
+
+   }
   render() {
     const { layers } = this.state;
     return (
       <div className="mapContainer">
         <BackgroundChooser map={map} />    
-        <div
-          className={this.state.menu === true ? "pulldown-content" : "hide"}
-          style={{
-            position: "absolute",
-            width: "320px",
-            zIndex: 600
-          }}
-        >
-                       
-              <Panel eventKey="2">
-                <Panel.Heading>
-                  <Panel.Title toggle>Kartlag</Panel.Title>
-                </Panel.Heading>
-                <Panel.Body collapsible>
-                  <Nav bsStyle="pills" pullLeft>
-                    {this.renderServiceList()}
-                  </Nav>
-                </Panel.Body>
-              </Panel>                              
+        <div>
+          <div className={this.state.isExpanded ? 'layers-container open-layers' : 'layers-container closed-layers'}>
+              <FontAwesomeIcon onClick={() => this.toogleLayers()} className="toggle-btn" icon={this.state.isExpanded ? 'times' : 'bars'} />
+              <div>
+                {this.renderServiceList()}
+              </div>                                           
+          </div>
         </div>
         <div
           id="map"

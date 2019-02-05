@@ -25,7 +25,7 @@ $btn-border-radius: 4px;
 
 // Font families
 $font-special-normal: 'Open Sans', sans-serif;
-$font-default: 'Open sans', sans-serif;
+$font-default: 'Open Sans', sans-serif;
 
 // Font sizes
 $font-xsmall: 14px;
@@ -71,11 +71,10 @@ h4, h5, h6 {
 }
 
 a {
-  color: $gray-light;
+  color: $gray-dark;
 
   &:hover,
-  &:focus {
-    color: $gray-light;
+  &:focus {    
     text-decoration: none;
   }
 }

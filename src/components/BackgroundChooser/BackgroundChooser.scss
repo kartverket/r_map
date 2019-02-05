@@ -5,22 +5,31 @@
 // Enkel .icon_1003
 // Terreng .icon_1004
 // Sjøkart .icon_1005
-
+.backgroundChooser {
+    
 label.btn,label.btn-default {
     height: 60px;
     width: 65px;
     border-radius: 0;
+    opacity: .8;
     margin: 5px;    
-    border: 3px solid white;
+    border: 3px solid #e5e5e5;
     transition: all .3s ease-in-out;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0;
     &:hover {
         background-position: 0 0;
+        opacity: 1;
         background-color: transparent;
         cursor: pointer;
         border-color: #e87722;
         > span {
             visibility: visible;
             color: #333;
+            font-size: .9em;
+            font-weight: 700;            
         }
         
     }    
@@ -40,7 +49,12 @@ label.btn,label.btn-default {
         background: url('../../assets/img/seamap.jpg') no-repeat 0 0;
     }
     > span {
-        visibility: hidden;
+        visibility: visible;
+        color: #999;
+        font-size: .9em;
+        font-weight: 700;
+        transition: .3s all ease-in-out;
 
     }
+}
 }
