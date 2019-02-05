@@ -105,7 +105,7 @@
     clear: both;
   }
   &.open-layers {
-    width: 300px;
+    width: 320px;
     height: 100%;
     > div {
       margin: 20px;
@@ -121,7 +121,16 @@
     margin: 20px;
     float: right;
     color: $color-toggle-on;
+    &:hover {
+      cursor: pointer;
+    }
 
+  }
+  .react-dropdown-tree-select .dropdown .dropdown-trigger {
+    border: none;
+  }
+  .tag-item .search {
+    border: none;
   }
 
 }

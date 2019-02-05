@@ -7,6 +7,7 @@ import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
 
 import { map, addLayer } from "../../MapUtil/maplibHelper";
 import "./AddWmsPanel.scss";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 /**
  * Panel containing a (checkable) list.
@@ -128,7 +129,7 @@ export default class AddWmsPanel extends React.Component {
     const { wmsLayers } = this.state;
 
     return wmsLayers && wmsLayers.length > 0 ? (
-      <div>{this.props.services.Title}<button className="btn btn-link" onClick={this.props.services.slett}>Fjern</button>
+      <div>{this.props.services.Title}<FontAwesomeIcon className="remove-inline" onClick={this.props.services.slett} icon={'times'} />
         <DropdownTreeSelect       
           placeholderText="Velg kartlag"
           data={wmsLayers}
