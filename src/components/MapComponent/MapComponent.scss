@@ -89,7 +89,11 @@
     color: #333;
   }
 }
-.layers-container {
+:local(.mapContainer) {
+  background: transparent;
+}
+ 
+:local(.container) {
   transition: .3s all ease-in-out;
   position: absolute;
   background: #fff;
@@ -104,7 +108,7 @@
   > div {
     clear: both;
   }
-  &.open-layers {
+  &.open {
     width: 320px;
     height: 100%;
     > div {
@@ -112,9 +116,12 @@
     }
     
   }
-  &.closed-layers {
+  &.closed {
     width: 80px;
     height: 80px;
+    &:hover {
+      background: #e5e5e5;
+    }
   }
   .toggle-btn {
     font-size: 2.5em;

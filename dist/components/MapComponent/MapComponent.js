@@ -273,11 +273,11 @@ function (_React$Component2) {
       var _this4 = this;
 
       return _react.default.createElement("div", {
-        className: "mapContainer"
+        className: _MapComponent.default.mapContainer
       }, _react.default.createElement(_BackgroundChooser.default, {
         map: _maplibHelper.map
       }), _react.default.createElement("div", null, _react.default.createElement("div", {
-        className: this.state.isExpanded ? 'layers-container open-layers' : 'layers-container closed-layers'
+        className: this.state.isExpanded ? _MapComponent.default.container + ' open' : _MapComponent.default.container + ' closed'
       }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
         onClick: function onClick() {
           return _this4.toogleLayers();

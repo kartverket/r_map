@@ -233,10 +233,10 @@ export class MapComponent extends React.Component {
    */
   render() {
     return (
-      <div className="mapContainer">
+      <div className={style.mapContainer}>
         <BackgroundChooser map={map} />
         <div>
-          <div className={this.state.isExpanded ? 'layers-container open-layers' : 'layers-container closed-layers'}>
+          <div className={this.state.isExpanded ? style.container + ' open' : style.container + ' closed'}>
             <FontAwesomeIcon onClick={() => this.toogleLayers()} className="toggle-btn" icon={this.state.isExpanded ? 'times' : ['far', 'layer-group']} />
             <div>
               {this.renderServiceList()}
