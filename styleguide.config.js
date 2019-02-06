@@ -5,6 +5,13 @@ module.exports = {
    
     webpackConfig: require('react-scripts/config/webpack.config.js'),
     contextDependencies: [path.resolve(__dirname, 'src/components')],
+    dangerouslyUpdateWebpackConfig(webpackConfig, env) {
+        webpackConfig.output = {
+            ...webpackConfig.output,
+            publicPath: process.env.PUBLIC_URL || ''
+        };
+        return webpackConfig;
+    },
     require: [
         path.join(__dirname, 'src/styleguide/styleguide.js'),
         'babel-polyfill',
