@@ -123,8 +123,8 @@ export default class AddWmsPanel extends React.Component {
 
   renderRemoveButton() {
     if (this.props.removeMapItem) {
-      return <FontAwesomeIcon className="remove-inline" onClick={this.props.removeMapItem} icon={'times'} />;
-    }else {
+      return <FontAwesomeIcon className="remove-inline" onClick={this.props.removeMapItem(this.props.services)} icon={'times'} />;
+    } else {
       return "";
     }
   }
