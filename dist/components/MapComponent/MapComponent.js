@@ -69,6 +69,7 @@ function (_React$Component) {
         key: "1",
         map: _maplibHelper.map,
         services: this.props.listItem,
+        removeMapItem: this.props.removeMapItem,
         draggable: true
       });
     }
@@ -237,9 +238,12 @@ function (_React$Component2) {
   }, {
     key: "renderServiceList",
     value: function renderServiceList() {
+      var _this3 = this;
+
       return this.props.services.map(function (listItem, i) {
         return _react.default.createElement(ListItem, {
           listItem: listItem,
+          removeMapItem: _this3.props.removeMapItem ? _this3.props.removeMapItem : null,
           key: i,
           map: _maplibHelper.map
         });
@@ -266,7 +270,7 @@ function (_React$Component2) {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       return _react.default.createElement("div", {
         className: "mapContainer"
@@ -276,7 +280,7 @@ function (_React$Component2) {
         className: this.state.isExpanded ? 'layers-container open-layers' : 'layers-container closed-layers'
       }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
         onClick: function onClick() {
-          return _this3.toogleLayers();
+          return _this4.toogleLayers();
         },
         className: "toggle-btn",
         icon: this.state.isExpanded ? 'times' : ['far', 'layer-group']

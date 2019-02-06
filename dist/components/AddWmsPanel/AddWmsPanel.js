@@ -151,20 +151,29 @@ function (_React$Component) {
       });
     }
   }, {
-    key: "render",
-
+    key: "renderRemoveButton",
+    value: function renderRemoveButton() {
+      if (this.props.removeMapItem) {
+        return _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+          className: "remove-inline",
+          onClick: this.props.removeMapItem,
+          icon: 'times'
+        });
+      } else {
+        return "";
+      }
+    }
     /**
      * The render function.
      */
+
+  }, {
+    key: "render",
     value: function render() {
       var passThroughOpts = _extends({}, this.props);
 
       var wmsLayers = this.state.wmsLayers;
-      return wmsLayers && wmsLayers.length > 0 ? _react.default.createElement("div", null, this.props.services.Title, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-        className: "remove-inline",
-        onClick: this.props.services.slett,
-        icon: 'times'
-      }), _react.default.createElement(_reactDropdownTreeSelect.default, {
+      return wmsLayers && wmsLayers.length > 0 ? _react.default.createElement("div", null, this.props.services.Title, this.renderRemoveButton(), _react.default.createElement(_reactDropdownTreeSelect.default, {
         placeholderText: "Velg kartlag",
         data: wmsLayers,
         onChange: this.onSelectionChange,

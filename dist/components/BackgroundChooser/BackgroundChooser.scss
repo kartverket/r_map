@@ -6,7 +6,14 @@
 // Terreng .icon_1004
 // Sjøkart .icon_1005
 .backgroundChooser {
-    
+    display: flex;
+    input[type="radio"] {
+        width: 0;
+        height: 0;
+        overflow: hidden;
+        position: absolute;
+        opacity: 0;
+    }
 label.btn,label.btn-default {
     height: 60px;
     width: 65px;
@@ -19,7 +26,7 @@ label.btn,label.btn-default {
     align-items: flex-end;
     justify-content: center;
     padding: 0;
-    &:hover {
+    &:hover,&.active {
         background-position: 0 0;
         opacity: 1;
         background-color: transparent;
