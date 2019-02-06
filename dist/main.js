@@ -28,4 +28,6 @@ var _BackgroundChooser = _interopRequireDefault(require("./components/Background
 
 var _MapComponent = _interopRequireDefault(require("./components/MapComponent/MapComponent"));
 
+require("./Utils/icons");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
