@@ -153,11 +153,32 @@ function (_React$Component) {
   }, {
     key: "renderRemoveButton",
     value: function renderRemoveButton() {
+      var _this3 = this;
+
       if (this.props.removeMapItem) {
         return _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
           className: "remove-inline",
-          onClick: this.props.removeMapItem(this.props.services),
+          onClick: function onClick() {
+            return _this3.props.removeMapItem(_this3.props.services);
+          },
           icon: 'times'
+        });
+      } else {
+        return "";
+      }
+    }
+  }, {
+    key: "renderDropdownTree",
+    value: function renderDropdownTree() {
+      var wmsLayers = this.state.wmsLayers;
+
+      if (wmsLayers && wmsLayers.length) {
+        return _react.default.createElement(_reactDropdownTreeSelect.default, {
+          placeholderText: "Velg kartlag",
+          data: wmsLayers,
+          onChange: this.onSelectionChange,
+          onAction: this.onAction,
+          onNodeToggle: this.onNodeToggle
         });
       } else {
         return "";
@@ -172,14 +193,7 @@ function (_React$Component) {
     value: function render() {
       var passThroughOpts = _extends({}, this.props);
 
-      var wmsLayers = this.state.wmsLayers;
-      return _react.default.createElement("div", null, this.props.services.Title, this.renderRemoveButton(), _react.default.createElement(_reactDropdownTreeSelect.default, {
-        placeholderText: "Velg kartlag",
-        data: wmsLayers,
-        onChange: this.onSelectionChange,
-        onAction: this.onAction,
-        onNodeToggle: this.onNodeToggle
-      }));
+      return _react.default.createElement("div", null, this.props.services.Title, this.renderRemoveButton(), this.renderDropdownTree());
     }
   }]);
 
