@@ -17,7 +17,7 @@ import style from "./MapComponent.scss";
 class ListItem extends React.Component {
   render() {
     return (
-      <AddWmsPanel key="1" map={map} services={this.props.listItem} draggable />
+      <AddWmsPanel key="1" map={map} services={this.props.listItem} removeMapItem={this.props.removeMapItem} draggable />
     );
   }
 }
@@ -212,7 +212,7 @@ export class MapComponent extends React.Component {
 
   renderServiceList() {
     return this.props.services.map((listItem, i) => {
-      return <ListItem listItem={listItem} key={i} map={map} />;
+      return <ListItem listItem={listItem} removeMapItem={this.props.removeMapItem ? this.props.removeMapItem : null} key={i} map={map} />;
     });
   }
   handleSelect(activeKey) {

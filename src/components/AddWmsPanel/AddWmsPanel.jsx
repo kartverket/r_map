@@ -121,6 +121,14 @@ export default class AddWmsPanel extends React.Component {
     console.log("onNodeToggle::", currentNode);
   }
 
+  renderRemoveButton() {
+    if (this.props.removeMapItem) {
+      return <FontAwesomeIcon className="remove-inline" onClick={this.props.removeMapItem} icon={'times'} />;
+    }else {
+      return "";
+    }
+  }
+
   /**
    * The render function.
    */
@@ -131,7 +139,7 @@ export default class AddWmsPanel extends React.Component {
     return wmsLayers && wmsLayers.length > 0 ? (
       <div>
         {this.props.services.Title}
-        <FontAwesomeIcon className="remove-inline" onClick={this.props.services.slett} icon={'times'} />
+        { this.renderRemoveButton() }
         <DropdownTreeSelect
           placeholderText="Velg kartlag"
           data={wmsLayers}
