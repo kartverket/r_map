@@ -136,10 +136,10 @@ export default class AddWmsPanel extends React.Component {
     const { ...passThroughOpts } = this.props;
     const { wmsLayers } = this.state;
 
-    return wmsLayers && wmsLayers.length > 0 ? (
+    return (
       <div>
         {this.props.services.Title}
-        { this.renderRemoveButton() }
+        {this.renderRemoveButton()}
         <DropdownTreeSelect
           placeholderText="Velg kartlag"
           data={wmsLayers}
@@ -148,6 +148,6 @@ export default class AddWmsPanel extends React.Component {
           onNodeToggle={this.onNodeToggle}
         />
       </div>
-    ) : null;
+    );
   }
 }
