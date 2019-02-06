@@ -46,9 +46,7 @@ import {
 import OlGeolocation from 'ol/Geolocation'
 import proj4 from 'proj4'
 
-import {
-    EventTypes
-} from './EventHandler'
+import { EventTypes } from './EventHandler'
 import {
     Vector as MaplibVectorSource,
     Wmts as MaplibWMTSSource,
@@ -57,17 +55,9 @@ import {
     Wfs as MaplibWfsSource
 } from './Sources'
 import Guid from './Utils'
-import {
-    OLProgressBar
-} from './OLProgessBar'
-import {
-    FORMATS,
-    SOURCES
-} from './Domain'
-import {
-    OLStylesJson,
-    OLStylesSLD
-} from './OLStyles'
+import { OLProgressBar } from './OLProgessBar'
+import { FORMATS, SOURCES } from './Domain'
+import { OLStylesJson, OLStylesSLD } from './OLStyles'
 
 import $ from "jquery";
 
@@ -513,11 +503,19 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         if (!tokenHost) {
             return null;
         } else if (!globalGkt || _checkGlobalGktTokenExpired()) {
+            // TODO: Fix ajax call without jQuery
+            /*globalGkt = await fetch(tokenHost, {
+                type: "GET",
+                async: false
+            })
+            .then(res => res.json());*/
+
             globalGkt = $.ajax({
                 type: "GET",
                 url: tokenHost,
                 async: false
             }).responseText.trim().replace(/"/g, "");
+
             lastGlobalGktCheck = (new Date()).getTime();
         }
         return globalGkt;
@@ -527,6 +525,14 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         if (!ticketHost) {
             return null;
         } else if (!globalTicket || _checkGlobalTicketExpired()) {
+            // TODO: Fix ajax call without jQuery
+            /*globalTicket = await fetch(ticketHost, {
+                type: "GET",
+                async: false
+            })
+            .then(res => res.json());*/
+
+          
             globalTicket = $.ajax({
                 type: "GET",
                 url: ticketHost,
@@ -787,6 +793,12 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                 }
             }
         };
+        // TODO: Fix ajax call without jQuery
+        /*await fetch(isySubLayer.url, {
+            type: "GET",
+            async: false
+        })
+        .then(res => callback(res.json()));*/
         $.ajax({
             url: isySubLayer.url,
             async: false
@@ -1421,6 +1433,13 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         }
         url += 'request=DescribeFeatureType&' +
             'version=' + isySubLayer.version + '&typename=' + isySubLayer.name;
+            // TODO: Fix ajax call without jQuery
+  /*          await fetch(url, {
+                type: "GET",
+                async: false
+            })
+            .then(res => _parseResponse(res.json()));
+*/
         $.ajax({
             url: url
         }).done(function (response) {

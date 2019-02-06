@@ -1,5 +1,6 @@
 module.exports = {
-  "extends": [
-    ".eslint-common.js"
-  ]
-};
+    "extends": [
+      ".eslint-common.js"
+    ]
+  };
+  

@@ -1,13 +1,17 @@
-import AddWmsPanel from './components/AddWmsPanel/AddWmsPanel';
-import BackgroundChooser from './components/BackgroundChooser/BackgroundChooser';
-import Map from './components/MapComponent/MapComponent';
-import WebFont from 'webfontloader';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
 import './Utils/icons';
 
-WebFont.load({
-    google: {
-        families: ['Open Sans:400,600,700','sans-serif']
-    }
-});
+import AddWmsPanel from './components/AddWmsPanel/AddWmsPanel';
+import BackgroundChooser from './components/BackgroundChooser/BackgroundChooser';
+import MapComponent from './components/MapComponent/MapComponent';
 
-export { AddWmsPanel, BackgroundChooser, Map };
+ReactDOM.render(<App />, document.getElementById('root'));
+
+serviceWorker.unregister();
+
+export { AddWmsPanel, BackgroundChooser, MapComponent };

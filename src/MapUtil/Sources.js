@@ -136,6 +136,12 @@ export const MaplibCustomMessageHandler = (eventHandler, _getIsySubLayerFromPool
         try {
             var image = event.tile.getImage();
             if (image && image.src && (image.src.toLowerCase().indexOf('&gkt=') < 0 || image.src.toLowerCase().indexOf('?gkt=') < 0)) {
+                // TODO: Fix ajax call without jQuery
+                /*let response = await fetch(image.src, {
+                    type: "GET",
+                    async: false
+                })
+                .then(res => res.json());*/
                 var response = $.ajax({
                     type: "GET",
                     url: image.src,
@@ -306,7 +312,13 @@ export const Wmts = (isySubLayer, parameters) => {
     var wmtsExtent = isySubLayer.wmtsExtent ? isySubLayer.wmtsExtent.split(',') : projectionExtent;
     if (isySubLayer.getCapabilities) {
         var capabilitiesUrl = urls[0] + '&Request=GetCapabilities&Service=WMTS&Version=1.0.0';
-        var capabilities = $.ajax({
+        // TODO: Fix ajax call without jQuery
+        /*let capabilities = await fetch(capabilitiesUrl, {
+            type: "GET",
+            async: false
+        })
+        .then(res => res.json());*/
+        var capabilities = $.ajax({ 
             type: "GET",
             url: capabilitiesUrl,
             async: false
@@ -554,6 +566,19 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
             // todo: should not use zoom in key, but rather cache the tiles from outmost zoom level
             offline.GetLayerResource(key, isySubLayer.name, url, parseResponse);
         } else {
+            // TODO: Fix ajax call without jQuery
+            /*fetch(url)
+            .then(res => res.json())
+            .then(response => {
+                if (typeof response === 'object') {
+                    if (response.firstChild.childElementCount === 0) {
+                        return;
+                    }
+                } else {
+                    return;
+                }
+                parseResponse(response);
+            });*/
             $.ajax({
                 url: url
             }).done(function (response) {

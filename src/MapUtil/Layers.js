@@ -74,10 +74,10 @@ export default class Layers {
     }
 
     arrangeLayers() {
-        if (layersArranged) {
+        if (this.layersArranged) {
             return;
         }
-        layersArranged = true;
+        this.layersArranged = true;
         var overlayLayers = this.getOverlayLayers();
         var rearrangeLayers = [];
         for (var k = 0; k < overlayLayers.length; k++) {
@@ -86,7 +86,7 @@ export default class Layers {
                 rearrangeLayers.push(overlayLayer);
             }
         }
-        rearrangeLayers.sort(compare);
+        rearrangeLayers.sort(this.compare);
         rearrangeLayers.forEach(function (layer) {
             this.showLayer(layer);
         });
@@ -182,7 +182,7 @@ export default class Layers {
     }
 
     getLayerById(id) {
-        if (layers !== undefined) {
+        if (this.layers !== undefined) {
             for (var i = 0; i <this.layers.length; i++) {
                 var layer =this.layers[i];
                 if (layer.id.toString() === id.toString()) {

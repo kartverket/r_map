@@ -129,8 +129,10 @@ export default class AddWmsPanel extends React.Component {
     const { wmsLayers } = this.state;
 
     return wmsLayers && wmsLayers.length > 0 ? (
-      <div>{this.props.services.Title}<FontAwesomeIcon className="remove-inline" onClick={this.props.services.slett} icon={'times'} />
-        <DropdownTreeSelect       
+      <div>
+        {this.props.services.Title}
+        <FontAwesomeIcon className="remove-inline" onClick={this.props.services.slett} icon={'times'} />
+        <DropdownTreeSelect
           placeholderText="Velg kartlag"
           data={wmsLayers}
           onChange={this.onSelectionChange}

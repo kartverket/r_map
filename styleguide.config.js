@@ -1,49 +1,47 @@
-const path = require('path');
-const fs = require('fs');
-const webpackCommonConf = require('./webpack.common.config.js');
-
+const path = require('path')
 module.exports = {
-  title: 'rMapComponent',
-  styleguideDir: './dist/styleguide',
-  ignore: [
-    '**/__tests__/**',
-    '**/*.test.{js,jsx,ts,tsx}',
-    '**/*.spec.{js,jsx,ts,tsx}',
-    '**/*.d.ts',
-    '**/src/**/*.example.jsx'
-  ],
-  usageMode: 'expand',
-  theme: {
-    sidebarWidth: 300
-  },
-  getExampleFilename(componentPath) {
-    return componentPath.replace(/\.jsx?$/, '.example.md')
-  },
-  getComponentPathLine(componentPath) {
-    const name = path.basename(componentPath, '.jsx')
-    const dir = path.dirname(componentPath).replace('src', 'dist');
-    return `import ${name} from 'r_map/${dir}/${name}';`
-  },
-  require: [
-    'babel-polyfill',
-    'whatwg-fetch',
-    'ol/ol.css'
-  ],
-  webpackConfig: webpackCommonConf,
-  sections: [{
-    name: 'Introduction',
-    content: 'README.md'
-  }, {
-    name: 'Components',
+    title: "rMapComponent",
+    styleguideDir: "docs",
+   
+    webpackConfig: require('react-scripts/config/webpack.config.js'),
+    contextDependencies: [path.resolve(__dirname, 'src/components')],
+    require: [
+        path.join(__dirname, 'src/styleguide/styleguide.js'),
+        'babel-polyfill',
+        'whatwg-fetch',
+        'ol/ol.css'
+    ],
     sections: [{
-      name: 'AddWmsPanel',
-      components: 'src/components/AddWmsPanel/**/*.jsx'
+        name: 'Introduction',
+        content: 'README.md'
     }, {
-      name: 'BackgroundChooser',
-      components: 'src/components/BackgroundChooser/**/*.jsx'
-    }, {
-      name: 'MapComponent',
-      components: 'src/components/MapComponent/**/*.jsx'
-    }]
-  }]
+        name: 'Components',
+        sections: [{
+            name: 'AddWmsPanel',
+            components: 'src/components/AddWmsPanel/**/*.jsx'
+        }, {
+            name: 'BackgroundChooser',
+            components: 'src/components/BackgroundChooser/**/*.jsx'
+        }, {
+            name: 'MapComponent',
+            components: 'src/components/MapComponent/**/*.jsx'
+        }]
+    }],
+    template: {
+        head: {
+            links: [
+                {
+                    rel: 'stylesheet',
+                    href: 'src/styleguide/styleguide.css'
+                }
+            ]
+        },
+        favicon: 'src/styleguide/favicon.ico'
+    },
+    theme: {
+        fontFamily: {
+            sidebarWidth: 300,
+            base: '"Open Sans", sans-serif'
+        }
+    }
 };

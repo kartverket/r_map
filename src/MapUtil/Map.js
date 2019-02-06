@@ -21,11 +21,9 @@ export const Map = (mapImplementation, eventHandler, featureInfo) => {
 
         mapConfiguration = mapConfig;
         var olMap = mapImplementation.InitMap(targetId, mapConfig);
-
         layerHandler = new Layers(mapConfig, mapImplementation)
         groupHandler = new Groups(mapConfig)
         categoryHandler = new Categories(mapConfig)
-
         eventHandler.TriggerEvent(EventTypes.MapLoaded);
         return olMap;
     }

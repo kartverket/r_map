@@ -8,7 +8,8 @@ import get from 'lodash/get.js';
 import {
   createDummyGroup,
   getWmsUrl,
-  mapConfig
+  mapConfig,
+  createNotExistGroup
 } from './maplibHelper'
 export const newMaplibLayer = (sourceType, source) => {
   let catIds = [999]
@@ -113,12 +114,9 @@ export class CapabilitiesUtil {
    */
   static getLayersFromWmsCapabilties(capabilities, nameField = 'Name') {
     const wmsVersion = get(capabilities, 'version');
-    const wmsAttribution = get(capabilities, 'Service.AccessConstraints');
     const layersInCapabilities = get(capabilities, 'Capability.Layer.Layer');
     const wmsGetMapConfig = get(capabilities, 'Capability.Request.GetMap');
-    const wmsGetFeatureInfoConfig = get(capabilities, 'Capability.Request.GetFeatureInfo');
     const getMapUrl = get(wmsGetMapConfig, 'DCPType[0].HTTP.Get.OnlineResource');
-    const getFeatureInfoUrl = get(wmsGetFeatureInfoConfig, 'DCPType[0].HTTP.Get.OnlineResource');
 
     return layersInCapabilities.map((layerObj) =>
       newMaplibLayer('WMS', {

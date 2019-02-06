@@ -1,21 +1,16 @@
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap/dist/css/bootstrap-theme.css";
+//import "bootstrap/dist/css/bootstrap.css";
+//import "bootstrap/dist/css/bootstrap-theme.css";
 import React from "react";
-import {
-  map,
-  eventHandler,
-  mapConfig,
-  addLayer
-} from "../../MapUtil/maplibHelper";
-import {
-  mergeDefaultParams,
-  parseWmsCapabilities
-} from "../../Utils/MapHelper";
+import { map, eventHandler, mapConfig, addLayer } from "../../MapUtil/maplibHelper";
+import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
+
+import { mergeDefaultParams, parseWmsCapabilities } from "../../Utils/MapHelper";
 import PropTypes from "prop-types";
 import queryString from "query-string";
 import setQuery from "set-query-string";
 import BackgroundChooser from "../BackgroundChooser/BackgroundChooser";
 import AddWmsPanel from "../AddWmsPanel/AddWmsPanel";
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import style from "./MapComponent.scss";
 
@@ -82,10 +77,10 @@ export class MapComponent extends React.Component {
   };
 
   static defaultProps = {
-    onMapViewChanges: () => {},
-    onChangeLon: () => {},
-    onChangeLat: () => {},
-    onChangeZoom: () => {},
+    onMapViewChanges: () => { },
+    onChangeLon: () => { },
+    onChangeLat: () => { },
+    onChangeZoom: () => { },
     lon: 396722,
     lat: 7197860,
     zoom: 4,
@@ -122,10 +117,10 @@ export class MapComponent extends React.Component {
     let projectName = queryValues['project'] || 'norgeskart'
     let epsg = queryValues['epsg'] || 'EPSG:3857'
 */
-    this.props = { lon: lon, lat: lat, zoom: zoom };
+    //  this.props = { lon: lon, lat: lat, zoom: zoom };
     this.newMapConfig = Object.assign({}, mapConfig, {
-      center: [this.props.lon, this.props.lat],
-      zoom: this.props.zoom
+      center: [lon, lat],
+      zoom: zoom
     });
     this.olMap = null;
   }
@@ -154,10 +149,10 @@ export class MapComponent extends React.Component {
         request: "GetCapabilities"
       });
       fetch(newUrl)
-        .then(function(response) {
+        .then(function (response) {
           return Promise.resolve(response.text());
         })
-        .then(function(text) {
+        .then(function (text) {
           let resultText = parseWmsCapabilities(text);
           let { Service, Capability } = {
             ...resultText
@@ -225,27 +220,27 @@ export class MapComponent extends React.Component {
       activeKey
     });
   }
-  /**
-   *
-   */
 
-   toogleLayers() {
+  toogleLayers() {
     this.setState({
       isExpanded: !this.state.isExpanded
     })
 
-   }
+  }
+
+  /**
+   *
+   */
   render() {
-    const { layers } = this.state;
     return (
       <div className="mapContainer">
-        <BackgroundChooser map={map} />    
+        <BackgroundChooser map={map} />
         <div>
           <div className={this.state.isExpanded ? 'layers-container open-layers' : 'layers-container closed-layers'}>
-              <FontAwesomeIcon onClick={() => this.toogleLayers()} className="toggle-btn" icon={this.state.isExpanded ? 'times' : ['far','layer-group']} />
-              <div>
-                {this.renderServiceList()}
-              </div>                                           
+            <FontAwesomeIcon onClick={() => this.toogleLayers()} className="toggle-btn" icon={this.state.isExpanded ? 'times' : ['far', 'layer-group']} />
+            <div>
+              {this.renderServiceList()}
+            </div>
           </div>
         </div>
         <div
@@ -256,7 +251,7 @@ export class MapComponent extends React.Component {
             height: "100%",
             zIndex: 0
           }}
-        />        
+        />
       </div>
     );
   }

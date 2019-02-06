@@ -96,7 +96,6 @@ export const createOlWMSFromCap = (map, getCapLayer, project) => {
             layerParam.VERSION = getCapLayer.version;
         }
 
-        var projCode = map.getView().getProjection().getCode();
 
         var layer/* = createOlWMS(map, layerParam, {
             url: getCapLayer.url,

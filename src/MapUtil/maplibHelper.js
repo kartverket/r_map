@@ -29,7 +29,6 @@ export let mapConfig = {
   displayCenter: '396722,7197864',
   displayprojectionepsgcode: 'EPSG:25833',
   tokenHost: 'https://www.norgeskart.no/ws/gkt.py',
-  proxyHost: '/?',
   projectName: 'norgeskart',
   wmts: [{
     type: 'map',
@@ -250,7 +249,7 @@ const findGroupExistance = (grpIds) => {
   })
   return notExistGroups
 }
-const createNotExistGroup = (grpIds, groupNameLng1, groupNameLng2) => {
+export const createNotExistGroup = (grpIds, groupNameLng1, groupNameLng2) => {
   let notExistGroups = findGroupExistance(grpIds)
   notExistGroups.forEach((grpId) => {
     createGroup(grpId, groupNameLng1, groupNameLng2)
