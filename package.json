@@ -2,9 +2,10 @@
   "name": "r_map",
   "version": "2.0.0",
   "private": true,
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "files": [
-    "src"
+    "dist",
+    "README.md"
   ],
   "dependencies": {
     "@fortawesome/fontawesome-pro": "^5.7.0",
@@ -27,7 +28,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "rm -rf dist && NODE_ENV=production babel src --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
+    "windows-build": "rm -rf dist && SET NODE_ENV=production&& babel src --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "styleguide": "styleguidist server",
@@ -43,6 +45,8 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
     "babel-polyfill": "^6.26.0",
     "react-styleguidist": "^8.0.6"
   }

@@ -1,19 +1,9 @@
 {
     "presets": [
-        "env",
-        "stage-0",
-        "react"
+      "@babel/preset-env",
+      "@babel/preset-react"
     ],
-    "env": {
-        "test": {
-            "plugins": [
-                "transform-es2015-modules-commonjs"
-            ]
-        },
-        "build": {
-            "plugins": [
-                "babel-plugin-transform-import-extension-jsx-to-js"
-            ]
-        }
-    }
-}
+    "plugins": [
+      "@babel/plugin-proposal-class-properties",
+    ]
+  }
