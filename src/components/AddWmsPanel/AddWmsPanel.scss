@@ -17,3 +17,42 @@ li {
         }
     }
 }
+.selectedlayers {
+    max-height: 0;
+    overflow: hidden;
+    transition: .3s all ease-in-out;
+
+    div {
+        padding: 2px 0;
+        > label {padding: 0 4px;}
+    }
+    &.open {        
+        max-height: 1000px;
+    }
+}
+.expand-layers-btn {
+    display: block;
+    margin-bottom: 10px;
+    &:hover {
+        cursor: pointer;
+    }
+    > svg {
+        font-size: 1.5em;
+        position: relative; 
+        top: 4px;
+        left: 6px;
+    }
+}
+.facet {
+    margin: 2px 0;
+    > input[type="checkbox"] {
+        width: 0;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
+    }
+    label > svg {
+        margin: 0 5px;
+        font-size: 1.1em;
+    }
+}

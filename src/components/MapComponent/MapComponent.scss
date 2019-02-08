@@ -116,7 +116,9 @@
     clear: both;
   }
   &.open {
-    width: 320px;
+    overflow: visible;
+    width: auto;
+    max-width: 400px;
     height: 100%;
     > div {
       margin: 20px;

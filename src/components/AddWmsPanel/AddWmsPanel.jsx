@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import DropdownTreeSelect from "react-dropdown-tree-select";
 import "react-dropdown-tree-select/dist/styles.css";
 
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
@@ -54,7 +53,11 @@ export default class AddWmsPanel extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      expanded: false,
+      checkedWmslayers: {}
+  };
+    this.toggleWmslayer =this.toggleWmslayer.bind(this);
     this.getCapabilitites();
   }
 
@@ -101,7 +104,7 @@ export default class AddWmsPanel extends React.Component {
     }
   }
 
-  onSelectionChange = (currentNode, selectedNodes) => {
+  onSelectionChange = (currentNode) => {    
     if (!map.GetOverlayLayers().includes(currentNode)) {
       map.AddLayer(currentNode);
     } else {
@@ -120,19 +123,52 @@ export default class AddWmsPanel extends React.Component {
   onNodeToggle = currentNode => {
     console.log("onNodeToggle::", currentNode);
   }
-
+  toggleExpand() {
+    this.setState(prevState => ({
+        expanded: !prevState.expanded
+    }))
+}
   renderRemoveButton() {
     if (this.props.removeMapItem) {
-      return <FontAwesomeIcon className="remove-inline" onClick={() => this.props.removeMapItem(this.props.services)} icon={'times'} />;
-    } else {
+      return <FontAwesomeIcon className="remove-inline" onClick={this.props.removeMapItem} icon={['fas','times']} />;
+
+    }else {
       return "";
     }
   }
+  toggleWmslayer(event) {        
+    console.log(event.target.checked);
+    if (event.target.checked) {
+      this.setState({
+        checkedWmslayers: {
+          ...this.state.checkedWmslayers,
+          [event.target.id]: true
+        }
+      })
+    } else {
+      this.setState({
+        checkedWmslayers: {
+          ...this.state.checkedWmslayers,
+          [event.target.id]: undefined
+        }
+      })
 
-  renderDropdownTree() {
+    }
+  }
+
+isWmsLayerChecked(layerid){ 
+  return this.state.checkedWmslayers[layerid]
+}
+  
+  renderSelectedLayers() {    
     const { wmsLayers } = this.state;
-    if (wmsLayers && wmsLayers.length) {
-      return <DropdownTreeSelect placeholderText="Velg kartlag" data={wmsLayers} onChange={this.onSelectionChange} onAction={this.onAction} onNodeToggle={this.onNodeToggle} />;
+    if (wmsLayers && wmsLayers.length) {      
+    const wmsLayersList = wmsLayers.map(layer => {
+      return <div className="facet" key={layer.id}>            
+      <input className="checkbox" onChange={this.toggleWmslayer} id={layer.id} type="checkbox" />      
+      <label onClick={() => this.onSelectionChange(layer)} htmlFor={layer.id}><FontAwesomeIcon className="svg-checkbox" icon={this.isWmsLayerChecked(layer.id) ? ['far', 'check-square'] : ['far', 'square']} /><span>{layer.label}</span></label> </div>
+    });
+    return wmsLayersList;
     } else {
       return "";
     }
@@ -143,14 +179,14 @@ export default class AddWmsPanel extends React.Component {
    */
   render() {
     const { ...passThroughOpts } = this.props;
+    
 
+    return  <div>
+              <div onClick={() => this.toggleExpand()} className={'expand-layers-btn'}>{this.props.services.Title} <FontAwesomeIcon icon={this.state.expanded ? ['fas','angle-up'] : ['fas','angle-down']} /></div>
+              { this.renderRemoveButton() }
 
-    return (
-      <div>
-        {this.props.services.Title}
-        {this.renderRemoveButton()}
-        {this.renderDropdownTree()}
-      </div>
-    );
+              <div className={this.state.expanded ? 'selectedlayers' + " " + 'open' : 'selectedlayers'}>
+              {this.renderSelectedLayers() }</div>
+            </div>;
   }
 }
