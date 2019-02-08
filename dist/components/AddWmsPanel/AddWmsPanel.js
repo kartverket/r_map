@@ -9,8 +9,6 @@ var _react = _interopRequireDefault(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _reactDropdownTreeSelect = _interopRequireDefault(require("react-dropdown-tree-select"));
-
 require("react-dropdown-tree-select/dist/styles.css");
 
 var _CapabilitiesUtil = require("../../MapUtil/CapabilitiesUtil");
@@ -26,6 +24,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -100,7 +100,7 @@ function (_React$Component) {
       }
     });
 
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onSelectionChange", function (currentNode, selectedNodes) {
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onSelectionChange", function (currentNode) {
       if (!_maplibHelper.map.GetOverlayLayers().includes(currentNode)) {
         _maplibHelper.map.AddLayer(currentNode);
       } else {
@@ -124,7 +124,11 @@ function (_React$Component) {
       console.log("onNodeToggle::", currentNode);
     });
 
-    _this.state = {};
+    _this.state = {
+      expanded: false,
+      checkedWmslayers: {}
+    };
+    _this.toggleWmslayer = _this.toggleWmslayer.bind(_assertThisInitialized(_assertThisInitialized(_this)));
 
     _this.getCapabilitites();
 
@@ -151,35 +155,75 @@ function (_React$Component) {
       });
     }
   }, {
+    key: "toggleExpand",
+    value: function toggleExpand() {
+      this.setState(function (prevState) {
+        return {
+          expanded: !prevState.expanded
+        };
+      });
+    }
+  }, {
     key: "renderRemoveButton",
     value: function renderRemoveButton() {
-      var _this3 = this;
-
       if (this.props.removeMapItem) {
         return _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
           className: "remove-inline",
-          onClick: function onClick() {
-            return _this3.props.removeMapItem(_this3.props.services);
-          },
-          icon: 'times'
+          onClick: this.props.removeMapItem,
+          icon: ['fas', 'times']
         });
       } else {
         return "";
       }
     }
   }, {
-    key: "renderDropdownTree",
-    value: function renderDropdownTree() {
+    key: "toggleWmslayer",
+    value: function toggleWmslayer(event) {
+      console.log(event.target.checked);
+
+      if (event.target.checked) {
+        this.setState({
+          checkedWmslayers: _objectSpread({}, this.state.checkedWmslayers, _defineProperty({}, event.target.id, true))
+        });
+      } else {
+        this.setState({
+          checkedWmslayers: _objectSpread({}, this.state.checkedWmslayers, _defineProperty({}, event.target.id, undefined))
+        });
+      }
+    }
+  }, {
+    key: "isWmsLayerChecked",
+    value: function isWmsLayerChecked(layerid) {
+      return this.state.checkedWmslayers[layerid];
+    }
+  }, {
+    key: "renderSelectedLayers",
+    value: function renderSelectedLayers() {
+      var _this3 = this;
+
       var wmsLayers = this.state.wmsLayers;
 
       if (wmsLayers && wmsLayers.length) {
-        return _react.default.createElement(_reactDropdownTreeSelect.default, {
-          placeholderText: "Velg kartlag",
-          data: wmsLayers,
-          onChange: this.onSelectionChange,
-          onAction: this.onAction,
-          onNodeToggle: this.onNodeToggle
+        var wmsLayersList = wmsLayers.map(function (layer) {
+          return _react.default.createElement("div", {
+            className: "facet",
+            key: layer.id
+          }, _react.default.createElement("input", {
+            className: "checkbox",
+            onChange: _this3.toggleWmslayer,
+            id: layer.id,
+            type: "checkbox"
+          }), _react.default.createElement("label", {
+            onClick: function onClick() {
+              return _this3.onSelectionChange(layer);
+            },
+            htmlFor: layer.id
+          }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+            className: "svg-checkbox",
+            icon: _this3.isWmsLayerChecked(layer.id) ? ['far', 'check-square'] : ['far', 'square']
+          }), _react.default.createElement("span", null, layer.label)), " ");
         });
+        return wmsLayersList;
       } else {
         return "";
       }
@@ -191,9 +235,20 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this4 = this;
+
       var passThroughOpts = _extends({}, this.props);
 
-      return _react.default.createElement("div", null, this.props.services.Title, this.renderRemoveButton(), this.renderDropdownTree());
+      return _react.default.createElement("div", null, _react.default.createElement("div", {
+        onClick: function onClick() {
+          return _this4.toggleExpand();
+        },
+        className: 'expand-layers-btn'
+      }, this.props.services.Title, " ", _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+        icon: this.state.expanded ? ['fas', 'angle-up'] : ['fas', 'angle-down']
+      })), this.renderRemoveButton(), _react.default.createElement("div", {
+        className: this.state.expanded ? 'selectedlayers' + " " + 'open' : 'selectedlayers'
+      }, this.renderSelectedLayers()));
     }
   }]);
 
