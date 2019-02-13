@@ -117,12 +117,12 @@ export class CapabilitiesUtil {
     const layersInCapabilities = get(capabilities, 'Capability.Layer.Layer');
     const wmsGetMapConfig = get(capabilities, 'Capability.Request.GetMap');
     const getMapUrl = get(wmsGetMapConfig, 'DCPType[0].HTTP.Get.OnlineResource');
-
     return layersInCapabilities.map((layerObj) =>
       newMaplibLayer('WMS', {
         type: "map",
         name: get(layerObj, nameField),
         url: getMapUrl,
+        legendurl: get(layerObj, 'Style[0].LegendURL[0].OnlineResource'),
         params: {
           layers: get(layerObj, 'Name'),
           format: "image/png",

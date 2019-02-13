@@ -1,4 +1,5 @@
 import Guid from './Utils'
+import { mergeDefaultParams } from "../Utils/MapHelper";
 
 export const FeatureInfo = (config) => {
     var defaults = {
@@ -26,30 +27,10 @@ export const LegendGraphic = (config) => {
         version: "1.0.0",
         service: 'wms',
         layer: '',
-        url: ''
     };
-
-    var instance = Object.assign({}, defaults, config)
-
-    function getLegendGraphicUrl() {
-        if (instance.url !== "?") {
-            return instance.url + 
-                "Service=" + instance.service + 
-                "&Request=" + instance.request + 
-                "&Version=" + instance.version + 
-                "&Format=" + instance.format + 
-                "&Width=" + instance.width + 
-                "&Height=" + instance.height + 
-                "&Layer=" + instance.layer;
-        } else {
-            return "";
-        }
-
-    }
-
-    return {
-        GetLegendGraphicUrl: getLegendGraphicUrl
-    };
+    let legendGraphicUrl = mergeDefaultParams(config.url, defaults);
+    
+    return legendGraphicUrl;
 }
 export const SubLayer = (config) => {
     var id = Guid.newGuid();
@@ -92,7 +73,7 @@ export const SubLayer = (config) => {
             url: instance.legendGraphicUrl,
             layer: instance.name
         });
-        instance.legendGraphicUrl = legendGraphic.GetLegendGraphicUrl();
+        instance.legendGraphicUrl = legendGraphic;
     }
 
     return instance;

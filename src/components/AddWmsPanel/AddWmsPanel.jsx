@@ -6,7 +6,9 @@ import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
 
 import { map, addLayer } from "../../MapUtil/maplibHelper";
 import "./AddWmsPanel.scss";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import Legend from "../Legend/Legend";
 
 /**
  * Panel containing a (checkable) list.
@@ -56,8 +58,8 @@ export default class AddWmsPanel extends React.Component {
     this.state = {
       expanded: false,
       checkedWmslayers: {}
-  };
-    this.toggleWmslayer =this.toggleWmslayer.bind(this);
+    };
+    this.toggleWmslayer = this.toggleWmslayer.bind(this);
     this.getCapabilitites();
   }
 
@@ -102,9 +104,9 @@ export default class AddWmsPanel extends React.Component {
       let newLayerConfig = addLayer(ServiceName, layerConfig);
       map.AddLayer(newLayerConfig);
     }
-  }
+  };
 
-  onSelectionChange = (currentNode) => {
+  onSelectionChange = currentNode => {
     if (!map.GetOverlayLayers().includes(currentNode)) {
       map.AddLayer(currentNode);
     } else {
@@ -114,25 +116,30 @@ export default class AddWmsPanel extends React.Component {
         map.ShowLayer(currentNode);
       }
     }
-  }
+  };
 
   onAction = ({ action, node }) => {
     console.log(`onAction:: [${action}]`, node);
-  }
+  };
 
   onNodeToggle = currentNode => {
     console.log("onNodeToggle::", currentNode);
-  }
+  };
   toggleExpand() {
     this.setState(prevState => ({
-        expanded: !prevState.expanded
-    }))
-}
+      expanded: !prevState.expanded
+    }));
+  }
   renderRemoveButton() {
     if (this.props.removeMapItem) {
-      return <FontAwesomeIcon className="remove-inline" onClick={this.props.removeMapItem} icon={['fas','times']} />;
-
-    }else {
+      return (
+        <FontAwesomeIcon
+          className="remove-inline"
+          onClick={this.props.removeMapItem}
+          icon={["fas", "times"]}
+        />
+      );
+    } else {
       return "";
     }
   }
@@ -144,31 +151,57 @@ export default class AddWmsPanel extends React.Component {
           ...this.state.checkedWmslayers,
           [event.target.id]: true
         }
-      })
+      });
     } else {
       this.setState({
         checkedWmslayers: {
           ...this.state.checkedWmslayers,
           [event.target.id]: undefined
         }
-      })
-
+      });
     }
   }
 
-isWmsLayerChecked(layerid){
-  return this.state.checkedWmslayers[layerid]
-}
+  isWmsLayerChecked(layerid) {
+    return this.state.checkedWmslayers[layerid];
+  }
 
   renderSelectedLayers() {
     const { wmsLayers } = this.state;
     if (wmsLayers && wmsLayers.length) {
-    const wmsLayersList = wmsLayers.map(layer => {
-      return <div className="facet" key={layer.id}>
-      <input className="checkbox" onChange={this.toggleWmslayer} id={layer.id} type="checkbox" />
-      <label onClick={() => this.onSelectionChange(layer)} htmlFor={layer.id}><FontAwesomeIcon className="svg-checkbox" icon={this.isWmsLayerChecked(layer.id) ? ['far', 'check-square'] : ['far', 'square']} /><span>{layer.label}</span></label> </div>
-    });
-    return wmsLayersList;
+      const wmsLayersList = wmsLayers.map(layer => {
+        console.log(layer)
+        return (
+          <div className="facet" key={layer.id}>
+            <input
+              className="checkbox"
+              onChange={this.toggleWmslayer}
+              id={layer.id}
+              type="checkbox"
+            />
+            <label
+              onClick={() => this.onSelectionChange(layer)}
+              htmlFor={layer.id}
+            >
+              <FontAwesomeIcon
+                className="svg-checkbox"
+                icon={
+                  this.isWmsLayerChecked(layer.id)
+                    ? ["far", "check-square"]
+                    : ["far", "square"]
+                }
+              />
+              <span>{layer.label}</span>
+            </label>{" "}
+
+            {/* ToDo[1] Legend: add proper styling to legend (sizing, hide(?) by default ) */}
+            {/* ToDo[2] Legend: Move legend to a more appropriate(?) place/component(?) */}
+            <Legend legendUrl={layer.subLayers[0].legendGraphicUrl} />
+
+          </div>
+        );
+      });
+      return wmsLayersList;
     } else {
       return "";
     }
@@ -178,12 +211,29 @@ isWmsLayerChecked(layerid){
    * The render function.
    */
   render() {
-    return  <div>
-              <div onClick={() => this.toggleExpand()} className={'expand-layers-btn'}>{this.props.services.Title} <FontAwesomeIcon icon={this.state.expanded ? ['fas','angle-up'] : ['fas','angle-down']} /></div>
-              { this.renderRemoveButton() }
+    return (
+      <div>
+        <div
+          onClick={() => this.toggleExpand()}
+          className={"expand-layers-btn"}
+        >
+          {this.props.services.Title}{" "}
+          <FontAwesomeIcon
+            icon={
+              this.state.expanded ? ["fas", "angle-up"] : ["fas", "angle-down"]
+            }
+          />
+        </div>
+        {this.renderRemoveButton()}
 
-              <div className={this.state.expanded ? 'selectedlayers open' : 'selectedlayers'}>
-              {this.renderSelectedLayers() }</div>
-            </div>;
+        <div
+          className={
+            this.state.expanded ? "selectedlayers open" : "selectedlayers"
+          }
+        >
+          {this.renderSelectedLayers()}
+        </div>
+      </div>
+    );
   }
 }
