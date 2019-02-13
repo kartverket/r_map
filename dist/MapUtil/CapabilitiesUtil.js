@@ -150,6 +150,7 @@ function () {
           type: "map",
           name: (0, _get.default)(layerObj, nameField),
           url: getMapUrl,
+          legendurl: (0, _get.default)(layerObj, 'Style[0].LegendURL[0].OnlineResource'),
           params: {
             layers: (0, _get.default)(layerObj, 'Name'),
             format: "image/png",

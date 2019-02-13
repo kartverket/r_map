@@ -19,6 +19,8 @@ require("./AddWmsPanel.scss");
 
 var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
+var _Legend = _interopRequireDefault(require("../Legend/Legend"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -168,7 +170,7 @@ function (_React$Component) {
         return _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
           className: "remove-inline",
           onClick: this.props.removeMapItem,
-          icon: ['fas', 'times']
+          icon: ["fas", "times"]
         });
       } else {
         return "";
@@ -203,6 +205,7 @@ function (_React$Component) {
 
       if (wmsLayers && wmsLayers.length) {
         var wmsLayersList = wmsLayers.map(function (layer) {
+          console.log(layer);
           return _react.default.createElement("div", {
             className: "facet",
             key: layer.id
@@ -218,8 +221,10 @@ function (_React$Component) {
             htmlFor: layer.id
           }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
             className: "svg-checkbox",
-            icon: _this3.isWmsLayerChecked(layer.id) ? ['far', 'check-square'] : ['far', 'square']
-          }), _react.default.createElement("span", null, layer.label)), " ");
+            icon: _this3.isWmsLayerChecked(layer.id) ? ["far", "check-square"] : ["far", "square"]
+          }), _react.default.createElement("span", null, layer.label)), " ", _react.default.createElement(_Legend.default, {
+            legendUrl: layer.subLayers[0].legendGraphicUrl
+          }));
         });
         return wmsLayersList;
       } else {
@@ -239,11 +244,11 @@ function (_React$Component) {
         onClick: function onClick() {
           return _this4.toggleExpand();
         },
-        className: 'expand-layers-btn'
+        className: "expand-layers-btn"
       }, this.props.services.Title, " ", _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-        icon: this.state.expanded ? ['fas', 'angle-up'] : ['fas', 'angle-down']
+        icon: this.state.expanded ? ["fas", "angle-up"] : ["fas", "angle-down"]
       })), this.renderRemoveButton(), _react.default.createElement("div", {
-        className: this.state.expanded ? 'selectedlayers open' : 'selectedlayers'
+        className: this.state.expanded ? "selectedlayers open" : "selectedlayers"
       }, this.renderSelectedLayers()));
     }
   }]);

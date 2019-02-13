@@ -7,6 +7,8 @@ exports.Layer = exports.FORMATS = exports.SOURCES = exports.SubLayer = exports.L
 
 var _Utils = _interopRequireDefault(require("./Utils"));
 
+var _MapHelper = require("../Utils/MapHelper");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var FeatureInfo = function FeatureInfo(config) {
@@ -34,22 +36,10 @@ var LegendGraphic = function LegendGraphic(config) {
     request: "GetLegendGraphic",
     version: "1.0.0",
     service: 'wms',
-    layer: '',
-    url: ''
+    layer: ''
   };
-  var instance = Object.assign({}, defaults, config);
-
-  function getLegendGraphicUrl() {
-    if (instance.url !== "?") {
-      return instance.url + "Service=" + instance.service + "&Request=" + instance.request + "&Version=" + instance.version + "&Format=" + instance.format + "&Width=" + instance.width + "&Height=" + instance.height + "&Layer=" + instance.layer;
-    } else {
-      return "";
-    }
-  }
-
-  return {
-    GetLegendGraphicUrl: getLegendGraphicUrl
-  };
+  var legendGraphicUrl = (0, _MapHelper.mergeDefaultParams)(config.url, defaults);
+  return legendGraphicUrl;
 };
 
 exports.LegendGraphic = LegendGraphic;
@@ -97,7 +87,7 @@ var SubLayer = function SubLayer(config) {
       url: instance.legendGraphicUrl,
       layer: instance.name
     });
-    instance.legendGraphicUrl = legendGraphic.GetLegendGraphicUrl();
+    instance.legendGraphicUrl = legendGraphic;
   }
 
   return instance;
