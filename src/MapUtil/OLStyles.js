@@ -331,11 +331,11 @@ export const OLStylesSLD = () => {
                                         color: self.getColorValue(pointstyle.fontColor, pointstyle.fontOpacity)
                                     }),
                                     stroke: new style.Stroke({
-                                        color: pointstyle.outlineColor ? 
-                                            self.getColorValue(pointstyle.outlineColor) : 
+                                        color: pointstyle.outlineColor ?
+                                            self.getColorValue(pointstyle.outlineColor) :
                                             self.getColorValue(pointstyle.fontColor, pointstyle.fontOpacity),
-                                        width: pointstyle.outlineWidth ? 
-                                            parseInt(pointstyle.outlineWidth, 10) : 
+                                        width: pointstyle.outlineWidth ?
+                                            parseInt(pointstyle.outlineWidth, 10) :
                                             undefined
                                     }),
                                     offsetX: pointstyle.labelXOffset ? parseInt(pointstyle.labelXOffset, 10) : undefined,
@@ -407,6 +407,8 @@ export const OLStylesSLD = () => {
                                                 stroke: strokestyle,
                                                 fill: fillstyle
                                             });
+                                            break;
+                                        default:
                                             break;
                                     }
                                 }
@@ -808,6 +810,9 @@ export const OLStylesSLD = () => {
                         case 3: // text node
                         case 4: // cdata section
                             value += child.nodeValue;
+                            break;
+                        default:
+                            break;
                     }
                 }
                 return value;
@@ -1033,6 +1038,8 @@ export const OLStylesSLD = () => {
                             value = parseInt(filter.value, 10);
                             condition = parseInt(featurevalue, 10) === value;
                             break;
+                        default:
+                          break;
                     }
                     break;
                 case '>':
@@ -1061,6 +1068,8 @@ export const OLStylesSLD = () => {
                             value = parseInt(filter.value, 10);
                             condition = parseInt(featurevalue, 10) !== value;
                             break;
+                        default:
+                            break;
                     }
                     break;
                 case 'NULL':
@@ -1072,17 +1081,23 @@ export const OLStylesSLD = () => {
                             value = parseInt(filter.value, 10);
                             condition = parseInt(featurevalue, 10) !== value;
                             break;
+                        default:
+                            break;
                     }
                     break;
                 case '..':
                     featurevalue = parseInt(featurevalue, 10);
                     condition = ((featurevalue >= parseInt(filter.lowerBoundary, 10)) && (featurevalue <= parseInt(filter.upperBoundary, 10)));
                     break;
+                default:
+                    break;
             }
         } else {
             switch (filter.operator) {
                 case 'NULL':
                     condition = true;
+                    break;
+                default:
                     break;
             }
         }
@@ -1130,6 +1145,8 @@ export const OLStylesSLD = () => {
                 }
                 break;
             case '!':
+                break;
+            default:
                 break;
         }
         return condition;
@@ -1284,6 +1301,9 @@ export const OLStylesSLD = () => {
                         case 3: // text node
                         case 4: // cdata section
                             value += child.nodeValue;
+                            break;
+                        default:
+                            break;
                     }
                 }
             }

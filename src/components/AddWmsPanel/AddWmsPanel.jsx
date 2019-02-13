@@ -104,7 +104,7 @@ export default class AddWmsPanel extends React.Component {
     }
   }
 
-  onSelectionChange = (currentNode) => {    
+  onSelectionChange = (currentNode) => {
     if (!map.GetOverlayLayers().includes(currentNode)) {
       map.AddLayer(currentNode);
     } else {
@@ -136,7 +136,7 @@ export default class AddWmsPanel extends React.Component {
       return "";
     }
   }
-  toggleWmslayer(event) {        
+  toggleWmslayer(event) {
     console.log(event.target.checked);
     if (event.target.checked) {
       this.setState({
@@ -156,16 +156,16 @@ export default class AddWmsPanel extends React.Component {
     }
   }
 
-isWmsLayerChecked(layerid){ 
+isWmsLayerChecked(layerid){
   return this.state.checkedWmslayers[layerid]
 }
-  
-  renderSelectedLayers() {    
+
+  renderSelectedLayers() {
     const { wmsLayers } = this.state;
-    if (wmsLayers && wmsLayers.length) {      
+    if (wmsLayers && wmsLayers.length) {
     const wmsLayersList = wmsLayers.map(layer => {
-      return <div className="facet" key={layer.id}>            
-      <input className="checkbox" onChange={this.toggleWmslayer} id={layer.id} type="checkbox" />      
+      return <div className="facet" key={layer.id}>
+      <input className="checkbox" onChange={this.toggleWmslayer} id={layer.id} type="checkbox" />
       <label onClick={() => this.onSelectionChange(layer)} htmlFor={layer.id}><FontAwesomeIcon className="svg-checkbox" icon={this.isWmsLayerChecked(layer.id) ? ['far', 'check-square'] : ['far', 'square']} /><span>{layer.label}</span></label> </div>
     });
     return wmsLayersList;
@@ -178,14 +178,11 @@ isWmsLayerChecked(layerid){
    * The render function.
    */
   render() {
-    const { ...passThroughOpts } = this.props;
-    
-
     return  <div>
               <div onClick={() => this.toggleExpand()} className={'expand-layers-btn'}>{this.props.services.Title} <FontAwesomeIcon icon={this.state.expanded ? ['fas','angle-up'] : ['fas','angle-down']} /></div>
               { this.renderRemoveButton() }
 
-              <div className={this.state.expanded ? 'selectedlayers' + " " + 'open' : 'selectedlayers'}>
+              <div className={this.state.expanded ? 'selectedlayers open' : 'selectedlayers'}>
               {this.renderSelectedLayers() }</div>
             </div>;
   }
