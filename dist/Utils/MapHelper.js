@@ -3,9 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getResolutionFromScale = exports.getWMSCapabilities = exports.parseWmsCapabilities = exports.mergeDefaultParams = exports.createOlWMSFromCap = exports.addWmsToMapFromConfig = exports.addWmsToMapFromCap = void 0;
-
-var _proj = _interopRequireDefault(require("proj4"));
+exports.getImageSourceRatio = exports.getResolutionFromScale = exports.getWMSCapabilities = exports.parseWmsCapabilities = exports.mergeDefaultParams = exports.createOlWMSFromCap = exports.addWmsToMapFromConfig = exports.addWmsToMapFromCap = void 0;
 
 var _queryString = _interopRequireDefault(require("query-string"));
 
@@ -101,28 +99,10 @@ var addWmsToMapFromConfig = function addWmsToMapFromConfig(map, wmslayer, projec
 exports.addWmsToMapFromConfig = addWmsToMapFromConfig;
 
 var createOlWMSFromCap = function createOlWMSFromCap(map, getCapLayer, project) {
-  var attribution,
-      attributionUrl,
-      metadata,
+  var layer,
       errors = [];
 
   if (getCapLayer) {
-    if (getCapLayer.Attribution !== undefined) {
-      if (Array.isArray(getCapLayer.Attribution)) {
-        console.warn('');
-      } else {
-        attribution = getCapLayer.Attribution.Title;
-
-        if (getCapLayer.Attribution.OnlineResource) {
-          attributionUrl = getCapLayer.Attribution.OnlineResource;
-        }
-      }
-    }
-
-    if (Array.isArray(getCapLayer.MetadataURL)) {
-      metadata = getCapLayer.MetadataURL[0].OnlineResource;
-    }
-
     var layerParam = {
       LAYERS: getCapLayer.layers
     };
@@ -130,26 +110,40 @@ var createOlWMSFromCap = function createOlWMSFromCap(map, getCapLayer, project) 
     if (getCapLayer.version) {
       layerParam.VERSION = getCapLayer.version;
     }
+    /*
+    var  attribution, attributionUrl, metadata
+      if (getCapLayer.Attribution !== undefined) {
+        if (Array.isArray(getCapLayer.Attribution)) {
+            console.warn('');
+        } else {
+            attribution = getCapLayer.Attribution.Title;
+            if (getCapLayer.Attribution.OnlineResource) {
+                attributionUrl = getCapLayer.Attribution.OnlineResource;
+            }
+        }
+    }
+    if (Array.isArray(getCapLayer.MetadataURL)) {
+        metadata = getCapLayer.MetadataURL[0].OnlineResource;
+    }
+        layer = createOlWMS(map, layerParam, {
+          url: getCapLayer.url,
+          label: getCapLayer.title,
+          attribution: attribution,
+          attributionUrl: attributionUrl,
+          projection: projCode,
+          legend: getCapLayer.legendurl,
+          group: getCapLayer.group,
+          metadata: metadata,
+          extent: getLayerExtentFromGetCap(map,
+              getCapLayer),
+          minResolution: getResolutionFromScale(
+              map.getView().getProjection(),
+              getCapLayer.MinScaleDenominator),
+          maxResolution: getResolutionFromScale(
+              map.getView().getProjection(),
+              getCapLayer.MaxScaleDenominator)
+      });*/
 
-    var layer;
-    /* = createOlWMS(map, layerParam, {
-    url: getCapLayer.url,
-    label: getCapLayer.title,
-    attribution: attribution,
-    attributionUrl: attributionUrl,
-    projection: projCode,
-    legend: getCapLayer.legendurl,
-    group: getCapLayer.group,
-    metadata: metadata,
-    extent: getLayerExtentFromGetCap(map,
-    getCapLayer),
-    minResolution: getResolutionFromScale(
-    map.getView().getProjection(),
-    getCapLayer.MinScaleDenominator),
-    maxResolution: getResolutionFromScale(
-    map.getView().getProjection(),
-    getCapLayer.MaxScaleDenominator)
-    });*/
 
     if (Array.isArray(getCapLayer.Dimension)) {
       for (var i = 0; i < getCapLayer.Dimension.length; i++) {
@@ -266,51 +260,6 @@ var parseCapabilities = function parseCapabilities(xml) {
   });
 };
 
-function getInfo(_x) {
-  return _getInfo.apply(this, arguments);
-}
-
-function _getInfo() {
-  _getInfo = _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee2(url) {
-    var info, response;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            _context2.prev = 0;
-            _context2.next = 3;
-            return fetch(url);
-
-          case 3:
-            response = _context2.sent;
-            _context2.next = 6;
-            return response.text();
-
-          case 6:
-            info = _context2.sent;
-            _context2.next = 12;
-            break;
-
-          case 9:
-            _context2.prev = 9;
-            _context2.t0 = _context2["catch"](0);
-            console.log('Error!', _context2.t0);
-
-          case 12:
-            return _context2.abrupt("return", info);
-
-          case 13:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, _callee2, this, [[0, 9]]);
-  }));
-  return _getInfo.apply(this, arguments);
-}
-
 var getWMSCapabilities =
 /*#__PURE__*/
 function () {
@@ -322,8 +271,6 @@ function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            console.log(url);
-
             if (url) {
               newUrl = mergeDefaultParams(url, {
                 service: "WMS",
@@ -340,7 +287,7 @@ function () {
               console.log("No wms parameter given");
             }
 
-          case 2:
+          case 1:
           case "end":
             return _context.stop();
         }
@@ -348,69 +295,62 @@ function () {
     }, _callee, this);
   }));
 
-  return function getWMSCapabilities(_x2) {
+  return function getWMSCapabilities(_x) {
     return _ref.apply(this, arguments);
   };
 }();
+/*
+export const getLayerExtentFromGetCap = (map, getCapLayer) => {
+    var extent = null;
+    var layer = getCapLayer;
+    var proj = map.getView().getProjection();
 
-exports.getWMSCapabilities = getWMSCapabilities;
-
-var getLayerExtentFromGetCap = function getLayerExtentFromGetCap(map, getCapLayer) {
-  var extent = null;
-  var layer = getCapLayer;
-  var proj = map.getView().getProjection(); //var ext = layer.BoundingBox[0].extent;
-  //var olExtent = [ext[1],ext[0],ext[3],ext[2]];
-  // TODO fix using layer.BoundingBox[0].extent
-  // when sextant fix his capabilities
-
-  var setProjectionFromEPSG = function setProjectionFromEPSG(bbox) {
-    var epsg_url = 'https://epsg.io/?format=json&q=' + bbox.crs.split(':')[1];
-    return fetch(epsg_url).then(function (response) {
-      var results = response.data.results;
-
-      if (results && results.length > 0) {
-        for (var i = 0, ii = results.length; i < ii; i++) {
-          var result = results[i];
-
-          if (result) {
-            if (result['code'] && result['code'].length > 0 && result['proj4'] && result['proj4'].length > 0) {
-              _proj.default.defs('EPSG:' + result['code'], result['proj4']);
+    var setProjectionFromEPSG = function (bbox) {
+        var epsg_url = 'https://epsg.io/?format=json&q=' + bbox.crs.split(':')[1];
+        return fetch(epsg_url)
+            .then(function (response) {
+                var results = response.data.results;
+                if (results && results.length > 0) {
+                    for (var i = 0, ii = results.length; i < ii; i++) {
+                        var result = results[i];
+                        if (result) {
+                            if (result['code'] && result['code'].length > 0 && result['proj4'] && result['proj4'].length > 0) {
+                                proj4.defs('EPSG:' + result['code'], result['proj4']);
+                            }
+                        }
+                    }
+                }
+            });
+    };
+    var bboxProp;
+    ['EX_GeographicBoundingBox', 'WGS84BoundingBox'].forEach(
+        function (prop) {
+            if (Array.isArray(layer[prop])) {
+                bboxProp = layer[prop];
             }
-          }
+        });
+    if (bboxProp) {
+        extent = transformExtent(bboxProp, 'EPSG:4326', proj);
+    } else if (Array.isArray(layer.BoundingBox)) {
+        for (var i = 0; i < layer.BoundingBox.length; i++) {
+            var bbox = layer.BoundingBox[i];
+            if (!get(bbox.crs)) {
+                // eslint-disable-next-line
+                setProjectionFromEPSG(bbox).then(() => {
+                    extent = transformExtent(bbox.extent, bbox.crs || 'EPSG:4326', proj);
+                });
+            } else {
+                if (bbox.crs === proj.getCode() || layer.BoundingBox.length === 1) {
+                    extent = transformExtent(bbox.extent, bbox.crs || 'EPSG:4326', proj);
+                    break;
+                }
+            }
         }
-      }
-    });
-  };
-
-  var bboxProp;
-  ['EX_GeographicBoundingBox', 'WGS84BoundingBox'].forEach(function (prop) {
-    if (Array.isArray(layer[prop])) {
-      bboxProp = layer[prop];
     }
-  });
-  /*
-      if (bboxProp) {
-          extent = transformExtent(bboxProp, 'EPSG:4326', proj);
-      } else if (Array.isArray(layer.BoundingBox)) {
-          for (var i = 0; i < layer.BoundingBox.length; i++) {
-              var bbox = layer.BoundingBox[i];
-              if (!get(bbox.crs)) {
-                  // eslint-disable-next-line
-                  setProjectionFromEPSG(bbox).then(() => {
-                      extent = transformExtent(bbox.extent, bbox.crs || 'EPSG:4326', proj);
-                  });
-              } else {
-                  if (bbox.crs === proj.getCode() || layer.BoundingBox.length === 1) {
-                      extent = transformExtent(bbox.extent, bbox.crs || 'EPSG:4326', proj);
-                      break;
-                  }
-              }
-          }
-      }
-      */
+    return extent;
+}
+*/
 
-  return extent;
-};
 /**
  * @description
  * Compute the resolution from a given scale
@@ -420,6 +360,8 @@ var getLayerExtentFromGetCap = function getLayerExtentFromGetCap(map, getCapLaye
  * @return {number} resolution
  */
 
+
+exports.getWMSCapabilities = getWMSCapabilities;
 
 var getResolutionFromScale = function getResolutionFromScale(projection, scale) {
   return scale && scale * 0.00028 / projection.getMetersPerUnit();
@@ -433,3 +375,5 @@ var getImageSourceRatio = function getImageSourceRatio(map, maxWidth) {
   ratio = Math.floor(ratio * 100) / 100;
   return Math.min(1.5, Math.max(1, ratio));
 };
+
+exports.getImageSourceRatio = getImageSourceRatio;

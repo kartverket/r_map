@@ -31,8 +31,10 @@ li {
     }
 }
 .expand-layers-btn {
-    display: block;
+    display: inline-block;
+    width: 90%;
     margin-bottom: 10px;
+    
     &:hover {
         cursor: pointer;
     }
@@ -46,13 +48,20 @@ li {
 .facet {
     margin: 2px 0;
     > input[type="checkbox"] {
-        width: 0;
-        height: 0;
+        
         overflow: hidden;
         visibility: hidden;
+        display: none;
     }
     label > svg {
         margin: 0 5px;
         font-size: 1.1em;
     }
+    label > span {
+        display: inline-block;
+        text-overflow: ellipsis;
+        max-width: 75%;
+        overflow: hidden;
+    }
+
 }

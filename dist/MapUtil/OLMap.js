@@ -264,6 +264,10 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
                 case 'EPSG:32638':
                   mousehtml += '38 ';
                   break;
+
+                default:
+                  mousehtml += '33 ';
+                  break;
               }
 
               break;
@@ -739,7 +743,7 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
           break;
 
         default:
-          throw "Unsupported source: SOURCES.'" + isySubLayer.source + "'. For SubLayer with url " + isySubLayer.url + " and name " + isySubLayer.name + ".";
+          throw new Error("Unsupported source: SOURCES.'" + isySubLayer.source + "'. For SubLayer with url " + isySubLayer.url + " and name " + isySubLayer.name + ".");
       }
 
       if (isySubLayer.source === _Domain.SOURCES.vector) {
@@ -1344,6 +1348,9 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
         parameters._olSalt = Math.random();
         source = new _Sources.Wfs(isySubLayer, offline, parameters, featureObj, eventHandler);
         break;
+
+      default:
+        break;
     }
 
     if (source) {
@@ -1396,6 +1403,9 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
           isVector = true;
           source = new _Sources.Wfs(isySubLayer, offline, parameters);
           break;
+
+        default:
+          break;
       }
 
       if (source) {
@@ -1444,6 +1454,9 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
         case _Domain.SOURCES.wfs:
           isVector = true;
           source = new _Sources.Wfs(isySubLayer, offline);
+          break;
+
+        default:
           break;
       }
 
@@ -1520,7 +1533,8 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
 
   function deactivateBoxSelect() {
     featureInfo.DeactivateBoxSelect(map);
-  }
+  } // eslint-disable-next-line no-extend-native
+
 
   Array.prototype.where = function (matcher) {
     var result = [];
