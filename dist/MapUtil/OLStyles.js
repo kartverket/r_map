@@ -438,6 +438,9 @@ var OLStylesSLD = function OLStylesSLD() {
                         fill: fillstyle
                       });
                       break;
+
+                    default:
+                      break;
                   }
                 }
               }
@@ -868,6 +871,10 @@ var OLStylesSLD = function OLStylesSLD() {
             case 4:
               // cdata section
               value += child.nodeValue;
+              break;
+
+            default:
+              break;
           }
         }
 
@@ -1109,6 +1116,9 @@ var OLStylesSLD = function OLStylesSLD() {
               value = parseInt(filter.value, 10);
               condition = parseInt(featurevalue, 10) === value;
               break;
+
+            default:
+              break;
           }
 
           break;
@@ -1144,6 +1154,9 @@ var OLStylesSLD = function OLStylesSLD() {
               value = parseInt(filter.value, 10);
               condition = parseInt(featurevalue, 10) !== value;
               break;
+
+            default:
+              break;
           }
 
           break;
@@ -1158,6 +1171,9 @@ var OLStylesSLD = function OLStylesSLD() {
               value = parseInt(filter.value, 10);
               condition = parseInt(featurevalue, 10) !== value;
               break;
+
+            default:
+              break;
           }
 
           break;
@@ -1166,11 +1182,17 @@ var OLStylesSLD = function OLStylesSLD() {
           featurevalue = parseInt(featurevalue, 10);
           condition = featurevalue >= parseInt(filter.lowerBoundary, 10) && featurevalue <= parseInt(filter.upperBoundary, 10);
           break;
+
+        default:
+          break;
       }
     } else {
       switch (filter.operator) {
         case 'NULL':
           condition = true;
+          break;
+
+        default:
           break;
       }
     }
@@ -1230,6 +1252,9 @@ var OLStylesSLD = function OLStylesSLD() {
         break;
 
       case '!':
+        break;
+
+      default:
         break;
     }
 
@@ -1400,6 +1425,10 @@ var OLStylesSLD = function OLStylesSLD() {
             case 4:
               // cdata section
               value += child.nodeValue;
+              break;
+
+            default:
+              break;
           }
         }
       }
