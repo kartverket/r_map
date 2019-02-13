@@ -249,7 +249,10 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                                 case 'EPSG:32638':
                                     mousehtml += '38 ';
                                     break;
-                            }
+                                default:
+                                  mousehtml += '33 ';
+                                  break;
+                        }
                             break;
                     }
                 }
@@ -532,7 +535,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
             })
             .then(res => res.json());*/
 
-          
+
             globalTicket = $.ajax({
                 type: "GET",
                 url: ticketHost,
@@ -661,10 +664,10 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                     break;
 
                 default:
-                    throw "Unsupported source: SOURCES.'" +
+                    throw new Error("Unsupported source: SOURCES.'" +
                         isySubLayer.source +
                         "'. For SubLayer with url " + isySubLayer.url +
-                        " and name " + isySubLayer.name + ".";
+                        " and name " + isySubLayer.name + ".");
             }
 
             if (isySubLayer.source === SOURCES.vector) {
@@ -1182,6 +1185,8 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                 parameters._olSalt = Math.random();
                 source = new MaplibWfsSource(isySubLayer, offline, parameters, featureObj, eventHandler);
                 break;
+            default:
+                break;
         }
         if (source) {
             layer.setSource(source);
@@ -1223,6 +1228,8 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                     isVector = true;
                     source = new MaplibWfsSource(isySubLayer, offline, parameters);
                     break;
+                default:
+                    break;
             }
             if (source) {
                 if (isVector) {
@@ -1261,6 +1268,8 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                 case SOURCES.wfs:
                     isVector = true;
                     source = new MaplibWfsSource(isySubLayer, offline);
+                    break;
+                default:
                     break;
             }
             if (source) {
@@ -1339,6 +1348,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
     }
 
 
+    // eslint-disable-next-line no-extend-native
     Array.prototype.where = function (matcher) {
         var result = [];
         for (var i = 0; i < this.length; i++) {

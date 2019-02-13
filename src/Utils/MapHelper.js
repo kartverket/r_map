@@ -1,4 +1,4 @@
-import proj4 from "proj4";
+//import proj4 from "proj4";
 import queryString from 'query-string'
 import parser from "fast-xml-parser";
 /**
@@ -73,31 +73,32 @@ export const addWmsToMapFromConfig = (map, wmslayer, project) => {
  * @return {ol.Layer} the created layer
  */
 export const createOlWMSFromCap = (map, getCapLayer, project) => {
-    var attribution, attributionUrl, metadata, errors = [];
+    var layer, errors = [];
     if (getCapLayer) {
-        if (getCapLayer.Attribution !== undefined) {
-            if (Array.isArray(getCapLayer.Attribution)) {
-                console.warn('');
-            } else {
-                attribution = getCapLayer.Attribution.Title;
-                if (getCapLayer.Attribution.OnlineResource) {
-                    attributionUrl = getCapLayer.Attribution.OnlineResource;
-                }
-            }
-        }
-        if (Array.isArray(getCapLayer.MetadataURL)) {
-            metadata = getCapLayer.MetadataURL[0].OnlineResource;
-        }
-
         var layerParam = {
             LAYERS: getCapLayer.layers
         };
         if (getCapLayer.version) {
             layerParam.VERSION = getCapLayer.version;
         }
+      /*
+      var  attribution, attributionUrl, metadata
+        if (getCapLayer.Attribution !== undefined) {
+          if (Array.isArray(getCapLayer.Attribution)) {
+              console.warn('');
+          } else {
+              attribution = getCapLayer.Attribution.Title;
+              if (getCapLayer.Attribution.OnlineResource) {
+                  attributionUrl = getCapLayer.Attribution.OnlineResource;
+              }
+          }
+      }
+      if (Array.isArray(getCapLayer.MetadataURL)) {
+          metadata = getCapLayer.MetadataURL[0].OnlineResource;
+      }
 
 
-        var layer/* = createOlWMS(map, layerParam, {
+        layer = createOlWMS(map, layerParam, {
             url: getCapLayer.url,
             label: getCapLayer.title,
             attribution: attribution,
@@ -231,18 +232,7 @@ const parseCapabilities = xml => {
     });
 };
 
-async function getInfo(url) {
-    let info
-    try {
-        let response = await fetch(url);
-        info = await response.text();
-    } catch (e) {
-        console.log('Error!', e);
-    }
-    return info
-}
 export const getWMSCapabilities = async (url) => {
-    console.log(url);
     if (url) {
       let newUrl = mergeDefaultParams(url, {
         service: "WMS",
@@ -261,15 +251,11 @@ export const getWMSCapabilities = async (url) => {
       console.log("No wms parameter given");
     }
 };
-const getLayerExtentFromGetCap = (map, getCapLayer) => {
+/*
+export const getLayerExtentFromGetCap = (map, getCapLayer) => {
     var extent = null;
     var layer = getCapLayer;
     var proj = map.getView().getProjection();
-
-    //var ext = layer.BoundingBox[0].extent;
-    //var olExtent = [ext[1],ext[0],ext[3],ext[2]];
-    // TODO fix using layer.BoundingBox[0].extent
-    // when sextant fix his capabilities
 
     var setProjectionFromEPSG = function (bbox) {
         var epsg_url = 'https://epsg.io/?format=json&q=' + bbox.crs.split(':')[1];
@@ -288,7 +274,6 @@ const getLayerExtentFromGetCap = (map, getCapLayer) => {
                 }
             });
     };
-
     var bboxProp;
     ['EX_GeographicBoundingBox', 'WGS84BoundingBox'].forEach(
         function (prop) {
@@ -296,7 +281,6 @@ const getLayerExtentFromGetCap = (map, getCapLayer) => {
                 bboxProp = layer[prop];
             }
         });
-/*
     if (bboxProp) {
         extent = transformExtent(bboxProp, 'EPSG:4326', proj);
     } else if (Array.isArray(layer.BoundingBox)) {
@@ -315,9 +299,9 @@ const getLayerExtentFromGetCap = (map, getCapLayer) => {
             }
         }
     }
-    */
     return extent;
 }
+*/
 
 /**
  * @description
@@ -331,7 +315,7 @@ export const getResolutionFromScale = (projection, scale) => {
     return scale && scale * 0.00028 / projection.getMetersPerUnit();
 }
 
-const getImageSourceRatio = (map, maxWidth) => {
+export const getImageSourceRatio = (map, maxWidth) => {
     var width = (map.getSize() && map.getSize()[0])
     var ratio = maxWidth / width;
     ratio = Math.floor(ratio * 100) / 100;
