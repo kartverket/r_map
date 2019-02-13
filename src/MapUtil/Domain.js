@@ -1,125 +1,129 @@
 import Guid from './Utils'
-import { mergeDefaultParams } from "../Utils/MapHelper";
+import {
+  mergeDefaultParams
+} from "../Utils/MapHelper";
 
 export const FeatureInfo = (config) => {
-    var defaults = {
-        // single select via WMS GetFeatureInfo
-        supportsGetFeatureInfo: true,
-        getFeatureInfoFormat: 'application/json',
-        getFeatureInfoCrs: '',
+  var defaults = {
+    // single select via WMS GetFeatureInfo
+    supportsGetFeatureInfo: true,
+    getFeatureInfoFormat: 'application/json',
+    getFeatureInfoCrs: '',
 
-        // multi select via WFS GetFeature
-        supportsGetFeature: true,
-        getFeatureBaseUrl: '',
-        getFeatureFormat: 'application/json',
-        getFeatureCrs: 'EPSG:4326'
-    };
+    // multi select via WFS GetFeature
+    supportsGetFeature: true,
+    getFeatureBaseUrl: '',
+    getFeatureFormat: 'application/json',
+    getFeatureCrs: 'EPSG:4326'
+  };
 
-    return Object.assign({}, defaults, config)
+  return Object.assign({}, defaults, config)
 };
 
 export const LegendGraphic = (config) => {
-    var defaults = {
-        width: "20",
-        height: "20",
-        format: "image/png",
-        request: "GetLegendGraphic",
-        version: "1.0.0",
-        service: 'wms',
-        layer: '',
-    };
-    let legendGraphicUrl = mergeDefaultParams(config.url, defaults);
-    
-    return legendGraphicUrl;
+  if (config.url === '' || config.url === '?') {
+    return null;
+  }
+  const defaults = {
+    width: "20",
+    height: "20",
+    format: "image/png",
+    request: "GetLegendGraphic",
+    version: "1.0.0",
+    service: 'wms',
+    layer: '',
+  };
+  return mergeDefaultParams(config.url, defaults);
 }
+
 export const SubLayer = (config) => {
-    var id = Guid.newGuid();
+  var id = Guid.newGuid();
 
-    var defaults = {
-        name: '',
-        providerName: '', //f.eks Fiskeridirektoratet
-        source: SOURCES.wmts,
-        url: '',
-        format: FORMATS.imagepng,
-        coordinate_system: '',
-        srs_dimension: '',
-        matrixSet: '',
-        extent: [-1, 1, -1, 1],
-        extentUnits: 'm',
-        id: id,
-        transparent: true,
-        layerIndex: -1,
-        legendGraphicUrl: '',
-        Origin: 'anonymous',
-        featureInfoTitle: '',
-        tooltipTemplate: '',
-        showDialog: true,
-        openNewWindow: false,
-        openParentWindow: false,
-        windowWidth: 500,
-        featureInfoElement: [],
-        editable: false,
-        featureInfo: FeatureInfo(),
-        featureNS: '',
-        geometryName: 'geometry'
-    };
-    var instance = Object.assign({}, defaults, config) // subLayerInstance
+  var defaults = {
+    name: '',
+    providerName: '', //f.eks Fiskeridirektoratet
+    source: SOURCES.wmts,
+    url: '',
+    format: FORMATS.imagepng,
+    coordinate_system: '',
+    srs_dimension: '',
+    matrixSet: '',
+    extent: [-1, 1, -1, 1],
+    extentUnits: 'm',
+    id: id,
+    transparent: true,
+    layerIndex: -1,
+    legendGraphicUrl: '',
+    Origin: 'anonymous',
+    featureInfoTitle: '',
+    tooltipTemplate: '',
+    showDialog: true,
+    openNewWindow: false,
+    openParentWindow: false,
+    windowWidth: 500,
+    featureInfoElement: [],
+    editable: false,
+    featureInfo: FeatureInfo(),
+    featureNS: '',
+    geometryName: 'geometry'
+  };
+  var instance = Object.assign({}, defaults, config) // subLayerInstance
 
-    if (instance.legendGraphicUrl.indexOf('?') === -1) {
-        instance.legendGraphicUrl += '?';
-    }
-    if (instance.legendGraphicUrl !== '') {
-        var legendGraphic = LegendGraphic({
-            url: instance.legendGraphicUrl,
-            layer: instance.name
-        });
-        instance.legendGraphicUrl = legendGraphic;
-    }
+  if (instance.legendGraphicUrl.indexOf('?') === -1) {
+    instance.legendGraphicUrl += '?';
+  }
+  if (instance.legendGraphicUrl !== '') {
+    var legendGraphic = LegendGraphic({
+      url: instance.legendGraphicUrl,
+      layer: instance.name
+    });
+    instance.legendGraphicUrl = legendGraphic;
+  }
 
-    return instance;
+  return instance;
 }
 
 export const SOURCES = {
-    wmts: "WMTS",
-    wms: "WMS",
-    vector: "VECTOR",
-    proxyWmts: "proxyWmts",
-    proxyWms: "proxyWms",
-    tms: "TMS",
-    wfs: "WFS"
+  wmts: "WMTS",
+  wms: "WMS",
+  vector: "VECTOR",
+  proxyWmts: "proxyWmts",
+  proxyWms: "proxyWms",
+  tms: "TMS",
+  wfs: "WFS"
 }
 
 export const FORMATS = {
-    imagepng: "image/png",
-    imagejpeg: "image/jpeg",
-    geoJson: "application/json"
+  imagepng: "image/png",
+  imagejpeg: "image/jpeg",
+  geoJson: "application/json"
 }
 export const Layer = (config) => {
-    var defaults = {
-        guid: '',
-        subLayers: [],
-        name: '',
-        categoryId: 0,
-        visibleOnLoad: true,
-        isVisible: false, // Holds current state, will be set to true on factory.Init if VisibleOnLoad = true
-        id: Guid.newGuid(),
-        isBaseLayer: false,
-        previewActive: false,
-        opacity: 1,
-        mapLayerIndex: -1,
-        minResolution: 0,
-        maxResolution: 21664,
-        legendGraphicUrls: [],
-        selectedLayerOpen: false //todo johben temp
-    };
-    var layerInstance = Object.assign({}, defaults, config) // layerInstance
+  var defaults = {
+    guid: '',
+    subLayers: [],
+    name: '',
+    categoryId: 0,
+    visibleOnLoad: true,
+    isVisible: false, // Holds current state, will be set to true on factory.Init if VisibleOnLoad = true
+    id: Guid.newGuid(),
+    isBaseLayer: false,
+    previewActive: false,
+    opacity: 1,
+    mapLayerIndex: -1,
+    minResolution: 0,
+    maxResolution: 21664,
+    legendGraphicUrls: [],
+    selectedLayerOpen: false //todo johben temp
+  };
+  var layerInstance = Object.assign({}, defaults, config) // layerInstance
 
-    var subLayers = [];
-    for (var i = 0; i < config.subLayers.length; i++) {
-        subLayers.push(SubLayer(config.subLayers[i]));
-    }
+  var subLayers = [];
+  for (var i = 0; i < config.subLayers.length; i++) {
+    subLayers.push(SubLayer(config.subLayers[i]));
+  }
 
-    layerInstance.subLayers = subLayers;
+  layerInstance.subLayers = subLayers;
 
-    return layerInstance;
+  return layerInstance;
 };

@@ -238,7 +238,6 @@ export const getWMSCapabilities = async (url) => {
         service: "WMS",
         request: "GetCapabilities"
       });
-      console.log(newUrl);
       fetch(newUrl)
         .then(function (response) {
           return Promise.resolve(response.text());

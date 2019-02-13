@@ -125,7 +125,7 @@ var createOlWMSFromCap = function createOlWMSFromCap(map, getCapLayer, project) 
     if (Array.isArray(getCapLayer.MetadataURL)) {
         metadata = getCapLayer.MetadataURL[0].OnlineResource;
     }
-          layer = createOlWMS(map, layerParam, {
+        layer = createOlWMS(map, layerParam, {
           url: getCapLayer.url,
           label: getCapLayer.title,
           attribution: attribution,
@@ -276,7 +276,6 @@ function () {
                 service: "WMS",
                 request: "GetCapabilities"
               });
-              console.log(newUrl);
               fetch(newUrl).then(function (response) {
                 return Promise.resolve(response.text());
               }).then(function (text) {

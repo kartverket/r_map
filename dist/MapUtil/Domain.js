@@ -29,6 +29,10 @@ var FeatureInfo = function FeatureInfo(config) {
 exports.FeatureInfo = FeatureInfo;
 
 var LegendGraphic = function LegendGraphic(config) {
+  if (config.url === '' || config.url === '?') {
+    return null;
+  }
+
   var defaults = {
     width: "20",
     height: "20",
@@ -38,8 +42,7 @@ var LegendGraphic = function LegendGraphic(config) {
     service: 'wms',
     layer: ''
   };
-  var legendGraphicUrl = (0, _MapHelper.mergeDefaultParams)(config.url, defaults);
-  return legendGraphicUrl;
+  return (0, _MapHelper.mergeDefaultParams)(config.url, defaults);
 };
 
 exports.LegendGraphic = LegendGraphic;

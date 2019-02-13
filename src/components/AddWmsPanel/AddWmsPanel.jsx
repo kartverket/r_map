@@ -170,7 +170,6 @@ export default class AddWmsPanel extends React.Component {
     const { wmsLayers } = this.state;
     if (wmsLayers && wmsLayers.length) {
       const wmsLayersList = wmsLayers.map(layer => {
-        console.log(layer)
         return (
           <div className="facet" key={layer.id}>
             <input

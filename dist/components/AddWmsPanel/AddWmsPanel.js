@@ -205,7 +205,6 @@ function (_React$Component) {
 
       if (wmsLayers && wmsLayers.length) {
         var wmsLayersList = wmsLayers.map(function (layer) {
-          console.log(layer);
           return _react.default.createElement("div", {
             className: "facet",
             key: layer.id
