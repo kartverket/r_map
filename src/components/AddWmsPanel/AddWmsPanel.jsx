@@ -210,20 +210,9 @@ export default class AddWmsPanel extends React.Component {
    * The render function.
    */
   render() {
-    return (
-      <div>
-        <div
-          onClick={() => this.toggleExpand()}
-          className={"expand-layers-btn"}
-        >
-          {this.props.services.Title}{" "}
-          <FontAwesomeIcon
-            icon={
-              this.state.expanded ? ["fas", "angle-up"] : ["fas", "angle-down"]
-            }
-          />
-        </div>
-        {this.renderRemoveButton()}
+    return  <div>
+              <div onClick={() => this.toggleExpand()} className={'expand-layers-btn'}><span className={'ellipsis-toggle'}>{this.props.services.Title}</span> <FontAwesomeIcon icon={this.state.expanded ? ['fas','angle-up'] : ['fas','angle-down']} /></div>
+              { this.renderRemoveButton() }
 
         <div
           className={
@@ -233,6 +222,5 @@ export default class AddWmsPanel extends React.Component {
           {this.renderSelectedLayers()}
         </div>
       </div>
-    );
   }
 }

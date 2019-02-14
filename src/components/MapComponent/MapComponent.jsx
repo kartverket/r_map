@@ -215,6 +215,9 @@ export class MapComponent extends React.Component {
       return <ListItem listItem={listItem} removeMapItem={this.props.removeMapItem ? this.props.removeMapItem : null} key={i} map={map} />;
     });
   }
+  renderLayerButton() {  
+   return this.props.services && this.props.services.length > 0
+  }
   handleSelect(activeKey) {
     this.setState({
       activeKey
@@ -227,6 +230,11 @@ export class MapComponent extends React.Component {
     })
 
   }
+  toogleMap() {
+    console.log('lukke kartet');
+    window.history.back();
+    // TODO: get paramtere to check for url til goto for closing map
+  }
 
   /**
    *
@@ -236,12 +244,20 @@ export class MapComponent extends React.Component {
       <div className={style.mapContainer}>
         <BackgroundChooser map={map} />
         <div>
-          <div className={this.state.isExpanded ? style.container + ' open' : style.container + ' closed'}>
-            <FontAwesomeIcon onClick={() => this.toogleLayers()} className="toggle-btn" icon={this.state.isExpanded ? 'times' : ['far', 'layer-group']} />
+          {this.renderLayerButton() ? (
+            <div className={this.state.isExpanded ? style.container + ' closed' : style.container + ' open'}>
+            <FontAwesomeIcon onClick={() => this.toogleLayers()} className={style.toggleBtn} icon={this.state.isExpanded ? ['far', 'layer-group'] : 'times' } />
             <div>
+              
               {this.renderServiceList()}
             </div>
           </div>
+          ) : (
+            <div>Gå til kartkatalogen</div>
+          )}
+          
+          
+          <div className={style.closeMap}><FontAwesomeIcon title="Lukk kartet" onClick={() => this.toogleMap()} className={style.toggleBtn} icon={'times'} /><span className={style.closeButtonLabel}>Lukk kartet</span></div>
         </div>
         <div
           id="map"

@@ -30,6 +30,17 @@ li {
         max-height: 1000px;
     }
 }
+.ellipsis-toggle {
+    width: 90%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+    position: relative;
+    top: 4px;
+    margin-right: 4px;
+    font-weight: 400;
+    white-space: nowrap;
+}
 .expand-layers-btn {
     display: inline-block;
     width: 90%;
