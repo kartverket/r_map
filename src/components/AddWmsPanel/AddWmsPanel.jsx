@@ -4,7 +4,7 @@ import "react-dropdown-tree-select/dist/styles.css";
 
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
 
-import { map, addLayer } from "../../MapUtil/maplibHelper";
+import { map } from "../../MapUtil/maplibHelper";
 import "./AddWmsPanel.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -25,22 +25,16 @@ export default class AddWmsPanel extends React.Component {
    */
   static propTypes = {
     /**
+     * The services to be parsed and shown in the panel
      * @type {Object} -- required
      */
     services: PropTypes.object.isRequired,
 
     /**
-     * Optional instance of Map which is used if onLayerAddToMap is not provided
+     * Optional instance of Map
      * @type {Object}
      */
     map: PropTypes.object,
-
-    /**
-     * Optional function being called when onAddSelectedLayers
-     * is triggered
-     * @type {Function}
-     */
-    onLayerAddToMap: PropTypes.func,
 
     /**
      * Optional function that is called if selection has changed.
@@ -70,41 +64,21 @@ export default class AddWmsPanel extends React.Component {
             console.log(layers)
         });
         */
-    CapabilitiesUtil.parseWmsCapabilities(
-      this.props.services.GetCapabilitiesUrl
-    )
-      .then(CapabilitiesUtil.getLayersFromWmsCapabilties)
+    CapabilitiesUtil.parseWmsCapabilities( this.props.services.GetCapabilitiesUrl )
+      .then(CapabilitiesUtil.getLayersFromWmsCapabilties )
       .then(layers => {
+        if (this.props.services.addLayers.length > 0) {
+          let layersToBeAdded = layers.filter(
+            e => this.props.services.addLayers.includes(e.name)
+          )
+          layersToBeAdded.forEach(layer => map.AddLayer(layer))
+        }
         this.setState({
           wmsLayers: layers
         });
       })
       .catch(e => console.log(e));
   }
-
-  addLayers = layers => {
-    let Capability = layers[0];
-    if (Capability) {
-      let layerConfig = {
-        type: "map",
-        name: Capability.Layer[0].Abstract,
-        url: Capability.Layer[0].url,
-        params: {
-          layers: layers,
-          format: "image/png"
-        },
-        guid: "1.temakart",
-        options: {
-          isbaselayer: "true",
-          singletile: "false",
-          visibility: "true"
-        }
-      };
-      let ServiceName = "WMS";
-      let newLayerConfig = addLayer(ServiceName, layerConfig);
-      map.AddLayer(newLayerConfig);
-    }
-  };
 
   onSelectionChange = currentNode => {
     if (!map.GetOverlayLayers().includes(currentNode)) {
@@ -118,13 +92,6 @@ export default class AddWmsPanel extends React.Component {
     }
   };
 
-  onAction = ({ action, node }) => {
-    console.log(`onAction:: [${action}]`, node);
-  };
-
-  onNodeToggle = currentNode => {
-    console.log("onNodeToggle::", currentNode);
-  };
   toggleExpand() {
     this.setState(prevState => ({
       expanded: !prevState.expanded
@@ -144,7 +111,6 @@ export default class AddWmsPanel extends React.Component {
     }
   }
   toggleWmslayer(event) {
-    console.log(event.target.checked);
     if (event.target.checked) {
       this.setState({
         checkedWmslayers: {
@@ -162,8 +128,8 @@ export default class AddWmsPanel extends React.Component {
     }
   }
 
-  isWmsLayerChecked(layerid) {
-    return this.state.checkedWmslayers[layerid];
+  isWmsLayerVisible(layer) {
+    return layer.isVisible;
   }
 
   renderSelectedLayers() {
@@ -178,14 +144,11 @@ export default class AddWmsPanel extends React.Component {
               id={layer.id}
               type="checkbox"
             />
-            <label
-              onClick={() => this.onSelectionChange(layer)}
-              htmlFor={layer.id}
-            >
+            <label onClick={() => this.onSelectionChange(layer)} htmlFor={layer.id} >
               <FontAwesomeIcon
                 className="svg-checkbox"
                 icon={
-                  this.isWmsLayerChecked(layer.id)
+                  this.isWmsLayerVisible(layer)
                     ? ["far", "check-square"]
                     : ["far", "square"]
                 }
@@ -212,24 +175,13 @@ export default class AddWmsPanel extends React.Component {
   render() {
     return (
       <div>
-        <div
-          onClick={() => this.toggleExpand()}
-          className={"expand-layers-btn"}
-        >
+        <div onClick={() => this.toggleExpand()} className={"expand-layers-btn"} >
           {this.props.services.Title}{" "}
-          <FontAwesomeIcon
-            icon={
-              this.state.expanded ? ["fas", "angle-up"] : ["fas", "angle-down"]
-            }
-          />
+          <FontAwesomeIcon icon={ this.state.expanded ? ["fas", "angle-up"] : ["fas", "angle-down"] } />
         </div>
         {this.renderRemoveButton()}
 
-        <div
-          className={
-            this.state.expanded ? "selectedlayers open" : "selectedlayers"
-          }
-        >
+        <div className={ this.state.expanded ? "selectedlayers open" : "selectedlayers" } >
           {this.renderSelectedLayers()}
         </div>
       </div>
