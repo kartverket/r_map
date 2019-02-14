@@ -74,32 +74,6 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(AddWmsPanel).call(this, props));
 
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "addLayers", function (layers) {
-      var Capability = layers[0];
-
-      if (Capability) {
-        var layerConfig = {
-          type: "map",
-          name: Capability.Layer[0].Abstract,
-          url: Capability.Layer[0].url,
-          params: {
-            layers: layers,
-            format: "image/png"
-          },
-          guid: "1.temakart",
-          options: {
-            isbaselayer: "true",
-            singletile: "false",
-            visibility: "true"
-          }
-        };
-        var ServiceName = "WMS";
-        var newLayerConfig = (0, _maplibHelper.addLayer)(ServiceName, layerConfig);
-
-        _maplibHelper.map.AddLayer(newLayerConfig);
-      }
-    });
-
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onSelectionChange", function (currentNode) {
       if (!_maplibHelper.map.GetOverlayLayers().includes(currentNode)) {
         _maplibHelper.map.AddLayer(currentNode);
@@ -112,16 +86,6 @@ function (_React$Component) {
           _maplibHelper.map.ShowLayer(currentNode);
         }
       }
-    });
-
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onAction", function (_ref) {
-      var action = _ref.action,
-          node = _ref.node;
-      console.log("onAction:: [".concat(action, "]"), node);
-    });
-
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onNodeToggle", function (currentNode) {
-      console.log("onNodeToggle::", currentNode);
     });
 
     _this.state = {
@@ -147,6 +111,15 @@ function (_React$Component) {
           });
           */
       _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(this.props.services.GetCapabilitiesUrl).then(_CapabilitiesUtil.CapabilitiesUtil.getLayersFromWmsCapabilties).then(function (layers) {
+        if (_this2.props.services.addLayers.length > 0) {
+          var layersToBeAdded = layers.filter(function (e) {
+            return _this2.props.services.addLayers.includes(e.name);
+          });
+          layersToBeAdded.forEach(function (layer) {
+            return _maplibHelper.map.AddLayer(layer);
+          });
+        }
+
         _this2.setState({
           wmsLayers: layers
         });
@@ -179,8 +152,6 @@ function (_React$Component) {
   }, {
     key: "toggleWmslayer",
     value: function toggleWmslayer(event) {
-      console.log(event.target.checked);
-
       if (event.target.checked) {
         this.setState({
           checkedWmslayers: _objectSpread({}, this.state.checkedWmslayers, _defineProperty({}, event.target.id, true))
@@ -192,9 +163,9 @@ function (_React$Component) {
       }
     }
   }, {
-    key: "isWmsLayerChecked",
-    value: function isWmsLayerChecked(layerid) {
-      return this.state.checkedWmslayers[layerid];
+    key: "isWmsLayerVisible",
+    value: function isWmsLayerVisible(layer) {
+      return layer.isVisible;
     }
   }, {
     key: "renderSelectedLayers",
@@ -220,7 +191,7 @@ function (_React$Component) {
             htmlFor: layer.id
           }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
             className: "svg-checkbox",
-            icon: _this3.isWmsLayerChecked(layer.id) ? ["far", "check-square"] : ["far", "square"]
+            icon: _this3.isWmsLayerVisible(layer) ? ["far", "check-square"] : ["far", "square"]
           }), _react.default.createElement("span", null, layer.label)), " ", _react.default.createElement(_Legend.default, {
             legendUrl: layer.subLayers[0].legendGraphicUrl
           }));
@@ -246,7 +217,7 @@ function (_React$Component) {
         className: 'expand-layers-btn'
       }, _react.default.createElement("span", {
         className: 'ellipsis-toggle'
-      }, this.props.services.Title), " ", _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+      }, this.props.services.Title), _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
         icon: this.state.expanded ? ['fas', 'angle-up'] : ['fas', 'angle-down']
       })), this.renderRemoveButton(), _react.default.createElement("div", {
         className: this.state.expanded ? "selectedlayers open" : "selectedlayers"
@@ -261,22 +232,16 @@ exports.default = AddWmsPanel;
 
 _defineProperty(AddWmsPanel, "propTypes", {
   /**
+   * The services to be parsed and shown in the panel
    * @type {Object} -- required
    */
   services: _propTypes.default.object.isRequired,
 
   /**
-   * Optional instance of Map which is used if onLayerAddToMap is not provided
+   * Optional instance of Map
    * @type {Object}
    */
   map: _propTypes.default.object,
-
-  /**
-   * Optional function being called when onAddSelectedLayers
-   * is triggered
-   * @type {Function}
-   */
-  onLayerAddToMap: _propTypes.default.func,
 
   /**
    * Optional function that is called if selection has changed.
