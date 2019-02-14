@@ -243,9 +243,11 @@ function (_React$Component) {
         onClick: function onClick() {
           return _this4.toggleExpand();
         },
-        className: "expand-layers-btn"
-      }, this.props.services.Title, " ", _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-        icon: this.state.expanded ? ["fas", "angle-up"] : ["fas", "angle-down"]
+        className: 'expand-layers-btn'
+      }, _react.default.createElement("span", {
+        className: 'ellipsis-toggle'
+      }, this.props.services.Title), " ", _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+        icon: this.state.expanded ? ['fas', 'angle-up'] : ['fas', 'angle-down']
       })), this.renderRemoveButton(), _react.default.createElement("div", {
         className: this.state.expanded ? "selectedlayers open" : "selectedlayers"
       }, this.renderSelectedLayers()));
