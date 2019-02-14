@@ -36,7 +36,7 @@ var TEST_DATA = [{
   "Title": "Fastmerker & Basestajoner WMS",
   "DistributionProtocol": "OGC:WMS",
   "GetCapabilitiesUrl": "https://openwms.statkart.no/skwms1/wms.fastmerker2?request=GetCapabilities&service=WMS",
-  addLayers: []
+  addLayers: ['Niv_fastmerker', 'Landsnettpunkt']
 }, {
   "Uuid": "8045628b-230a-4ba4-a6e0-xxxxx",
   "Title": "Abas",

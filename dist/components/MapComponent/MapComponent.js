@@ -250,6 +250,11 @@ function (_React$Component2) {
       });
     }
   }, {
+    key: "renderLayerButton",
+    value: function renderLayerButton() {
+      return this.props.services && this.props.services.length > 0;
+    }
+  }, {
     key: "handleSelect",
     value: function handleSelect(activeKey) {
       this.setState({
@@ -262,6 +267,12 @@ function (_React$Component2) {
       this.setState({
         isExpanded: !this.state.isExpanded
       });
+    }
+  }, {
+    key: "toogleMap",
+    value: function toogleMap() {
+      console.log('lukke kartet');
+      window.history.back(); // TODO: get paramtere to check for url til goto for closing map
     }
     /**
      *
@@ -276,15 +287,26 @@ function (_React$Component2) {
         className: _MapComponent.default.mapContainer
       }, _react.default.createElement(_BackgroundChooser.default, {
         map: _maplibHelper.map
-      }), _react.default.createElement("div", null, _react.default.createElement("div", {
-        className: this.state.isExpanded ? _MapComponent.default.container + ' open' : _MapComponent.default.container + ' closed'
+      }), _react.default.createElement("div", null, this.renderLayerButton() ? _react.default.createElement("div", {
+        className: this.state.isExpanded ? _MapComponent.default.container + ' closed' : _MapComponent.default.container + ' open'
       }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
         onClick: function onClick() {
           return _this4.toogleLayers();
         },
-        className: "toggle-btn",
-        icon: this.state.isExpanded ? 'times' : ['far', 'layer-group']
-      }), _react.default.createElement("div", null, this.renderServiceList()))), _react.default.createElement("div", {
+        className: _MapComponent.default.toggleBtn,
+        icon: this.state.isExpanded ? ['far', 'layer-group'] : 'times'
+      }), _react.default.createElement("div", null, this.renderServiceList())) : _react.default.createElement("div", null, "G\xE5 til kartkatalogen"), _react.default.createElement("div", {
+        className: _MapComponent.default.closeMap
+      }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+        title: "Lukk kartet",
+        onClick: function onClick() {
+          return _this4.toogleMap();
+        },
+        className: _MapComponent.default.toggleBtn,
+        icon: 'times'
+      }), _react.default.createElement("span", {
+        className: _MapComponent.default.closeButtonLabel
+      }, "Lukk kartet"))), _react.default.createElement("div", {
         id: "map",
         style: {
           position: "relative",
