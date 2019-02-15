@@ -152,12 +152,14 @@ export const OLStylesJson = (style) => {
             }
             return _createStyle(feature, style);
         }
+        return [];
     };
 
     var getHoverStyle = function (feature) {
         if (feature) {
             return _createStyle(feature, style, true);
         }
+        return [];
     };
 
     return {

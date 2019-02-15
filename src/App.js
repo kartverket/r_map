@@ -35,8 +35,6 @@ const TEST_DATA = [
     "DistributionProtocol": "WFS",
     "GetCapabilitiesUrl":"https://wfs.geonorge.no/skwms1/wfs.markagrensa?request=GetCapabilities&service=WFS"
   }
-
-
 ]
 
 class App extends Component {

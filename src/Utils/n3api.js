@@ -1,12 +1,13 @@
+import queryString from "query-string";
 
-const nkapi = 'http://localhost:3001/api/v1/' 
+const nkapi = 'http://localhost:3001/api/v1/'
 
-const getCapabilitiesByUuid = async (uuid) => {
+export const getCapabilitiesByUuid = async (uuid) => {
  let response = await fetch(nkapi + 'capa/get/' + uuid)
  return response
-} 
+}
 
-const api = () => {
+export const api = () => {
     var url = 'https://www.norgeskart.no/';
     var urlOpenWps = 'https://openwps.statkart.no/skwms1/';
     var urlOpenWms = 'http://openwms.statkart.no/skwms1/';
@@ -137,7 +138,7 @@ const api = () => {
         if (save) {
             params.save = true;
         }
-        return url + 'ws/get-json.py?' + $.param(params);
+        return url + 'ws/get-json.py?' + queryString.stringify(params);
     };
 
     this.generateGeoJSONSaveUrl = function () {
@@ -296,7 +297,7 @@ const api = () => {
             bbox: { // UTM zone 35
                 MinX: 253177.3653,
                 MaxX: 683621.7167,
-                MinY: 7603094.00, // Norway
+                MinY: 7603094, // Norway
                 MaxY: 7924929.221 // Norway
             }
         },
@@ -526,7 +527,7 @@ const api = () => {
     this.getSOSIfromEPSG = function (epsg) {
         return this.sosiCodes
             .filter(function (el) {
-                return el.EPSG == epsg;
+                return el.EPSG === epsg;
             })
             .map(function (obj) {
                 return obj.SOSI;
@@ -536,7 +537,7 @@ const api = () => {
         var result = {};
         this.sosiCodes
             .filter(function (el) {
-                return el.type == type;
+                return el.type === type;
             })
             .filter(Boolean)
             .map(function (obj) {
