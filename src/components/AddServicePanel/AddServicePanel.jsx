@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
 import { map } from "../../MapUtil/maplibHelper";
 
-import "./AddWmsPanel.scss";
+import "./AddServicePanel.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Legend from "../Legend/Legend";
@@ -14,10 +14,10 @@ import Legend from "../Legend/Legend";
  * This class can be used e.g with a result obtained by ol WMS capabilities
  * parser, in particular objects in `Capability.Layer.Layer`
  *
- * @class The AddWmsPanel
+ * @class The AddServicePanel
  * @extends React.Component
  */
-export default class AddWmsPanel extends React.Component {
+export default class AddServicePanel extends React.Component {
   /**
    * The prop types.
    * @type {Object}
@@ -43,8 +43,8 @@ export default class AddWmsPanel extends React.Component {
   };
 
   /**
-   * Create an AddWmsPanel.
-   * @constructs AddWmsPanel
+   * Create an AddServicePanel.
+   * @constructs AddServicePanel
    */
   constructor(props) {
     super(props);
@@ -63,20 +63,41 @@ export default class AddWmsPanel extends React.Component {
             console.log(layers)
         });
         */
-    CapabilitiesUtil.parseWmsCapabilities( this.props.services.GetCapabilitiesUrl )
-      .then(CapabilitiesUtil.getLayersFromWmsCapabilties )
-      .then(layers => {
-        if (this.props.services.addLayers.length > 0) {
-          let layersToBeAdded = layers.filter(
-            e => this.props.services.addLayers.includes(e.name)
-          )
-          layersToBeAdded.forEach(layer => map.AddLayer(layer))
-        }
-        this.setState({
-          wmsLayers: layers
-        });
-      })
-      .catch(e => console.log(e));
+      switch (this.props.services.DistributionProtocol){
+          case 'WMS':
+          case 'OGC:WMS':
+          CapabilitiesUtil.parseWmsCapabilities( this.props.services.GetCapabilitiesUrl )
+          .then(CapabilitiesUtil.getLayersFromWmsCapabilties )
+          .then(layers => {
+            if (this.props.services.addLayers.length > 0) {
+              let layersToBeAdded = layers.filter(
+                e => this.props.services.addLayers.includes(e.name)
+              )
+              layersToBeAdded.forEach(layer => map.AddLayer(layer))
+            }
+            this.setState({
+              wmsLayers: layers
+            });
+          })
+          .catch(e => console.log(e));
+          break;
+          case 'WFS':
+          CapabilitiesUtil.parseWFSCapabilities( this.props.services.GetCapabilitiesUrl )
+          .then(CapabilitiesUtil.getLayersFromWmsCapabilties )
+          .then(layers => {
+            console.log(layers)
+            this.setState({
+              wmsLayers: layers
+            });
+          })
+          .catch(e => console.log(e));
+
+          break;
+          default:
+            console.warn('No service type specified')
+          break;
+      }
+
   }
 
   onSelectionChange = currentNode => {

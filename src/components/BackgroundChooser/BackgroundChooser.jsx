@@ -5,7 +5,7 @@ import "./BackgroundChooser.scss";
 /**
  * Panel containing a list of backgroundLayers.
  *
- * @class The AddWmsPanel
+ * @class BackgroundChooser
  * @extends React.Component
  */
 export default class BackgroundChooser extends Component {
@@ -14,22 +14,22 @@ export default class BackgroundChooser extends Component {
     this.state = { baseLayers: [] };
     eventHandler.RegisterEvent("MapLoaded", () =>
       this.setState({ baseLayers: map.GetBaseLayers() })
-      
+
     );
-  }  
+  }
   setAsBaseLayer = baseLayer => {
     map.SetBaseLayer(baseLayer);
     map.ZoomToLayer(baseLayer);
     this.setState({ value: baseLayer });
   }
   renderBaseLayers(baseLayers) {
-    return baseLayers.map((baseLayer, index) => {   
-      
-      return (        
+    return baseLayers.map((baseLayer, index) => {
+
+      return (
         <ToggleButton key={index} className={'icon_' + baseLayer.id} value={baseLayer}>
           <span>{" "}
           {baseLayer.name}{" "} </span>
-        </ToggleButton>  
+        </ToggleButton>
       );
     });
   }

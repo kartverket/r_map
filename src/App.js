@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MapComponent from './components/MapComponent/MapComponent';
+import MapContainer from './components/MapContainer/MapContainer';
 
 const TEST_DATA = [
   {
@@ -22,14 +22,28 @@ const TEST_DATA = [
     "DistributionProtocol": "OGC:WMTS",
     "GetCapabilitiesUrl": "https://opencache.statkart.no/gatekeeper/gk/gk.open_wmts?request=GetCapabilities&service=WMS",
     addLayers:[]
+  },
+  {
+    "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
+    "Title": "tilgjengelighet",
+    "DistributionProtocol": "WFS",
+    "GetCapabilitiesUrl":"http://wfs.geonorge.no/skwms1/wfs.tilgjengelighet_friluft?request=GetCapabilities&service=WFS"
+  },
+  {
+    "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
+    "Title": "markagrenser",
+    "DistributionProtocol": "WFS",
+    "GetCapabilitiesUrl":"https://wfs.geonorge.no/skwms1/wfs.markagrensa?request=GetCapabilities&service=WFS"
   }
+
+
 ]
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-          <MapComponent services={TEST_DATA} />
+          <MapContainer services={TEST_DATA} />
       </div>
     );
   }

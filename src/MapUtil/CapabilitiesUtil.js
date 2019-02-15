@@ -11,6 +11,26 @@ import {
   mapConfig,
   createNotExistGroup
 } from './maplibHelper'
+
+import {
+  Jsonix
+} from '@boundlessgeo/jsonix'
+import {
+  XLink_1_0
+} from 'w3c-schemas'
+import {
+  OWS_1_1_0,
+  OWS_1_0_0,
+  Filter_1_1_0,
+  Filter_2_0,
+  GML_2_1_2,
+  GML_3_1_1,
+  SMIL_2_0,
+  SMIL_2_0_Language,
+  WFS_1_1_0,
+  WFS_2_0
+} from 'ogc-schemas'
+
 export const newMaplibLayer = (sourceType, source) => {
   let catIds = [999]
   if (source.groupid !== undefined) {
@@ -82,6 +102,12 @@ export const newMaplibLayer = (sourceType, source) => {
   return newIsyLayer
 }
 
+var context_wfs_2_0_0 = new Jsonix.Context([XLink_1_0, OWS_1_1_0, GML_2_1_2, Filter_2_0, WFS_2_0]);
+var unmarshaller_wfs_2_0_0 = context_wfs_2_0_0.createUnmarshaller();
+
+var context_wfs_1_1_0 = new Jsonix.Context([XLink_1_0, OWS_1_0_0, OWS_1_1_0, Filter_1_1_0, GML_2_1_2, GML_3_1_1, SMIL_2_0, SMIL_2_0_Language, WFS_1_1_0]);
+var unmarshaller_wfs_1_1_0 = context_wfs_1_1_0.createUnmarshaller();
+
 /**
  * Helper class to parse capabilities of WMS layers
  *
@@ -150,6 +176,33 @@ export class CapabilitiesUtil {
         return wmtsCapabilitiesParser.read(data);
       });
   }
+
+  static parseWFSCapabilities(capabilitiesUrl) {
+    return fetch(capabilitiesUrl)
+      .then((response) => response.text())
+      .then((data) => {
+        let parser, xmlDoc, result;
+        parser = new DOMParser();
+        xmlDoc = parser.parseFromString(data, "text/xml");
+
+        let version = xmlDoc.getElementsByTagName("WFS_Capabilities")[0].attributes.version.value;
+        switch (version) {
+          case '1.1.0':
+            result = unmarshaller_wfs_1_1_0.unmarshalString(data);
+            break;
+          case '2.0.0':
+            result = unmarshaller_wfs_2_0_0.unmarshalString(data);
+            break;
+          default:
+            console.warn('No matching WFS version parser found.')
+        }
+        console.log('WFS : ', result);
+        return result
+      });
+
+  };
+
+
 }
 
 export default CapabilitiesUtil;
