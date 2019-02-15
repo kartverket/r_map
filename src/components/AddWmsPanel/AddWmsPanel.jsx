@@ -1,10 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "react-dropdown-tree-select/dist/styles.css";
 
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
-
 import { map } from "../../MapUtil/maplibHelper";
+
 import "./AddWmsPanel.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
