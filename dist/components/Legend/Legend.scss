@@ -1,0 +1,19 @@
+:local(.legend) {
+    position: relative;    
+    max-height: 1000px;
+    display: block;
+    overflow: hidden;
+    transition: all .3s ease-in-out;
+    &:local(.closed) {
+        max-height: 0;
+    }    
+}
+:local(.toggle) {
+    font-size: .9em;
+    &:hover {
+        cursor: pointer;
+    }
+}
+:local(.label) {
+    width: 147px;
+}
