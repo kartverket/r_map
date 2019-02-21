@@ -215,7 +215,7 @@ export class MapComponent extends React.Component {
       return <ListItem listItem={listItem} removeMapItem={this.props.removeMapItem ? this.props.removeMapItem : null} key={i} map={map} />;
     });
   }
-  renderLayerButton() {  
+  renderLayerButton() {
    return this.props.services && this.props.services.length > 0
   }
   handleSelect(activeKey) {
@@ -242,21 +242,21 @@ export class MapComponent extends React.Component {
   render() {
     return (
       <div className={style.mapContainer}>
-        <BackgroundChooser map={map} />
+        <BackgroundChooser/>
         <div>
           {this.renderLayerButton() ? (
             <div className={this.state.isExpanded ? style.container + ' closed' : style.container + ' open'}>
             <FontAwesomeIcon onClick={() => this.toogleLayers()} className={style.toggleBtn} icon={this.state.isExpanded ? ['far', 'layer-group'] : 'times' } />
             <div>
-              
+
               {this.renderServiceList()}
             </div>
           </div>
           ) : (
             <div>Gå til kartkatalogen</div>
           )}
-          
-          
+
+
           <div className={style.closeMap}><FontAwesomeIcon title="Lukk kartet" onClick={() => this.toogleMap()} className={style.toggleBtn} icon={'times'} /><span className={style.closeButtonLabel}>Lukk kartet</span></div>
         </div>
         <div

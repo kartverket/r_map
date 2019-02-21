@@ -285,9 +285,7 @@ function (_React$Component2) {
 
       return _react.default.createElement("div", {
         className: _MapComponent.default.mapContainer
-      }, _react.default.createElement(_BackgroundChooser.default, {
-        map: _maplibHelper.map
-      }), _react.default.createElement("div", null, this.renderLayerButton() ? _react.default.createElement("div", {
+      }, _react.default.createElement(_BackgroundChooser.default, null), _react.default.createElement("div", null, this.renderLayerButton() ? _react.default.createElement("div", {
         className: this.state.isExpanded ? _MapComponent.default.container + ' closed' : _MapComponent.default.container + ' open'
       }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
         onClick: function onClick() {
