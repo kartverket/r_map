@@ -17,13 +17,6 @@ const TEST_DATA = [
     addLayers:[]
   },
   {
-    "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c4c",
-    "Title": "norgeskart",
-    "DistributionProtocol": "OGC:WMTS",
-    "GetCapabilitiesUrl": "https://opencache.statkart.no/gatekeeper/gk/gk.open_wmts?request=GetCapabilities&service=WMS",
-    addLayers:[]
-  },
-  {
     "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
     "Title": "tilgjengelighet",
     "DistributionProtocol": "WFS",

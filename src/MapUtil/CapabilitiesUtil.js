@@ -177,6 +177,28 @@ export class CapabilitiesUtil {
       });
   }
 
+  static getLayersFromWfsCapabilties(capabilities, nameField = 'name.localPart') {
+    const wfsVersion = get(capabilities, 'value.version');
+    const featureTypesInCapabilities = get(capabilities, 'value.featureTypeList.featureType');
+    const url = get(capabilities, 'value.operationsMetadata.operation[0].dcp[0].http.getOrPost[0].value.href');
+    return featureTypesInCapabilities.map((layerObj) =>
+      newMaplibLayer('WFS', {
+        type: "map",
+        name: get(layerObj, nameField),
+        url: url,
+        params: {
+          layers: get(layerObj, nameField),
+          format: "image/png",
+          'VERSION': wfsVersion
+        },
+        guid: "1.temakart",
+        options: {
+          isbaselayer: "false",
+          singletile: "false",
+          visibility: "true"
+        }
+      }));
+  }
   static parseWFSCapabilities(capabilitiesUrl) {
     return fetch(capabilitiesUrl)
       .then((response) => response.text())

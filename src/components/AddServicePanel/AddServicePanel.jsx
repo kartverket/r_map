@@ -7,7 +7,7 @@ import { map } from "../../MapUtil/maplibHelper";
 import "./AddServicePanel.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import Legend from "../Legend/Legend";
+import InlineLegend from "../Legend/InlineLegend";
 
 /**
  * Panel containing a (checkable) list.
@@ -63,41 +63,40 @@ export default class AddServicePanel extends React.Component {
             console.log(layers)
         });
         */
-      switch (this.props.services.DistributionProtocol){
-          case 'WMS':
-          case 'OGC:WMS':
-          CapabilitiesUtil.parseWmsCapabilities( this.props.services.GetCapabilitiesUrl )
-          .then(CapabilitiesUtil.getLayersFromWmsCapabilties )
+    switch (this.props.services.DistributionProtocol) {
+      case "WMS":
+      case "OGC:WMS":
+        CapabilitiesUtil.parseWmsCapabilities(this.props.services.GetCapabilitiesUrl)
+          .then(CapabilitiesUtil.getLayersFromWmsCapabilties)
           .then(layers => {
             if (this.props.services.addLayers.length > 0) {
-              let layersToBeAdded = layers.filter(
-                e => this.props.services.addLayers.includes(e.name)
-              )
-              layersToBeAdded.forEach(layer => map.AddLayer(layer))
+              let layersToBeAdded = layers.filter(e =>
+                this.props.services.addLayers.includes(e.name)
+              );
+              layersToBeAdded.forEach(layer => map.AddLayer(layer));
             }
             this.setState({
               wmsLayers: layers
             });
           })
           .catch(e => console.log(e));
-          break;
-          case 'WFS':
-          CapabilitiesUtil.parseWFSCapabilities( this.props.services.GetCapabilitiesUrl )
-          .then(CapabilitiesUtil.getLayersFromWmsCapabilties )
+        break;
+      case "WFS":
+        CapabilitiesUtil.parseWFSCapabilities(this.props.services.GetCapabilitiesUrl)
+          .then(CapabilitiesUtil.getLayersFromWfsCapabilties)
           .then(layers => {
-            console.log(layers)
+            console.log(layers);
             this.setState({
               wmsLayers: layers
             });
           })
           .catch(e => console.log(e));
 
-          break;
-          default:
-            console.warn('No service type specified')
-          break;
-      }
-
+        break;
+      default:
+        console.warn("No service type specified");
+        break;
+    }
   }
 
   onSelectionChange = currentNode => {
@@ -120,8 +119,7 @@ export default class AddServicePanel extends React.Component {
   renderRemoveButton() {
     if (this.props.removeMapItem) {
       return (
-        <FontAwesomeIcon
-          className="remove-inline"
+        <FontAwesomeIcon className="remove-inline"
           onClick={this.props.removeMapItem}
           icon={["fas", "times"]}
         />
@@ -165,8 +163,7 @@ export default class AddServicePanel extends React.Component {
               type="checkbox"
             />
             <label onClick={() => this.onSelectionChange(layer)} htmlFor={layer.id} >
-              <FontAwesomeIcon
-                className="svg-checkbox"
+              <FontAwesomeIcon className="svg-checkbox"
                 icon={
                   this.isWmsLayerVisible(layer)
                     ? ["far", "check-square"]
@@ -175,11 +172,7 @@ export default class AddServicePanel extends React.Component {
               />
               <span>{layer.label}</span>
             </label>{" "}
-
-            {/* ToDo[1] Legend: add proper styling to legend (sizing, hide(?) by default ) */}
-            {/* ToDo[2] Legend: Move legend to a more appropriate(?) place/component(?) */}
-            <Legend legendUrl={layer.subLayers[0].legendGraphicUrl} />
-
+            <InlineLegend legendUrl={layer.subLayers[0].legendGraphicUrl} />
           </div>
         );
       });
@@ -193,16 +186,29 @@ export default class AddServicePanel extends React.Component {
    * The render function.
    */
   render() {
-    return <div>
-              <div onClick={() => this.toggleExpand()} className={'expand-layers-btn'}>
-                <span className={'ellipsis-toggle'}>{this.props.services.Title}</span>
-                <FontAwesomeIcon icon={this.state.expanded ? ['fas','angle-up'] : ['fas','angle-down']} />
-                </div>
-              { this.renderRemoveButton() }
+    return (
+      <div>
+        <div
+          onClick={() => this.toggleExpand()}
+          className={"expand-layers-btn"}
+        >
+          <span className={"ellipsis-toggle"}>{this.props.services.Title}</span>
+          <FontAwesomeIcon
+            icon={
+              this.state.expanded ? ["fas", "angle-up"] : ["fas", "angle-down"]
+            }
+          />
+        </div>
+        {this.renderRemoveButton()}
 
-        <div className={ this.state.expanded ? "selectedlayers open" : "selectedlayers" } >
+        <div
+          className={
+            this.state.expanded ? "selectedlayers open" : "selectedlayers"
+          }
+        >
           {this.renderSelectedLayers()}
         </div>
       </div>
+    );
   }
 }

@@ -1,15 +1,8 @@
 import React from "react";
 
-const Legend = props => {
-  if (props.legendUrl) {
-    return (
+const Legend = props =>
       <div>
-        <img src={props.legendUrl} alt="Legend" />
+        <img src={props.legendUrl} alt={props.legendAlternative} />
       </div>
-    );
-  } else {
-    return <div />;
-  }
-};
 
 export default Legend;

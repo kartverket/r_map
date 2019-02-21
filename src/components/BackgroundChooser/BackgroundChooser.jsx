@@ -1,49 +1,39 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { map, eventHandler } from "../../MapUtil/maplibHelper";
 import { ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 import "./BackgroundChooser.scss";
 /**
  * Panel containing a list of backgroundLayers.
- *
- * @class BackgroundChooser
- * @extends React.Component
  */
-export default class BackgroundChooser extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { baseLayers: [] };
-    eventHandler.RegisterEvent("MapLoaded", () =>
-      this.setState({ baseLayers: map.GetBaseLayers() })
+const BackgroundChooser = () => {
+  const [baseLayers, setBaseLayers] = useState([]);
+  const [baseLayer, setBaseLayer] = useState([]);
 
-    );
-  }
-  setAsBaseLayer = baseLayer => {
+  eventHandler.RegisterEvent("MapLoaded", () => setBaseLayers(map.GetBaseLayers()) );
+
+  const setAsBaseLayer = baseLayer => {
     map.SetBaseLayer(baseLayer);
     map.ZoomToLayer(baseLayer);
-    this.setState({ value: baseLayer });
-  }
-  renderBaseLayers(baseLayers) {
-    return baseLayers.map((baseLayer, index) => {
+    setBaseLayer(baseLayer);
+  };
 
-      return (
-        <ToggleButton key={index} className={'icon_' + baseLayer.id} value={baseLayer}>
-          <span>{" "}
-          {baseLayer.name}{" "} </span>
-        </ToggleButton>
-      );
-    });
-  }
-  render() {
-    return (
-      <ToggleButtonGroup
-        type="radio"
-        name="Backgound"
-        className="backgroundChooser"
-        onChange={this.setAsBaseLayer}
-        value={this.state.value}
-      >
-        {this.renderBaseLayers(this.state.baseLayers)}
-      </ToggleButtonGroup>
-    );
-  }
-}
+  const renderBaseLayers = baseLayers => {
+    return baseLayers.map((baseLayer, index) => (
+      <ToggleButton key={index} className={"icon_" + baseLayer.id} value={baseLayer}>
+        <span> {baseLayer.name} </span>
+      </ToggleButton>
+    ));
+  };
+  return (
+    <ToggleButtonGroup
+      type="radio"
+      name="Backgound"
+      className="backgroundChooser"
+      onChange={setAsBaseLayer}
+      value={baseLayer}
+    >
+      {renderBaseLayers(baseLayers)}
+    </ToggleButtonGroup>
+  );
+};
+export default BackgroundChooser;

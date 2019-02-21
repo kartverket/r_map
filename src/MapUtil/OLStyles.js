@@ -1,18 +1,18 @@
-import style from 'ol/style/Style'
+import {Style, Fill, Stroke, Circle, RegularShape, Text, Icon} from 'ol/style'
 import {parse as xmlparse} from 'ol/xml'
 
 export const OLStylesDefault = () => {
     var styles = function () {
-        var fill = new style.Fill({
+        var fill = new Fill({
             color: 'rgba(255,0,0,0.8)'
         });
-        var stroke = new style.Stroke({
+        var stroke = new Stroke({
             color: '#3399CC',
             width: 2.25
         });
         return [
-            new style.Style({
-                image: new style.Circle({
+            new Style({
+                image: new Circle({
                     fill: fill,
                     stroke: stroke,
                     radius: 8
@@ -35,7 +35,7 @@ export const OLStylesJson = (style) => {
         var jsonobject = (typeof jsonstyle === "object") ? jsonstyle : JSON.parse(jsonstyle);
         var currentstyle = [];
         _zIndex++;
-        currentstyle.push(new style.Style({
+        currentstyle.push(new Style({
             fill: _createFillStyle(jsonobject),
             icon: _createIconStyle(jsonobject, hover),
             image: _createImageStyle(jsonobject, hover),
@@ -48,19 +48,19 @@ export const OLStylesJson = (style) => {
 
     function _createFillStyle(jsonstyle) {
         if (jsonstyle.fill) {
-            return new style.Fill(jsonstyle.fill);
+            return new Fill(jsonstyle.fill);
         }
     }
 
     function _createIconStyle(jsonstyle) {
         if (jsonstyle.icon) {
-            return new style.Icon(jsonstyle.icon);
+            return new Icon(jsonstyle.icon);
         }
     }
 
     function _createImageStyle(jsonstyle, hover) {
         if (jsonstyle.image) {
-            return new style.Circle({
+            return new Circle({
                 radius: hover ? jsonstyle.image.radius * 1.2 : jsonstyle.image.radius,
                 fill: _createFillStyle(jsonstyle.image),
                 stroke: _createStrokeStyle(jsonstyle.image)
@@ -68,7 +68,7 @@ export const OLStylesJson = (style) => {
         } else if (jsonstyle.regularshape) {
             var angle = parseInt(jsonstyle.regularshape.angle, 10);
             var rotation = parseInt(jsonstyle.regularshape.rotation, 10);
-            return new style.RegularShape({
+            return new RegularShape({
                 fill: _createFillStyle(jsonstyle.regularshape),
                 stroke: _createStrokeStyle(jsonstyle.regularshape),
                 radius: hover ? jsonstyle.regularshape.radius * 1.2 : jsonstyle.regularshape.radius,
@@ -85,7 +85,7 @@ export const OLStylesJson = (style) => {
             if (hover) {
                 jsonstyle.stroke.width *= 2;
             }
-            return new style.Stroke(jsonstyle.stroke);
+            return new Stroke(jsonstyle.stroke);
         }
     }
 
@@ -99,7 +99,7 @@ export const OLStylesJson = (style) => {
                     jsonstyle.text.rotation *= -1;
                 }
             }
-            return new style.Text({
+            return new Text({
                 font: jsonstyle.text.font,
                 offsetX: jsonstyle.text.offsetX,
                 offsetY: jsonstyle.text.offsetY,
@@ -170,30 +170,30 @@ export const OLStylesJson = (style) => {
 
 export const OLStylesSLD = () => {
     var styles = [
-        new style.Style({
-            fill: new style.Fill({
+        new Style({
+            fill: new Fill({
                 color: 'rgba(255, 255, 255, 0.6)'
             }),
-            stroke: new style.Stroke({
+            stroke: new Stroke({
                 color: '#319FD3',
                 width: 2
             }),
-            image: new style.Circle({
+            image: new Circle({
                 radius: 3,
-                fill: new style.Fill({
+                fill: new Fill({
                     color: 'rgba(255, 255, 255, 0.6)'
                 }),
-                stroke: new style.Stroke({
+                stroke: new Stroke({
                     color: '#319FD3',
                     width: 2
                 })
             }),
-            text: new style.Text({
+            text: new Text({
                 font: '12px Calibri,sans-serif',
-                fill: new style.Fill({
+                fill: new Fill({
                     color: '#000'
                 }),
-                stroke: new style.Stroke({
+                stroke: new Stroke({
                     color: '#fff',
                     width: 3
                 })
@@ -204,11 +204,11 @@ export const OLStylesSLD = () => {
     var sld;
 
     /*
-     style.Style({
-     fill: new style.Fill(),
-     image: new style.Image(),
-     stroke: new style.Stroke(),
-     text: new style.Text()
+     Style({
+     fill: new Fill(),
+     image: new Image(),
+     stroke: new Stroke(),
+     text: new Text()
      }
      */
 
@@ -278,7 +278,7 @@ export const OLStylesSLD = () => {
                 var isDefault = obj.isDefault ? obj.isDefault : false;
                 if (this.multipleSymbolizers) {
                     delete obj.defaultsPerSymbolizer;
-                    style = new style.Style(obj);
+                    style = new Style(obj);
                 } else {
                     obj.rules.each(function (item, rule) {
                         var polygonstyle = rule.symbolizer.Polygon;
@@ -289,13 +289,13 @@ export const OLStylesSLD = () => {
                         var fillstyle, strokestyle, imagestyle;
                         if (polygonstyle) {
                             if (polygonstyle.fill) {
-                                fillstyle = new style.Fill({
+                                fillstyle = new Fill({
                                     color: self.getColorValue(polygonstyle.fillColor, polygonstyle.fillOpacity)
                                 });
                             }
                             if (polygonstyle.stroke) {
                                 if (polygonstyle.strokeColor !== undefined && polygonstyle.strokeWidth !== undefined) {
-                                    strokestyle = new style.Stroke({
+                                    strokestyle = new Stroke({
                                         color: self.getColorValue(polygonstyle.strokeColor, polygonstyle.strokeOpacity),
                                         width: parseInt(polygonstyle.strokeWidth.trim(), 10),
                                         lineDash: polygonstyle.strokeDashstyle ? polygonstyle.strokeDashstyle.split(' ') : undefined
@@ -304,13 +304,13 @@ export const OLStylesSLD = () => {
                             }
                         } else if (pointstyle) {
                             if (pointstyle.fill) {
-                                fillstyle = new style.Fill({
+                                fillstyle = new Fill({
                                     color: self.getColorValue(pointstyle.fillColor, pointstyle.fillOpacity)
                                 });
                             }
                             if (pointstyle.stroke) {
                                 if (pointstyle.strokeColor !== undefined || pointstyle.strokeWidth !== undefined) {
-                                    strokestyle = new style.Stroke({
+                                    strokestyle = new Stroke({
                                         color: self.getColorValue(pointstyle.strokeColor, pointstyle.strokeOpacity),
                                         width: pointstyle.strokeWidth ? parseInt(pointstyle.strokeWidth.trim(), 10) : undefined,
                                         lineDash: pointstyle.strokeDashstyle ? pointstyle.strokeDashstyle.split(' ') : undefined
@@ -324,15 +324,15 @@ export const OLStylesSLD = () => {
                                 if (pointstyle.outlineWidth === undefined) {
                                     pointstyle.outlineWidth = '3';
                                 }
-                                textstyle = new style.Text({
+                                textstyle = new Text({
                                     textAlign: self.getAlignValue(pointstyle.labelAnchorPointX),
                                     textBaseline: self.getBaselineValue(pointstyle.labelAnchorPointY),
                                     font: self.getFontValue(pointstyle),
                                     text: pointstyle.label,
-                                    fill: new style.Fill({
+                                    fill: new Fill({
                                         color: self.getColorValue(pointstyle.fontColor, pointstyle.fontOpacity)
                                     }),
-                                    stroke: new style.Stroke({
+                                    stroke: new Stroke({
                                         color: pointstyle.outlineColor ?
                                             self.getColorValue(pointstyle.outlineColor) :
                                             self.getColorValue(pointstyle.fontColor, pointstyle.fontOpacity),
@@ -348,7 +348,7 @@ export const OLStylesSLD = () => {
                             if (pointstyle.graphic) {
                                 if (pointstyle.externalGraphic) {
                                     var imageopacity = pointstyle.fillOpacity ? parseFloat(pointstyle.fillOpacity) : undefined;
-                                    imagestyle = new style.Icon({
+                                    imagestyle = new Icon({
                                         opacity: imageopacity,
                                         //size: [2*pointstyle.pointRadius, 2*pointstyle.pointRadius],
                                         //scale: 0.4,
@@ -359,14 +359,14 @@ export const OLStylesSLD = () => {
                                 } else {
                                     switch (pointstyle.graphicName) {
                                         case 'circle':
-                                            imagestyle = new style.Circle({
+                                            imagestyle = new Circle({
                                                 radius: parseInt(pointstyle.pointRadius, 10),
                                                 stroke: strokestyle,
                                                 fill: fillstyle
                                             });
                                             break;
                                         case 'cross':
-                                            imagestyle = new style.RegularShape({
+                                            imagestyle = new RegularShape({
                                                 radius: parseInt(pointstyle.pointRadius, 10),
                                                 radius2: 0,
                                                 points: 4,
@@ -375,7 +375,7 @@ export const OLStylesSLD = () => {
                                             });
                                             break;
                                         case 'star':
-                                            imagestyle = new style.RegularShape({
+                                            imagestyle = new RegularShape({
                                                 radius: parseInt(pointstyle.pointRadius, 10),
                                                 radius2: parseInt(pointstyle.pointRadius, 10) / 3,
                                                 points: 5,
@@ -384,7 +384,7 @@ export const OLStylesSLD = () => {
                                             });
                                             break;
                                         case 'square':
-                                            imagestyle = new style.RegularShape({
+                                            imagestyle = new RegularShape({
                                                 radius: parseInt(pointstyle.pointRadius, 10),
                                                 points: 4,
                                                 angle: Math.PI / 4,
@@ -393,7 +393,7 @@ export const OLStylesSLD = () => {
                                             });
                                             break;
                                         case 'triangle':
-                                            imagestyle = new style.RegularShape({
+                                            imagestyle = new RegularShape({
                                                 radius: parseInt(pointstyle.pointRadius, 10),
                                                 points: 3,
                                                 stroke: strokestyle,
@@ -401,7 +401,7 @@ export const OLStylesSLD = () => {
                                             });
                                             break;
                                         case 'x':
-                                            imagestyle = new style.RegularShape({
+                                            imagestyle = new RegularShape({
                                                 radius: parseInt(pointstyle.pointRadius, 10),
                                                 radius2: 0,
                                                 points: 4,
@@ -417,26 +417,26 @@ export const OLStylesSLD = () => {
                             }
                         } else if (linestyle) {
                             if (linestyle.fill) {
-                                fillstyle = new style.Fill({
+                                fillstyle = new Fill({
                                     color: self.getColorValue(linestyle.fillColor, linestyle.fillOpacity)
                                 });
                             }
                             if (linestyle.stroke) {
-                                strokestyle = new style.Stroke({
+                                strokestyle = new Stroke({
                                     color: self.getColorValue(linestyle.strokeColor, linestyle.strokeOpacity),
                                     width: self.getStrokeWidth(linestyle.strokeWidth),
                                     lineDash: self.getStrokeDashstyle(linestyle.strokeDashstyle)
                                 });
                             }
                             if (linestyle.graphic && linestyle.graphicName === 'circle') {
-                                imagestyle = new style.Circle({
+                                imagestyle = new Circle({
                                     radius: parseInt(linestyle.pointRadius, 10),
                                     fill: fillstyle
                                 });
                                 fillstyle = undefined;
                             }
                         }
-                        style = new style.Style({
+                        style = new Style({
                             fill: fillstyle,
                             image: imagestyle,
                             stroke: strokestyle
@@ -447,7 +447,7 @@ export const OLStylesSLD = () => {
                             rule: rule
                         });
                         if (textstyle) {
-                            style = new style.Style({
+                            style = new Style({
                                 text: textstyle
                             });
                             layer.userStyles.push({
@@ -1518,17 +1518,17 @@ export const OLStylesSLD = () => {
 
 export const OLStylesMeasure = () => {
     var styles = function () {
-        return new style.Style({
-            fill: new style.Fill({
+        return new Style({
+            fill: new Fill({
                 color: 'rgba(255, 255, 255, 0.8)'
             }),
-            stroke: new style.Stroke({
+            stroke: new Stroke({
                 color: '#ffcc33',
                 width: 2
             }),
-            image: new style.Circle({
+            image: new Circle({
                 radius: 7,
-                fill: new style.Fill({
+                fill: new Fill({
                     color: '#ffcc33'
                 })
             })
@@ -1536,20 +1536,20 @@ export const OLStylesMeasure = () => {
     };
 
     var drawStyles = function () {
-        return new style.Style({
-            fill: new style.Fill({
+        return new Style({
+            fill: new Fill({
                 color: 'rgba(255, 255, 255, 0.5)'
             }),
-            stroke: new style.Stroke({
+            stroke: new Stroke({
                 color: 'rgba(160, 0, 0, 0.5)',
                 width: 2
             }),
-            image: new style.Circle({
+            image: new Circle({
                 radius: 5,
-                fill: new style.Fill({
+                fill: new Fill({
                     color: 'rgba(160, 0, 0, 0.8)'
                 }),
-                stroke: new style.Stroke({
+                stroke: new Stroke({
                     color: 'rgba(255, 255, 255, 0.8)',
                     width: 2
                 })
