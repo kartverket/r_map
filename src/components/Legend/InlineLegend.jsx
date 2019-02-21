@@ -1,41 +1,33 @@
-import React from "react";
-import Legend from './Legend';
+import React, { useState } from "react";
+import Legend from "./Legend";
 import style from "./InlineLegend.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default class InlineLegend extends React.Component {
+const InlineLegend = props => {
+  const [expanded, toggleExpand] = useState(false);
+  const handleExpand = () => toggleExpand(!expanded);
 
-constructor(props) {
-  super(props);
-  this.state = {
-    expanded: false
+  const legend = () => {
+    if (props.legendUrl) {
+      return (
+        <div>
+          <div className={style.toggle} onClick={() => handleExpand()}>
+            <span className={style.label}>
+              {expanded ? "Skjul tegnforklaring" : "Vis tegnforklaring"}{" "}
+            </span>
+            <FontAwesomeIcon icon={expanded ? ["fas", "angle-up"] : ["fas", "angle-down"]} />
+          </div>
+          <div className={ expanded ? style.legend : style.legend + " " + style.closed }>
+            <Legend legendUrl={props.legendUrl} legendAlternative="Legend" />
+          </div>
+        </div>
+      );
+    } else {
+      return "";
+    }
   };
-}
-toggleExpand() {
-  this.setState(prevState => ({
-    expanded: !prevState.expanded
-  }));
-}
 
-legend() {
+  return <div>{legend()}</div>;
+};
 
-  if (this.props.legendUrl) {
-  return (
-    <div>
-    <div className={style.toggle} onClick={() => this.toggleExpand()}>
-        <span className={style.label}>{this.state.expanded ? 'Skjul tegnforklaring' : 'Vis tegnforklaring'} </span>
-        <FontAwesomeIcon icon={this.state.expanded ? ["fas", "angle-up"] : ["fas", "angle-down"]} />
-    </div>
-    <div className={this.state.expanded ?  style.legend : style.legend + ' ' + style.closed }>
-        <Legend legendUrl={this.props.legendUrl} legendAlternative="Legend" />
-    </div>
-  </div>
-  );
-  } else {
-    return "";
-  }
-}
-render() {
-  return <div>{this.legend()}</div>
-}
-}
+export default InlineLegend;
