@@ -12,13 +12,8 @@ import AddServicePanel from "../AddServicePanel/AddServicePanel";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import style from "./MapContainer.scss";
 
-class ListItem extends React.Component {
-  render() {
-    return (
-      <AddServicePanel key="1" map={map} services={this.props.listItem} removeMapItem={this.props.removeMapItem} draggable />
-    );
-  }
-}
+const ListItem = (props) => <AddServicePanel key="1" map={map} services={props.listItem} removeMapItem={props.removeMapItem} draggable />
+
 /**
  * @class The Map Component
  * @extends React.Component
