@@ -7,7 +7,7 @@ import { map } from "../../MapUtil/maplibHelper";
 import "./AddWmsPanel.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import Legend from "../Legend/Legend";
+import InlineLegend from "../Legend/InlineLegend";
 
 /**
  * Panel containing a (checkable) list.
@@ -155,9 +155,7 @@ export default class AddWmsPanel extends React.Component {
               <span>{layer.label}</span>
             </label>{" "}
 
-            {/* ToDo[1] Legend: add proper styling to legend (sizing, hide(?) by default ) */}
-            {/* ToDo[2] Legend: Move legend to a more appropriate(?) place/component(?) */}
-            <Legend legendUrl={layer.subLayers[0].legendGraphicUrl} />
+            <InlineLegend legendUrl={layer.subLayers[0].legendGraphicUrl} />
 
           </div>
         );

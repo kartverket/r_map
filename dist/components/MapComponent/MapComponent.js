@@ -104,11 +104,11 @@ function (_React$Component2) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(MapComponent).call(this, props));
 
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
+    _defineProperty(_assertThisInitialized(_this), "state", {
       layers: []
     });
 
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "addWMS_", function (url, layers) {
+    _defineProperty(_assertThisInitialized(_this), "addWMS_", function (url, layers) {
       if (url) {
         var newUrl = (0, _MapHelper.mergeDefaultParams)(url, {
           service: "WMS",
@@ -149,7 +149,7 @@ function (_React$Component2) {
       }
     });
 
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "updateMapInfoState", function () {
+    _defineProperty(_assertThisInitialized(_this), "updateMapInfoState", function () {
       var center = _maplibHelper.map.GetCenter();
 
       var queryValues = _queryString.default.parse(window.location.search);
@@ -165,7 +165,7 @@ function (_React$Component2) {
       (0, _setQueryString.default)(queryValues);
     });
 
-    _this.handleSelect = _this.handleSelect.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleSelect = _this.handleSelect.bind(_assertThisInitialized(_this));
     _this.state = {
       activeKey: "1",
       open: false,
