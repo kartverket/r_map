@@ -59,6 +59,7 @@ export const newMaplibLayer = (sourceType, source) => {
       matrixSet: source.matrixset,
       numZoomLevels: mapConfig.numZoomLevels,
       id: sourceType === 'VECTOR' ? source.name + 8001 : source.name + 1001,
+      version: source.version,
       transparent: true,
       layerIndex: -1,
       legendGraphicUrl: source.legendurl || '',
@@ -178,7 +179,7 @@ export class CapabilitiesUtil {
   }
 
   static getLayersFromWfsCapabilties(capabilities, nameField = 'name.localPart') {
-    const wfsVersion = get(capabilities, 'value.version');
+    const version = get(capabilities, 'value.version');
     const featureTypesInCapabilities = get(capabilities, 'value.featureTypeList.featureType');
     const url = get(capabilities, 'value.operationsMetadata.operation[0].dcp[0].http.getOrPost[0].value.href');
     return featureTypesInCapabilities.map((layerObj) =>
@@ -186,10 +187,10 @@ export class CapabilitiesUtil {
         type: "map",
         name: get(layerObj, nameField),
         url: url,
+        version: version,
         params: {
           layers: get(layerObj, nameField),
-          format: "image/png",
-          'VERSION': wfsVersion
+          format: "image/png"
         },
         guid: "1.temakart",
         options: {

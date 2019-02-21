@@ -263,7 +263,7 @@ export const createDummyGroup = () => {
   }
 }
 export const getWmsUrl = (url) => {
-  if (url.indexOf('|')) {
+  if (url.indexOf('|') >= 0) {
     return url.split('|')
   } else {
     return url

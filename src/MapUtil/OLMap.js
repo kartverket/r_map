@@ -658,7 +658,8 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                     break;
                 case SOURCES.wfs:
                     if (!isySubLayer.noProxy) {
-                        isySubLayer.url = _getProxyUrl(isySubLayer.url, true);
+                        // TODO: Fix proxy
+                        // isySubLayer.url = _getProxyUrl(isySubLayer.url, true);
                     }
                     source = MaplibWfsSource(isySubLayer, offline, parameters);
                     break;
