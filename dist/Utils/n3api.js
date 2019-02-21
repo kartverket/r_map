@@ -210,7 +210,7 @@ var api = function api() {
    // No CORS
    this.generateSeHavnivaaUrl = function (lat, lon) {
    return urlHavnivaa + "tideapi.php?lat=" + lat + "&lon=" + lon + "&refcode=cd&place=&lang=nb&file=&tide_request=locationlevels";
-     };                this.generateSearchEiendomUrl = function (query) {
+    };                this.generateSearchEiendomUrl = function (query) {
    return "http://eiendom.statkart.no/Search.ashx?filter=KILDE:sted,matreiendom,SITEURLKEY:httpwwwseeiendomno,LESEGRUPPER:guests&term=" + query;
    };
    */
