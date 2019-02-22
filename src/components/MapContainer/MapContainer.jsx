@@ -1,18 +1,18 @@
 import React from "react";
-import { map, eventHandler, mapConfig, addLayer } from "../../MapUtil/maplibHelper";
+import { map, eventHandler, mapConfig } from "../../MapUtil/maplibHelper";
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
-
-import { mergeDefaultParams, parseWmsCapabilities } from "../../Utils/MapHelper";
 import PropTypes from "prop-types";
 import queryString from "query-string";
 import setQuery from "set-query-string";
 import BackgroundChooser from "../BackgroundChooser/BackgroundChooser";
 import AddServicePanel from "../AddServicePanel/AddServicePanel";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import style from "./MapContainer.scss";
 
-const ListItem = (props) => <AddServicePanel key="1" map={map} services={props.listItem} removeMapItem={props.removeMapItem} draggable />
+const ListItem = props => (
+  <AddServicePanel key="1" map={map} services={props.listItem} removeMapItem={props.removeMapItem} draggable/>
+);
 
 /**
  * @class The Map Component
@@ -70,10 +70,10 @@ export class MapContainer extends React.Component {
   };
 
   static defaultProps = {
-    onMapViewChanges: () => { },
-    onChangeLon: () => { },
-    onChangeLat: () => { },
-    onChangeZoom: () => { },
+    onMapViewChanges: () => {},
+    onChangeLon: () => {},
+    onChangeLat: () => {},
+    onChangeZoom: () => {},
     lon: 396722,
     lat: 7197860,
     zoom: 4,
@@ -135,51 +135,6 @@ export class MapContainer extends React.Component {
   /**
    *
    */
-  addWMS_ = (url, layers) => {
-    if (url) {
-      let newUrl = mergeDefaultParams(url, {
-        service: "WMS",
-        request: "GetCapabilities"
-      });
-      fetch(newUrl)
-        .then(function (response) {
-          return Promise.resolve(response.text());
-        })
-        .then(function (text) {
-          let resultText = parseWmsCapabilities(text);
-          let { Service, Capability } = {
-            ...resultText
-          };
-          if (Capability) {
-            let layerConfig = {
-              type: "map",
-              name: Capability.Layer[0].Abstract,
-              url: Capability.Layer[0].url,
-              params: {
-                layers: layers,
-                format: "image/png"
-              },
-              guid: "1.temakart",
-              options: {
-                isbaselayer: "true",
-                singletile: "false",
-                visibility: "true"
-              }
-            };
-            let newLayerConfig = addLayer(Service.Name, layerConfig);
-            map.AddLayer(newLayerConfig);
-          } else {
-            // console.log('No capabilities!')
-          }
-        });
-    } else {
-      // console.log('No wms parameter given')
-    }
-  };
-
-  /**
-   *
-   */
   updateMapInfoState = () => {
     let center = map.GetCenter();
     const queryValues = queryString.parse(window.location.search);
@@ -204,12 +159,12 @@ export class MapContainer extends React.Component {
   }
 
   renderServiceList() {
-    return this.props.services.map((listItem, i) => {
-      return <ListItem listItem={listItem} removeMapItem={this.props.removeMapItem ? this.props.removeMapItem : null} key={i} map={map} />;
-    });
+    return this.props.services.map((listItem, i) => (
+      <ListItem listItem={listItem} removeMapItem={ this.props.removeMapItem ? this.props.removeMapItem : null } key={i} map={map}/>
+    ));
   }
   renderLayerButton() {
-   return this.props.services && this.props.services.length > 0
+    return this.props.services && this.props.services.length > 0;
   }
   handleSelect(activeKey) {
     this.setState({
@@ -220,11 +175,10 @@ export class MapContainer extends React.Component {
   toogleLayers() {
     this.setState({
       isExpanded: !this.state.isExpanded
-    })
-
+    });
   }
   toogleMap() {
-    console.log('lukke kartet');
+    console.log("lukke kartet");
     window.history.back();
     // TODO: get paramtere to check for url til goto for closing map
   }
@@ -235,22 +189,21 @@ export class MapContainer extends React.Component {
   render() {
     return (
       <div className={style.mapContainer}>
-        <BackgroundChooser map={map} />
+        <BackgroundChooser />
         <div>
           {this.renderLayerButton() ? (
-            <div className={this.state.isExpanded ? style.container + ' closed' : style.container + ' open'}>
-            <FontAwesomeIcon onClick={() => this.toogleLayers()} className={style.toggleBtn} icon={this.state.isExpanded ? ['far', 'layer-group'] : 'times' } />
-            <div>
-
-              {this.renderServiceList()}
+            <div className={ this.state.isExpanded ? style.container + " closed" : style.container + " open" }>
+              <FontAwesomeIcon onClick={() => this.toogleLayers()} className={style.toggleBtn} icon={this.state.isExpanded ? ["far", "layer-group"] : "times"}/>
+              <div>{this.renderServiceList()}</div>
             </div>
-          </div>
           ) : (
             <div>Gå til kartkatalogen</div>
           )}
 
-
-          <div className={style.closeMap}><FontAwesomeIcon title="Lukk kartet" onClick={() => this.toogleMap()} className={style.toggleBtn} icon={'times'} /><span className={style.closeButtonLabel}>Lukk kartet</span></div>
+          <div className={style.closeMap}>
+            <FontAwesomeIcon title="Lukk kartet" onClick={() => this.toogleMap()} className={style.toggleBtn} icon={"times"} />
+            <span className={style.closeButtonLabel}>Lukk kartet</span>
+          </div>
         </div>
         <div
           id="map"
