@@ -472,66 +472,58 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
   var projection = (0, _proj.get)(isySubLayer.coordinate_system);
 
   var parseResponse = function parseResponse(response) {
+    var features = _fastXmlParser.default.parse(response); //const response = new DOMParser();
+    //response = parser.parseFromString(response, "text/xml");
+
+    /*
     source.dispatchEvent('vectorloadend');
     var featureNamespace;
-
-    if (typeof source.format === 'undefined') {
+     if (typeof source.format === 'undefined') {
       var gmlFormat;
-
       switch (isySubLayer.version) {
         case '1.0.0':
-          gmlFormat = new _GML.default();
+          gmlFormat = new GML2Format();
           break;
-
         case '1.1.0':
-          gmlFormat = new _GML2.default();
+          gmlFormat = new GML3Format();
           break;
-
         case '2.0.0':
-          gmlFormat = new _GML2.default();
+          gmlFormat = new GML3Format();
           break;
-
         default:
-          gmlFormat = new _format.GML();
+          gmlFormat = new GMLFormat();
           break;
-      } // TODO: Remove this gigahack when the number of returned coordinates is static (or implement an algorithm that can find the dimension dynamically).
-
-
+      }
+       // TODO: Remove this gigahack when the number of returned coordinates is static (or implement an algorithm that can find the dimension dynamically).
       if (isySubLayer.srs_dimension && isySubLayer.srs_dimension.length > 0) {
         featureNamespace = response.firstChild.firstElementChild.firstElementChild.namespaceURI;
-        source.format = new _format.WFS({
+        source.format = new WFSFormat({
           featureType: response.firstChild.firstElementChild.firstElementChild.localName,
           featureNS: featureNamespace,
           gmlFormat: gmlFormat
         });
       } else {
         featureNamespace = response.firstChild.namespaceURI;
-        source.format = new _format.WFS({
+        source.format = new WFSFormat({
           featureType: isySubLayer.name,
           featureNS: featureNamespace,
           gmlFormat: gmlFormat
         });
       }
     }
-
     if (isySubLayer.srs_dimension === "3") {
       featureNamespace = response.firstChild.firstElementChild.firstElementChild.namespaceURI;
-
       if (response.firstChild.nodeName.toLowerCase() === "gml:featurecollection") {
         for (var i = 0; i < response.firstChild.childNodes.length; i++) {
           var member = response.firstChild.childNodes.item(i);
-
           if (member.nodeName.toLowerCase() === "gml:featuremember") {
             for (var j = 0; j < member.childNodes.length; j++) {
               var feature = member.childNodes.item(j);
-
               if (feature.nodeName.toLowerCase() === isySubLayer.name.toLowerCase()) {
                 for (var k = 0; k < feature.childNodes.length; k++) {
                   var attribute = feature.childNodes.item(k);
-
                   for (var l = 0; l < attribute.childNodes.length; l++) {
                     var attributeType = attribute.childNodes.item(l).nodeName;
-
                     if (attributeType.toLowerCase() === "gml:linestring" || attributeType.toLowerCase() === "gml:point") {
                       var srsAttribute = document.createAttribute("srsDimension");
                       srsAttribute.value = isySubLayer.srs_dimension;
@@ -545,8 +537,11 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
         }
       }
     }
+     var features = source.format.readFeatures(response);
+    */
 
-    var features = source.format.readFeatures(response); //
+
+    console.log(features); //
     //var featureIsValid = function (feature){
     //    var geometryIsOk = false;
     //    var getZCoordinate = function (c) {
@@ -595,9 +590,8 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
 
     if (features.length > 0) {
       isySubLayer.geometryName = features[0].getGeometryName();
-    }
+    } //isySubLayer.featureNS = featureNamespace;
 
-    isySubLayer.featureNS = featureNamespace;
 
     if (featureObj) {
       if (eventHandler) {
@@ -618,7 +612,7 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
       url += "service=WFS&";
     }
 
-    url += 'request=GetFeature&' + 'version=' + isySubLayer.version + '&typename=' + isySubLayer.name + '&' + 'srsname=' + isySubLayer.coordinate_system + '&' + 'bbox=' + extent.join(',');
+    url += 'request=GetFeature&' + 'version=' + isySubLayer.version + '&typename=' + isySubLayer.name + '&' + 'srsname=' + isySubLayer.coordinate_system + '&' + 'bbox=' + extent.join(',') + ',' + isySubLayer.coordinate_system; // + '&outputFormat=text/xml; subtype=gml/3.2.1';
 
     if (parameters) {
       // source is refreshed
@@ -627,44 +621,18 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
       }
     }
 
-    var isCaching = source.get('caching');
-
-    if (isCaching || offline.IsActive()) {
-      // We are either offline or in caching mode
-      // problem finding unique key here, using extent og zoom for now
-      //var key = view.getZoom() + '-' + extent[0] + '-' + extent[1];
-      var key = extent[0] + '-' + extent[1]; // todo: should not use zoom in key, but rather cache the tiles from outmost zoom level
-
-      offline.GetLayerResource(key, isySubLayer.name, url, parseResponse);
-    } else {
-      // TODO: Fix ajax call without jQuery
-
-      /*fetch(url)
-      .then(res => res.json())
-      .then(response => {
-          if (typeof response === 'object') {
-              if (response.firstChild.childElementCount === 0) {
-                  return;
-              }
-          } else {
-              return;
-          }
-          parseResponse(response);
-      });*/
-      _jquery.default.ajax({
-        url: url
-      }).done(function (response) {
-        if (_typeof(response) === 'object') {
-          if (response.firstChild.childElementCount === 0) {
-            return;
-          }
-        } else {
+    return fetch(url).then(function (response) {
+      return response.text();
+    }).then(function (response) {
+      if (_typeof(response) === 'object') {
+        if (response.firstChild.childElementCount === 0) {
           return;
         }
-
-        parseResponse(response);
-      });
-    }
+      } else {
+        return parseResponse(response);
+        ;
+      }
+    });
   };
 
   var source = new _source.Vector({

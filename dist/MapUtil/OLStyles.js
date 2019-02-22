@@ -5,25 +5,23 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.OLStylesMeasure = exports.OLStylesSLD = exports.OLStylesJson = exports.OLStylesDefault = void 0;
 
-var _Style = _interopRequireDefault(require("ol/style/Style"));
+var _style = require("ol/style");
 
 var _xml = require("ol/xml");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var OLStylesDefault = function OLStylesDefault() {
   var styles = function styles() {
-    var fill = new _Style.default.Fill({
+    var fill = new _style.Fill({
       color: 'rgba(255,0,0,0.8)'
     });
-    var stroke = new _Style.default.Stroke({
+    var stroke = new _style.Stroke({
       color: '#3399CC',
       width: 2.25
     });
-    return [new _Style.default.Style({
-      image: new _Style.default.Circle({
+    return [new _style.Style({
+      image: new _style.Circle({
         fill: fill,
         stroke: stroke,
         radius: 8
@@ -47,7 +45,7 @@ var OLStylesJson = function OLStylesJson(style) {
     var jsonobject = _typeof(jsonstyle) === "object" ? jsonstyle : JSON.parse(jsonstyle);
     var currentstyle = [];
     _zIndex++;
-    currentstyle.push(new style.Style({
+    currentstyle.push(new _style.Style({
       fill: _createFillStyle(jsonobject),
       icon: _createIconStyle(jsonobject, hover),
       image: _createImageStyle(jsonobject, hover),
@@ -60,19 +58,19 @@ var OLStylesJson = function OLStylesJson(style) {
 
   function _createFillStyle(jsonstyle) {
     if (jsonstyle.fill) {
-      return new style.Fill(jsonstyle.fill);
+      return new _style.Fill(jsonstyle.fill);
     }
   }
 
   function _createIconStyle(jsonstyle) {
     if (jsonstyle.icon) {
-      return new style.Icon(jsonstyle.icon);
+      return new _style.Icon(jsonstyle.icon);
     }
   }
 
   function _createImageStyle(jsonstyle, hover) {
     if (jsonstyle.image) {
-      return new style.Circle({
+      return new _style.Circle({
         radius: hover ? jsonstyle.image.radius * 1.2 : jsonstyle.image.radius,
         fill: _createFillStyle(jsonstyle.image),
         stroke: _createStrokeStyle(jsonstyle.image)
@@ -80,7 +78,7 @@ var OLStylesJson = function OLStylesJson(style) {
     } else if (jsonstyle.regularshape) {
       var angle = parseInt(jsonstyle.regularshape.angle, 10);
       var rotation = parseInt(jsonstyle.regularshape.rotation, 10);
-      return new style.RegularShape({
+      return new _style.RegularShape({
         fill: _createFillStyle(jsonstyle.regularshape),
         stroke: _createStrokeStyle(jsonstyle.regularshape),
         radius: hover ? jsonstyle.regularshape.radius * 1.2 : jsonstyle.regularshape.radius,
@@ -98,7 +96,7 @@ var OLStylesJson = function OLStylesJson(style) {
         jsonstyle.stroke.width *= 2;
       }
 
-      return new style.Stroke(jsonstyle.stroke);
+      return new _style.Stroke(jsonstyle.stroke);
     }
   }
 
@@ -114,7 +112,7 @@ var OLStylesJson = function OLStylesJson(style) {
         }
       }
 
-      return new style.Text({
+      return new _style.Text({
         font: jsonstyle.text.font,
         offsetX: jsonstyle.text.offsetX,
         offsetY: jsonstyle.text.offsetY,
@@ -177,12 +175,16 @@ var OLStylesJson = function OLStylesJson(style) {
 
       return _createStyle(feature, style);
     }
+
+    return [];
   };
 
   var getHoverStyle = function getHoverStyle(feature) {
     if (feature) {
       return _createStyle(feature, style, true);
     }
+
+    return [];
   };
 
   return {
@@ -194,30 +196,30 @@ var OLStylesJson = function OLStylesJson(style) {
 exports.OLStylesJson = OLStylesJson;
 
 var OLStylesSLD = function OLStylesSLD() {
-  var styles = [new _Style.default.Style({
-    fill: new _Style.default.Fill({
+  var styles = [new _style.Style({
+    fill: new _style.Fill({
       color: 'rgba(255, 255, 255, 0.6)'
     }),
-    stroke: new _Style.default.Stroke({
+    stroke: new _style.Stroke({
       color: '#319FD3',
       width: 2
     }),
-    image: new _Style.default.Circle({
+    image: new _style.Circle({
       radius: 3,
-      fill: new _Style.default.Fill({
+      fill: new _style.Fill({
         color: 'rgba(255, 255, 255, 0.6)'
       }),
-      stroke: new _Style.default.Stroke({
+      stroke: new _style.Stroke({
         color: '#319FD3',
         width: 2
       })
     }),
-    text: new _Style.default.Text({
+    text: new _style.Text({
       font: '12px Calibri,sans-serif',
-      fill: new _Style.default.Fill({
+      fill: new _style.Fill({
         color: '#000'
       }),
-      stroke: new _Style.default.Stroke({
+      stroke: new _style.Stroke({
         color: '#fff',
         width: 3
       })
@@ -225,11 +227,11 @@ var OLStylesSLD = function OLStylesSLD() {
   })];
   var sld;
   /*
-   style.Style({
-   fill: new style.Fill(),
-   image: new style.Image(),
-   stroke: new style.Stroke(),
-   text: new style.Text()
+   Style({
+   fill: new Fill(),
+   image: new Image(),
+   stroke: new Stroke(),
+   text: new Text()
    }
    */
 
@@ -299,7 +301,7 @@ var OLStylesSLD = function OLStylesSLD() {
 
         if (this.multipleSymbolizers) {
           delete obj.defaultsPerSymbolizer;
-          style = new style.Style(obj);
+          style = new _style.Style(obj);
         } else {
           obj.rules.each(function (item, rule) {
             var polygonstyle = rule.symbolizer.Polygon;
@@ -310,14 +312,14 @@ var OLStylesSLD = function OLStylesSLD() {
 
             if (polygonstyle) {
               if (polygonstyle.fill) {
-                fillstyle = new style.Fill({
+                fillstyle = new _style.Fill({
                   color: self.getColorValue(polygonstyle.fillColor, polygonstyle.fillOpacity)
                 });
               }
 
               if (polygonstyle.stroke) {
                 if (polygonstyle.strokeColor !== undefined && polygonstyle.strokeWidth !== undefined) {
-                  strokestyle = new style.Stroke({
+                  strokestyle = new _style.Stroke({
                     color: self.getColorValue(polygonstyle.strokeColor, polygonstyle.strokeOpacity),
                     width: parseInt(polygonstyle.strokeWidth.trim(), 10),
                     lineDash: polygonstyle.strokeDashstyle ? polygonstyle.strokeDashstyle.split(' ') : undefined
@@ -326,14 +328,14 @@ var OLStylesSLD = function OLStylesSLD() {
               }
             } else if (pointstyle) {
               if (pointstyle.fill) {
-                fillstyle = new style.Fill({
+                fillstyle = new _style.Fill({
                   color: self.getColorValue(pointstyle.fillColor, pointstyle.fillOpacity)
                 });
               }
 
               if (pointstyle.stroke) {
                 if (pointstyle.strokeColor !== undefined || pointstyle.strokeWidth !== undefined) {
-                  strokestyle = new style.Stroke({
+                  strokestyle = new _style.Stroke({
                     color: self.getColorValue(pointstyle.strokeColor, pointstyle.strokeOpacity),
                     width: pointstyle.strokeWidth ? parseInt(pointstyle.strokeWidth.trim(), 10) : undefined,
                     lineDash: pointstyle.strokeDashstyle ? pointstyle.strokeDashstyle.split(' ') : undefined
@@ -350,15 +352,15 @@ var OLStylesSLD = function OLStylesSLD() {
                   pointstyle.outlineWidth = '3';
                 }
 
-                textstyle = new style.Text({
+                textstyle = new _style.Text({
                   textAlign: self.getAlignValue(pointstyle.labelAnchorPointX),
                   textBaseline: self.getBaselineValue(pointstyle.labelAnchorPointY),
                   font: self.getFontValue(pointstyle),
                   text: pointstyle.label,
-                  fill: new style.Fill({
+                  fill: new _style.Fill({
                     color: self.getColorValue(pointstyle.fontColor, pointstyle.fontOpacity)
                   }),
-                  stroke: new style.Stroke({
+                  stroke: new _style.Stroke({
                     color: pointstyle.outlineColor ? self.getColorValue(pointstyle.outlineColor) : self.getColorValue(pointstyle.fontColor, pointstyle.fontOpacity),
                     width: pointstyle.outlineWidth ? parseInt(pointstyle.outlineWidth, 10) : undefined
                   }),
@@ -371,7 +373,7 @@ var OLStylesSLD = function OLStylesSLD() {
               if (pointstyle.graphic) {
                 if (pointstyle.externalGraphic) {
                   var imageopacity = pointstyle.fillOpacity ? parseFloat(pointstyle.fillOpacity) : undefined;
-                  imagestyle = new style.Icon({
+                  imagestyle = new _style.Icon({
                     opacity: imageopacity,
                     //size: [2*pointstyle.pointRadius, 2*pointstyle.pointRadius],
                     //scale: 0.4,
@@ -382,7 +384,7 @@ var OLStylesSLD = function OLStylesSLD() {
                 } else {
                   switch (pointstyle.graphicName) {
                     case 'circle':
-                      imagestyle = new style.Circle({
+                      imagestyle = new _style.Circle({
                         radius: parseInt(pointstyle.pointRadius, 10),
                         stroke: strokestyle,
                         fill: fillstyle
@@ -390,7 +392,7 @@ var OLStylesSLD = function OLStylesSLD() {
                       break;
 
                     case 'cross':
-                      imagestyle = new style.RegularShape({
+                      imagestyle = new _style.RegularShape({
                         radius: parseInt(pointstyle.pointRadius, 10),
                         radius2: 0,
                         points: 4,
@@ -400,7 +402,7 @@ var OLStylesSLD = function OLStylesSLD() {
                       break;
 
                     case 'star':
-                      imagestyle = new style.RegularShape({
+                      imagestyle = new _style.RegularShape({
                         radius: parseInt(pointstyle.pointRadius, 10),
                         radius2: parseInt(pointstyle.pointRadius, 10) / 3,
                         points: 5,
@@ -410,7 +412,7 @@ var OLStylesSLD = function OLStylesSLD() {
                       break;
 
                     case 'square':
-                      imagestyle = new style.RegularShape({
+                      imagestyle = new _style.RegularShape({
                         radius: parseInt(pointstyle.pointRadius, 10),
                         points: 4,
                         angle: Math.PI / 4,
@@ -420,7 +422,7 @@ var OLStylesSLD = function OLStylesSLD() {
                       break;
 
                     case 'triangle':
-                      imagestyle = new style.RegularShape({
+                      imagestyle = new _style.RegularShape({
                         radius: parseInt(pointstyle.pointRadius, 10),
                         points: 3,
                         stroke: strokestyle,
@@ -429,7 +431,7 @@ var OLStylesSLD = function OLStylesSLD() {
                       break;
 
                     case 'x':
-                      imagestyle = new style.RegularShape({
+                      imagestyle = new _style.RegularShape({
                         radius: parseInt(pointstyle.pointRadius, 10),
                         radius2: 0,
                         points: 4,
@@ -446,13 +448,13 @@ var OLStylesSLD = function OLStylesSLD() {
               }
             } else if (linestyle) {
               if (linestyle.fill) {
-                fillstyle = new style.Fill({
+                fillstyle = new _style.Fill({
                   color: self.getColorValue(linestyle.fillColor, linestyle.fillOpacity)
                 });
               }
 
               if (linestyle.stroke) {
-                strokestyle = new style.Stroke({
+                strokestyle = new _style.Stroke({
                   color: self.getColorValue(linestyle.strokeColor, linestyle.strokeOpacity),
                   width: self.getStrokeWidth(linestyle.strokeWidth),
                   lineDash: self.getStrokeDashstyle(linestyle.strokeDashstyle)
@@ -460,7 +462,7 @@ var OLStylesSLD = function OLStylesSLD() {
               }
 
               if (linestyle.graphic && linestyle.graphicName === 'circle') {
-                imagestyle = new style.Circle({
+                imagestyle = new _style.Circle({
                   radius: parseInt(linestyle.pointRadius, 10),
                   fill: fillstyle
                 });
@@ -468,7 +470,7 @@ var OLStylesSLD = function OLStylesSLD() {
               }
             }
 
-            style = new style.Style({
+            style = new _style.Style({
               fill: fillstyle,
               image: imagestyle,
               stroke: strokestyle
@@ -480,7 +482,7 @@ var OLStylesSLD = function OLStylesSLD() {
             });
 
             if (textstyle) {
-              style = new style.Style({
+              style = new _style.Style({
                 text: textstyle
               });
               layer.userStyles.push({
@@ -1043,7 +1045,7 @@ var OLStylesSLD = function OLStylesSLD() {
 
     /*
      var userStyles = response.getElementsByTagName('UserStyle');
-       var thisstyle = [];
+      var thisstyle = [];
      $(userStyles).each(function(index, userstyle){
      if (index === 0) {
      thisstyle.push(parseStyle(userstyle));
@@ -1675,17 +1677,17 @@ exports.OLStylesSLD = OLStylesSLD;
 
 var OLStylesMeasure = function OLStylesMeasure() {
   var styles = function styles() {
-    return new _Style.default.Style({
-      fill: new _Style.default.Fill({
+    return new _style.Style({
+      fill: new _style.Fill({
         color: 'rgba(255, 255, 255, 0.8)'
       }),
-      stroke: new _Style.default.Stroke({
+      stroke: new _style.Stroke({
         color: '#ffcc33',
         width: 2
       }),
-      image: new _Style.default.Circle({
+      image: new _style.Circle({
         radius: 7,
-        fill: new _Style.default.Fill({
+        fill: new _style.Fill({
           color: '#ffcc33'
         })
       })
@@ -1693,20 +1695,20 @@ var OLStylesMeasure = function OLStylesMeasure() {
   };
 
   var drawStyles = function drawStyles() {
-    return new _Style.default.Style({
-      fill: new _Style.default.Fill({
+    return new _style.Style({
+      fill: new _style.Fill({
         color: 'rgba(255, 255, 255, 0.5)'
       }),
-      stroke: new _Style.default.Stroke({
+      stroke: new _style.Stroke({
         color: 'rgba(160, 0, 0, 0.5)',
         width: 2
       }),
-      image: new _Style.default.Circle({
+      image: new _style.Circle({
         radius: 5,
-        fill: new _Style.default.Fill({
+        fill: new _style.Fill({
           color: 'rgba(160, 0, 0, 0.8)'
         }),
-        stroke: new _Style.default.Stroke({
+        stroke: new _style.Stroke({
           color: 'rgba(255, 255, 255, 0.8)',
           width: 2
         })

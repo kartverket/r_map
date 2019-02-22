@@ -4160,7 +4160,7 @@ fast-levenshtein@~2.0.4:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
-fast-xml-parser@^3.12.12:
+fast-xml-parser@^3.12.13:
   version "3.12.13"
   resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-3.12.13.tgz#15cea8faad48ce78baadd918b1e781303584d35e"
   integrity sha512-AW0qennqoHQ65BAMZX/7Y2he6WUz3iqmW4L4/EgMXNvTd5Jfubig50F+N2JVthC5DnkhPWRUp+eO6bbaMCnjHA==

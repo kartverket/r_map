@@ -7,7 +7,7 @@ exports.default = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _MapComponent = _interopRequireDefault(require("./components/MapComponent/MapComponent"));
+var _MapContainer = _interopRequireDefault(require("./components/MapContainer/MapContainer"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -44,11 +44,25 @@ var TEST_DATA = [{
   "GetCapabilitiesUrl": "https://openwms.statkart.no/skwms1/wms.adm_enheter?request=GetCapabilities&service=WMS",
   addLayers: []
 }, {
-  "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c4c",
-  "Title": "norgeskart",
-  "DistributionProtocol": "OGC:WMTS",
-  "GetCapabilitiesUrl": "https://opencache.statkart.no/gatekeeper/gk/gk.open_wmts?request=GetCapabilities&service=WMS",
-  addLayers: []
+  "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
+  "Title": "tilgjengelighet",
+  "DistributionProtocol": "WFS",
+  "GetCapabilitiesUrl": "http://wfs.geonorge.no/skwms1/wfs.tilgjengelighet_friluft?request=GetCapabilities&service=WFS"
+}, {
+  "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
+  "Title": "markagrenser",
+  "DistributionProtocol": "WFS",
+  "GetCapabilitiesUrl": "https://wfs.geonorge.no/skwms1/wfs.markagrensa?request=GetCapabilities&service=WFS"
+}, {
+  "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
+  "Title": "Kvikkleire ",
+  "DistributionProtocol": "WFS",
+  "GetCapabilitiesUrl": "https://wfs.geonorge.no/skwms1/wfs.kvikkleire?service=wfs&request=getcapabilities"
+}, {
+  "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
+  "Title": "Brannstasjoner ",
+  "DistributionProtocol": "WFS",
+  "GetCapabilitiesUrl": "https://wfs.geonorge.no/skwms1/wfs.brannstasjoner?service=wfs&request=getcapabilities"
 }];
 
 var App =
@@ -67,7 +81,7 @@ function (_Component) {
     value: function render() {
       return _react.default.createElement("div", {
         className: "App"
-      }, _react.default.createElement(_MapComponent.default, {
+      }, _react.default.createElement(_MapContainer.default, {
         services: TEST_DATA
       }));
     }

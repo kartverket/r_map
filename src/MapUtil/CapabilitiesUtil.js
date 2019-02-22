@@ -219,7 +219,6 @@ export class CapabilitiesUtil {
           default:
             console.warn('No matching WFS version parser found.')
         }
-        console.log('WFS : ', result);
         return result
       });
 

@@ -3,21 +3,27 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = exports.MapComponent = void 0;
+exports.default = exports.MapContainer = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
+var _maplibHelper = require("../../MapUtil/maplibHelper");
 
 var _CapabilitiesUtil = require("../../MapUtil/CapabilitiesUtil");
 
-var _maplibHelper = require("../../MapUtil/maplibHelper");
+var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _queryString = _interopRequireDefault(require("query-string"));
 
 var _setQueryString = _interopRequireDefault(require("set-query-string"));
 
-var _MapComponent = _interopRequireDefault(require("./MapComponent.scss"));
+var _BackgroundChooser = _interopRequireDefault(require("../BackgroundChooser/BackgroundChooser"));
+
+var _AddServicePanel = _interopRequireDefault(require("../AddServicePanel/AddServicePanel"));
+
+var _reactFontawesome = require("@fortawesome/react-fontawesome");
+
+var _MapContainer = _interopRequireDefault(require("./MapContainer.scss"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -41,14 +47,25 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+var ListItem = function ListItem(props) {
+  return _react.default.createElement(_AddServicePanel.default, {
+    key: "1",
+    map: _maplibHelper.map,
+    services: props.listItem,
+    removeMapItem: props.removeMapItem,
+    draggable: true
+  });
+};
 /**
  * @class The Map Component
  * @extends React.Component
  */
-var MapComponent =
+
+
+var MapContainer =
 /*#__PURE__*/
 function (_React$Component) {
-  _inherits(MapComponent, _React$Component);
+  _inherits(MapContainer, _React$Component);
 
   /**
    * The prop types.
@@ -59,12 +76,16 @@ function (_React$Component) {
    *
    *@constructs Map
    */
-  function MapComponent(props) {
+  function MapContainer(props) {
     var _this;
 
-    _classCallCheck(this, MapComponent);
+    _classCallCheck(this, MapContainer);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(MapComponent).call(this, props));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(MapContainer).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      layers: []
+    });
 
     _defineProperty(_assertThisInitialized(_this), "updateMapInfoState", function () {
       var center = _maplibHelper.map.GetCenter();
@@ -82,8 +103,11 @@ function (_React$Component) {
       (0, _setQueryString.default)(queryValues);
     });
 
+    _this.handleSelect = _this.handleSelect.bind(_assertThisInitialized(_this));
     _this.state = {
-      activeKey: "1"
+      activeKey: "1",
+      open: false,
+      menu: _this.props.menu
     };
 
     var _queryValues = _queryString.default.parse(window.location.search);
@@ -91,9 +115,12 @@ function (_React$Component) {
     var lon = Number(_queryValues["lon"] || props.lon);
     var lat = Number(_queryValues["lat"] || props.lat);
     var zoom = Number(_queryValues["zoom"] || props.zoom);
+    _this.wms = _queryValues["wms"] || "";
+    _this.layers = Array(_queryValues["layers"] || []);
     /*
     let wmts = Array(queryValues['wmts'] || [])
     let wfs = Array(queryValues['wfs'] || [])
+    let projectName = queryValues['project'] || 'norgeskart'
     let epsg = queryValues['epsg'] || 'EPSG:3857'
     */
     //  this.props = { lon: lon, lat: lat, zoom: zoom };
@@ -105,10 +132,18 @@ function (_React$Component) {
     _this.olMap = null;
     return _this;
   }
+  /**
+   *
+   */
 
-  _createClass(MapComponent, [{
+
+  _createClass(MapContainer, [{
     key: "componentDidMount",
     value: function componentDidMount() {
+      if (this.props.wms) {
+        this.addWMS(this.wms, this.layers);
+      }
+
       this.olMap = _maplibHelper.map.Init("map", this.newMapConfig);
 
       _maplibHelper.map.AddZoom();
@@ -120,38 +155,94 @@ function (_React$Component) {
       this.props = {
         map: _maplibHelper.map
       };
-      this.addWMS();
     }
+    /**
+     *
+     */
+
   }, {
     key: "addWMS",
     value: function addWMS() {
       var _this2 = this;
 
-      this.props.services.forEach(function (service) {
-        _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(service.GetCapabilitiesUrl).then(_CapabilitiesUtil.CapabilitiesUtil.getLayersFromWmsCapabilties).then(function (layers) {
-          if (service.addLayers.length > 0) {
-            var layersToBeAdded = layers.filter(function (e) {
-              return service.addLayers.includes(e.name);
-            });
-            layersToBeAdded.forEach(function (layer) {
-              return _maplibHelper.map.AddLayer(layer);
-            });
-          }
+      _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(this.props.services.GetCapabilitiesUrl).then(_CapabilitiesUtil.CapabilitiesUtil.getLayersFromWmsCapabilties).then(function (layers) {
+        _this2.setState({
+          wmsLayers: layers
+        });
+      }).catch(function () {
+        return alert("Could not parse capabilities document.");
+      });
+    }
+  }, {
+    key: "renderServiceList",
+    value: function renderServiceList() {
+      var _this3 = this;
 
-          _this2.setState({
-            wmsLayers: layers
-          });
-        }).catch(function (e) {
-          return console.warn(e);
+      return this.props.services.map(function (listItem, i) {
+        return _react.default.createElement(ListItem, {
+          listItem: listItem,
+          removeMapItem: _this3.props.removeMapItem ? _this3.props.removeMapItem : null,
+          key: i,
+          map: _maplibHelper.map
         });
       });
     }
   }, {
+    key: "renderLayerButton",
+    value: function renderLayerButton() {
+      return this.props.services && this.props.services.length > 0;
+    }
+  }, {
+    key: "handleSelect",
+    value: function handleSelect(activeKey) {
+      this.setState({
+        activeKey: activeKey
+      });
+    }
+  }, {
+    key: "toogleLayers",
+    value: function toogleLayers() {
+      this.setState({
+        isExpanded: !this.state.isExpanded
+      });
+    }
+  }, {
+    key: "toogleMap",
+    value: function toogleMap() {
+      console.log("lukke kartet");
+      window.history.back(); // TODO: get paramtere to check for url til goto for closing map
+    }
+    /**
+     *
+     */
+
+  }, {
     key: "render",
     value: function render() {
+      var _this4 = this;
+
       return _react.default.createElement("div", {
-        className: _MapComponent.default.mapContainer
-      }, _react.default.createElement("div", {
+        className: _MapContainer.default.mapContainer
+      }, _react.default.createElement(_BackgroundChooser.default, null), _react.default.createElement("div", null, this.renderLayerButton() ? _react.default.createElement("div", {
+        className: this.state.isExpanded ? _MapContainer.default.container + " closed" : _MapContainer.default.container + " open"
+      }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+        onClick: function onClick() {
+          return _this4.toogleLayers();
+        },
+        className: _MapContainer.default.toggleBtn,
+        icon: this.state.isExpanded ? ["far", "layer-group"] : "times"
+      }), _react.default.createElement("div", null, this.renderServiceList())) : _react.default.createElement("div", null, "G\xE5 til kartkatalogen"), _react.default.createElement("div", {
+        className: _MapContainer.default.closeMap
+      }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+        title: "Lukk kartet",
+        onClick: function onClick() {
+          return _this4.toogleMap();
+        },
+        className: _MapContainer.default.toggleBtn,
+        icon: "times"
+      }), _react.default.createElement("span", {
+        className: _MapContainer.default.closeButtonLabel
+      }, "Lukk kartet"))), _react.default.createElement("div", {
         id: "map",
         style: {
           position: "relative",
@@ -163,12 +254,12 @@ function (_React$Component) {
     }
   }]);
 
-  return MapComponent;
+  return MapContainer;
 }(_react.default.Component);
 
-exports.MapComponent = MapComponent;
+exports.MapContainer = MapContainer;
 
-_defineProperty(MapComponent, "propTypes", {
+_defineProperty(MapContainer, "propTypes", {
   /**
    * @type {Number}
    */
@@ -205,20 +296,32 @@ _defineProperty(MapComponent, "propTypes", {
   onMapViewChanges: _propTypes.default.func,
 
   /**
+   * @type {String}
+   */
+  wms: _propTypes.default.string,
+
+  /**
    * @type {Array}
    */
-  services: _propTypes.default.arrayOf(_propTypes.default.object)
+  services: _propTypes.default.arrayOf(_propTypes.default.object),
+
+  /**
+   * @type {Boolean}
+   */
+  menu: _propTypes.default.bool
 });
 
-_defineProperty(MapComponent, "defaultProps", {
+_defineProperty(MapContainer, "defaultProps", {
   onMapViewChanges: function onMapViewChanges() {},
   onChangeLon: function onChangeLon() {},
   onChangeLat: function onChangeLat() {},
   onChangeZoom: function onChangeZoom() {},
   lon: 396722,
   lat: 7197860,
-  zoom: 4
+  zoom: 4,
+  wms: "",
+  menu: true
 });
 
-var _default = MapComponent;
+var _default = MapContainer;
 exports.default = _default;

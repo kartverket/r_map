@@ -735,8 +735,8 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
           break;
 
         case _Domain.SOURCES.wfs:
-          if (!isySubLayer.noProxy) {
-            isySubLayer.url = _getProxyUrl(isySubLayer.url, true);
+          if (!isySubLayer.noProxy) {// TODO: Fix proxy
+            // isySubLayer.url = _getProxyUrl(isySubLayer.url, true);
           }
 
           source = (0, _Sources.Wfs)(isySubLayer, offline, parameters);

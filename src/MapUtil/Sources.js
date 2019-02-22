@@ -412,6 +412,10 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
   var projection = getProjection(isySubLayer.coordinate_system);
 
   var parseResponse = function (response) {
+    const features = parser.parse(response)
+    //const response = new DOMParser();
+    //response = parser.parseFromString(response, "text/xml");
+    /*
     source.dispatchEvent('vectorloadend');
     var featureNamespace;
 
@@ -477,6 +481,8 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
     }
 
     var features = source.format.readFeatures(response);
+*/
+    console.log(features);
     //
     //var featureIsValid = function (feature){
     //    var geometryIsOk = false;
@@ -528,7 +534,7 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
     if (features.length > 0) {
       isySubLayer.geometryName = features[0].getGeometryName();
     }
-    isySubLayer.featureNS = featureNamespace;
+    //isySubLayer.featureNS = featureNamespace;
 
     if (featureObj) {
       if (eventHandler) {
@@ -549,7 +555,7 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
     url += 'request=GetFeature&' +
       'version=' + isySubLayer.version + '&typename=' + isySubLayer.name + '&' +
       'srsname=' + isySubLayer.coordinate_system + '&' +
-      'bbox=' + extent.join(',') + ',' + isySubLayer.coordinate_system;
+      'bbox=' + extent.join(',') + ',' + isySubLayer.coordinate_system; // + '&outputFormat=text/xml; subtype=gml/3.2.1';
 
     if (parameters) {
       // source is refreshed
@@ -566,9 +572,8 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
             return;
           }
         } else {
-          return;
+          return parseResponse(response);;
         }
-        return parseResponse(response);
       });
   };
 

@@ -85,13 +85,11 @@ export default class AddServicePanel extends React.Component {
         CapabilitiesUtil.parseWFSCapabilities(this.props.services.GetCapabilitiesUrl)
           .then(CapabilitiesUtil.getLayersFromWfsCapabilties)
           .then(layers => {
-            console.log(layers);
             this.setState({
               wmsLayers: layers
             });
           })
           .catch(e => console.log(e));
-
         break;
       default:
         console.warn("No service type specified");

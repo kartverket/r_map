@@ -27,6 +27,17 @@ const TEST_DATA = [
     "Title": "markagrenser",
     "DistributionProtocol": "WFS",
     "GetCapabilitiesUrl":"https://wfs.geonorge.no/skwms1/wfs.markagrensa?request=GetCapabilities&service=WFS"
+  },
+  {
+    "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
+    "Title": "Kvikkleire ",
+    "DistributionProtocol": "WFS",
+    "GetCapabilitiesUrl":"https://wfs.geonorge.no/skwms1/wfs.kvikkleire?service=wfs&request=getcapabilities"
+  },{
+    "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
+    "Title": "Brannstasjoner ",
+    "DistributionProtocol": "WFS",
+    "GetCapabilitiesUrl":"https://wfs.geonorge.no/skwms1/wfs.brannstasjoner?service=wfs&request=getcapabilities"
   }
 ]
 
