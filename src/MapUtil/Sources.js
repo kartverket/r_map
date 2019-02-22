@@ -549,7 +549,7 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
     url += 'request=GetFeature&' +
       'version=' + isySubLayer.version + '&typename=' + isySubLayer.name + '&' +
       'srsname=' + isySubLayer.coordinate_system + '&' +
-      'bbox=' + extent.join(',');
+      'bbox=' + extent.join(',') + ',' + isySubLayer.coordinate_system;
 
     if (parameters) {
       // source is refreshed
@@ -558,7 +558,6 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
       }
     }
 
-    // TODO: Fix ajax call without jQuery
     return fetch(url)
       .then((response) => response.text())
       .then(response => {
