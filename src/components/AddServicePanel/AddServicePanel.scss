@@ -10,13 +10,6 @@
 .node-label {
     padding-left: 5px;
 }
-li {
-    &.node{
-        input[type="checkbox"] {
-            font-size: 2em;
-        }
-    }
-}
 .selectedlayers {
     max-height: 0;
     overflow: hidden;
@@ -26,7 +19,7 @@ li {
         padding: 2px 0;
         > label {padding: 0 4px;}
     }
-    &.open {        
+    &.open {
         max-height: 1000px;
     }
 }
@@ -45,13 +38,13 @@ li {
     display: inline-block;
     width: 90%;
     margin-bottom: 10px;
-    
+
     &:hover {
         cursor: pointer;
     }
     > svg {
         font-size: 1.5em;
-        position: relative; 
+        position: relative;
         top: 4px;
         left: 6px;
     }
@@ -59,7 +52,6 @@ li {
 .facet {
     margin: 2px 0;
     > input[type="checkbox"] {
-        
         overflow: hidden;
         visibility: hidden;
         display: none;

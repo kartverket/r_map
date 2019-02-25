@@ -390,9 +390,7 @@ export const Vector = (isySubLayer) => {
   return source;
 };
 export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) => {
-  /* jshint -W024 */
   var strategy;
-  //isySubLayer.tiled = true; // todo: just for testing, remove before merge!
 
   if (isySubLayer.tiled) {
     var newMapRes = [];
@@ -482,33 +480,36 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
 
     var features = source.format.readFeatures(response);
 */
-    console.log(features);
-    //
-    //var featureIsValid = function (feature){
-    //    var geometryIsOk = false;
-    //    var getZCoordinate = function (c) {
-    //        if (Array.isArray(c)) {
-    //            return getZCoordinate(c[c.length - 1]);
-    //        }
-    //        return c;
-    //    };
-    //    var geometry = feature.getGeometry();
-    //    var coords = geometry.getCoordinates();
-    //    var z = getZCoordinate(coords);
-    //    if (!isNaN(z)){
-    //        geometryIsOk = true;
-    //    }
-    //    return geometryIsOk;
-    //};
 
-    if (features && features.length > 0) {
-      //var featureIsOk = true;
-      //if (!featureIsValid(features[0])) {
-      //    if (console && console.log) {
-      //        featureIsOk = false;
-      //        console.log(isySubLayer.name + ' does not have valid coordinates!');
-      //    }
-      //}
+    var featureIsValid = function (feature){
+       var geometryIsOk = false;
+      //  var getZCoordinate = function (c) {
+      //      if (Array.isArray(c)) {
+      //          return getZCoordinate(c[c.length - 1]);
+      //      }
+      //      return c;
+      //  };
+      //  var geometry = feature.getGeometry();
+      //  var coords = geometry.getCoordinates();
+      //  var z = getZCoordinate(coords);
+      //  if (!isNaN(z)){
+      //      geometryIsOk = true;
+      //  }
+       return geometryIsOk;
+    };
+
+    if (features && features['wfs:FeatureCollection'] && features['wfs:FeatureCollection']['wfs:member']) {
+      console.log(features);
+      let test = new GMLFormat().readFeatures(features, {
+        dataProjection: 'EPSG:32633',
+        featureProjection: 'EPSG:32633'
+      });
+      console.log(test)
+      var featureIsOk = true;
+      if (!featureIsValid(features)) {
+        featureIsOk = false;
+        console.log(isySubLayer.name + ' does not have valid coordinates!');
+      }
       features.forEach(function (featureitem) {
         featureitem.set("layerguid", isySubLayer.id);
         //if (!featureIsOk){

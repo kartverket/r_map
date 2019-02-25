@@ -5,13 +5,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const InlineLegend = props => {
   const [expanded, toggleExpand] = useState(false);
-  const handleExpand = () => toggleExpand(!expanded);
 
   const legend = () => {
     if (props.legendUrl) {
       return (
         <div>
-          <div className={style.toggle} onClick={() => handleExpand()}>
+          <div className={style.toggle} onClick={() => toggleExpand(!expanded)}>
             <span className={style.label}>
               {expanded ? "Skjul tegnforklaring" : "Vis tegnforklaring"}{" "}
             </span>

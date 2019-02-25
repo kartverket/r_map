@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import style from "./MapContainer.scss";
 
 const ListItem = props => (
-  <AddServicePanel key="1" map={map} services={props.listItem} removeMapItem={props.removeMapItem} draggable/>
+  <AddServicePanel map={map} services={props.listItem} removeMapItem={props.removeMapItem} draggable/>
 );
 
 /**

@@ -15,7 +15,7 @@ const TEST_DATA = [
     "DistributionProtocol": "OGC:WMS",
     "GetCapabilitiesUrl": "https://openwms.statkart.no/skwms1/wms.adm_enheter?request=GetCapabilities&service=WMS",
     addLayers:[]
-  },
+  }/*,
   {
     "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
     "Title": "tilgjengelighet",
@@ -38,7 +38,7 @@ const TEST_DATA = [
     "Title": "Brannstasjoner ",
     "DistributionProtocol": "WFS",
     "GetCapabilitiesUrl":"https://wfs.geonorge.no/skwms1/wfs.brannstasjoner?service=wfs&request=getcapabilities"
-  }
+  }*/
 ]
 
 class App extends Component {
