@@ -5,11 +5,11 @@ import { map } from "../../MapUtil/maplibHelper";
 
 const LayerEntry = props => {
   const [options, toggleOptions] = useState(false);
+  const [checked, setChecked] = useState(props.layer.isVisible);
   const [transparency, setTransparency] = useState(50);
 
   const layer = props.layer;
   const copyright = layer.copyright;
-
   const abstractTextSpan = () => {
     return layer.abstract ? (
       <span>{`${layer.label} - ${layer.abstract}:`}</span>
@@ -28,11 +28,12 @@ const LayerEntry = props => {
         map.ShowLayer(currentNode);
       }
     }
-    console.log('onSelectionChange')
+    setChecked(currentNode.isVisible)
   };
 
-  const handleStatus = (e) => {
-    console.log('handleStatus')
+  const setOpacity = (value) => {
+    setTransparency(value)
+    map.SetLayerOpacity(layer,transparency/100)
   }
 
   return (
@@ -41,10 +42,9 @@ const LayerEntry = props => {
           className="checkbox"
           id={layer.id}
           type="checkbox"
-          onChange={handleStatus}
         />
         <label onClick={() => onSelectionChange(layer)} htmlFor={layer.id} >
-          <FontAwesomeIcon className="svg-checkbox" icon={layer.isVisible ? ["far", "check-square"] : ["far", "square"] } />
+        <FontAwesomeIcon className="svg-checkbox" icon={checked ? ["far", "check-square"] : ["far", "square"] } />
         </label>{" "}
 
         {abstractTextSpan()}
@@ -56,13 +56,15 @@ const LayerEntry = props => {
         </label>
         {options ? (
           <div>
+          {/** TODO: Add layer up and down */}
+          {/** TODO: STYLE the slider */}
             <label>transparency: {transparency}
             <input
               type="range"
               min={0}
               max={100}
               value={transparency}
-              onChange={(e) => setTransparency(e.target.value)}
+              onChange={(e) => setOpacity(e.target.value)}
             />
             </label>
           </div>

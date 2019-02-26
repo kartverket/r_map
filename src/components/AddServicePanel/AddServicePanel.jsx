@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
@@ -6,6 +6,7 @@ import { map } from "../../MapUtil/maplibHelper";
 
 import "./AddServicePanel.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import InlineLegend from "../Legend/InlineLegend";
 import LayerEntry from "./LayerEntry"
 
@@ -17,41 +18,61 @@ import LayerEntry from "./LayerEntry"
  * @class The AddServicePanel
  * @extends React.Component
  */
-const AddServicePanel = (props) => {
-  const [wmsLayers, setWmsLayers] = useState({state:[]})
-  const [expanded, toggleExpand] = useState(false);
-  const handleExpand = () => toggleExpand(!expanded);
+export default class AddServicePanel extends React.Component {
+  /**
+   * The prop types.
+   * @type {Object}
+   */
+  static propTypes = {
+    /**
+     * The services to be parsed and shown in the panel
+     * @type {Object} -- required
+     */
+    services: PropTypes.object.isRequired,
 
-  const getWmsLayers = () => wmsLayers.state
-  const setLayers = v => {
-    wmsLayers.state = v;
-    setWmsLayers(wmsLayers)
+    /**
+     * Optional instance of Map
+     * @type {Object}
+     */
+    map: PropTypes.object,
+  };
+
+  /**
+   * Create an AddWmsPanel.
+   * @constructs AddWmsPanel
+   */
+  constructor(props) {
+    super(props);
+    this.state = {
+      expanded: false
+    };
+    this.getCapabilitites();
   }
 
-  const getCapabilitites = () => {
-    switch (props.services.DistributionProtocol) {
+  getCapabilitites() {
+    switch (this.props.services.DistributionProtocol) {
       case "WMS":
       case "OGC:WMS":
-        CapabilitiesUtil.parseWmsCapabilities(props.services.GetCapabilitiesUrl)
-          .then(CapabilitiesUtil.getLayersFromWmsCapabilties)
+        CapabilitiesUtil.parseWmsCapabilities( this.props.services.GetCapabilitiesUrl )
+          .then(CapabilitiesUtil.getLayersFromWmsCapabilties )
           .then(layers => {
-            if (props.services.addLayers.length > 0) {
-              let layersToBeAdded = layers.filter(e =>
-                props.services.addLayers.includes(e.name)
-              );
-              layersToBeAdded.forEach(layer => {
-                map.AddLayer(layer)
-              });
-              setLayers(layers)
+            if (this.props.services.addLayers.length > 0) {
+              let layersToBeAdded = layers.filter(e => this.props.services.addLayers.includes(e.name))
+              layersToBeAdded.forEach(layer => map.AddLayer(layer))
             }
+            this.setState({
+              wmsLayers: layers
+            });
           })
           .catch(e => console.log(e));
         break;
       case "WFS":
-        CapabilitiesUtil.parseWFSCapabilities(props.services.GetCapabilitiesUrl)
+        CapabilitiesUtil.parseWFSCapabilities(this.props.services.GetCapabilitiesUrl)
           .then(CapabilitiesUtil.getLayersFromWfsCapabilties)
           .then(layers => {
-            setLayers(layers)
+            this.setState({
+              wmsLayers: layers
+            });
           })
           .catch(e => console.log(e));
         break;
@@ -61,58 +82,64 @@ const AddServicePanel = (props) => {
     }
   }
 
-  const renderRemoveButton = () => props.removeMapItem ? <FontAwesomeIcon className="remove-inline" onClick={props.removeMapItem} icon={["fas", "times"]} /> : ''
+  onSelectionChange = currentNode => {
+    if (!map.GetOverlayLayers().includes(currentNode)) {
+      map.AddLayer(currentNode);
+    } else {
+      if (map.GetVisibleSubLayers().find(el => el.id === currentNode.id)) {
+        map.HideLayer(currentNode);
+      } else {
+        map.ShowLayer(currentNode);
+      }
+    }
+  };
 
-  const renderSelectedLayers = () => {
-    let layers = getWmsLayers()
-    if (layers && layers.length) {
-      return layers.map(layer => {
-        return (
-          <div key={layer.id}>
-            <LayerEntry layer={layer}/>
-            <InlineLegend legendUrl={layer.subLayers[0].legendGraphicUrl} />
-          </div>
-        );
-      });
+  toggleExpand() {
+    this.setState(prevState => ({
+      expanded: !prevState.expanded
+    }));
+  }
+  renderRemoveButton() {
+    if (this.props.removeMapItem) {
+      return (
+        <FontAwesomeIcon className="remove-inline" onClick={this.props.removeMapItem} icon={["fas", "times"]}/>
+      );
     } else {
       return "";
     }
   }
 
-  getCapabilitites()
+  renderSelectedLayers() {
+    const { wmsLayers } = this.state;
+    if (wmsLayers && wmsLayers.length) {
+      const wmsLayersList = wmsLayers.map(layer => {
+        return (
+          <div className="facet" key={layer.id}>
+            <LayerEntry layer={layer}/>
+            <InlineLegend legendUrl={layer.subLayers[0].legendGraphicUrl} />
+          </div>
+        );
+      });
+      return wmsLayersList;
+    } else {
+      return "";
+    }
+  }
 
-  return (
-    <>
-      <div onClick={() => handleExpand()} className={"expand-layers-btn"}>
-        <span className={"ellipsis-toggle"}>{props.services.Title}</span>
-        <FontAwesomeIcon icon={ expanded ? ["fas", "angle-up"] : ["fas", "angle-down"] } />
-      </div>
-      {renderRemoveButton()}
+  /**
+   * The render function.
+   */
+  render() {
+    return <div>
+            <div onClick={() => this.toggleExpand()} className={'expand-layers-btn'}>
+              <span className={'ellipsis-toggle'}>{this.props.services.Title}</span>
+              <FontAwesomeIcon icon={this.state.expanded ? ['fas','angle-up'] : ['fas','angle-down']} />
+              </div>
+            { this.renderRemoveButton() }
 
-      <div className={ expanded ? "selectedlayers open" : "selectedlayers" } >
-        {renderSelectedLayers()}
-      </div>
-    </>
-  );
+            <div className={ this.state.expanded ? "selectedlayers open" : "selectedlayers" } >
+              {this.renderSelectedLayers()}
+            </div>
+          </div>
+  }
 }
-
-AddServicePanel.propTypes = {
-  /**
-   * The services to be parsed and shown in the panel
-   * @type {Object} -- required
-   */
-  services: PropTypes.object.isRequired,
-
-  /**
-   * Optional instance of Map
-   * @type {Object}
-   */
-  map: PropTypes.object,
-
-  /**
-   * Optional function that is called if selection has changed.
-   * @type {Function}
-   */
-  onSelectionChange: PropTypes.func
-};
-export default AddServicePanel
