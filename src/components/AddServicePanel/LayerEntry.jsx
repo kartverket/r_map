@@ -8,6 +8,8 @@ const LayerEntry = props => {
   const [checked, setChecked] = useState(props.layer.isVisible);
   const [transparency, setTransparency] = useState(50);
 
+  const [index, setIndex] = useState(0);
+
   const layer = props.layer;
   const copyright = layer.copyright;
   const abstractTextSpan = () => {
@@ -35,6 +37,16 @@ const LayerEntry = props => {
     setTransparency(value)
     map.SetLayerOpacity(layer,transparency/100)
   }
+  const oneUp = () => {
+    setIndex(map.GetZIndex(layer.subLayers[0]) + 1)
+    map.SetZIndex(layer.subLayers[0], index)
+    console.log('index : ' + index)
+    console.log('zIndex : ' + map.GetZIndex(layer.subLayers[0]))
+  }
+  const oneDown = () => {
+    setIndex(map.GetZIndex(layer.subLayers[0]) - 1)
+    map.SetZIndex(layer.subLayers[0], index)
+}
 
   return (
       <>
@@ -56,7 +68,12 @@ const LayerEntry = props => {
         </label>
         {options ? (
           <div>
-          {/** TODO: Add layer up and down */}
+          {/** TODO: Style layer up and down */}
+          {/** TODO: Fix layer up and down */}
+          <div>
+            <button onClick={() => oneUp()}>UP</button>
+            <button onClick={() => oneDown()}>Down</button>{index}
+          </div>
           {/** TODO: STYLE the slider */}
             <label>transparency: {transparency}
             <input

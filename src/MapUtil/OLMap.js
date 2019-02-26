@@ -2146,6 +2146,23 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         }
     };
 
+    function setZIndex(isySubLayer, index ) {
+        var layer = _getLayerByGuid(isySubLayer.id);
+        if (layer && !isNaN(index)) {
+            layer.setZIndex(index);
+        }
+    }
+
+    function getZIndex(isySubLayer) {
+        var layer = _getLayerByGuid(isySubLayer.id);
+        if (layer) {
+            return layer.getZIndex();
+        } else {
+            return ''
+        }
+    }
+
+
     /*
         Utility functions End
      */
@@ -2334,7 +2351,9 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         DescribeFeature: describeFeature,
         RemoveIsyToken: removeIsyToken,
         SetIsyToken: setIsyToken,
-        ShowCustomMessage: showCustomMessage
+        ShowCustomMessage: showCustomMessage,
+        SetZIndex:setZIndex,
+        GetZIndex:getZIndex
         // Utility end
     };
 };

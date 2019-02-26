@@ -15,7 +15,13 @@ const TEST_DATA = [
     "DistributionProtocol": "OGC:WMS",
     "GetCapabilitiesUrl": "https://openwms.statkart.no/skwms1/wms.adm_enheter?request=GetCapabilities&service=WMS",
     addLayers:[]
-  }/*,
+  }, {
+    "Uuid": "8045628b-230a-4ba4-a6e0-xxxxx",
+    "Title": "ssr2",
+    "DistributionProtocol": "OGC:WMS",
+    "GetCapabilitiesUrl": "https://openwms.statkart.no/skwms1/wms.ssr2?request=GetCapabilities&service=WMS",
+    addLayers: []
+  } /*,
   {
     "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
     "Title": "tilgjengelighet",
