@@ -9,7 +9,7 @@ const InlineLegend = props => {
   const legend = () => {
     if (props.legendUrl) {
       return (
-        <div>
+        <>
           <div className={style.toggle} onClick={() => toggleExpand(!expanded)}>
             <span className={style.label}>
               {expanded ? "Skjul tegnforklaring" : "Vis tegnforklaring"}{" "}
@@ -19,7 +19,7 @@ const InlineLegend = props => {
           <div className={ expanded ? style.legend : style.legend + " " + style.closed }>
             <Legend legendUrl={props.legendUrl} legendAlternative="Legend" />
           </div>
-        </div>
+        </>
       );
     } else {
       return "";
