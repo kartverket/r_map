@@ -31,7 +31,7 @@ const InlineLegend = props => {
 };
 
 InlineLegend.propTypes = {
-  legendUrl: PropTypes.string.isRequired
+  legendUrl: PropTypes.string
 };
 
 export default InlineLegend;
