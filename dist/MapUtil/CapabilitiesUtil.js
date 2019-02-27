@@ -15,6 +15,12 @@ var _get = _interopRequireDefault(require("lodash/get.js"));
 
 var _maplibHelper = require("./maplibHelper");
 
+var _jsonix = require("@boundlessgeo/jsonix");
+
+var _w3cSchemas = require("w3c-schemas");
+
+var _ogcSchemas = require("ogc-schemas");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -53,6 +59,7 @@ var newMaplibLayer = function newMaplibLayer(sourceType, source) {
       matrixSet: source.matrixset,
       numZoomLevels: _maplibHelper.mapConfig.numZoomLevels,
       id: sourceType === 'VECTOR' ? source.name + 8001 : source.name + 1001,
+      version: source.version,
       transparent: true,
       layerIndex: -1,
       legendGraphicUrl: source.legendurl || '',
@@ -95,14 +102,17 @@ var newMaplibLayer = function newMaplibLayer(sourceType, source) {
   });
   return newIsyLayer;
 };
+
+exports.newMaplibLayer = newMaplibLayer;
+var context_wfs_2_0_0 = new _jsonix.Jsonix.Context([_w3cSchemas.XLink_1_0, _ogcSchemas.OWS_1_1_0, _ogcSchemas.GML_2_1_2, _ogcSchemas.Filter_2_0, _ogcSchemas.WFS_2_0]);
+var unmarshaller_wfs_2_0_0 = context_wfs_2_0_0.createUnmarshaller();
+var context_wfs_1_1_0 = new _jsonix.Jsonix.Context([_w3cSchemas.XLink_1_0, _ogcSchemas.OWS_1_0_0, _ogcSchemas.OWS_1_1_0, _ogcSchemas.Filter_1_1_0, _ogcSchemas.GML_2_1_2, _ogcSchemas.GML_3_1_1, _ogcSchemas.SMIL_2_0, _ogcSchemas.SMIL_2_0_Language, _ogcSchemas.WFS_1_1_0]);
+var unmarshaller_wfs_1_1_0 = context_wfs_1_1_0.createUnmarshaller();
 /**
  * Helper class to parse capabilities of WMS layers
  *
  * @class CapabilitiesUtil
  */
-
-
-exports.newMaplibLayer = newMaplibLayer;
 
 var CapabilitiesUtil =
 /*#__PURE__*/
@@ -180,6 +190,59 @@ function () {
       }).then(function (data) {
         var wmtsCapabilitiesParser = new _WMTSCapabilities.default();
         return wmtsCapabilitiesParser.read(data);
+      });
+    }
+  }, {
+    key: "getLayersFromWfsCapabilties",
+    value: function getLayersFromWfsCapabilties(capabilities) {
+      var nameField = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'name.localPart';
+      var version = (0, _get.default)(capabilities, 'value.version');
+      var featureTypesInCapabilities = (0, _get.default)(capabilities, 'value.featureTypeList.featureType');
+      var url = (0, _get.default)(capabilities, 'value.operationsMetadata.operation[0].dcp[0].http.getOrPost[0].value.href');
+      return featureTypesInCapabilities.map(function (layerObj) {
+        return newMaplibLayer('WFS', {
+          type: "map",
+          name: (0, _get.default)(layerObj, nameField),
+          url: url,
+          version: version,
+          params: {
+            layers: (0, _get.default)(layerObj, nameField),
+            format: "image/png"
+          },
+          guid: "1.temakart",
+          options: {
+            isbaselayer: "false",
+            singletile: "false",
+            visibility: "true"
+          }
+        });
+      });
+    }
+  }, {
+    key: "parseWFSCapabilities",
+    value: function parseWFSCapabilities(capabilitiesUrl) {
+      return fetch(capabilitiesUrl).then(function (response) {
+        return response.text();
+      }).then(function (data) {
+        var parser, xmlDoc, result;
+        parser = new DOMParser();
+        xmlDoc = parser.parseFromString(data, "text/xml");
+        var version = xmlDoc.getElementsByTagName("WFS_Capabilities")[0].attributes.version.value;
+
+        switch (version) {
+          case '1.1.0':
+            result = unmarshaller_wfs_1_1_0.unmarshalString(data);
+            break;
+
+          case '2.0.0':
+            result = unmarshaller_wfs_2_0_0.unmarshalString(data);
+            break;
+
+          default:
+            console.warn('No matching WFS version parser found.');
+        }
+
+        return result;
       });
     }
   }]);

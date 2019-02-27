@@ -1,6 +1,15 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.api = exports.getCapabilitiesByUuid = void 0;
+
+var _queryString = _interopRequireDefault(require("query-string"));
+
 var _this = void 0;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -38,6 +47,8 @@ function () {
     return _ref.apply(this, arguments);
   };
 }();
+
+exports.getCapabilitiesByUuid = getCapabilitiesByUuid;
 
 var api = function api() {
   var url = 'https://www.norgeskart.no/';
@@ -168,7 +179,7 @@ var api = function api() {
       params.save = true;
     }
 
-    return url + 'ws/get-json.py?' + $.param(params);
+    return url + 'ws/get-json.py?' + _queryString.default.stringify(params);
   };
 
   _this.generateGeoJSONSaveUrl = function () {
@@ -315,7 +326,7 @@ var api = function api() {
       // UTM zone 35
       MinX: 253177.3653,
       MaxX: 683621.7167,
-      MinY: 7603094.00,
+      MinY: 7603094,
       // Norway
       MaxY: 7924929.221 // Norway
 
@@ -555,7 +566,7 @@ var api = function api() {
 
   _this.getSOSIfromEPSG = function (epsg) {
     return this.sosiCodes.filter(function (el) {
-      return el.EPSG == epsg;
+      return el.EPSG === epsg;
     }).map(function (obj) {
       return obj.SOSI;
     })[0];
@@ -564,7 +575,7 @@ var api = function api() {
   _this.getCoordinateSystems = function (type) {
     var result = {};
     this.sosiCodes.filter(function (el) {
-      return el.type == type;
+      return el.type === type;
     }).filter(Boolean).map(function (obj) {
       var rObj = {};
       rObj[obj.SOSI] = obj.key;
@@ -593,3 +604,5 @@ var api = function api() {
     });
   };
 };
+
+exports.api = api;

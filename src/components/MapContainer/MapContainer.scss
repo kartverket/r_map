@@ -25,6 +25,33 @@
 .ol-control button:focus {
   outline: transparent;
 }
+:local(.closeMap) {
+  transition: .3s all ease-in-out;
+  position: absolute;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  z-index: 2;
+  overflow: hidden;
+  margin-top: 20px;
+  right: 0;
+  border-right-color: white;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  width: 80px;
+  height: 80px;
+  &:hover {
+    background: #e5e5e5;
+    width: 180px;
+  }
+}
+:local(.closeButtonLabel) {
+  white-space: nowrap;
+  padding-top: 25px;
+  padding-left: 20px;
+
+  display: inline-block;
+}
 .ol-zoom {
   top: 40%;
   left: auto;
@@ -88,6 +115,17 @@
     color: #333;
   }
 }
+:local(.mapContainer) {
+  background: transparent;
+  position: fixed;
+  margin-top: 62px;
+  top: 0px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+}
+
 :local(.container) {
   transition: .3s all ease-in-out;
   position: absolute;
@@ -104,13 +142,14 @@
     clear: both;
   }
   &.open {
-    overflow: auto;
+    overflow: visible;
     width: auto;
     max-width: 400px;
     height: 100%;
     > div {
       margin: 20px;
     }
+
   }
   &.closed {
     width: 80px;
@@ -119,4 +158,21 @@
       background: #e5e5e5;
     }
   }
+  .react-dropdown-tree-select .dropdown .dropdown-trigger {
+    border: none;
+  }
+  .tag-item .search {
+    border: none;
+  }
+
+}
+:local(.toggleBtn) {
+
+    font-size: 2.5em;
+    margin: 20px;
+    float: right;
+    color: $color-toggle-on;
+    &:hover {
+      cursor: pointer;
+    }
 }

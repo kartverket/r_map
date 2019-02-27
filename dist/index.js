@@ -3,10 +3,10 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-Object.defineProperty(exports, "AddWmsPanel", {
+Object.defineProperty(exports, "AddServicePanel", {
   enumerable: true,
   get: function get() {
-    return _AddWmsPanel.default;
+    return _AddServicePanel.default;
   }
 });
 Object.defineProperty(exports, "BackgroundChooser", {
@@ -34,7 +34,7 @@ var serviceWorker = _interopRequireWildcard(require("./serviceWorker"));
 
 require("./Utils/icons");
 
-var _AddWmsPanel = _interopRequireDefault(require("./components/AddWmsPanel/AddWmsPanel"));
+var _AddServicePanel = _interopRequireDefault(require("./components/AddServicePanel/AddServicePanel"));
 
 var _BackgroundChooser = _interopRequireDefault(require("./components/BackgroundChooser/BackgroundChooser"));
 

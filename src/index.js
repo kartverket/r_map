@@ -6,7 +6,7 @@ import * as serviceWorker from './serviceWorker';
 
 import './Utils/icons';
 
-import AddWmsPanel from './components/AddWmsPanel/AddWmsPanel';
+import AddServicePanel from './components/AddServicePanel/AddServicePanel';
 import BackgroundChooser from './components/BackgroundChooser/BackgroundChooser';
 import MapComponent from './components/MapComponent/MapComponent';
 
@@ -14,4 +14,4 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
 serviceWorker.unregister();
 
-export { AddWmsPanel, BackgroundChooser, MapComponent };
+export { AddServicePanel, BackgroundChooser, MapComponent };

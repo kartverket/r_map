@@ -101,6 +101,13 @@ export const Map = (mapImplementation, eventHandler, featureInfo) => {
         mapImplementation.RedrawMap();
     }
 
+    function setZIndex(isyLayer, value) {
+        mapImplementation.SetZIndex(isyLayer, value);
+    }
+    function getZIndex(isyLayer){
+       return  mapImplementation.GetZIndex(isyLayer);
+    }
+
     function setBaseLayer(isyLayer) {
         layerHandler.setBaseLayer(isyLayer);
     }
@@ -945,7 +952,9 @@ export const Map = (mapImplementation, eventHandler, featureInfo) => {
         DescribeFeature: describeFeature,
         RemoveIsyToken: removeIsyToken,
         SetIsyToken: setIsyToken,
-        ShowCustomMessage: showCustomMessage
+        ShowCustomMessage: showCustomMessage,
+        SetZIndex: setZIndex,
+        GetZIndex: getZIndex
         //AddVectorTestData: addVectorTestData
         // Utility end
     };

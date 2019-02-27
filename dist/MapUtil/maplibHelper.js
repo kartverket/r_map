@@ -275,7 +275,7 @@ var createDummyGroup = function createDummyGroup() {
 exports.createDummyGroup = createDummyGroup;
 
 var getWmsUrl = function getWmsUrl(url) {
-  if (url.indexOf('|')) {
+  if (url.indexOf('|') >= 0) {
     return url.split('|');
   } else {
     return url;

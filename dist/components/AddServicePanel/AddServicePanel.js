@@ -13,7 +13,7 @@ var _CapabilitiesUtil = require("../../MapUtil/CapabilitiesUtil");
 
 var _maplibHelper = require("../../MapUtil/maplibHelper");
 
-require("./AddWmsPanel.scss");
+require("./AddServicePanel.scss");
 
 var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
@@ -48,13 +48,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
  * This class can be used e.g with a result obtained by ol WMS capabilities
  * parser, in particular objects in `Capability.Layer.Layer`
  *
- * @class The AddWmsPanel
+ * @class The AddServicePanel
  * @extends React.Component
  */
-var AddWmsPanel =
+var AddServicePanel =
 /*#__PURE__*/
 function (_React$Component) {
-  _inherits(AddWmsPanel, _React$Component);
+  _inherits(AddServicePanel, _React$Component);
 
   /**
    * The prop types.
@@ -62,15 +62,15 @@ function (_React$Component) {
    */
 
   /**
-   * Create an AddWmsPanel.
-   * @constructs AddWmsPanel
+   * Create an AddServicePanel.
+   * @constructs AddServicePanel
    */
-  function AddWmsPanel(props) {
+  function AddServicePanel(props) {
     var _this;
 
-    _classCallCheck(this, AddWmsPanel);
+    _classCallCheck(this, AddServicePanel);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(AddWmsPanel).call(this, props));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(AddServicePanel).call(this, props));
 
     _defineProperty(_assertThisInitialized(_this), "onSelectionChange", function (currentNode) {
       if (!_maplibHelper.map.GetOverlayLayers().includes(currentNode)) {
@@ -97,7 +97,7 @@ function (_React$Component) {
     return _this;
   }
 
-  _createClass(AddWmsPanel, [{
+  _createClass(AddServicePanel, [{
     key: "getCapabilitites",
     value: function getCapabilitites() {
       var _this2 = this;
@@ -108,22 +108,45 @@ function (_React$Component) {
               console.log(layers)
           });
           */
-      _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(this.props.services.GetCapabilitiesUrl).then(_CapabilitiesUtil.CapabilitiesUtil.getLayersFromWmsCapabilties).then(function (layers) {
-        if (_this2.props.services.addLayers.length > 0) {
-          var layersToBeAdded = layers.filter(function (e) {
-            return _this2.props.services.addLayers.includes(e.name);
-          });
-          layersToBeAdded.forEach(function (layer) {
-            return _maplibHelper.map.AddLayer(layer);
-          });
-        }
+      switch (this.props.services.DistributionProtocol) {
+        case "WMS":
+        case "OGC:WMS":
+          _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(this.props.services.GetCapabilitiesUrl).then(_CapabilitiesUtil.CapabilitiesUtil.getLayersFromWmsCapabilties).then(function (layers) {
+            if (_this2.props.services.addLayers.length > 0) {
+              var layersToBeAdded = layers.filter(function (e) {
+                return _this2.props.services.addLayers.includes(e.name);
+              });
+              layersToBeAdded.forEach(function (layer) {
+                return _maplibHelper.map.AddLayer(layer);
+              });
+            }
 
-        _this2.setState({
-          wmsLayers: layers
-        });
-      }).catch(function (e) {
-        return console.log(e);
-      });
+            _this2.setState({
+              wmsLayers: layers
+            });
+          }).catch(function (e) {
+            return console.log(e);
+          });
+
+          break;
+
+        case "WFS":
+          _CapabilitiesUtil.CapabilitiesUtil.parseWFSCapabilities(this.props.services.GetCapabilitiesUrl).then(_CapabilitiesUtil.CapabilitiesUtil.getLayersFromWfsCapabilties).then(function (layers) {
+            console.log(layers);
+
+            _this2.setState({
+              wmsLayers: layers
+            });
+          }).catch(function (e) {
+            return console.log(e);
+          });
+
+          break;
+
+        default:
+          console.warn("No service type specified");
+          break;
+      }
     }
   }, {
     key: "toggleExpand",
@@ -212,23 +235,23 @@ function (_React$Component) {
         onClick: function onClick() {
           return _this4.toggleExpand();
         },
-        className: 'expand-layers-btn'
+        className: "expand-layers-btn"
       }, _react.default.createElement("span", {
-        className: 'ellipsis-toggle'
+        className: "ellipsis-toggle"
       }, this.props.services.Title), _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-        icon: this.state.expanded ? ['fas', 'angle-up'] : ['fas', 'angle-down']
+        icon: this.state.expanded ? ["fas", "angle-up"] : ["fas", "angle-down"]
       })), this.renderRemoveButton(), _react.default.createElement("div", {
         className: this.state.expanded ? "selectedlayers open" : "selectedlayers"
       }, this.renderSelectedLayers()));
     }
   }]);
 
-  return AddWmsPanel;
+  return AddServicePanel;
 }(_react.default.Component);
 
-exports.default = AddWmsPanel;
+exports.default = AddServicePanel;
 
-_defineProperty(AddWmsPanel, "propTypes", {
+_defineProperty(AddServicePanel, "propTypes", {
   /**
    * The services to be parsed and shown in the panel
    * @type {Object} -- required
