@@ -67,11 +67,10 @@ const LayerEntry = props => {
           <div>
             <button onClick={() => setLayerIndex(index + 1)}>UP</button>
             <button onClick={() => setLayerIndex(index - 1)}>Down</button>
-            {index}
           </div>
           {/** TODO: STYLE the slider */}
           <label>
-            transparency: {transparency}
+            transparency:
             <input
               type="range"
               min={0}
