@@ -7660,13 +7660,9 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
-ogc-schemas@^2.6.1:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/ogc-schemas/-/ogc-schemas-2.6.1.tgz#0834b00d8038f56fedd206467f34c130e9976f92"
-  integrity sha1-CDSwDYA49W/t0gZGfzTBMOmXb5I=
-  dependencies:
-    jsonix ">=2.4.0"
-    w3c-schemas ">=1.4.0"
+"ogc-schemas@https://github.com/highsource/ogc-schemas":
+  version "0.0.0"
+  resolved "https://github.com/highsource/ogc-schemas#18ce89928006eee08ed7e5a6ce6ea016436a444b"
 
 ol@^5.3.1:
   version "5.3.1"
@@ -11386,7 +11382,7 @@ w3c-hr-time@^1.0.1:
   dependencies:
     browser-process-hrtime "^0.1.2"
 
-w3c-schemas@>=1.4.0, w3c-schemas@^1.4.0:
+w3c-schemas@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/w3c-schemas/-/w3c-schemas-1.4.0.tgz#f4dafe92d97af56a99b3faa1520f592df2998428"
   integrity sha1-9Nr+ktl69WqZs/qhUg9ZLfKZhCg=

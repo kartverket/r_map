@@ -29,7 +29,7 @@ import {
   SMIL_2_0_Language,
   WFS_1_1_0,
   WFS_2_0
-} from 'ogc-schemas'
+} from 'ogc-schemas/scripts/'
 
 export const newMaplibLayer = (sourceType, source) => {
   let catIds = [999]

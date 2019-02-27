@@ -19,7 +19,7 @@ var _jsonix = require("@boundlessgeo/jsonix");
 
 var _w3cSchemas = require("w3c-schemas");
 
-var _ogcSchemas = require("ogc-schemas");
+var _scripts = require("ogc-schemas/scripts/");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -104,9 +104,9 @@ var newMaplibLayer = function newMaplibLayer(sourceType, source) {
 };
 
 exports.newMaplibLayer = newMaplibLayer;
-var context_wfs_2_0_0 = new _jsonix.Jsonix.Context([_w3cSchemas.XLink_1_0, _ogcSchemas.OWS_1_1_0, _ogcSchemas.GML_2_1_2, _ogcSchemas.Filter_2_0, _ogcSchemas.WFS_2_0]);
+var context_wfs_2_0_0 = new _jsonix.Jsonix.Context([_w3cSchemas.XLink_1_0, _scripts.OWS_1_1_0, _scripts.GML_2_1_2, _scripts.Filter_2_0, _scripts.WFS_2_0]);
 var unmarshaller_wfs_2_0_0 = context_wfs_2_0_0.createUnmarshaller();
-var context_wfs_1_1_0 = new _jsonix.Jsonix.Context([_w3cSchemas.XLink_1_0, _ogcSchemas.OWS_1_0_0, _ogcSchemas.OWS_1_1_0, _ogcSchemas.Filter_1_1_0, _ogcSchemas.GML_2_1_2, _ogcSchemas.GML_3_1_1, _ogcSchemas.SMIL_2_0, _ogcSchemas.SMIL_2_0_Language, _ogcSchemas.WFS_1_1_0]);
+var context_wfs_1_1_0 = new _jsonix.Jsonix.Context([_w3cSchemas.XLink_1_0, _scripts.OWS_1_0_0, _scripts.OWS_1_1_0, _scripts.Filter_1_1_0, _scripts.GML_2_1_2, _scripts.GML_3_1_1, _scripts.SMIL_2_0, _scripts.SMIL_2_0_Language, _scripts.WFS_1_1_0]);
 var unmarshaller_wfs_1_1_0 = context_wfs_1_1_0.createUnmarshaller();
 /**
  * Helper class to parse capabilities of WMS layers
