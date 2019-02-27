@@ -8,7 +8,7 @@ import "./AddServicePanel.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import InlineLegend from "../Legend/InlineLegend";
-import LayerEntry from "./LayerEntry"
+import LayerEntry from "./LayerEntry";
 
 /**
  * Panel containing a (checkable) list.
@@ -34,7 +34,7 @@ export default class AddServicePanel extends React.Component {
      * Optional instance of Map
      * @type {Object}
      */
-    map: PropTypes.object,
+    map: PropTypes.object
   };
 
   /**
@@ -53,12 +53,16 @@ export default class AddServicePanel extends React.Component {
     switch (this.props.services.DistributionProtocol) {
       case "WMS":
       case "OGC:WMS":
-        CapabilitiesUtil.parseWmsCapabilities( this.props.services.GetCapabilitiesUrl )
-          .then(CapabilitiesUtil.getLayersFromWmsCapabilties )
+        CapabilitiesUtil.parseWmsCapabilities(
+          this.props.services.GetCapabilitiesUrl
+        )
+          .then(CapabilitiesUtil.getLayersFromWmsCapabilties)
           .then(layers => {
             if (this.props.services.addLayers.length > 0) {
-              let layersToBeAdded = layers.filter(e => this.props.services.addLayers.includes(e.name))
-              layersToBeAdded.forEach(layer => map.AddLayer(layer))
+              let layersToBeAdded = layers.filter(e =>
+                this.props.services.addLayers.includes(e.name)
+              );
+              layersToBeAdded.forEach(layer => map.AddLayer(layer));
             }
             this.setState({
               wmsLayers: layers
@@ -67,7 +71,9 @@ export default class AddServicePanel extends React.Component {
           .catch(e => console.log(e));
         break;
       case "WFS":
-        CapabilitiesUtil.parseWFSCapabilities(this.props.services.GetCapabilitiesUrl)
+        CapabilitiesUtil.parseWFSCapabilities(
+          this.props.services.GetCapabilitiesUrl
+        )
           .then(CapabilitiesUtil.getLayersFromWfsCapabilties)
           .then(layers => {
             this.setState({
@@ -102,7 +108,11 @@ export default class AddServicePanel extends React.Component {
   renderRemoveButton() {
     if (this.props.removeMapItem) {
       return (
-        <FontAwesomeIcon className="remove-inline" onClick={this.props.removeMapItem} icon={["fas", "times"]}/>
+        <FontAwesomeIcon
+          className="remove-inline"
+          onClick={this.props.removeMapItem}
+          icon={["fas", "times"]}
+        />
       );
     } else {
       return "";
@@ -115,7 +125,7 @@ export default class AddServicePanel extends React.Component {
       const wmsLayersList = wmsLayers.map(layer => {
         return (
           <div className="facet" key={layer.id}>
-            <LayerEntry layer={layer}/>
+            <LayerEntry layer={layer} />
             <InlineLegend legendUrl={layer.subLayers[0].legendGraphicUrl} />
           </div>
         );
@@ -130,16 +140,25 @@ export default class AddServicePanel extends React.Component {
    * The render function.
    */
   render() {
-    return <div>
-            <div onClick={() => this.toggleExpand()} className={'expand-layers-btn'}>
-              <span className={'ellipsis-toggle'}>{this.props.services.Title}</span>
-              <FontAwesomeIcon icon={this.state.expanded ? ['fas','angle-up'] : ['fas','angle-down']} />
-              </div>
-            { this.renderRemoveButton() }
+    return (
+      <div>
+        <div onClick={() => this.toggleExpand()} className={"expand-layers-btn"} >
+          <span className={"ellipsis-toggle"}>{this.props.services.Title}</span>
+          <FontAwesomeIcon
+            icon={
+              this.state.expanded ? ["fas", "angle-up"] : ["fas", "angle-down"]
+            }
+          />
+        </div>
+        {this.renderRemoveButton()}
 
-            <div className={ this.state.expanded ? "selectedlayers open" : "selectedlayers" } >
-              {this.renderSelectedLayers()}
-            </div>
-          </div>
+        <div className={
+            this.state.expanded ? "selectedlayers open" : "selectedlayers"
+          }
+        >
+          {this.renderSelectedLayers()}
+        </div>
+      </div>
+    );
   }
 }
