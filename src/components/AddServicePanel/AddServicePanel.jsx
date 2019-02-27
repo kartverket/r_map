@@ -29,12 +29,6 @@ export default class AddServicePanel extends React.Component {
      * @type {Object} -- required
      */
     services: PropTypes.object.isRequired,
-
-    /**
-     * Optional instance of Map
-     * @type {Object}
-     */
-    map: PropTypes.object
   };
 
   /**

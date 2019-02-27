@@ -11,14 +11,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import style from "./MapContainer.scss";
 
 const ListItem = props => (
-  <AddServicePanel map={map} services={props.listItem} removeMapItem={props.removeMapItem} draggable/>
+  <AddServicePanel services={props.listItem} removeMapItem={props.removeMapItem} draggable/>
 );
 
 /**
  * @class The Map Component
  * @extends React.Component
  */
-export class MapContainer extends React.Component {
+export default class MapContainer extends React.Component {
   state = {
     layers: []
   };
@@ -218,5 +218,3 @@ export class MapContainer extends React.Component {
     );
   }
 }
-
-export default MapContainer;

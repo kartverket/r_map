@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { map } from "../../MapUtil/maplibHelper";
@@ -86,6 +87,10 @@ const LayerEntry = props => {
       {props.children}
     </>
   );
+};
+
+LayerEntry.propTypes = {
+  layer: PropTypes.object
 };
 
 export default LayerEntry;

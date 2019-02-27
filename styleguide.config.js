@@ -24,8 +24,8 @@ module.exports = {
   }, {
     name: 'Components',
     sections: [{
-      name: 'AddWmsPanel',
-      components: 'src/components/AddWmsPanel/**/*.jsx'
+      name: 'AddServicePanel',
+      components: 'src/components/AddServicePanel/**/*.jsx'
     }, {
       name: 'BackgroundChooser',
       components: 'src/components/BackgroundChooser/**/*.jsx'
@@ -35,6 +35,9 @@ module.exports = {
     }, {
       name: 'MapComponent',
       components: 'src/components/MapComponent/**/*.jsx'
+    }, {
+      name: 'MapContainer',
+      components: 'src/components/MapContainer/**/*.jsx'
     }]
   }],
   template: {
