@@ -448,8 +448,7 @@ var Vector = function Vector(isySubLayer) {
 exports.Vector = Vector;
 
 var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandler) {
-  /* jshint -W024 */
-  var strategy; //isySubLayer.tiled = true; // todo: just for testing, remove before merge!
+  var strategy;
 
   if (isySubLayer.tiled) {
     var newMapRes = [];
@@ -478,7 +477,7 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
     /*
     source.dispatchEvent('vectorloadend');
     var featureNamespace;
-     if (typeof source.format === 'undefined') {
+      if (typeof source.format === 'undefined') {
       var gmlFormat;
       switch (isySubLayer.version) {
         case '1.0.0':
@@ -494,7 +493,7 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
           gmlFormat = new GMLFormat();
           break;
       }
-       // TODO: Remove this gigahack when the number of returned coordinates is static (or implement an algorithm that can find the dimension dynamically).
+        // TODO: Remove this gigahack when the number of returned coordinates is static (or implement an algorithm that can find the dimension dynamically).
       if (isySubLayer.srs_dimension && isySubLayer.srs_dimension.length > 0) {
         featureNamespace = response.firstChild.firstElementChild.firstElementChild.namespaceURI;
         source.format = new WFSFormat({
@@ -537,36 +536,41 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
         }
       }
     }
-     var features = source.format.readFeatures(response);
+      var features = source.format.readFeatures(response);
     */
 
 
-    console.log(features); //
-    //var featureIsValid = function (feature){
-    //    var geometryIsOk = false;
-    //    var getZCoordinate = function (c) {
-    //        if (Array.isArray(c)) {
-    //            return getZCoordinate(c[c.length - 1]);
-    //        }
-    //        return c;
-    //    };
-    //    var geometry = feature.getGeometry();
-    //    var coords = geometry.getCoordinates();
-    //    var z = getZCoordinate(coords);
-    //    if (!isNaN(z)){
-    //        geometryIsOk = true;
-    //    }
-    //    return geometryIsOk;
-    //};
+    var featureIsValid = function featureIsValid(feature) {
+      var geometryIsOk = false; //  var getZCoordinate = function (c) {
+      //      if (Array.isArray(c)) {
+      //          return getZCoordinate(c[c.length - 1]);
+      //      }
+      //      return c;
+      //  };
+      //  var geometry = feature.getGeometry();
+      //  var coords = geometry.getCoordinates();
+      //  var z = getZCoordinate(coords);
+      //  if (!isNaN(z)){
+      //      geometryIsOk = true;
+      //  }
 
-    if (features && features.length > 0) {
-      //var featureIsOk = true;
-      //if (!featureIsValid(features[0])) {
-      //    if (console && console.log) {
-      //        featureIsOk = false;
-      //        console.log(isySubLayer.name + ' does not have valid coordinates!');
-      //    }
-      //}
+      return geometryIsOk;
+    };
+
+    if (features && features['wfs:FeatureCollection'] && features['wfs:FeatureCollection']['wfs:member']) {
+      console.log(features);
+      var test = new _format.GML().readFeatures(features, {
+        dataProjection: 'EPSG:32633',
+        featureProjection: 'EPSG:32633'
+      });
+      console.log(test);
+      var featureIsOk = true;
+
+      if (!featureIsValid(features)) {
+        featureIsOk = false;
+        console.log(isySubLayer.name + ' does not have valid coordinates!');
+      }
+
       features.forEach(function (featureitem) {
         featureitem.set("layerguid", isySubLayer.id); //if (!featureIsOk){
         //    var geometry = featureitem.getGeometry();

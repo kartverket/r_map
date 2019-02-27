@@ -44,25 +44,36 @@ var TEST_DATA = [{
   "GetCapabilitiesUrl": "https://openwms.statkart.no/skwms1/wms.adm_enheter?request=GetCapabilities&service=WMS",
   addLayers: []
 }, {
+  "Uuid": "8045628b-230a-4ba4-a6e0-xxxxx",
+  "Title": "ssr2",
+  "DistributionProtocol": "OGC:WMS",
+  "GetCapabilitiesUrl": "https://openwms.statkart.no/skwms1/wms.ssr2?request=GetCapabilities&service=WMS",
+  addLayers: []
+  /*,
+  {
   "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
   "Title": "tilgjengelighet",
   "DistributionProtocol": "WFS",
-  "GetCapabilitiesUrl": "http://wfs.geonorge.no/skwms1/wfs.tilgjengelighet_friluft?request=GetCapabilities&service=WFS"
-}, {
+  "GetCapabilitiesUrl":"http://wfs.geonorge.no/skwms1/wfs.tilgjengelighet_friluft?request=GetCapabilities&service=WFS"
+  },
+  {
   "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
   "Title": "markagrenser",
   "DistributionProtocol": "WFS",
-  "GetCapabilitiesUrl": "https://wfs.geonorge.no/skwms1/wfs.markagrensa?request=GetCapabilities&service=WFS"
-}, {
+  "GetCapabilitiesUrl":"https://wfs.geonorge.no/skwms1/wfs.markagrensa?request=GetCapabilities&service=WFS"
+  },
+  {
   "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
   "Title": "Kvikkleire ",
   "DistributionProtocol": "WFS",
-  "GetCapabilitiesUrl": "https://wfs.geonorge.no/skwms1/wfs.kvikkleire?service=wfs&request=getcapabilities"
-}, {
+  "GetCapabilitiesUrl":"https://wfs.geonorge.no/skwms1/wfs.kvikkleire?service=wfs&request=getcapabilities"
+  },{
   "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
   "Title": "Brannstasjoner ",
   "DistributionProtocol": "WFS",
-  "GetCapabilitiesUrl": "https://wfs.geonorge.no/skwms1/wfs.brannstasjoner?service=wfs&request=getcapabilities"
+  "GetCapabilitiesUrl":"https://wfs.geonorge.no/skwms1/wfs.brannstasjoner?service=wfs&request=getcapabilities"
+  }*/
+
 }];
 
 var App =

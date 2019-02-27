@@ -19,11 +19,11 @@ var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
 var _InlineLegend = _interopRequireDefault(require("../Legend/InlineLegend"));
 
+var _LayerEntry = _interopRequireDefault(require("./LayerEntry"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -62,8 +62,8 @@ function (_React$Component) {
    */
 
   /**
-   * Create an AddServicePanel.
-   * @constructs AddServicePanel
+   * Create an AddWmsPanel.
+   * @constructs AddWmsPanel
    */
   function AddServicePanel(props) {
     var _this;
@@ -87,10 +87,8 @@ function (_React$Component) {
     });
 
     _this.state = {
-      expanded: false,
-      checkedWmslayers: {}
+      expanded: false
     };
-    _this.toggleWmslayer = _this.toggleWmslayer.bind(_assertThisInitialized(_this));
 
     _this.getCapabilitites();
 
@@ -102,12 +100,6 @@ function (_React$Component) {
     value: function getCapabilitites() {
       var _this2 = this;
 
-      /*
-          CapabilitiesUtil.parseWMTS(this.props.services.GetCapabilitiesUrl)
-          .then(layers => {
-              console.log(layers)
-          });
-          */
       switch (this.props.services.DistributionProtocol) {
         case "WMS":
         case "OGC:WMS":
@@ -132,8 +124,6 @@ function (_React$Component) {
 
         case "WFS":
           _CapabilitiesUtil.CapabilitiesUtil.parseWFSCapabilities(this.props.services.GetCapabilitiesUrl).then(_CapabilitiesUtil.CapabilitiesUtil.getLayersFromWfsCapabilties).then(function (layers) {
-            console.log(layers);
-
             _this2.setState({
               wmsLayers: layers
             });
@@ -171,28 +161,8 @@ function (_React$Component) {
       }
     }
   }, {
-    key: "toggleWmslayer",
-    value: function toggleWmslayer(event) {
-      if (event.target.checked) {
-        this.setState({
-          checkedWmslayers: _objectSpread({}, this.state.checkedWmslayers, _defineProperty({}, event.target.id, true))
-        });
-      } else {
-        this.setState({
-          checkedWmslayers: _objectSpread({}, this.state.checkedWmslayers, _defineProperty({}, event.target.id, undefined))
-        });
-      }
-    }
-  }, {
-    key: "isWmsLayerVisible",
-    value: function isWmsLayerVisible(layer) {
-      return layer.isVisible;
-    }
-  }, {
     key: "renderSelectedLayers",
     value: function renderSelectedLayers() {
-      var _this3 = this;
-
       var wmsLayers = this.state.wmsLayers;
 
       if (wmsLayers && wmsLayers.length) {
@@ -200,20 +170,9 @@ function (_React$Component) {
           return _react.default.createElement("div", {
             className: "facet",
             key: layer.id
-          }, _react.default.createElement("input", {
-            className: "checkbox",
-            onChange: _this3.toggleWmslayer,
-            id: layer.id,
-            type: "checkbox"
-          }), _react.default.createElement("label", {
-            onClick: function onClick() {
-              return _this3.onSelectionChange(layer);
-            },
-            htmlFor: layer.id
-          }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-            className: "svg-checkbox",
-            icon: _this3.isWmsLayerVisible(layer) ? ["far", "check-square"] : ["far", "square"]
-          }), _react.default.createElement("span", null, layer.label)), " ", _react.default.createElement(_InlineLegend.default, {
+          }, _react.default.createElement(_LayerEntry.default, {
+            layer: layer
+          }), _react.default.createElement(_InlineLegend.default, {
             legendUrl: layer.subLayers[0].legendGraphicUrl
           }));
         });
@@ -229,11 +188,11 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this4 = this;
+      var _this3 = this;
 
       return _react.default.createElement("div", null, _react.default.createElement("div", {
         onClick: function onClick() {
-          return _this4.toggleExpand();
+          return _this3.toggleExpand();
         },
         className: "expand-layers-btn"
       }, _react.default.createElement("span", {
@@ -256,17 +215,5 @@ _defineProperty(AddServicePanel, "propTypes", {
    * The services to be parsed and shown in the panel
    * @type {Object} -- required
    */
-  services: _propTypes.default.object.isRequired,
-
-  /**
-   * Optional instance of Map
-   * @type {Object}
-   */
-  map: _propTypes.default.object,
-
-  /**
-   * Optional function that is called if selection has changed.
-   * @type {Function}
-   */
-  onSelectionChange: _propTypes.default.func
+  services: _propTypes.default.object.isRequired
 });

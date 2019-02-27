@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = exports.MapContainer = void 0;
+exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -49,8 +49,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var ListItem = function ListItem(props) {
   return _react.default.createElement(_AddServicePanel.default, {
-    key: "1",
-    map: _maplibHelper.map,
     services: props.listItem,
     removeMapItem: props.removeMapItem,
     draggable: true
@@ -257,7 +255,7 @@ function (_React$Component) {
   return MapContainer;
 }(_react.default.Component);
 
-exports.MapContainer = MapContainer;
+exports.default = MapContainer;
 
 _defineProperty(MapContainer, "propTypes", {
   /**
@@ -322,6 +320,3 @@ _defineProperty(MapContainer, "defaultProps", {
   wms: "",
   menu: true
 });
-
-var _default = MapContainer;
-exports.default = _default;

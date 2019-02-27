@@ -7,6 +7,8 @@ exports.default = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
 var _Legend = _interopRequireDefault(require("./Legend"));
 
 var _InlineLegend = _interopRequireDefault(require("./InlineLegend.scss"));
@@ -31,16 +33,12 @@ var InlineLegend = function InlineLegend(props) {
       expanded = _useState2[0],
       toggleExpand = _useState2[1];
 
-  var handleExpand = function handleExpand() {
-    return toggleExpand(!expanded);
-  };
-
   var legend = function legend() {
     if (props.legendUrl) {
-      return _react.default.createElement("div", null, _react.default.createElement("div", {
+      return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
         className: _InlineLegend.default.toggle,
         onClick: function onClick() {
-          return handleExpand();
+          return toggleExpand(!expanded);
         }
       }, _react.default.createElement("span", {
         className: _InlineLegend.default.label
@@ -60,5 +58,8 @@ var InlineLegend = function InlineLegend(props) {
   return _react.default.createElement("div", null, legend());
 };
 
+InlineLegend.propTypes = {
+  legendUrl: _propTypes.default.string.isRequired
+};
 var _default = InlineLegend;
 exports.default = _default;

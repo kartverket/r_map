@@ -24,6 +24,5 @@ const TEST_DATA = [
     addLayers:[]
   }
 ];
-
 <MapContainer services={TEST_DATA}/>
 ```
