@@ -21,6 +21,18 @@ Object.defineProperty(exports, "MapComponent", {
     return _MapComponent.default;
   }
 });
+Object.defineProperty(exports, "MapContainer", {
+  enumerable: true,
+  get: function get() {
+    return _MapContainer.default;
+  }
+});
+Object.defineProperty(exports, "Legend", {
+  enumerable: true,
+  get: function get() {
+    return _Legend.default;
+  }
+});
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -39,6 +51,10 @@ var _AddServicePanel = _interopRequireDefault(require("./components/AddServicePa
 var _BackgroundChooser = _interopRequireDefault(require("./components/BackgroundChooser/BackgroundChooser"));
 
 var _MapComponent = _interopRequireDefault(require("./components/MapComponent/MapComponent"));
+
+var _MapContainer = _interopRequireDefault(require("./components/MapContainer/MapContainer"));
+
+var _Legend = _interopRequireDefault(require("./components/Legend/Legend"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
