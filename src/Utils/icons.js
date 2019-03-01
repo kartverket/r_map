@@ -4,7 +4,7 @@ import {
   faLayerGroup,
   faCheckSquare,
   faSquare,
-  faCogs, faInfo
+  faCogs, faInfo, faCog, faSlidersH
 } from '@fortawesome/pro-regular-svg-icons'
 
 
@@ -18,7 +18,9 @@ library.add(
     faCheckSquare,
     faSquare,
     faCogs,
-    faInfo
+    faInfo,
+    faCog,
+    faSlidersH
     ]
 );
 

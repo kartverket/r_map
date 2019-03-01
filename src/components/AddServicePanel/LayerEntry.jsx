@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import style from './LayerEntry.scss'
 import { map } from "../../MapUtil/maplibHelper";
 
 const LayerEntry = props => {
@@ -58,20 +58,21 @@ const LayerEntry = props => {
       ) : null}
       <label onClick={() => toggleOptions(!options)}>
         <FontAwesomeIcon
-          icon={["far", "cogs"]}
+          icon={["far", "sliders-h"]}
           color={options ? "red" : "black"}
         />
       </label>
       {options ? (
-        <div>
+        <div className={style.settings}>
           {/** TODO: Style layer up and down */}
           <div>
-            <button onClick={() => setLayerIndex(index + 1)}>UP</button>
-            <button onClick={() => setLayerIndex(index - 1)}>Down</button>
+            <button className={style.movelayerBtn} onClick={() => setLayerIndex(index + 1)}>Flytt fremover<FontAwesomeIcon title="Vis laget lenger opp"  icon={['fas', 'angle-up']} /></button>
+            <button className={style.movelayerBtn} onClick={() => setLayerIndex(index - 1)}>Flytt bakover <FontAwesomeIcon  title="Vis laget lenger ned" icon={['fas','angle-down']} /></button>
+            <span className={style.priority}>Prioritet: {index}</span>
           </div>
           {/** TODO: STYLE the slider */}
-          <label>
-            transparency:
+          <label className={style.slider}>
+            Gjennomsiktighet:
             <input
               type="range"
               min={0}
