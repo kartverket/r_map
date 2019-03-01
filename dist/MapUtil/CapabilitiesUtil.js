@@ -52,6 +52,8 @@ var newMaplibLayer = function newMaplibLayer(sourceType, source) {
       gatekeeper: source.gatekeeper === 'true',
       url: (0, _maplibHelper.getWmsUrl)(source.url),
       format: source.params.format,
+      featureNS: source.featureNS || '',
+      featureType: source.featureType || '',
       coordinate_system: source.epsg || _maplibHelper.mapConfig.coordinate_system,
       extent: _maplibHelper.mapConfig.extent,
       extentUnits: _maplibHelper.mapConfig.extentUnits,
@@ -196,10 +198,13 @@ function () {
     key: "getLayersFromWfsCapabilties",
     value: function getLayersFromWfsCapabilties(capabilities) {
       var nameField = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'name.localPart';
-      var version = (0, _get.default)(capabilities, 'value.version');
+      var version = '1.1.0'; //get(capabilities, 'value.version');
+
       var featureTypesInCapabilities = (0, _get.default)(capabilities, 'value.featureTypeList.featureType');
       var url = (0, _get.default)(capabilities, 'value.operationsMetadata.operation[0].dcp[0].http.getOrPost[0].value.href');
+      var featureNS = {};
       return featureTypesInCapabilities.map(function (layerObj) {
+        featureNS[layerObj.name.prefix] = layerObj.name.namespaceURI;
         return newMaplibLayer('WFS', {
           type: "map",
           name: (0, _get.default)(layerObj, nameField),
@@ -214,7 +219,9 @@ function () {
             isbaselayer: "false",
             singletile: "false",
             visibility: "true"
-          }
+          },
+          featureNS: featureNS,
+          featureType: layerObj.name.prefix + ':' + layerObj.name.localPart
         });
       });
     }

@@ -52,6 +52,8 @@ export const newMaplibLayer = (sourceType, source) => {
       gatekeeper: source.gatekeeper === 'true',
       url: getWmsUrl(source.url),
       format: source.params.format,
+      featureNS: source.featureNS || '',
+      featureType: source.featureType || '',
       coordinate_system: source.epsg || mapConfig.coordinate_system,
       extent: mapConfig.extent,
       extentUnits: mapConfig.extentUnits,
@@ -179,11 +181,13 @@ export class CapabilitiesUtil {
   }
 
   static getLayersFromWfsCapabilties(capabilities, nameField = 'name.localPart') {
-    const version = get(capabilities, 'value.version');
+    const version = '1.1.0'; //get(capabilities, 'value.version');
     const featureTypesInCapabilities = get(capabilities, 'value.featureTypeList.featureType');
     const url = get(capabilities, 'value.operationsMetadata.operation[0].dcp[0].http.getOrPost[0].value.href');
-    return featureTypesInCapabilities.map((layerObj) =>
-      newMaplibLayer('WFS', {
+    let featureNS = {};
+    return featureTypesInCapabilities.map((layerObj) => {
+      featureNS[layerObj.name.prefix] = layerObj.name.namespaceURI;
+      return newMaplibLayer('WFS', {
         type: "map",
         name: get(layerObj, nameField),
         url: url,
@@ -197,8 +201,10 @@ export class CapabilitiesUtil {
           isbaselayer: "false",
           singletile: "false",
           visibility: "true"
-        }
-      }));
+        },
+        featureNS:featureNS,
+        featureType:layerObj.name.prefix + ':' + layerObj.name.localPart
+      })});
   }
   static parseWFSCapabilities(capabilitiesUrl) {
     return fetch(capabilitiesUrl)

@@ -15,7 +15,7 @@ var _format = require("ol/format");
 
 var _GML = _interopRequireDefault(require("ol/format/GML2"));
 
-var _GML2 = _interopRequireDefault(require("ol/format/GML3"));
+var _GML2 = _interopRequireDefault(require("ol/format/GML32"));
 
 var _Projection = _interopRequireDefault(require("ol/proj/Projection"));
 
@@ -24,8 +24,6 @@ var _WMTSCapabilities = _interopRequireDefault(require("ol/format/WMTSCapabiliti
 var _WMTS = _interopRequireDefault(require("ol/source/WMTS"));
 
 var _jquery = _interopRequireDefault(require("jquery"));
-
-var _fastXmlParser = _interopRequireDefault(require("fast-xml-parser"));
 
 var _WMTS2 = _interopRequireDefault(require("ol/tilegrid/WMTS"));
 
@@ -165,7 +163,7 @@ var MaplibCustomMessageHandler = function MaplibCustomMessageHandler(eventHandle
           async: false
         }).responseText;
 
-        var responseObject = (0, _fastXmlParser.default)(response);
+        var responseObject = new DOMParser(response);
 
         if (responseObject && responseObject.serviceexceptionreport && responseObject.serviceexceptionreport.serviceexception) {
           var gkterror = responseObject.serviceexceptionreport.serviceexception.split('\n');
@@ -471,58 +469,68 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
   var projection = (0, _proj.get)(isySubLayer.coordinate_system);
 
   var parseResponse = function parseResponse(response) {
-    var features = _fastXmlParser.default.parse(response); //const response = new DOMParser();
-    //response = parser.parseFromString(response, "text/xml");
-
-    /*
+    var domparser = new DOMParser();
+    response = domparser.parseFromString(response, "text/xml");
     source.dispatchEvent('vectorloadend');
     var featureNamespace;
-      if (typeof source.format === 'undefined') {
+
+    if (typeof source.format === 'undefined') {
       var gmlFormat;
+
       switch (isySubLayer.version) {
         case '1.0.0':
-          gmlFormat = new GML2Format();
+          gmlFormat = new _GML.default();
           break;
+
         case '1.1.0':
-          gmlFormat = new GML3Format();
+          gmlFormat = new _GML2.default();
           break;
+
         case '2.0.0':
-          gmlFormat = new GML3Format();
+          gmlFormat = new _GML2.default();
           break;
+
         default:
-          gmlFormat = new GMLFormat();
+          gmlFormat = new _format.GML();
           break;
-      }
-        // TODO: Remove this gigahack when the number of returned coordinates is static (or implement an algorithm that can find the dimension dynamically).
+      } // TODO: Remove this gigahack when the number of returned coordinates is static (or implement an algorithm that can find the dimension dynamically).
+
+
       if (isySubLayer.srs_dimension && isySubLayer.srs_dimension.length > 0) {
-        featureNamespace = response.firstChild.firstElementChild.firstElementChild.namespaceURI;
-        source.format = new WFSFormat({
-          featureType: response.firstChild.firstElementChild.firstElementChild.localName,
+        featureNamespace = isySubLayer.featureNS || response.firstChild.firstElementChild.firstElementChild.namespaceURI;
+        source.format = new _format.WFS({
+          featureType: isySubLayer.featureType || response.firstChild.firstElementChild.firstElementChild.localName,
           featureNS: featureNamespace,
           gmlFormat: gmlFormat
         });
       } else {
-        featureNamespace = response.firstChild.namespaceURI;
-        source.format = new WFSFormat({
-          featureType: isySubLayer.name,
+        featureNamespace = isySubLayer.featureNS || response.firstChild.namespaceURI;
+        source.format = new _format.WFS({
+          featureType: isySubLayer.featureType || isySubLayer.name,
           featureNS: featureNamespace,
           gmlFormat: gmlFormat
         });
       }
     }
+
     if (isySubLayer.srs_dimension === "3") {
       featureNamespace = response.firstChild.firstElementChild.firstElementChild.namespaceURI;
+
       if (response.firstChild.nodeName.toLowerCase() === "gml:featurecollection") {
         for (var i = 0; i < response.firstChild.childNodes.length; i++) {
           var member = response.firstChild.childNodes.item(i);
-          if (member.nodeName.toLowerCase() === "gml:featuremember") {
+
+          if (member.nodeName.toLowerCase() === "gml:featureMember") {
             for (var j = 0; j < member.childNodes.length; j++) {
               var feature = member.childNodes.item(j);
+
               if (feature.nodeName.toLowerCase() === isySubLayer.name.toLowerCase()) {
                 for (var k = 0; k < feature.childNodes.length; k++) {
                   var attribute = feature.childNodes.item(k);
+
                   for (var l = 0; l < attribute.childNodes.length; l++) {
                     var attributeType = attribute.childNodes.item(l).nodeName;
+
                     if (attributeType.toLowerCase() === "gml:linestring" || attributeType.toLowerCase() === "gml:point") {
                       var srsAttribute = document.createAttribute("srsDimension");
                       srsAttribute.value = isySubLayer.srs_dimension;
@@ -536,9 +544,8 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
         }
       }
     }
-      var features = source.format.readFeatures(response);
-    */
 
+    var features = source.format.readFeatures(response);
 
     var featureIsValid = function featureIsValid(feature) {
       var geometryIsOk = false; //  var getZCoordinate = function (c) {
@@ -557,13 +564,7 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
       return geometryIsOk;
     };
 
-    if (features && features['wfs:FeatureCollection'] && features['wfs:FeatureCollection']['wfs:member']) {
-      console.log(features);
-      var test = new _format.GML().readFeatures(features, {
-        dataProjection: 'EPSG:32633',
-        featureProjection: 'EPSG:32633'
-      });
-      console.log(test);
+    if (features && features.length > 0) {
       var featureIsOk = true;
 
       if (!featureIsValid(features)) {
@@ -594,14 +595,15 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
 
     if (features.length > 0) {
       isySubLayer.geometryName = features[0].getGeometryName();
-    } //isySubLayer.featureNS = featureNamespace;
-
+    }
 
     if (featureObj) {
       if (eventHandler) {
         eventHandler.TriggerEvent(_EventHandler.EventTypes.RefreshSourceDone, featureObj);
       }
     }
+
+    return features;
   };
 
   var loader = function loader(extent) {
@@ -616,7 +618,7 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
       url += "service=WFS&";
     }
 
-    url += 'request=GetFeature&' + 'version=' + isySubLayer.version + '&typename=' + isySubLayer.name + '&' + 'srsname=' + isySubLayer.coordinate_system + '&' + 'bbox=' + extent.join(',') + ',' + isySubLayer.coordinate_system; // + '&outputFormat=text/xml; subtype=gml/3.2.1';
+    url += 'request=GetFeature&' + 'version=' + isySubLayer.version + '&typename=' + isySubLayer.name + '&' + 'srsname=' + isySubLayer.coordinate_system + '&' + 'bbox=' + extent.join(',') + ',' + isySubLayer.coordinate_system + '&outputFormat=text/xml; subtype=gml/3.2.1';
 
     if (parameters) {
       // source is refreshed

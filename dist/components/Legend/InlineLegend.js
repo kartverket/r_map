@@ -59,7 +59,7 @@ var InlineLegend = function InlineLegend(props) {
 };
 
 InlineLegend.propTypes = {
-  legendUrl: _propTypes.default.string.isRequired
+  legendUrl: _propTypes.default.string
 };
 var _default = InlineLegend;
 exports.default = _default;
