@@ -1,33 +1,21 @@
-import {
-  EventTypes
-} from './EventHandler'
-import {
-  FORMATS
-} from './Domain'
-import {
-  TileWMS,
-  ImageWMS
-} from 'ol/source'
+import { EventTypes } from './EventHandler'
+import { FORMATS } from './Domain'
+import { TileWMS, ImageWMS } from 'ol/source'
 import {
   GeoJSON as GeoJSONFormat,
   GML as GMLFormat,
   WFS as WFSFormat
 } from 'ol/format';
 import GML2Format from 'ol/format/GML2'
-import GML3Format from 'ol/format/GML3'
-
+//import GML3Format from 'ol/format/GML3'
+import GML32Format from 'ol/format/GML32'
 import Projection from 'ol/proj/Projection'
 import WMTSCapabilities from 'ol/format/WMTSCapabilities'
-import {
-  Vector as VectorSource
-} from 'ol/source'
+import { Vector as VectorSource } from 'ol/source'
 import WMTS from 'ol/source/WMTS';
 import $ from "jquery";
 
-import parser from "fast-xml-parser";
-import
-WMTSTileGrid
-from 'ol/tilegrid/WMTS'
+import WMTSTileGrid from 'ol/tilegrid/WMTS'
 import TileGrid from 'ol/tilegrid/TileGrid'
 import {
   getWidth as getExtentWidth,
@@ -37,9 +25,7 @@ import {
   bbox as loadingstrategyBbox,
   tile as loadingstrategyTile
 } from 'ol/loadingstrategy'
-import {
-  get as getProjection
-} from 'ol/proj.js';
+import { get as getProjection } from 'ol/proj.js';
 
 export const MaplibCustomMessageHandler = (eventHandler, _getIsySubLayerFromPool) => {
   var olMap;
@@ -147,7 +133,7 @@ export const MaplibCustomMessageHandler = (eventHandler, _getIsySubLayerFromPool
           url: image.src,
           async: false
         }).responseText;
-        var responseObject = parser(response);
+        var responseObject = new DOMParser(response);
         if (responseObject && responseObject.serviceexceptionreport && responseObject.serviceexceptionreport.serviceexception) {
           var gkterror = responseObject.serviceexceptionreport.serviceexception.split('\n');
           return message + '<br>' + gkterror[2] + ' ' + gkterror[3].substr(0, gkterror[3].indexOf(' Token:'));
@@ -410,10 +396,9 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
   var projection = getProjection(isySubLayer.coordinate_system);
 
   var parseResponse = function (response) {
-    const features = parser.parse(response)
-    //const response = new DOMParser();
-    //response = parser.parseFromString(response, "text/xml");
-    /*
+    const domparser = new DOMParser();
+    response = domparser.parseFromString(response, "text/xml");
+
     source.dispatchEvent('vectorloadend');
     var featureNamespace;
 
@@ -424,10 +409,10 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
           gmlFormat = new GML2Format();
           break;
         case '1.1.0':
-          gmlFormat = new GML3Format();
+          gmlFormat = new GML32Format();
           break;
         case '2.0.0':
-          gmlFormat = new GML3Format();
+          gmlFormat = new GML32Format();
           break;
         default:
           gmlFormat = new GMLFormat();
@@ -436,16 +421,16 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
 
       // TODO: Remove this gigahack when the number of returned coordinates is static (or implement an algorithm that can find the dimension dynamically).
       if (isySubLayer.srs_dimension && isySubLayer.srs_dimension.length > 0) {
-        featureNamespace = response.firstChild.firstElementChild.firstElementChild.namespaceURI;
+        featureNamespace = isySubLayer.featureNS || response.firstChild.firstElementChild.firstElementChild.namespaceURI;
         source.format = new WFSFormat({
-          featureType: response.firstChild.firstElementChild.firstElementChild.localName,
+          featureType: isySubLayer.featureType || response.firstChild.firstElementChild.firstElementChild.localName,
           featureNS: featureNamespace,
           gmlFormat: gmlFormat
         });
       } else {
-        featureNamespace = response.firstChild.namespaceURI;
+        featureNamespace = isySubLayer.featureNS || response.firstChild.namespaceURI;
         source.format = new WFSFormat({
-          featureType: isySubLayer.name,
+          featureType: isySubLayer.featureType || isySubLayer.name,
           featureNS: featureNamespace,
           gmlFormat: gmlFormat
         });
@@ -456,7 +441,7 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
       if (response.firstChild.nodeName.toLowerCase() === "gml:featurecollection") {
         for (var i = 0; i < response.firstChild.childNodes.length; i++) {
           var member = response.firstChild.childNodes.item(i);
-          if (member.nodeName.toLowerCase() === "gml:featuremember") {
+          if (member.nodeName.toLowerCase() === "gml:featureMember") {
             for (var j = 0; j < member.childNodes.length; j++) {
               var feature = member.childNodes.item(j);
               if (feature.nodeName.toLowerCase() === isySubLayer.name.toLowerCase()) {
@@ -479,7 +464,6 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
     }
 
     var features = source.format.readFeatures(response);
-*/
 
     var featureIsValid = function (feature){
        var geometryIsOk = false;
@@ -498,13 +482,7 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
        return geometryIsOk;
     };
 
-    if (features && features['wfs:FeatureCollection'] && features['wfs:FeatureCollection']['wfs:member']) {
-      console.log(features);
-      let test = new GMLFormat().readFeatures(features, {
-        dataProjection: 'EPSG:32633',
-        featureProjection: 'EPSG:32633'
-      });
-      console.log(test)
+    if (features && features.length > 0) {
       var featureIsOk = true;
       if (!featureIsValid(features)) {
         featureIsOk = false;
@@ -535,13 +513,13 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
     if (features.length > 0) {
       isySubLayer.geometryName = features[0].getGeometryName();
     }
-    //isySubLayer.featureNS = featureNamespace;
 
     if (featureObj) {
       if (eventHandler) {
         eventHandler.TriggerEvent(EventTypes.RefreshSourceDone, featureObj);
       }
     }
+    return features;
   };
 
   var loader = function (extent) {
@@ -556,7 +534,7 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
     url += 'request=GetFeature&' +
       'version=' + isySubLayer.version + '&typename=' + isySubLayer.name + '&' +
       'srsname=' + isySubLayer.coordinate_system + '&' +
-      'bbox=' + extent.join(',') + ',' + isySubLayer.coordinate_system; // + '&outputFormat=text/xml; subtype=gml/3.2.1';
+      'bbox=' + extent.join(',') + ',' + isySubLayer.coordinate_system + '&outputFormat=text/xml; subtype=gml/3.2.1';
 
     if (parameters) {
       // source is refreshed
