@@ -115,7 +115,6 @@ export default class MapContainer extends React.Component {
       center: [lon, lat],
       zoom: zoom
     });
-    this.olMap = null;
   }
 
   /**
@@ -125,7 +124,7 @@ export default class MapContainer extends React.Component {
     if (this.props.wms) {
       this.addWMS(this.wms, this.layers);
     }
-    this.olMap = map.Init("map", this.newMapConfig);
+    window.olMap = map.Init("map", this.newMapConfig);
     map.AddZoom();
     map.AddScaleLine();
     eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState);

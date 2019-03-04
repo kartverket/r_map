@@ -42,6 +42,15 @@ const LayerEntry = props => {
     setIndex(newIndex);
     map.SetZIndex(layer.subLayers[0], newIndex);
   };
+  const checkResolution = () => {
+    const resolution = window.olMap.getView().getResolution();
+    if (layer.subLayers[0].maxScale <= resolution) {
+      console.warn("Resolution mismatch, layer " + layer.name + " doesn't show at this zoom level ");
+    }
+  }
+  window.olMap.getView().on('change:resolution', function(e) {
+    checkResolution()
+  });
 
   return (
     <>
