@@ -11,6 +11,8 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
+var _LayerEntry = _interopRequireDefault(require("./LayerEntry.scss"));
+
 var _maplibHelper = require("../../MapUtil/maplibHelper");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -101,17 +103,31 @@ var LayerEntry = function LayerEntry(props) {
       return toggleOptions(!options);
     }
   }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-    icon: ["far", "cogs"],
+    icon: ["far", "sliders-h"],
     color: options ? "red" : "black"
-  })), options ? _react.default.createElement("div", null, _react.default.createElement("div", null, _react.default.createElement("button", {
+  })), options ? _react.default.createElement("div", {
+    className: _LayerEntry.default.settings
+  }, _react.default.createElement("div", null, _react.default.createElement("button", {
+    className: _LayerEntry.default.movelayerBtn,
     onClick: function onClick() {
       return setLayerIndex(index + 1);
     }
-  }, "UP"), _react.default.createElement("button", {
+  }, "Flytt fremover", _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+    title: "Vis laget over",
+    icon: ['fas', 'arrow-up']
+  })), _react.default.createElement("button", {
+    className: _LayerEntry.default.movelayerBtn,
     onClick: function onClick() {
       return setLayerIndex(index - 1);
     }
-  }, "Down")), _react.default.createElement("label", null, "transparency:", _react.default.createElement("input", {
+  }, "Flytt bakover ", _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+    title: "Vis laget under",
+    icon: ['fas', 'arrow-down']
+  })), _react.default.createElement("span", {
+    className: _LayerEntry.default.priority
+  }, "Prioritet: ", index)), _react.default.createElement("label", {
+    className: _LayerEntry.default.slider
+  }, "Gjennomsiktighet:", _react.default.createElement("input", {
     type: "range",
     min: 0,
     max: 100,
