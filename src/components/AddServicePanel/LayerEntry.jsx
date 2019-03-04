@@ -66,8 +66,8 @@ const LayerEntry = props => {
         <div className={style.settings}>
           {/** TODO: Style layer up and down */}
           <div>
-            <button className={style.movelayerBtn} onClick={() => setLayerIndex(index + 1)}>Flytt fremover<FontAwesomeIcon title="Vis laget lenger opp"  icon={['fas', 'angle-up']} /></button>
-            <button className={style.movelayerBtn} onClick={() => setLayerIndex(index - 1)}>Flytt bakover <FontAwesomeIcon  title="Vis laget lenger ned" icon={['fas','angle-down']} /></button>
+            <button className={style.movelayerBtn} onClick={() => setLayerIndex(index + 1)}>Flytt fremover<FontAwesomeIcon title="Vis laget over"  icon={['fas', 'arrow-up']} /></button>
+            <button className={style.movelayerBtn} onClick={() => setLayerIndex(index - 1)}>Flytt bakover <FontAwesomeIcon  title="Vis laget under" icon={['fas','arrow-down']} /></button>
             <span className={style.priority}>Prioritet: {index}</span>
           </div>
           {/** TODO: STYLE the slider */}

@@ -1,10 +1,10 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTimes, faBars, faAngleUp, faAngleDown } from '@fortawesome/pro-solid-svg-icons'
+import { faTimes, faBars, faAngleUp, faAngleDown, faArrowDown, faArrowUp } from '@fortawesome/pro-solid-svg-icons'
 import {
   faLayerGroup,
   faCheckSquare,
   faSquare,
-  faCogs, faInfo, faCog, faSlidersH
+  faCogs, faInfo, faCog, faSlidersH, faSortAmountDown, faSortAmountUp, faLevelUp, faLevelDown
 } from '@fortawesome/pro-regular-svg-icons'
 
 
@@ -20,7 +20,13 @@ library.add(
     faCogs,
     faInfo,
     faCog,
-    faSlidersH
+    faSlidersH,
+    faSortAmountDown,
+    faSortAmountUp,
+    faLevelUp,
+    faLevelDown,
+    faArrowDown,
+    faArrowUp
     ]
 );
 
