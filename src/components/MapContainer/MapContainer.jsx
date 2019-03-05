@@ -111,7 +111,8 @@ export default class MapContainer extends React.Component {
     let epsg = queryValues['epsg'] || 'EPSG:3857'
 */
     //  this.props = { lon: lon, lat: lat, zoom: zoom };
-    this.newMapConfig = Object.assign({}, mapConfig, {
+    let defaultConfig = JSON.parse(JSON.stringify(mapConfig))
+    this.newMapConfig = Object.assign({}, defaultConfig, {
       center: [lon, lat],
       zoom: zoom
     });
