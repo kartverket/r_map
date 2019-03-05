@@ -111,11 +111,11 @@ export default class MapContainer extends React.Component {
     let epsg = queryValues['epsg'] || 'EPSG:3857'
 */
     //  this.props = { lon: lon, lat: lat, zoom: zoom };
-    this.newMapConfig = Object.assign({}, mapConfig, {
+    let defaultConfig = JSON.parse(JSON.stringify(mapConfig))
+    this.newMapConfig = Object.assign({}, defaultConfig, {
       center: [lon, lat],
       zoom: zoom
     });
-    this.olMap = null;
   }
 
   /**
@@ -125,7 +125,7 @@ export default class MapContainer extends React.Component {
     if (this.props.wms) {
       this.addWMS(this.wms, this.layers);
     }
-    this.olMap = map.Init("map", this.newMapConfig);
+    window.olMap = map.Init("map", this.newMapConfig);
     map.AddZoom();
     map.AddScaleLine();
     eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState);

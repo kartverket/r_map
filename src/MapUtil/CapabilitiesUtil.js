@@ -69,7 +69,7 @@ export const newMaplibLayer = (sourceType, source) => {
       maxScale: source.options.maxscale,
       sortingIndex: -1,
       featureInfo: {
-        supportsGetFeatureInfo: true,
+        supportsGetFeatureInfo: source.options.queryable,
         getFeatureInfoFormat: 'application/vnd.ogc.gml',
         getFeatureInfoCrs: '',
         supportsGetFeature: true,
@@ -161,7 +161,10 @@ export class CapabilitiesUtil {
         options: {
           isbaselayer: "false",
           singletile: "false",
-          visibility: "true"
+          visibility: "true",
+          maxscale: layerObj.MaxScaleDenominator || '',
+          minscale: layerObj.MinScaleDenominator || '',
+          queryable: layerObj.queryable
         }
       }));
   }
@@ -200,7 +203,9 @@ export class CapabilitiesUtil {
         options: {
           isbaselayer: "false",
           singletile: "false",
-          visibility: "true"
+          visibility: "true",
+          maxscale: layerObj.MaxScaleDenominator || '',
+          minscale: layerObj.MinScaleDenominator || ''
         },
         featureNS:featureNS,
         featureType:layerObj.name.prefix + ':' + layerObj.name.localPart

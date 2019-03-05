@@ -746,10 +746,10 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                 layer.setMaxResolution(isySubLayer.maxResolution);
             }
             if (isySubLayer.maxScale) {
-                _setLayerMinresolution(layer, _getResolutionByScale(isySubLayer.maxScale), 'layer');
+              isySubLayer.maxScale = _setLayerMaxresolution(layer, _getResolutionByScale(isySubLayer.maxScale), 'layer');
             }
             if (isySubLayer.minScale) {
-                _setLayerMaxresolution(layer, _getResolutionByScale(isySubLayer.minScale), 'layer');
+              isySubLayer.minScale = _setLayerMinresolution(layer, _getResolutionByScale(isySubLayer.minScale), 'layer');
             }
             if (returnlayer) {
                 _addIsySubLayer(isySubLayer);
@@ -771,6 +771,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
             }
             //console.log(debuginfo + ' setLayerMinresolution() ' + layer.get('config').name + ': ' + scale);
             layer.setMinResolution(scale);
+            return scale;
         }
     }
 
@@ -783,6 +784,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
             }
             //console.log(debuginfo + ' setLayerMaxresolution() ' + layer.get('config').name + ': ' + scale);
             layer.setMaxResolution(scale);
+            return scale;
         }
     }
 
