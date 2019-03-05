@@ -123,11 +123,11 @@ function (_React$Component) {
     */
     //  this.props = { lon: lon, lat: lat, zoom: zoom };
 
-    _this.newMapConfig = Object.assign({}, _maplibHelper.mapConfig, {
+    var defaultConfig = JSON.parse(JSON.stringify(_maplibHelper.mapConfig));
+    _this.newMapConfig = Object.assign({}, defaultConfig, {
       center: [lon, lat],
       zoom: zoom
     });
-    _this.olMap = null;
     return _this;
   }
   /**
@@ -142,7 +142,7 @@ function (_React$Component) {
         this.addWMS(this.wms, this.layers);
       }
 
-      this.olMap = _maplibHelper.map.Init("map", this.newMapConfig);
+      window.olMap = _maplibHelper.map.Init("map", this.newMapConfig);
 
       _maplibHelper.map.AddZoom();
 

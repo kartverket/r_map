@@ -827,11 +827,11 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
       }
 
       if (isySubLayer.maxScale) {
-        _setLayerMinresolution(layer, _getResolutionByScale(isySubLayer.maxScale), 'layer');
+        isySubLayer.maxScale = _setLayerMaxresolution(layer, _getResolutionByScale(isySubLayer.maxScale), 'layer');
       }
 
       if (isySubLayer.minScale) {
-        _setLayerMaxresolution(layer, _getResolutionByScale(isySubLayer.minScale), 'layer');
+        isySubLayer.minScale = _setLayerMinresolution(layer, _getResolutionByScale(isySubLayer.minScale), 'layer');
       }
 
       if (returnlayer) {
@@ -858,6 +858,7 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
 
 
       layer.setMinResolution(scale);
+      return scale;
     }
   }
 
@@ -873,6 +874,7 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
 
 
       layer.setMaxResolution(scale);
+      return scale;
     }
   }
 
