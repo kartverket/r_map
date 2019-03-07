@@ -1,6 +1,6 @@
 image: node:10.15.0
 
 job1:
-  script: 
-    - npm install
-    - npm run build
+  script:
+    - yarn
+    - yarn build
