@@ -1,5 +1,7 @@
 "use strict";
 
+var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -8,8 +10,6 @@ exports.Layer = exports.FORMATS = exports.SOURCES = exports.SubLayer = exports.L
 var _Utils = _interopRequireDefault(require("./Utils"));
 
 var _MapHelper = require("../Utils/MapHelper");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var FeatureInfo = function FeatureInfo(config) {
   var defaults = {
@@ -34,11 +34,11 @@ var LegendGraphic = function LegendGraphic(config) {
   }
 
   var defaults = {
-    width: "20",
-    height: "20",
-    format: "image/png",
-    request: "GetLegendGraphic",
-    version: "1.0.0",
+    width: '20',
+    height: '20',
+    format: 'image/png',
+    request: 'GetLegendGraphic',
+    version: '1.0.0',
     service: 'wms',
     layer: ''
   };
@@ -98,19 +98,19 @@ var SubLayer = function SubLayer(config) {
 
 exports.SubLayer = SubLayer;
 var SOURCES = {
-  wmts: "WMTS",
-  wms: "WMS",
-  vector: "VECTOR",
-  proxyWmts: "proxyWmts",
-  proxyWms: "proxyWms",
-  tms: "TMS",
-  wfs: "WFS"
+  wmts: 'WMTS',
+  wms: 'WMS',
+  vector: 'VECTOR',
+  proxyWmts: 'proxyWmts',
+  proxyWms: 'proxyWms',
+  tms: 'TMS',
+  wfs: 'WFS'
 };
 exports.SOURCES = SOURCES;
 var FORMATS = {
-  imagepng: "image/png",
-  imagejpeg: "image/jpeg",
-  geoJson: "application/json"
+  imagepng: 'image/png',
+  imagejpeg: 'image/jpeg',
+  geoJson: 'application/json'
 };
 exports.FORMATS = FORMATS;
 

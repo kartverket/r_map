@@ -1,4 +1,4 @@
 ```js
 
-<BackgroundChooser />
+<BackgroundChooser ;/>
 ```

@@ -1,23 +1,23 @@
 import {
   Category,
   MapConfig
-} from './Repository'
+} from './Repository';
 
 import {
   Layer
-} from './Domain'
+} from './Domain';
 import {
   EventHandler
-} from './EventHandler'
+} from './EventHandler';
 import {
   OLMap
-} from './OLMap'
+} from './OLMap';
 import {
   Map
-} from './Map'
+} from './Map';
 
-let groupIds = []
-let notDummyGroup = false
+let groupIds = [];
+let notDummyGroup = false;
 export let mapConfig = {
   groups: [],
   coordinate_system: 'EPSG:25833',
@@ -123,74 +123,74 @@ export let mapConfig = {
   }],
   mapbounds: {
     mapbound: [{
-      epsg: "EPSG:23031",
-      extent: "-1500000.0, 3500000.0, 4045984.0, 9045984.0"
+      epsg: 'EPSG:23031',
+      extent: '-1500000.0, 3500000.0, 4045984.0, 9045984.0'
     }, {
-      epsg: "EPSG:23032",
-      extent: "-2000000.0, 3500000.0, 3545984.0, 9045984.0"
+      epsg: 'EPSG:23032',
+      extent: '-2000000.0, 3500000.0, 3545984.0, 9045984.0'
     }, {
-      epsg: "EPSG:23033",
-      extent: "-2500000.0, 3500000.0, 3045984.0, 9045984.0"
+      epsg: 'EPSG:23033',
+      extent: '-2500000.0, 3500000.0, 3045984.0, 9045984.0'
     }, {
-      epsg: "EPSG:23034",
-      extent: "-3000000.0, 3500000.0, 2545984.0, 9045984.0"
+      epsg: 'EPSG:23034',
+      extent: '-3000000.0, 3500000.0, 2545984.0, 9045984.0'
     }, {
-      epsg: "EPSG:23035",
-      extent: "-3500000.0, 3500000.0, 2045984.0, 9045984.0"
+      epsg: 'EPSG:23035',
+      extent: '-3500000.0, 3500000.0, 2045984.0, 9045984.0'
     }, {
-      epsg: "EPSG:23036",
-      extent: "-4000000.0, 3500000.0, 1545984.0, 9045984.0"
+      epsg: 'EPSG:23036',
+      extent: '-4000000.0, 3500000.0, 1545984.0, 9045984.0'
     }, {
-      epsg: "EPSG:25831",
-      extent: "-1500000.0, 3500000.0, 4045984.0, 9045984.0"
+      epsg: 'EPSG:25831',
+      extent: '-1500000.0, 3500000.0, 4045984.0, 9045984.0'
     }, {
-      epsg: "EPSG:25832",
-      extent: "-2000000.0, 3500000.0, 3545984.0, 9045984.0"
+      epsg: 'EPSG:25832',
+      extent: '-2000000.0, 3500000.0, 3545984.0, 9045984.0'
     }, {
-      epsg: "EPSG:25833",
-      extent: "-2500000.0, 3500000.0, 3045984.0, 9045984.0"
+      epsg: 'EPSG:25833',
+      extent: '-2500000.0, 3500000.0, 3045984.0, 9045984.0'
     }, {
-      epsg: "EPSG:25834",
-      extent: "-3000000.0, 3500000.0, 2545984.0, 9045984.0"
+      epsg: 'EPSG:25834',
+      extent: '-3000000.0, 3500000.0, 2545984.0, 9045984.0'
     }, {
-      epsg: "EPSG:25835",
-      extent: "-3500000.0, 3500000.0, 2045984.0, 9045984.0"
+      epsg: 'EPSG:25835',
+      extent: '-3500000.0, 3500000.0, 2045984.0, 9045984.0'
     }, {
-      epsg: "EPSG:25836",
-      extent: "-4000000.0, 3500000.0, 1545984.0, 9045984.0"
+      epsg: 'EPSG:25836',
+      extent: '-4000000.0, 3500000.0, 1545984.0, 9045984.0'
     }, {
-      epsg: "EPSG:32631",
-      extent: "-1500000.0, 3500000.0, 4045984.0, 9045984.0"
+      epsg: 'EPSG:32631',
+      extent: '-1500000.0, 3500000.0, 4045984.0, 9045984.0'
     }, {
-      epsg: "EPSG:32632",
-      extent: "-2000000.0, 3500000.0, 3545984.0, 9045984.0"
+      epsg: 'EPSG:32632',
+      extent: '-2000000.0, 3500000.0, 3545984.0, 9045984.0'
     }, {
-      epsg: "EPSG:25833",
-      extent: "-2500000.0, 3500000.0, 3045984.0, 9045984.0"
+      epsg: 'EPSG:25833',
+      extent: '-2500000.0, 3500000.0, 3045984.0, 9045984.0'
     }, {
-      epsg: "EPSG:32634",
-      extent: "-3000000.0, 3500000.0, 2545984.0, 9045984.0"
+      epsg: 'EPSG:32634',
+      extent: '-3000000.0, 3500000.0, 2545984.0, 9045984.0'
     }, {
-      epsg: "EPSG:32635",
-      extent: "-3500000.0, 3500000.0, 2045984.0, 9045984.0"
+      epsg: 'EPSG:32635',
+      extent: '-3500000.0, 3500000.0, 2045984.0, 9045984.0'
     }, {
-      epsg: "EPSG:32636",
-      extent: "-4000000.0, 3500000.0, 1545984.0, 9045984.0"
+      epsg: 'EPSG:32636',
+      extent: '-4000000.0, 3500000.0, 1545984.0, 9045984.0'
     }, {
-      epsg: "EPSG:4326",
-      extent: "-180, -90, 180, 90"
+      epsg: 'EPSG:4326',
+      extent: '-180, -90, 180, 90'
     }, {
-      epsg: "EPSG:3857",
-      extent: "-20037508.34, -20037508.34, 20037508.34, 20037508.34"
+      epsg: 'EPSG:3857',
+      extent: '-20037508.34, -20037508.34, 20037508.34, 20037508.34'
     }, {
-      epsg: "EPSG:900913",
-      extent: "-20037508.34, -20037508.34, 20037508.34, 20037508.34"
+      epsg: 'EPSG:900913',
+      extent: '-20037508.34, -20037508.34, 20037508.34, 20037508.34'
     }, {
-      epsg: "EPSG:54009",
-      extent: "-18000000.0, -9000000.0, 18000000.0, 9000000.0"
+      epsg: 'EPSG:54009',
+      extent: '-18000000.0, -9000000.0, 18000000.0, 9000000.0'
     }, {
-      epsg: "EPSG:3006",
-      extent: "-1200000.0, 4700000.0, 2600000.0, 8500000.0"
+      epsg: 'EPSG:3006',
+      extent: '-1200000.0, 4700000.0, 2600000.0, 8500000.0'
     }]
   },
   name: 'default config',
@@ -215,7 +215,7 @@ export let mapConfig = {
   },
   onlyOneGroup: false,
   isOffline: false
-}
+};
 
 export const createGroup = (groupId, groupNameLng1, groupNameLng2, visibleOnLoad) => {
   var newGroup = Category({
@@ -223,62 +223,62 @@ export const createGroup = (groupId, groupNameLng1, groupNameLng2, visibleOnLoad
     name: groupNameLng1,
     parentId: groupNameLng2,
     visibleOnLoad: visibleOnLoad
-  })
-  groupIds.push(groupId)
-  mapConfig.groups.push(newGroup)
-  mapConfig.languages.en[newGroup.groupId] = groupNameLng1 // has to be fix with correct value!
-  mapConfig.languages.no[newGroup.groupId] = groupNameLng2
-}
+  });
+  groupIds.push(groupId);
+  mapConfig.groups.push(newGroup);
+  mapConfig.languages.en[newGroup.groupId] = groupNameLng1; // has to be fix with correct value!
+  mapConfig.languages.no[newGroup.groupId] = groupNameLng2;
+};
 const updateMapConfigWithGroups = (mapConfig) => {
   if (mapConfig.maplayer !== undefined) {
     if (mapConfig.maplayer.length !== undefined) {
       mapConfig.maplayer.forEach(function (group) {
-        createGroup(group.groupid, group.name, group.namelng, group.display)
-      })
+        createGroup(group.groupid, group.name, group.namelng, group.display);
+      });
     } else {
-      createGroup(mapConfig.maplayer.groupid, mapConfig.maplayer.name, mapConfig.maplayer.namelng, mapConfig.maplayer.display)
+      createGroup(mapConfig.maplayer.groupid, mapConfig.maplayer.name, mapConfig.maplayer.namelng, mapConfig.maplayer.display);
     }
   }
-}
+};
 const findGroupExistance = (grpIds) => {
-  let notExistGroups = []
+  let notExistGroups = [];
   grpIds.forEach((grpId) => {
     if (groupIds.indexOf(grpId) === -1) {
-      notExistGroups.push(grpId)
+      notExistGroups.push(grpId);
     }
-  })
-  return notExistGroups
-}
+  });
+  return notExistGroups;
+};
 export const createNotExistGroup = (grpIds, groupNameLng1, groupNameLng2) => {
-  let notExistGroups = findGroupExistance(grpIds)
+  let notExistGroups = findGroupExistance(grpIds);
   notExistGroups.forEach((grpId) => {
-    createGroup(grpId, groupNameLng1, groupNameLng2)
-  })
-}
+    createGroup(grpId, groupNameLng1, groupNameLng2);
+  });
+};
 export const createDummyGroup = () => {
   // dummy category for layers without group id
   if (notDummyGroup === false) {
-    createGroup(999, 'Other layers', 'Andre lag')
-    notDummyGroup = true
+    createGroup(999, 'Other layers', 'Andre lag');
+    notDummyGroup = true;
   }
-}
+};
 export const getWmsUrl = (url) => {
   if (url.indexOf('|') >= 0) {
-    return url.split('|')
+    return url.split('|');
   } else {
-    return url
+    return url;
   }
-}
+};
 export const addLayer = (sourceType, source) => {
-  let catIds = [999]
+  let catIds = [999];
   if (source.groupid !== undefined) {
     catIds = source.groupid.toString().split(',').map((item) => {
-      return parseInt(item, 10)
-    })
-    createNotExistGroup(catIds, source.name, source.namelng)
+      return parseInt(item, 10);
+    });
+    createNotExistGroup(catIds, source.name, source.namelng);
   } else {
     if (source.options.isbaselayer === 'false') {
-      createDummyGroup()
+      createDummyGroup();
     }
   }
   const newIsyLayer = Layer({
@@ -334,54 +334,54 @@ export const addLayer = (sourceType, source) => {
     legendGraphicUrls: [],
     selectedLayerOpen: false,
     thumbnail: source.thumbnail
-  })
+  });
   return newIsyLayer;
-}
+};
 
 const addLayerToConfig = (newIsyLayer, source) => {
-  mapConfig.layers.push(newIsyLayer)
-  mapConfig.languages.en[newIsyLayer.id] = source.name
-  mapConfig.languages.no[newIsyLayer.id] = source.namelng
-}
+  mapConfig.layers.push(newIsyLayer);
+  mapConfig.languages.en[newIsyLayer.id] = source.name;
+  mapConfig.languages.no[newIsyLayer.id] = source.namelng;
+};
 const updateMapConfigWithImageLayers = (mapConfig) => {
   if (mapConfig.wmts !== undefined) {
     if (mapConfig.wmts.length !== undefined) {
       mapConfig.wmts.forEach((wmts) => {
-        addLayerToConfig(addLayer('WMTS', wmts), wmts)
-      })
+        addLayerToConfig(addLayer('WMTS', wmts), wmts);
+      });
     } else {
-      addLayerToConfig(addLayer('WMTS', mapConfig.wmts), mapConfig.wmts)
+      addLayerToConfig(addLayer('WMTS', mapConfig.wmts), mapConfig.wmts);
     }
   }
   if (mapConfig.wms !== undefined) {
     if (mapConfig.wms.length !== undefined) {
       mapConfig.wms.forEach((wms) => {
-        addLayerToConfig(addLayer('WMS', wms), wms)
-      })
+        addLayerToConfig(addLayer('WMS', wms), wms);
+      });
     } else {
-      addLayerToConfig(addLayer('WMS', mapConfig.wms), mapConfig.wms)
+      addLayerToConfig(addLayer('WMS', mapConfig.wms), mapConfig.wms);
     }
   }
   if (mapConfig.vector !== undefined) {
     if (mapConfig.vector.length !== undefined) {
       mapConfig.vector.forEach(function (vector) {
-        addLayerToConfig(addLayer('VECTOR', vector), vector)
-      })
+        addLayerToConfig(addLayer('VECTOR', vector), vector);
+      });
     } else {
-      addLayerToConfig(addLayer('VECTOR', mapConfig.vector), mapConfig.vector)
+      addLayerToConfig(addLayer('VECTOR', mapConfig.vector), mapConfig.vector);
     }
   }
-}
-updateMapConfigWithGroups(mapConfig)
-updateMapConfigWithImageLayers(mapConfig)
-mapConfig = MapConfig(mapConfig)
-mapConfig.instance = 'geoportal'
-mapConfig.proxyHost = '/?'
+};
+updateMapConfigWithGroups(mapConfig);
+updateMapConfigWithImageLayers(mapConfig);
+mapConfig = MapConfig(mapConfig);
+mapConfig.instance = 'geoportal';
+mapConfig.proxyHost = '/?';
 
-export const eventHandler = EventHandler()
-export const mapImplementation = OLMap(null, eventHandler)
+export const eventHandler = EventHandler();
+export const mapImplementation = OLMap(null, eventHandler);
 export const map = Map(
   mapImplementation,
   eventHandler,
   null
-)
+);

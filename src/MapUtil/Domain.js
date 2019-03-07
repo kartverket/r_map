@@ -1,7 +1,7 @@
-import Guid from './Utils'
+import Guid from './Utils';
 import {
   mergeDefaultParams
-} from "../Utils/MapHelper";
+} from '../Utils/MapHelper';
 
 export const FeatureInfo = (config) => {
   var defaults = {
@@ -17,7 +17,7 @@ export const FeatureInfo = (config) => {
     getFeatureCrs: 'EPSG:4326'
   };
 
-  return Object.assign({}, defaults, config)
+  return Object.assign({}, defaults, config);
 };
 
 export const LegendGraphic = (config) => {
@@ -25,16 +25,16 @@ export const LegendGraphic = (config) => {
     return null;
   }
   const defaults = {
-    width: "20",
-    height: "20",
-    format: "image/png",
-    request: "GetLegendGraphic",
-    version: "1.0.0",
+    width: '20',
+    height: '20',
+    format: 'image/png',
+    request: 'GetLegendGraphic',
+    version: '1.0.0',
     service: 'wms',
     layer: '',
   };
   return mergeDefaultParams(config.url, defaults);
-}
+};
 
 export const SubLayer = (config) => {
   var id = Guid.newGuid();
@@ -67,7 +67,7 @@ export const SubLayer = (config) => {
     featureNS: '',
     geometryName: 'geometry'
   };
-  var instance = Object.assign({}, defaults, config) // subLayerInstance
+  var instance = Object.assign({}, defaults, config); // subLayerInstance
 
   if (instance.legendGraphicUrl.indexOf('?') === -1) {
     instance.legendGraphicUrl += '?';
@@ -81,23 +81,23 @@ export const SubLayer = (config) => {
   }
 
   return instance;
-}
+};
 
 export const SOURCES = {
-  wmts: "WMTS",
-  wms: "WMS",
-  vector: "VECTOR",
-  proxyWmts: "proxyWmts",
-  proxyWms: "proxyWms",
-  tms: "TMS",
-  wfs: "WFS"
-}
+  wmts: 'WMTS',
+  wms: 'WMS',
+  vector: 'VECTOR',
+  proxyWmts: 'proxyWmts',
+  proxyWms: 'proxyWms',
+  tms: 'TMS',
+  wfs: 'WFS'
+};
 
 export const FORMATS = {
-  imagepng: "image/png",
-  imagejpeg: "image/jpeg",
-  geoJson: "application/json"
-}
+  imagepng: 'image/png',
+  imagejpeg: 'image/jpeg',
+  geoJson: 'application/json'
+};
 export const Layer = (config) => {
   var defaults = {
     guid: '',
@@ -116,7 +116,7 @@ export const Layer = (config) => {
     legendGraphicUrls: [],
     selectedLayerOpen: false //todo johben temp
   };
-  var layerInstance = Object.assign({}, defaults, config) // layerInstance
+  var layerInstance = Object.assign({}, defaults, config); // layerInstance
 
   var subLayers = [];
   for (var i = 0; i < config.subLayers.length; i++) {

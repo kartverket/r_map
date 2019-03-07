@@ -1,32 +1,35 @@
-import { EventTypes } from './EventHandler'
-import { FORMATS } from './Domain'
-import { TileWMS, ImageWMS } from 'ol/source'
+import { EventTypes } from './EventHandler';
+import { FORMATS } from './Domain';
+import { TileWMS, ImageWMS } from 'ol/source';
 import {
   GeoJSON as GeoJSONFormat,
   GML as GMLFormat,
   WFS as WFSFormat
 } from 'ol/format';
-import GML2Format from 'ol/format/GML2'
+import GML2Format from 'ol/format/GML2';
 //import GML3Format from 'ol/format/GML3'
-import GML32Format from 'ol/format/GML32'
-import Projection from 'ol/proj/Projection'
-import WMTSCapabilities from 'ol/format/WMTSCapabilities'
-import { Vector as VectorSource } from 'ol/source'
+import GML32Format from 'ol/format/GML32';
+import Projection from 'ol/proj/Projection';
+import WMTSCapabilities from 'ol/format/WMTSCapabilities';
+import { Vector as VectorSource } from 'ol/source';
 import WMTS from 'ol/source/WMTS';
-import $ from "jquery";
+import $ from 'jquery';
 
-import WMTSTileGrid from 'ol/tilegrid/WMTS'
-import TileGrid from 'ol/tilegrid/TileGrid'
+import WMTSTileGrid from 'ol/tilegrid/WMTS';
+import TileGrid from 'ol/tilegrid/TileGrid';
 import {
   getWidth as getExtentWidth,
   getTopLeft as getExtentTopLeft
-} from 'ol/extent'
+} from 'ol/extent';
 import {
   bbox as loadingstrategyBbox,
   tile as loadingstrategyTile
-} from 'ol/loadingstrategy'
+} from 'ol/loadingstrategy';
 import { get as getProjection } from 'ol/proj.js';
 
+/**
+ *
+ */
 export const MaplibCustomMessageHandler = (eventHandler, _getIsySubLayerFromPool) => {
   var olMap;
   var _message = 'Service down: ';
@@ -129,7 +132,7 @@ export const MaplibCustomMessageHandler = (eventHandler, _getIsySubLayerFromPool
         })
         .then(res => res.json());*/
         var response = $.ajax({
-          type: "GET",
+          type: 'GET',
           url: image.src,
           async: false
         }).responseText;
@@ -195,6 +198,11 @@ export const MaplibCustomMessageHandler = (eventHandler, _getIsySubLayerFromPool
     ShowCustomMessage: showCustomMessage
   };
 };
+/**
+ *
+ * @param {*} isySubLayer
+ * @param {*} parameters
+ */
 export const Wms = (isySubLayer, parameters) => {
   var url;
   var urls;
@@ -231,7 +239,7 @@ export const Wms = (isySubLayer, parameters) => {
     source = new TileWMS({
       params: {
         LAYERS: isySubLayer.name,
-        VERSION: "1.1.1",
+        VERSION: '1.1.1',
         FORMAT: isySubLayer.format,
         STYLES: isySubLayer.styles || ''
       },
@@ -250,7 +258,7 @@ export const Wms = (isySubLayer, parameters) => {
     source = new ImageWMS({
       params: {
         LAYERS: isySubLayer.name,
-        VERSION: "1.1.1",
+        VERSION: '1.1.1',
         FORMAT: isySubLayer.format,
         STYLES: isySubLayer.styles || ''
       },
@@ -265,6 +273,11 @@ export const Wms = (isySubLayer, parameters) => {
   }
   return source;
 };
+/**
+ *
+ * @param {*} isySubLayer
+ * @param {*} parameters
+ */
 export const Wmts = (isySubLayer, parameters) => {
   var projection = new Projection({
     code: isySubLayer.coordinate_system,
@@ -293,7 +306,7 @@ export const Wmts = (isySubLayer, parameters) => {
     urls[i] += getUrlParameter();
   }
 
-  var source, sourceOptions;
+  var source; var sourceOptions;
   var projectionExtent = projection.getExtent();
   var wmtsExtent = isySubLayer.wmtsExtent ? isySubLayer.wmtsExtent.split(',') : projectionExtent;
   if (isySubLayer.getCapabilities) {
@@ -305,7 +318,7 @@ export const Wmts = (isySubLayer, parameters) => {
     })
     .then(res => res.json());*/
     var capabilities = $.ajax({
-      type: "GET",
+      type: 'GET',
       url: capabilitiesUrl,
       async: false
     }).responseText;
@@ -334,7 +347,7 @@ export const Wmts = (isySubLayer, parameters) => {
     var matrixIds = new Array(isySubLayer.numZoomLevels);
     for (var z = 0; z < isySubLayer.numZoomLevels; ++z) {
       resolutions[z] = size / Math.pow(2, z);
-      matrixIds[z] = isySubLayer.matrixPrefix ? matrixSet + ":" + z : matrixIds[z] = z;
+      matrixIds[z] = isySubLayer.matrixPrefix ? matrixSet + ':' + z : matrixIds[z] = z;
     }
     sourceOptions = {
       layer: isySubLayer.name,
@@ -358,6 +371,9 @@ export const Wmts = (isySubLayer, parameters) => {
 
   return source;
 };
+/**
+ *
+ */
 export const Vector = (isySubLayer) => {
   var source;
   switch (isySubLayer.format) {
@@ -375,6 +391,14 @@ export const Vector = (isySubLayer) => {
 
   return source;
 };
+/**
+ *
+ * @param {*} isySubLayer
+ * @param {*} offline
+ * @param {*} parameters
+ * @param {*} featureObj
+ * @param {*} eventHandler
+ */
 export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) => {
   var strategy;
 
@@ -397,7 +421,7 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
 
   var parseResponse = function (response) {
     const domparser = new DOMParser();
-    response = domparser.parseFromString(response, "text/xml");
+    response = domparser.parseFromString(response, 'text/xml');
 
     source.dispatchEvent('vectorloadend');
     var featureNamespace;
@@ -436,12 +460,12 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
         });
       }
     }
-    if (isySubLayer.srs_dimension === "3") {
+    if (isySubLayer.srs_dimension === '3') {
       featureNamespace = response.firstChild.firstElementChild.firstElementChild.namespaceURI;
-      if (response.firstChild.nodeName.toLowerCase() === "gml:featurecollection") {
+      if (response.firstChild.nodeName.toLowerCase() === 'gml:featurecollection') {
         for (var i = 0; i < response.firstChild.childNodes.length; i++) {
           var member = response.firstChild.childNodes.item(i);
-          if (member.nodeName.toLowerCase() === "gml:featureMember") {
+          if (member.nodeName.toLowerCase() === 'gml:featureMember') {
             for (var j = 0; j < member.childNodes.length; j++) {
               var feature = member.childNodes.item(j);
               if (feature.nodeName.toLowerCase() === isySubLayer.name.toLowerCase()) {
@@ -449,8 +473,8 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
                   var attribute = feature.childNodes.item(k);
                   for (var l = 0; l < attribute.childNodes.length; l++) {
                     var attributeType = attribute.childNodes.item(l).nodeName;
-                    if (attributeType.toLowerCase() === "gml:linestring" || attributeType.toLowerCase() === "gml:point") {
-                      var srsAttribute = document.createAttribute("srsDimension");
+                    if (attributeType.toLowerCase() === 'gml:linestring' || attributeType.toLowerCase() === 'gml:point') {
+                      var srsAttribute = document.createAttribute('srsDimension');
                       srsAttribute.value = isySubLayer.srs_dimension;
                       attribute.firstElementChild.attributes.setNamedItem(srsAttribute);
                     }
@@ -466,7 +490,8 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
     var features = source.format.readFeatures(response);
 
     var featureIsValid = function (feature){
-       var geometryIsOk = false;
+      var geometryIsOk = false;
+      console.warn(feature);
       //  var getZCoordinate = function (c) {
       //      if (Array.isArray(c)) {
       //          return getZCoordinate(c[c.length - 1]);
@@ -479,7 +504,7 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
       //  if (!isNaN(z)){
       //      geometryIsOk = true;
       //  }
-       return geometryIsOk;
+      return geometryIsOk;
     };
 
     if (features && features.length > 0) {
@@ -489,8 +514,8 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
         console.log(isySubLayer.name + ' does not have valid coordinates!');
       }
       features.forEach(function (featureitem) {
-        featureitem.set("layerguid", isySubLayer.id);
-        //if (!featureIsOk){
+        featureitem.set('layerguid', isySubLayer.id);
+        if (!featureIsOk){
         //    var geometry = featureitem.getGeometry();
         //    var coords = geometry.getCoordinates().join(',').split(',');
         //    var newcoords = [];
@@ -500,7 +525,7 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
         //        }
         //    }
         //    geometry.setCoordinates(newcoords);
-        //}
+        }
         //if (featureObj) {
         //    if (featureObj.getId() === featureitem.getId()) {
         //        featureObj = featureitem;
@@ -528,8 +553,8 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
     if (Array.isArray(isySubLayer.url)) {
       url = isySubLayer.url[0];
     }
-    if (url.toLowerCase().indexOf("service=wfs") < 0) {
-      url += "service=WFS&";
+    if (url.toLowerCase().indexOf('service=wfs') < 0) {
+      url += 'service=WFS&';
     }
     url += 'request=GetFeature&' +
       'version=' + isySubLayer.version + '&typename=' + isySubLayer.name + '&' +
@@ -551,7 +576,7 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
             return;
           }
         } else {
-          return parseResponse(response);;
+          return parseResponse(response);
         }
       });
   };

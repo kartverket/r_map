@@ -1,11 +1,15 @@
 "use strict";
 
+var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.MapRENDERERS = exports.OLMap = void 0;
 
-var _Map = _interopRequireDefault(require("ol/Map"));
+var _typeof2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/typeof"));
+
+var _ol = require("ol");
 
 var _Projection = _interopRequireDefault(require("ol/proj/Projection"));
 
@@ -57,10 +61,6 @@ var _OLStyles = require("./OLStyles");
 
 var _jquery = _interopRequireDefault(require("jquery"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featureInfo, mapExport, hoverInfo, measureLine, drawFeature, offline, addLayerFeature, modifyFeature, addFeatureGps, printBoxSelect, addLayerUrl) {
   var map;
   var layerPool = [];
@@ -70,9 +70,9 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
   var mapScales;
   var hoverOptions;
   var initialGeolocationChange = false;
-  var proxyHost = "";
-  var tokenHost = "";
-  var ticketHost = "";
+  var proxyHost = '';
+  var tokenHost = '';
+  var ticketHost = '';
   var gktLifetime = 3000;
   var ticketLifetime = 3000;
   var lastGktCheck = 0;
@@ -88,8 +88,8 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
   var describedSource;
   var isyLayerGeometryType;
   var customMessageHandler;
-  /*
-      Start up functions Start
+  /**
+   * Start up functions Start
    */
 
   function initMap(targetId, mapConfig) {
@@ -118,7 +118,7 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
       altShiftDragRotate: false,
       pinchRotate: false
     });
-    map = new _Map.default({
+    map = new _ol.Map({
       target: targetId,
       renderer: mapConfig.renderer,
       layers: [],
@@ -315,7 +315,7 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
 
           if (params && params.GKT) {
             //console.log(layer.typename + ' ' + params.GKT);
-            var initTime = source.get("timestamp");
+            var initTime = source.get('timestamp');
 
             if (initTime) {
               var elapsedTime = Math.round((currentTime - initTime) / 1000);
@@ -348,7 +348,7 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
           var params = source.getParams();
 
           if (params && params.ticket) {
-            var initTime = source.get("timestamp");
+            var initTime = source.get('timestamp');
 
             if (initTime) {
               var elapsedTime = Math.round((currentTime - initTime) / 1000);
@@ -369,20 +369,22 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
     source.updateParams({
       GKT: _getToken()
     });
-    source.set("timestamp", new Date().getTime());
+    source.set('timestamp', new Date().getTime());
   }
 
   function _setTicket(source) {
     source.updateParams({
       ticket: _getTicket()
     });
-    source.set("timestamp", new Date().getTime());
+    source.set('timestamp', new Date().getTime());
   }
 
   function changeView(viewPropertyObject) {
     if (map !== undefined) {
       var view = map.getView();
-      var lon, lat, zoom;
+      var lon;
+      var lat;
+      var zoom;
 
       if (viewPropertyObject.lon) {
         lon = viewPropertyObject.lon;
@@ -411,13 +413,13 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
     }
   }
   /*
-      Start up functions End
-   */
+        Start up functions End
+     */
 
   /*
-      Layer functions Start
-      Functionality to be moved to ISY.MapImplementation.OL3.Layers
-   */
+        Layer functions Start
+        Functionality to be moved to ISY.MapImplementation.OL3.Layers
+     */
 
 
   function addDataToLayer(isySubLayer, data) {
@@ -566,15 +568,15 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
       // TODO: Fix ajax call without jQuery
 
       /*globalGkt = await fetch(tokenHost, {
-          type: "GET",
-          async: false
-      })
-      .then(res => res.json());*/
+                type: "GET",
+                async: false
+            })
+            .then(res => res.json());*/
       globalGkt = _jquery.default.ajax({
-        type: "GET",
+        type: 'GET',
         url: tokenHost,
         async: false
-      }).responseText.trim().replace(/"/g, "");
+      }).responseText.trim().replace(/"/g, '');
       lastGlobalGktCheck = new Date().getTime();
     }
 
@@ -588,15 +590,15 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
       // TODO: Fix ajax call without jQuery
 
       /*globalTicket = await fetch(ticketHost, {
-          type: "GET",
-          async: false
-      })
-      .then(res => res.json());*/
+                type: "GET",
+                async: false
+            })
+            .then(res => res.json());*/
       globalTicket = _jquery.default.ajax({
-        type: "GET",
+        type: 'GET',
         url: ticketHost,
         async: false
-      }).responseText.trim().replace(/"/g, "");
+      }).responseText.trim().replace(/"/g, '');
       lastGlobalTicketCheck = new Date().getTime();
     }
 
@@ -725,7 +727,7 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
         case _Domain.SOURCES.vector:
           source = (0, _Sources.Vector)(isySubLayer);
 
-          if (isySubLayer.url !== "") {
+          if (isySubLayer.url !== '') {
             if (!isySubLayer.noProxy) {
               isySubLayer.url = _getProxyUrl(isySubLayer.url);
             } // _loadVectorLayer(isySubLayer, source);
@@ -743,12 +745,12 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
           break;
 
         default:
-          throw new Error("Unsupported source: SOURCES.'" + isySubLayer.source + "'. For SubLayer with url " + isySubLayer.url + " and name " + isySubLayer.name + ".");
+          throw new Error('Unsupported source: SOURCES.\'' + isySubLayer.source + '\'. For SubLayer with url ' + isySubLayer.url + ' and name ' + isySubLayer.name + '.');
       }
 
       if (isySubLayer.source === _Domain.SOURCES.vector) {
         if (isySubLayer.style) {
-          if (_typeof(isySubLayer.style) === "object" || isySubLayer.style.indexOf("http") < 0) {
+          if ((0, _typeof2.default)(isySubLayer.style) === 'object' || isySubLayer.style.indexOf('http') < 0) {
             sldstyles[isySubLayer.id] = (0, _OLStyles.OLStylesJson)(isySubLayer.style);
             layer = new _layer.Vector({
               source: source,
@@ -880,7 +882,7 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
 
   function _loadVectorLayer(isySubLayer, source) {
     var callback = function callback(data) {
-      data = _typeof(data) === 'object' ? data : JSON.parse(data);
+      data = (0, _typeof2.default)(data) === 'object' ? data : JSON.parse(data);
       var format = new _format.GeoJSON();
 
       for (var i = 0; i < data.features.length; i++) {
@@ -893,10 +895,10 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
     }; // TODO: Fix ajax call without jQuery
 
     /*await fetch(isySubLayer.url, {
-        type: "GET",
-        async: false
-    })
-    .then(res => callback(res.json()));*/
+            type: "GET",
+            async: false
+        })
+        .then(res => callback(res.json()));*/
 
 
     _jquery.default.ajax({
@@ -960,7 +962,7 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
   }
 
   function _getLayerFromPoolByFeature(feature) {
-    var featureId = feature.get("layerguid");
+    var featureId = feature.get('layerguid');
 
     if (featureId === undefined) {
       featureId = feature.getId();
@@ -1223,7 +1225,7 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
       result.push(visibleLayers[j].guid);
     }
 
-    return result.join(",");
+    return result.join(',');
   }
 
   function _compareMapLayerIndex(a, b) {
@@ -1238,13 +1240,13 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
     return 0;
   }
   /*
-      Layer functions End
-   */
+        Layer functions End
+     */
 
   /*
-      Map Export Start
-      Functionality in ISY.;ap.OL3.Export
-   */
+        Map Export Start
+        Functionality in ISY.;ap.OL3.Export
+     */
 
 
   var _resizeEvent = function _resizeEvent() {
@@ -1340,7 +1342,7 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
       case _Domain.SOURCES.vector:
         source = new _Sources.Vector(isySubLayer);
 
-        if (isySubLayer.url !== "") {
+        if (isySubLayer.url !== '') {
           _loadVectorLayer(isySubLayer, source);
         }
 
@@ -1395,7 +1397,7 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
           isVector = true;
           source = new _Sources.Vector(isySubLayer);
 
-          if (isySubLayer.url !== "") {
+          if (isySubLayer.url !== '') {
             _loadVectorLayer(isySubLayer, source);
           }
 
@@ -1447,7 +1449,7 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
           isVector = true;
           source = new _Sources.Vector(isySubLayer);
 
-          if (isySubLayer.url !== "") {
+          if (isySubLayer.url !== '') {
             _loadVectorLayer(isySubLayer, source);
           }
 
@@ -1480,13 +1482,13 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
     map.renderSync();
   }
   /*
-      Map Export End
-   */
+        Map Export End
+     */
 
   /*
-      Feature Info Start
-      Functionality in ISY.MapImplementation.OL3.FeatureInfo
-   */
+        Feature Info Start
+        Functionality in ISY.MapImplementation.OL3.FeatureInfo
+     */
 
 
   function activateInfoClick(callback) {
@@ -1566,7 +1568,7 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
   }
 
   function _parseResponse(response) {
-    var subLayerName = describedSubLayer.name.split(":");
+    var subLayerName = describedSubLayer.name.split(':');
 
     if (subLayerName.length > 0) {
       subLayerName = subLayerName[subLayerName.length - 1];
@@ -1574,17 +1576,17 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
       return;
     }
 
-    var elementNodeByName = _getElementsByAttribute("element", "name", subLayerName, response, true)[0];
+    var elementNodeByName = _getElementsByAttribute('element', 'name', subLayerName, response, true)[0];
 
-    var elementGeometryName = _getElementsByAttribute("element", "type", isyLayerGeometryType, elementNodeByName, false)[0];
+    var elementGeometryName = _getElementsByAttribute('element', 'type', isyLayerGeometryType, elementNodeByName, false)[0];
 
     if (elementGeometryName === undefined) {
       return;
     } else {
-      elementGeometryName = elementGeometryName.getAttribute("name");
+      elementGeometryName = elementGeometryName.getAttribute('name');
     }
 
-    var featureNamespace = response.firstChild.getAttribute("targetNamespace");
+    var featureNamespace = response.firstChild.getAttribute('targetNamespace');
 
     if (typeof describedSource.format === 'undefined') {
       var gmlFormat;
@@ -1633,17 +1635,17 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
       url = isySubLayer.url[0];
     }
 
-    if (url.toLowerCase().indexOf("service=wfs") < 0) {
-      url += "service=WFS&";
+    if (url.toLowerCase().indexOf('service=wfs') < 0) {
+      url += 'service=WFS&';
     }
 
     url += 'request=DescribeFeatureType&' + 'version=' + isySubLayer.version + '&typename=' + isySubLayer.name; // TODO: Fix ajax call without jQuery
 
     /*          await fetch(url, {
-                  type: "GET",
-                  async: false
-              })
-              .then(res => _parseResponse(res.json()));
+                type: "GET",
+                async: false
+            })
+            .then(res => _parseResponse(res.json()));
     */
 
     _jquery.default.ajax({
@@ -1731,12 +1733,12 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
     return featureInfo.GetFeatureExtent(feature);
   }
   /*
-      Feature Info End
-   */
+        Feature Info End
+     */
 
   /*
-   HoverInfo Start
-   */
+     HoverInfo Start
+     */
 
 
   function activateHoverInfo(callback) {
@@ -1747,13 +1749,13 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
     hoverInfo.DeactivateHoverInfo(map);
   }
   /*
-   HoverInfo End
-   */
+     HoverInfo End
+     */
 
   /*
-   Measure Start
-   Functionality in ISY.MapImplementation.OL3.Measure
-   */
+     Measure Start
+     Functionality in ISY.MapImplementation.OL3.Measure
+     */
 
 
   function activateMeasure(callback, options) {
@@ -1772,13 +1774,13 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
     measureLine.Deactivate(map);
   }
   /*
-   Measure End
-   */
+     Measure End
+     */
 
   /*
-   AddLayerFeature Start
-   Functionality in ISY.MapImplementation.OL3.AddLayerFeature
-   */
+     AddLayerFeature Start
+     Functionality in ISY.MapImplementation.OL3.AddLayerFeature
+     */
 
 
   function activateAddLayerFeature(options) {
@@ -1789,13 +1791,13 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
     addLayerFeature.Deactivate(map);
   }
   /*
-   AddLayerFeature End
-   */
+     AddLayerFeature End
+     */
 
   /*
-   AddFeatureGps Start
-   Functionality in ISY.MapImplementation.OL3.AddFeatureGps
-   */
+     AddFeatureGps Start
+     Functionality in ISY.MapImplementation.OL3.AddFeatureGps
+     */
 
 
   function activateAddFeatureGps(options) {
@@ -1810,12 +1812,12 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
     addFeatureGps.Deactivate(map);
   }
   /*
-   AddLayerFeature End
-   */
+     AddLayerFeature End
+     */
 
   /*
-   Modify Feature Start
-   */
+     Modify Feature Start
+     */
 
 
   function activateModifyFeature(options) {
@@ -1826,12 +1828,12 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
     modifyFeature.Deactivate(map);
   }
   /*
-   Modify Feature End
-   */
+     Modify Feature End
+     */
 
   /*
-   DrawFeature Start
-   */
+     DrawFeature Start
+     */
 
 
   function activateDrawFeature(callback, options) {
@@ -1842,13 +1844,13 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
     drawFeature.Deactivate(map);
   }
   /*
-   DrawFeature End
-   */
+     DrawFeature End
+     */
 
   /*
-   Offline Start
-   Functionality in ISY.MapImplementation.OL3.Offline
-   */
+     Offline Start
+     Functionality in ISY.MapImplementation.OL3.Offline
+     */
 
 
   function _initOffline() {
@@ -1917,12 +1919,12 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
     }
   }
   /*
-   Offline End
-   */
+     Offline End
+     */
 
   /*
-    PrintBoxSelect Start
-   */
+      PrintBoxSelect Start
+     */
 
 
   var activatePrintBoxSelect = function activatePrintBoxSelect(options) {
@@ -1933,12 +1935,12 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
     printBoxSelect.Deactivate(map);
   };
   /*
-   PrintBoxSelect End
-   */
+     PrintBoxSelect End
+     */
 
   /*
-   AddLayerUrl Start
-   */
+     AddLayerUrl Start
+     */
 
 
   var activateAddLayerUrl = function activateAddLayerUrl(options) {
@@ -1949,12 +1951,12 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
     addLayerUrl.Deactivate(map);
   };
   /*
-   AddLayerUrl End
-   */
+     AddLayerUrl End
+     */
 
   /*
-      Utility functions start
-   */
+        Utility functions start
+     */
 
 
   var _getUrlObject = function _getUrlObject() {
@@ -1985,7 +1987,7 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
     if (layer) {
       var extent;
 
-      if (typeof layer.getSource().getExtent !== "undefined") {
+      if (typeof layer.getSource().getExtent !== 'undefined') {
         extent = layer.getSource().getExtent();
       } else {
         extent = layer.getSource().getTileGrid().getExtent();
@@ -2100,12 +2102,12 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
   };
 
   function transformEpsgCoordinate(coord, toCrs) {
-    if (coord.epsg !== "" && toCrs !== "" && coord.epsg !== toCrs) {
+    if (coord.epsg !== '' && toCrs !== '' && coord.epsg !== toCrs) {
       //var fromProj = getProjection(coord.epsg);
       //var toProj = getProjection(toCrs);
       var transformedCoord = (0, _proj.transform)([coord.lon, coord.lat], coord.epsg, toCrs);
 
-      if (toCrs === "EPSG:4326") {
+      if (toCrs === 'EPSG:4326') {
         transformedCoord = [transformedCoord[1], transformedCoord[0]];
       }
 
@@ -2120,15 +2122,15 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
   function transformBox(fromCrs, toCrs, boxExtent) {
     var returnExtent = boxExtent;
 
-    if (fromCrs !== "" && toCrs !== "" && fromCrs !== toCrs) {
+    if (fromCrs !== '' && toCrs !== '' && fromCrs !== toCrs) {
       //var fromProj = getProjection(fromCrs);
       //var toProj = getProjection(toCrs);
       //var transformedExtent = transformExtent(boxExtent, fromProj, toProj);
       var transformedExtent = (0, _proj.transformExtent)(boxExtent, fromCrs, toCrs);
       returnExtent = transformedExtent;
 
-      if (toCrs === "EPSG:4326") {
-        returnExtent = transformedExtent[1] + "," + transformedExtent[0] + "," + transformedExtent[3] + "," + transformedExtent[2];
+      if (toCrs === 'EPSG:4326') {
+        returnExtent = transformedExtent[1] + ',' + transformedExtent[0] + ',' + transformedExtent[3] + ',' + transformedExtent[2];
       }
     }
 
@@ -2390,8 +2392,8 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
     }
   }
   /*
-      Utility functions End
-   */
+        Utility functions End
+     */
 
 
   return {

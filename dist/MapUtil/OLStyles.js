@@ -1,15 +1,17 @@
 "use strict";
 
+var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.OLStylesMeasure = exports.OLStylesSLD = exports.OLStylesJson = exports.OLStylesDefault = void 0;
 
+var _typeof2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/typeof"));
+
 var _style = require("ol/style");
 
 var _xml = require("ol/xml");
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var OLStylesDefault = function OLStylesDefault() {
   var styles = function styles() {
@@ -42,7 +44,7 @@ var OLStylesJson = function OLStylesJson(style) {
   var _zIndex = 0;
 
   function _createStyle(feature, jsonstyle, hover) {
-    var jsonobject = _typeof(jsonstyle) === "object" ? jsonstyle : JSON.parse(jsonstyle);
+    var jsonobject = (0, _typeof2.default)(jsonstyle) === 'object' ? jsonstyle : JSON.parse(jsonstyle);
     var currentstyle = [];
     _zIndex++;
     currentstyle.push(new _style.Style({
@@ -227,36 +229,36 @@ var OLStylesSLD = function OLStylesSLD() {
   })];
   var sld;
   /*
-   Style({
-   fill: new Fill(),
-   image: new Image(),
-   stroke: new Stroke(),
-   text: new Text()
-   }
-   */
+     Style({
+     fill: new Fill(),
+     image: new Image(),
+     stroke: new Stroke(),
+     text: new Text()
+     }
+     */
 
   /*
-   var parseSymbolizer = function(symbolizernode){
-   return symbolizernode;
-   };
-   var parseStyle = function(stylenode){
-   var rulenodes = stylenode.getElementsByTagName('Rule');
-   $(rulenodes).each(function(ruleindex, rulenode){
-   $(rulenode.childNodes).each(function(index, childnode) {
-   if (childnode.nodeName.indexOf('Symbolizer') > 0) {
-   var symbolizer = parseSymbolizer(childnode, ruleindex);
-   //console.log(ruleindex + ':');
-   console.log(symbolizer);
-   }
-   });
-   });
-   };
-   */
+     var parseSymbolizer = function(symbolizernode){
+     return symbolizernode;
+     };
+     var parseStyle = function(stylenode){
+     var rulenodes = stylenode.getElementsByTagName('Rule');
+     $(rulenodes).each(function(ruleindex, rulenode){
+     $(rulenode.childNodes).each(function(index, childnode) {
+     if (childnode.nodeName.indexOf('Symbolizer') > 0) {
+     var symbolizer = parseSymbolizer(childnode, ruleindex);
+     //console.log(ruleindex + ':');
+     console.log(symbolizer);
+     }
+     });
+     });
+     };
+     */
 
   var readers = {
     sld: {
       StyledLayerDescriptor: function StyledLayerDescriptor(node, sld) {
-        sld.version = node.getAttribute("version");
+        sld.version = node.getAttribute('version');
         this.readChildNodes(node, sld);
       },
       Name: function Name(node, obj) {
@@ -308,7 +310,9 @@ var OLStylesSLD = function OLStylesSLD() {
             var pointstyle = rule.symbolizer.Point;
             var linestyle = rule.symbolizer.Line;
             var textstyle = rule.symbolizer.Text;
-            var fillstyle, strokestyle, imagestyle;
+            var fillstyle;
+            var strokestyle;
+            var imagestyle;
 
             if (polygonstyle) {
               if (polygonstyle.fill) {
@@ -495,7 +499,7 @@ var OLStylesSLD = function OLStylesSLD() {
         }
       },
       IsDefault: function IsDefault(node, style) {
-        if (this.getChildValue(node) === "1") {
+        if (this.getChildValue(node) === '1') {
           style.isDefault = true;
         }
       },
@@ -539,9 +543,9 @@ var OLStylesSLD = function OLStylesSLD() {
         this.readChildNodes(node, config);
         config.labelRotation = config.rotation;
         delete config.rotation;
-        var labelAlign,
-            x = symbolizer.labelAnchorPointX,
-            y = symbolizer.labelAnchorPointY;
+        var labelAlign;
+        var x = symbolizer.labelAnchorPointX;
+        var y = symbolizer.labelAnchorPointY;
 
         if (x <= 1 / 3) {
           labelAlign = 'l';
@@ -638,21 +642,21 @@ var OLStylesSLD = function OLStylesSLD() {
       },
 
       /*
-      RasterSymbolizer: function (node, rule) {
-          var config = {};
-          this.readChildNodes(node, config);
-          if (this.multipleSymbolizers) {
-              config.zIndex = this.featureTypeCounter;
-              rule.symbolizers.push(
-                  new OpenLayers.Symbolizer.Raster(config)
-              );
-          } else {
-              rule.symbolizer["Raster"] = OpenLayers.Util.applyDefaults(
-                  config, rule.symbolizer["Raster"]
-              );
-          }
-      },
-      */
+            RasterSymbolizer: function (node, rule) {
+                var config = {};
+                this.readChildNodes(node, config);
+                if (this.multipleSymbolizers) {
+                    config.zIndex = this.featureTypeCounter;
+                    rule.symbolizers.push(
+                        new OpenLayers.Symbolizer.Raster(config)
+                    );
+                } else {
+                    rule.symbolizer["Raster"] = OpenLayers.Util.applyDefaults(
+                        config, rule.symbolizer["Raster"]
+                    );
+                }
+            },
+            */
       Geometry: function Geometry(node, obj) {
         obj.geometry = {};
         this.readChildNodes(node, obj.geometry);
@@ -662,79 +666,79 @@ var OLStylesSLD = function OLStylesSLD() {
         this.readChildNodes(node, symbolizer.colorMap);
       },
       ColorMapEntry: function ColorMapEntry(node, colorMap) {
-        var q = node.getAttribute("quantity");
-        var o = node.getAttribute("opacity");
+        var q = node.getAttribute('quantity');
+        var o = node.getAttribute('opacity');
         colorMap.push({
-          color: node.getAttribute("color"),
+          color: node.getAttribute('color'),
           quantity: q !== null ? parseFloat(q) : undefined,
-          label: node.getAttribute("label") || undefined,
+          label: node.getAttribute('label') || undefined,
           opacity: o !== null ? parseFloat(o) : undefined
         });
       },
 
       /*
-      LineSymbolizer: function (node, rule) {
-          var config = {};
-          this.readChildNodes(node, config);
-          if (this.multipleSymbolizers) {
-              config.zIndex = this.featureTypeCounter;
-              rule.symbolizers.push(
-                  new OpenLayers.Symbolizer.Line(config)
-              );
-          } else {
-              rule.symbolizer["Line"] = config;
-          }
-      },
-      PolygonSymbolizer: function (node, rule) {
-          var config = {
-              fill: false,
-              stroke: false
-          };
-          if (!this.multipleSymbolizers) {
-              config = rule.symbolizer["Polygon"] || config;
-          }
-          this.readChildNodes(node, config);
-          if (this.multipleSymbolizers) {
-              config.zIndex = this.featureTypeCounter;
-              rule.symbolizers.push(
-                  new OpenLayers.Symbolizer.Polygon(config)
-              );
-          } else {
-              rule.symbolizer["Polygon"] = config;
-          }
-      },
-      PointSymbolizer: function (node, rule) {
-          var config = {
-              fill: false,
-              stroke: false,
-              graphic: false
-          };
-          if (!this.multipleSymbolizers) {
-              config = rule.symbolizer["Point"] || config;
-          }
-          this.readChildNodes(node, config);
-          if (this.multipleSymbolizers) {
-              config.zIndex = this.featureTypeCounter;
-              rule.symbolizers.push(
-                  new OpenLayers.Symbolizer.Point(config)
-              );
-          } else {
-              rule.symbolizer["Point"] = config;
-          }
-      },
-      TextSymbolizer: function (node, rule) {
-          var config = {};
-          this.readChildNodes(node, config);
-          if (this.multipleSymbolizers) {
-              config.zIndex = this.featureTypeCounter;
-              rule.symbolizers.push(
-                  new OpenLayers.Symbolizer.Text(config)
-              );
-          } else {
-              rule.symbolizer["Text"] = config;
-          }
-      },
-      */
+            LineSymbolizer: function (node, rule) {
+                var config = {};
+                this.readChildNodes(node, config);
+                if (this.multipleSymbolizers) {
+                    config.zIndex = this.featureTypeCounter;
+                    rule.symbolizers.push(
+                        new OpenLayers.Symbolizer.Line(config)
+                    );
+                } else {
+                    rule.symbolizer["Line"] = config;
+                }
+            },
+            PolygonSymbolizer: function (node, rule) {
+                var config = {
+                    fill: false,
+                    stroke: false
+                };
+                if (!this.multipleSymbolizers) {
+                    config = rule.symbolizer["Polygon"] || config;
+                }
+                this.readChildNodes(node, config);
+                if (this.multipleSymbolizers) {
+                    config.zIndex = this.featureTypeCounter;
+                    rule.symbolizers.push(
+                        new OpenLayers.Symbolizer.Polygon(config)
+                    );
+                } else {
+                    rule.symbolizer["Polygon"] = config;
+                }
+            },
+            PointSymbolizer: function (node, rule) {
+                var config = {
+                    fill: false,
+                    stroke: false,
+                    graphic: false
+                };
+                if (!this.multipleSymbolizers) {
+                    config = rule.symbolizer["Point"] || config;
+                }
+                this.readChildNodes(node, config);
+                if (this.multipleSymbolizers) {
+                    config.zIndex = this.featureTypeCounter;
+                    rule.symbolizers.push(
+                        new OpenLayers.Symbolizer.Point(config)
+                    );
+                } else {
+                    rule.symbolizer["Point"] = config;
+                }
+            },
+            TextSymbolizer: function (node, rule) {
+                var config = {};
+                this.readChildNodes(node, config);
+                if (this.multipleSymbolizers) {
+                    config.zIndex = this.featureTypeCounter;
+                    rule.symbolizers.push(
+                        new OpenLayers.Symbolizer.Text(config)
+                    );
+                } else {
+                    rule.symbolizer["Text"] = config;
+                }
+            },
+            */
       Stroke: function Stroke(node, symbolizer) {
         symbolizer.stroke = true;
         this.readChildNodes(node, symbolizer);
@@ -744,15 +748,15 @@ var OLStylesSLD = function OLStylesSLD() {
         this.readChildNodes(node, symbolizer);
       },
       CssParameter: function CssParameter(node, symbolizer) {
-        var cssProperty = node.getAttribute("name");
+        var cssProperty = node.getAttribute('name');
         var symProperty = this.cssMap[cssProperty]; // for labels, fill should map to fontColor and fill-opacity
         // to fontOpacity
 
         if (symbolizer.label) {
           if (cssProperty === 'fill') {
-            symProperty = "fontColor";
+            symProperty = 'fontColor';
           } else if (cssProperty === 'fill-opacity') {
-            symProperty = "fontOpacity";
+            symProperty = 'fontOpacity';
           }
         }
 
@@ -772,8 +776,9 @@ var OLStylesSLD = function OLStylesSLD() {
 
         this.readChildNodes(node, graphic); // directly properties with names that match symbolizer properties
 
-        var properties = ["stroke", "strokeColor", "strokeWidth", "strokeOpacity", "strokeLinecap", "fill", "fillColor", "fillOpacity", "graphicName", "rotation", "graphicFormat"];
-        var prop, value;
+        var properties = ['stroke', 'strokeColor', 'strokeWidth', 'strokeOpacity', 'strokeLinecap', 'fill', 'fillColor', 'fillOpacity', 'graphicName', 'rotation', 'graphicFormat'];
+        var prop;
+        var value;
 
         for (var i = 0, len = properties.length; i < len; ++i) {
           prop = properties[i];
@@ -842,7 +847,7 @@ var OLStylesSLD = function OLStylesSLD() {
         }
       },
       OnlineResource: function OnlineResource(node, obj) {
-        obj.href = this.getAttributeNS(node, this.namespaces.xlink, "href");
+        obj.href = this.getAttributeNS(node, this.namespaces.xlink, 'href');
       },
       Format: function Format(node, graphic) {
         graphic.graphicFormat = this.getChildValue(node);
@@ -852,8 +857,8 @@ var OLStylesSLD = function OLStylesSLD() {
       _expression: function _expression(node) {
         // only the simplest of ogc:expression handled
         // "some text and an <PropertyName>attribute</PropertyName>"}
-        var obj,
-            value = "";
+        var obj;
+        var value = '';
 
         for (var child = node.firstChild; child; child = child.nextSibling) {
           switch (child.nodeType) {
@@ -861,7 +866,7 @@ var OLStylesSLD = function OLStylesSLD() {
               obj = this.readNode(child);
 
               if (obj.property) {
-                value += "${" + obj.property + "}";
+                value += '${' + obj.property + '}';
               } else if (obj.value !== undefined) {
                 value += obj.value;
               }
@@ -902,7 +907,7 @@ var OLStylesSLD = function OLStylesSLD() {
         }
       },
       FeatureId: function FeatureId(node, obj) {
-        var fid = node.getAttribute("fid");
+        var fid = node.getAttribute('fid');
 
         if (fid) {
           obj.fids.push(fid);
@@ -910,77 +915,77 @@ var OLStylesSLD = function OLStylesSLD() {
       },
       And: function And(node, obj) {
         var filter = {
-          filters: ["&&"]
+          filters: ['&&']
         };
         this.readChildNodes(node, filter);
         obj.filters.push(filter);
       },
       Or: function Or(node, obj) {
         var filter = {
-          filters: ["||"]
+          filters: ['||']
         };
         this.readChildNodes(node, filter);
         obj.filters.push(filter);
       },
       Not: function Not(node, obj) {
         var filter = {
-          filters: ["!"]
+          filters: ['!']
         };
         this.readChildNodes(node, filter);
         obj.filters.push(filter);
       },
       PropertyIsLike: function PropertyIsLike(node, obj) {
         var filter = {
-          operator: "=="
+          operator: '=='
         };
         this.readChildNodes(node, filter);
         obj.filters.push(filter);
       },
       PropertyIsEqualTo: function PropertyIsEqualTo(node, obj) {
         var filter = {
-          operator: "=="
+          operator: '=='
         };
         this.readChildNodes(node, filter);
         obj.filters.push(filter);
       },
       PropertyIsNotEqualTo: function PropertyIsNotEqualTo(node, obj) {
         var filter = {
-          operator: "!="
+          operator: '!='
         };
         this.readChildNodes(node, filter);
         obj.filters.push(filter);
       },
       PropertyIsLessThan: function PropertyIsLessThan(node, obj) {
         var filter = {
-          operator: "<"
+          operator: '<'
         };
         this.readChildNodes(node, filter);
         obj.filters.push(filter);
       },
       PropertyIsGreaterThan: function PropertyIsGreaterThan(node, obj) {
         var filter = {
-          operator: ">"
+          operator: '>'
         };
         this.readChildNodes(node, filter);
         obj.filters.push(filter);
       },
       PropertyIsLessThanOrEqualTo: function PropertyIsLessThanOrEqualTo(node, obj) {
         var filter = {
-          operator: "<="
+          operator: '<='
         };
         this.readChildNodes(node, filter);
         obj.filters.push(filter);
       },
       PropertyIsGreaterThanOrEqualTo: function PropertyIsGreaterThanOrEqualTo(node, obj) {
         var filter = {
-          operator: ">="
+          operator: '>='
         };
         this.readChildNodes(node, filter);
         obj.filters.push(filter);
       },
       PropertyIsBetween: function PropertyIsBetween(node, obj) {
         var filter = {
-          operator: ".."
+          operator: '..'
         };
         this.readChildNodes(node, filter);
         obj.filters.push(filter);
@@ -999,29 +1004,29 @@ var OLStylesSLD = function OLStylesSLD() {
       },
 
       /*"Intersects": function(node, obj) {
-       this.readSpatial(node, obj, OpenLayers.Filter.Spatial.INTERSECTS);
-       },
-       "Within": function(node, obj) {
-       this.readSpatial(node, obj, OpenLayers.Filter.Spatial.WITHIN);
-       },
-       "Contains": function(node, obj) {
-       this.readSpatial(node, obj, OpenLayers.Filter.Spatial.CONTAINS);
-       },
-       "DWithin": function(node, obj) {
-       this.readSpatial(node, obj, OpenLayers.Filter.Spatial.DWITHIN);
-       },
-       "Distance": function(node, obj) {
-       obj.distance = parseInt(this.getChildValue(node), 10);
-       obj.distanceUnits = node.getAttribute("units");
-       },*/
+             this.readSpatial(node, obj, OpenLayers.Filter.Spatial.INTERSECTS);
+             },
+             "Within": function(node, obj) {
+             this.readSpatial(node, obj, OpenLayers.Filter.Spatial.WITHIN);
+             },
+             "Contains": function(node, obj) {
+             this.readSpatial(node, obj, OpenLayers.Filter.Spatial.CONTAINS);
+             },
+             "DWithin": function(node, obj) {
+             this.readSpatial(node, obj, OpenLayers.Filter.Spatial.DWITHIN);
+             },
+             "Distance": function(node, obj) {
+             obj.distance = parseInt(this.getChildValue(node), 10);
+             obj.distanceUnits = node.getAttribute("units");
+             },*/
 
       /*"Function": function(node, obj) {
-       //TODO write decoder for it
-       return;
-       },*/
+             //TODO write decoder for it
+             return;
+             },*/
       PropertyIsNull: function PropertyIsNull(node, obj) {
         var filter = {
-          operator: "NULL"
+          operator: 'NULL'
         };
         this.readChildNodes(node, filter);
         obj.filters.push(filter);
@@ -1044,15 +1049,15 @@ var OLStylesSLD = function OLStylesSLD() {
     this.readChildNodes(response, sld); //console.log(sld);
 
     /*
-     var userStyles = response.getElementsByTagName('UserStyle');
-       var thisstyle = [];
-     $(userStyles).each(function(index, userstyle){
-     if (index === 0) {
-     thisstyle.push(parseStyle(userstyle));
-     }
-     });
-     console.log(thisstyle.length);
-     */
+         var userStyles = response.getElementsByTagName('UserStyle');
+          var thisstyle = [];
+         $(userStyles).each(function(index, userstyle){
+         if (index === 0) {
+         thisstyle.push(parseStyle(userstyle));
+         }
+         });
+         console.log(thisstyle.length);
+         */
 
     styles = []; //styles.push(sld.namedLayers[0].userStyles[1]);
     //styles.push(sld.namedLayers[0].userStyles[0].style);
@@ -1101,14 +1106,15 @@ var OLStylesSLD = function OLStylesSLD() {
       return false;
     }
 
-    var featurevalue, value;
+    var featurevalue;
+    var value;
     var condition = false;
     featurevalue = feature.get(filter.property);
 
     if (featurevalue) {
       switch (filter.operator) {
         case '==':
-          switch (_typeof(featurevalue)) {
+          switch ((0, _typeof2.default)(featurevalue)) {
             case 'string':
               value = filter.value;
               condition = featurevalue === value;
@@ -1146,7 +1152,7 @@ var OLStylesSLD = function OLStylesSLD() {
           break;
 
         case '!=':
-          switch (_typeof(featurevalue)) {
+          switch ((0, _typeof2.default)(featurevalue)) {
             case 'string':
               value = filter.value;
               condition = featurevalue !== value;
@@ -1164,7 +1170,7 @@ var OLStylesSLD = function OLStylesSLD() {
           break;
 
         case 'NULL':
-          switch (_typeof(featurevalue)) {
+          switch ((0, _typeof2.default)(featurevalue)) {
             case 'string':
               condition = featurevalue.length === 0;
               break;
@@ -1203,10 +1209,10 @@ var OLStylesSLD = function OLStylesSLD() {
   };
 
   var setHidden = function setHidden(feature, hidden) {
-    var ishidden = feature.get("isHidden");
+    var ishidden = feature.get('isHidden');
 
     if (ishidden === undefined) {
-      feature.set("isHidden", hidden);
+      feature.set('isHidden', hidden);
     }
   };
 
@@ -1284,7 +1290,9 @@ var OLStylesSLD = function OLStylesSLD() {
     }
 
     var userStyles = [];
-    var textstyle, label, featurelabel; //var geometrytype = feature.getGeometry().getType();
+    var textstyle;
+    var label;
+    var featurelabel; //var geometrytype = feature.getGeometry().getType();
 
     if (sld) {
       sld.namedLayers[0].userStyles.each(function (item, userStyle) {
@@ -1401,23 +1409,23 @@ var OLStylesSLD = function OLStylesSLD() {
     GetStyle: getStyle,
     GetStyleForLegend: getStyleForLegend,
     GetHoverStyle: getHoverStyle,
-    defaultPrefix: "sld",
+    defaultPrefix: 'sld',
     namespaces: {
-      sld: "http://www.opengis.net/sld",
-      ogc: "http://www.opengis.net/ogc",
-      gml: "http://www.opengis.net/gml",
-      xlink: "http://www.w3.org/1999/xlink",
-      xsi: "http://www.w3.org/2001/XMLSchema-instance"
+      sld: 'http://www.opengis.net/sld',
+      ogc: 'http://www.opengis.net/ogc',
+      gml: 'http://www.opengis.net/gml',
+      xlink: 'http://www.w3.org/1999/xlink',
+      xsi: 'http://www.w3.org/2001/XMLSchema-instance'
     },
     namespaceAlias: {
-      "http://www.opengis.net/sld": "sld",
-      "http://www.opengis.net/ogc": "ogc",
-      "http://www.opengis.net/gml": "gml",
-      "http://www.w3.org/1999/xlink": "xlink",
-      "http://www.w3.org/2001/XMLSchema-instance": "xsi"
+      'http://www.opengis.net/sld': 'sld',
+      'http://www.opengis.net/ogc': 'ogc',
+      'http://www.opengis.net/gml': 'gml',
+      'http://www.w3.org/1999/xlink': 'xlink',
+      'http://www.w3.org/2001/XMLSchema-instance': 'xsi'
     },
     getChildValue: function getChildValue(node, def) {
-      var value = def || "";
+      var value = def || '';
 
       if (node) {
         for (var child = node.firstChild; child; child = child.nextSibling) {
@@ -1463,8 +1471,8 @@ var OLStylesSLD = function OLStylesSLD() {
       var group = this.readers[node.namespaceURI ? this.namespaceAlias[node.namespaceURI] : this.defaultPrefix];
 
       if (group) {
-        var local = node.localName || node.nodeName.split(":").pop();
-        var reader = group[local] || group["*"];
+        var local = node.localName || node.nodeName.split(':').pop();
+        var reader = group[local] || group['*'];
 
         if (reader) {
           reader.apply(this, [node, obj]);
@@ -1475,17 +1483,17 @@ var OLStylesSLD = function OLStylesSLD() {
     },
     readers: readers,
     cssMap: {
-      "stroke": "strokeColor",
-      "stroke-opacity": "strokeOpacity",
-      "stroke-width": "strokeWidth",
-      "stroke-linecap": "strokeLinecap",
-      "stroke-dasharray": "strokeDashstyle",
-      "fill": "fillColor",
-      "fill-opacity": "fillOpacity",
-      "font-family": "fontFamily",
-      "font-size": "fontSize",
-      "font-weight": "fontWeight",
-      "font-style": "fontStyle"
+      'stroke': 'strokeColor',
+      'stroke-opacity': 'strokeOpacity',
+      'stroke-width': 'strokeWidth',
+      'stroke-linecap': 'strokeLinecap',
+      'stroke-dasharray': 'strokeDashstyle',
+      'fill': 'fillColor',
+      'fill-opacity': 'fillOpacity',
+      'font-family': 'fontFamily',
+      'font-size': 'fontSize',
+      'font-weight': 'fontWeight',
+      'font-style': 'fontStyle'
     },
     getCssProperty: function getCssProperty(sym) {
       var css = null;
@@ -1506,13 +1514,14 @@ var OLStylesSLD = function OLStylesSLD() {
         attributeNode = node.getAttributeNodeNS(uri, name);
       } else {
         var attributes = node.attributes;
-        var potentialNode, fullName;
+        var potentialNode;
+        var fullName;
 
         for (var i = 0, len = attributes.length; i < len; ++i) {
           potentialNode = attributes[i];
 
           if (potentialNode.namespaceURI === uri) {
-            fullName = potentialNode.prefix ? potentialNode.prefix + ":" + name : name;
+            fullName = potentialNode.prefix ? potentialNode.prefix + ':' + name : name;
 
             if (fullName === potentialNode.nodeName) {
               attributeNode = potentialNode;
@@ -1525,10 +1534,10 @@ var OLStylesSLD = function OLStylesSLD() {
       return attributeNode;
     },
     getAttributeNS: function getAttributeNS(node, uri, name) {
-      var attributeValue = "";
+      var attributeValue = '';
 
       if (node.getAttributeNS) {
-        attributeValue = node.getAttributeNS(uri, name) || "";
+        attributeValue = node.getAttributeNS(uri, name) || '';
       } else {
         var attributeNode = this.getAttributeNodeNS(node, uri, name);
 
@@ -1621,7 +1630,7 @@ var OLStylesSLD = function OLStylesSLD() {
       //    return colorvalue;
       //}
       if (colorvalue === undefined) {
-        colorvalue = "#000000";
+        colorvalue = '#000000';
       }
 
       var color = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(colorvalue.trim());
@@ -1653,22 +1662,22 @@ var OLStylesSLD = function OLStylesSLD() {
 
       return format || this.defaultGraphicFormat;
     },
-    defaultGraphicFormat: "image/png",
+    defaultGraphicFormat: 'image/png',
     graphicFormats: {
-      "image/jpeg": /\.jpe?g$/i,
-      "image/gif": /\.gif$/i,
-      "image/png": /\.png$/i
+      'image/jpeg': /\.jpe?g$/i,
+      'image/gif': /\.gif$/i,
+      'image/png': /\.png$/i
     },
     multipleSymbolizers: false,
     featureTypeCounter: null,
     defaultSymbolizer: {
-      fillColor: "#808080",
+      fillColor: '#808080',
       fillOpacity: 1,
-      strokeColor: "#000000",
+      strokeColor: '#000000',
       strokeOpacity: 1,
       strokeWidth: 1,
       pointRadius: 3,
-      graphicName: "square"
+      graphicName: 'square'
     }
   };
 };

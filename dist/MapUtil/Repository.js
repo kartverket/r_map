@@ -7,9 +7,9 @@ exports.MapConfig = exports.Category = void 0;
 
 var Category = function Category(config) {
   var defaults = {
-    catId: "",
-    name: "",
-    parentId: "",
+    catId: '',
+    name: '',
+    parentId: '',
     subCategories: [],
     isOpen: false
   };
@@ -20,22 +20,22 @@ exports.Category = Category;
 
 var MapConfig = function MapConfig(config) {
   var defaults = {
-    name: "",
-    comment: "",
+    name: '',
+    comment: '',
     useCategories: true,
     categories: [],
     numZoomLevels: 10,
     newMaxRes: 21664,
     newMaxScale: 81920000,
-    renderer: "canvas",
+    renderer: 'canvas',
     center: [-1, 1],
     zoom: 5,
     layers: [],
-    coordinate_system: "EPSG:25833",
-    matrixSet: "EPSG:25833",
+    coordinate_system: 'EPSG:25833',
+    matrixSet: 'EPSG:25833',
     extent: [-1, -1, -1, -1],
     extentUnits: 'm',
-    proxyHost: "",
+    proxyHost: '',
     groups: []
   };
   return Object.assign({}, defaults, config); // mapConfigInstance

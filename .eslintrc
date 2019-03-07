@@ -1,7 +1,8 @@
-module.exports = {
+{
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "react-app"
   ],
   "plugins": [
     "html",
@@ -18,8 +19,9 @@ module.exports = {
     "Promise": false
   },
   "rules": {
+    "no-console": "off",
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warning",
+    "react-hooks/exhaustive-deps": 1,
     "indent": ["error", 2, {
       "SwitchCase": 1
     }],
@@ -40,14 +42,6 @@ module.exports = {
     "react/jsx-tag-spacing": ["error", {
       "beforeSelfClosing": "always"
     }],
-    "require-jsdoc": ["error", {
-      "require": {
-        "FunctionDeclaration": true,
-        "MethodDefinition": true,
-        "ClassDeclaration": true,
-        "ArrowFunctionExpression": true
-      }
-    }],
     "space-infix-ops": ["error", {
       "int32Hint": false
     }]
@@ -57,4 +51,4 @@ module.exports = {
       "version": "16.0"
     }
   }
-};
+}

@@ -1,22 +1,24 @@
 "use strict";
 
+var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _classCallCheck2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/classCallCheck"));
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+var _createClass2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/createClass"));
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
+/**
+ *
+ */
 var Layers =
 /*#__PURE__*/
 function () {
   function Layers(mapConfig, mapImplementation) {
-    _classCallCheck(this, Layers);
-
+    (0, _classCallCheck2.default)(this, Layers);
     this.mapImplementation = mapImplementation;
     this.config = mapConfig;
     this.layers = mapConfig.layers;
@@ -51,7 +53,7 @@ function () {
     }
   }
 
-  _createClass(Layers, [{
+  (0, _createClass2.default)(Layers, [{
     key: "setUpLayerIndex",
     value: function setUpLayerIndex() {
       var layerIndex = 0;
@@ -348,9 +350,7 @@ function () {
       return Math.max(indexes);
     }
   }]);
-
   return Layers;
 }();
 
 exports.default = Layers;
-;

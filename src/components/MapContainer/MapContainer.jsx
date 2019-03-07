@@ -1,18 +1,26 @@
-import React from "react";
-import { map, eventHandler, mapConfig } from "../../MapUtil/maplibHelper";
-import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
-import PropTypes from "prop-types";
-import queryString from "query-string";
-import setQuery from "set-query-string";
-import BackgroundChooser from "../BackgroundChooser/BackgroundChooser";
-import AddServicePanel from "../AddServicePanel/AddServicePanel";
+import React from 'react';
+import { map, eventHandler, mapConfig } from '../../MapUtil/maplibHelper';
+import { CapabilitiesUtil } from '../../MapUtil/CapabilitiesUtil';
+import PropTypes from 'prop-types';
+import queryString from 'query-string';
+import setQuery from 'set-query-string';
+import BackgroundChooser from '../BackgroundChooser/BackgroundChooser';
+import AddServicePanel from '../AddServicePanel/AddServicePanel';
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import style from "./MapContainer.scss";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import style from './MapContainer.scss';
 
+/**
+ *
+ * @param {*} props
+ */
 const ListItem = props => (
-  <AddServicePanel services={props.listItem} removeMapItem={props.removeMapItem} draggable/>
+  <AddServicePanel services={props.listItem} removeMapItem={props.removeMapItem} draggable />
 );
+ListItem.propTypes = {
+  removeMapItem: PropTypes.object,
+  listItem: PropTypes.object
+};
 
 /**
  * @class The Map Component
@@ -66,7 +74,8 @@ export default class MapContainer extends React.Component {
     /**
      * @type {Boolean}
      */
-    menu: PropTypes.bool
+    menu: PropTypes.bool,
+    removeMapItem: PropTypes.object
   };
 
   static defaultProps = {
@@ -77,7 +86,7 @@ export default class MapContainer extends React.Component {
     lon: 396722,
     lat: 7197860,
     zoom: 4,
-    wms: "",
+    wms: '',
     menu: true
   };
 
@@ -91,19 +100,19 @@ export default class MapContainer extends React.Component {
     this.handleSelect = this.handleSelect.bind(this);
 
     this.state = {
-      activeKey: "1",
+      activeKey: '1',
       open: false,
       menu: this.props.menu
     };
 
     const queryValues = queryString.parse(window.location.search);
 
-    let lon = Number(queryValues["lon"] || props.lon);
-    let lat = Number(queryValues["lat"] || props.lat);
-    let zoom = Number(queryValues["zoom"] || props.zoom);
+    let lon = Number(queryValues['lon'] || props.lon);
+    let lat = Number(queryValues['lat'] || props.lat);
+    let zoom = Number(queryValues['zoom'] || props.zoom);
 
-    this.wms = queryValues["wms"] || "";
-    this.layers = Array(queryValues["layers"] || []);
+    this.wms = queryValues['wms'] || '';
+    this.layers = Array(queryValues['layers'] || []);
     /*
     let wmts = Array(queryValues['wmts'] || [])
     let wfs = Array(queryValues['wfs'] || [])
@@ -111,7 +120,7 @@ export default class MapContainer extends React.Component {
     let epsg = queryValues['epsg'] || 'EPSG:3857'
 */
     //  this.props = { lon: lon, lat: lat, zoom: zoom };
-    let defaultConfig = JSON.parse(JSON.stringify(mapConfig))
+    let defaultConfig = JSON.parse(JSON.stringify(mapConfig));
     this.newMapConfig = Object.assign({}, defaultConfig, {
       center: [lon, lat],
       zoom: zoom
@@ -125,10 +134,10 @@ export default class MapContainer extends React.Component {
     if (this.props.wms) {
       this.addWMS(this.wms, this.layers);
     }
-    window.olMap = map.Init("map", this.newMapConfig);
+    window.olMap = map.Init('map', this.newMapConfig);
     map.AddZoom();
     map.AddScaleLine();
-    eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState);
+    eventHandler.RegisterEvent('MapMoveend', this.updateMapInfoState);
     this.props = { map: map };
   }
 
@@ -155,12 +164,12 @@ export default class MapContainer extends React.Component {
           wmsLayers: layers
         });
       })
-      .catch(() => alert("Could not parse capabilities document."));
+      .catch(() => alert('Could not parse capabilities document.'));
   }
 
   renderServiceList() {
     return this.props.services.map((listItem, i) => (
-      <ListItem listItem={listItem} removeMapItem={ this.props.removeMapItem ? this.props.removeMapItem : null } key={i} map={map}/>
+      <ListItem listItem={listItem} removeMapItem={ this.props.removeMapItem ? this.props.removeMapItem : null } key={i} map={map} />
     ));
   }
   renderLayerButton() {
@@ -178,7 +187,7 @@ export default class MapContainer extends React.Component {
     });
   }
   toogleMap() {
-    console.log("lukke kartet");
+    console.log('lukke kartet');
     window.history.back();
     // TODO: get paramtere to check for url til goto for closing map
   }
@@ -192,8 +201,8 @@ export default class MapContainer extends React.Component {
         <BackgroundChooser />
         <div>
           {this.renderLayerButton() ? (
-            <div className={ this.state.isExpanded ? style.container + " closed" : style.container + " open" }>
-              <FontAwesomeIcon onClick={() => this.toogleLayers()} className={style.toggleBtn} icon={this.state.isExpanded ? ["far", "layer-group"] : "times"}/>
+            <div className={ this.state.isExpanded ? style.container + ' closed' : style.container + ' open' }>
+              <FontAwesomeIcon onClick={() => this.toogleLayers()} className={style.toggleBtn} icon={this.state.isExpanded ? ['far', 'layer-group'] : 'times'} />
               <div>{this.renderServiceList()}</div>
             </div>
           ) : (
@@ -201,16 +210,16 @@ export default class MapContainer extends React.Component {
           )}
 
           <div className={style.closeMap}>
-            <FontAwesomeIcon title="Lukk kartet" onClick={() => this.toogleMap()} className={style.toggleBtn} icon={"times"} />
+            <FontAwesomeIcon title="Lukk kartet" onClick={() => this.toogleMap()} className={style.toggleBtn} icon={'times'} />
             <span className={style.closeButtonLabel}>Lukk kartet</span>
           </div>
         </div>
         <div
           id="map"
           style={{
-            position: "relative",
-            width: "100%",
-            height: "100%",
+            position: 'relative',
+            width: '100%',
+            height: '100%',
             zIndex: 0
           }}
         />

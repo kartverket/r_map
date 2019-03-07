@@ -1,13 +1,17 @@
 "use strict";
 
+var _interopRequireWildcard = require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/interopRequireWildcard");
+
+var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _react = _interopRequireWildcard(require("react"));
+var _slicedToArray2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/slicedToArray"));
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
@@ -15,45 +19,44 @@ var _LayerEntry = _interopRequireDefault(require("./LayerEntry.scss"));
 
 var _maplibHelper = require("../../MapUtil/maplibHelper");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
+/**
+ *
+ */
 var LayerEntry = function LayerEntry(props) {
   var _useState = (0, _react.useState)(false),
-      _useState2 = _slicedToArray(_useState, 2),
+      _useState2 = (0, _slicedToArray2.default)(_useState, 2),
       options = _useState2[0],
       toggleOptions = _useState2[1];
 
   var _useState3 = (0, _react.useState)(props.layer.isVisible),
-      _useState4 = _slicedToArray(_useState3, 2),
+      _useState4 = (0, _slicedToArray2.default)(_useState3, 2),
       checked = _useState4[0],
       setChecked = _useState4[1];
 
   var _useState5 = (0, _react.useState)(50),
-      _useState6 = _slicedToArray(_useState5, 2),
+      _useState6 = (0, _slicedToArray2.default)(_useState5, 2),
       transparency = _useState6[0],
       setTransparency = _useState6[1];
 
   var _useState7 = (0, _react.useState)(0),
-      _useState8 = _slicedToArray(_useState7, 2),
+      _useState8 = (0, _slicedToArray2.default)(_useState7, 2),
       index = _useState8[0],
       setIndex = _useState8[1];
 
   var layer = props.layer;
   var copyright = layer.copyright;
+  /**
+   *
+   */
 
   var abstractTextSpan = function abstractTextSpan() {
     return layer.abstract ? _react.default.createElement("span", null, "".concat(layer.label, " - ").concat(layer.abstract, ":")) : _react.default.createElement("span", null, "".concat(layer.label));
   };
+  /**
+   *
+   * @param {*} currentNode
+   */
+
 
   var onSelectionChange = function onSelectionChange(currentNode) {
     if (!_maplibHelper.map.GetOverlayLayers().includes(currentNode)) {
@@ -70,28 +73,40 @@ var LayerEntry = function LayerEntry(props) {
 
     setChecked(currentNode.isVisible);
   };
+  /**
+   *
+   */
+
 
   var setOpacity = function setOpacity(value) {
     setTransparency(value);
 
     _maplibHelper.map.SetLayerOpacity(layer, transparency / 100);
   };
+  /**
+   *
+   */
+
 
   var setLayerIndex = function setLayerIndex(newIndex) {
     setIndex(newIndex);
 
     _maplibHelper.map.SetZIndex(layer.subLayers[0], newIndex);
   };
+  /**
+   *
+   */
+
 
   var checkResolution = function checkResolution() {
     var resolution = window.olMap.getView().getResolution();
 
     if (layer.subLayers[0].maxScale <= resolution) {
-      console.warn("Resolution mismatch, layer " + layer.name + " doesn't show at this zoom level ");
+      console.warn('Resolution mismatch, layer ' + layer.name + ' doesn\'t show at this zoom level ');
     }
   };
 
-  window.olMap.getView().on('change:resolution', function (e) {
+  window.olMap.getView().on('change:resolution', function () {
     checkResolution();
   });
   return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("input", {
@@ -105,17 +120,17 @@ var LayerEntry = function LayerEntry(props) {
     htmlFor: layer.id
   }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     className: "svg-checkbox",
-    icon: checked ? ["far", "check-square"] : ["far", "square"]
-  })), " ", abstractTextSpan(), copyright ? _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+    icon: checked ? ['far', 'check-square'] : ['far', 'square']
+  })), ' ', abstractTextSpan(), copyright ? _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     className: "infoIcon",
-    icon: ["info"]
+    icon: ['info']
   }) : null, _react.default.createElement("label", {
     onClick: function onClick() {
       return toggleOptions(!options);
     }
   }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-    icon: ["far", "sliders-h"],
-    color: options ? "red" : "black"
+    icon: ['far', 'sliders-h'],
+    color: options ? 'red' : 'black'
   })), options ? _react.default.createElement("div", {
     className: _LayerEntry.default.settings
   }, _react.default.createElement("div", null, _react.default.createElement("button", {
@@ -146,11 +161,8 @@ var LayerEntry = function LayerEntry(props) {
     onChange: function onChange(e) {
       return setOpacity(e.target.value);
     }
-  }))) : "", props.children);
+  }))) : '', props.children);
 };
 
-LayerEntry.propTypes = {
-  layer: _propTypes.default.object
-};
 var _default = LayerEntry;
 exports.default = _default;

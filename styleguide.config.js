@@ -3,7 +3,7 @@ module.exports = {
   title: "rMapComponent",
   styleguideDir: "docs",
 
-  webpackConfig: require('react-scripts/config/webpack.config.js'),
+  webpackConfig: require('./config/webpack.config.js'),
   contextDependencies: [path.resolve(__dirname, 'src/components')],
   dangerouslyUpdateWebpackConfig(webpackConfig, env) {
     webpackConfig.output = {

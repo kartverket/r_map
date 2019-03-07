@@ -1,30 +1,30 @@
 "use strict";
 
+var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.api = exports.getCapabilitiesByUuid = void 0;
 
+var _regenerator = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/regenerator"));
+
+var _asyncToGenerator2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/asyncToGenerator"));
+
 var _queryString = _interopRequireDefault(require("query-string"));
 
 var _this = void 0;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 var nkapi = 'http://localhost:3001/api/v1/';
 
 var getCapabilitiesByUuid =
 /*#__PURE__*/
 function () {
-  var _ref = _asyncToGenerator(
+  var _ref = (0, _asyncToGenerator2.default)(
   /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee(uuid) {
+  _regenerator.default.mark(function _callee(uuid) {
     var response;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+    return _regenerator.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
@@ -40,7 +40,7 @@ function () {
             return _context.stop();
         }
       }
-    }, _callee, this);
+    }, _callee);
   }));
 
   return function getCapabilitiesByUuid(_x) {
@@ -57,7 +57,7 @@ var api = function api() {
   var urlGeonorge = 'https://ws.geonorge.no/';
   var urlSeEiendom = 'http://www.seeiendom.no/';
   var urlFaktaark = 'https://stadnamn.kartverket.no/fakta/';
-  var urlHavnivaa = "http://api.sehavniva.no/";
+  var urlHavnivaa = 'http://api.sehavniva.no/';
 
   _this.generateWhat3WordsServiceUrl = function () {
     return url + 'ws/w3w.py';
@@ -68,8 +68,8 @@ var api = function api() {
   };
 
   _this.generateElevationChartServiceUrl = function (gpxFile) {
-    var serviceUrl = urlOpenWps + "wps.elevation2?request=Execute&service=WPS&version=1.0.0&identifier=elevationChart&dataInputs=";
-    return serviceUrl + "gpx=@xlink:href=" + gpxFile;
+    var serviceUrl = urlOpenWps + 'wps.elevation2?request=Execute&service=WPS&version=1.0.0&identifier=elevationChart&dataInputs=';
+    return serviceUrl + 'gpx=@xlink:href=' + gpxFile;
   };
 
   _this.generateMapLinkServiceUrl = function (config) {
@@ -84,7 +84,7 @@ var api = function api() {
     var width = encodeURIComponent(config.WIDTH);
     var height = encodeURIComponent(config.HEIGHT);
     var bbox = encodeURIComponent(config.BBOX);
-    return urlOpenWms + "wms.topo4?service=" + service + "&request=" + request + "&CRS=" + crs + "&FORMAT=" + format + "&BGCOLOR=" + bgcolor + "&TRANSPARENT=" + transparent + "&LAYERS=" + layers + "&VERSION=" + version + "&WIDTH=" + width + "&HEIGHT=" + height + "&BBOX=" + bbox;
+    return urlOpenWms + 'wms.topo4?service=' + service + '&request=' + request + '&CRS=' + crs + '&FORMAT=' + format + '&BGCOLOR=' + bgcolor + '&TRANSPARENT=' + transparent + '&LAYERS=' + layers + '&VERSION=' + version + '&WIDTH=' + width + '&HEIGHT=' + height + '&BBOX=' + bbox;
   };
 
   _this.generateEmergencyPosterServiceUrl = function (config) {
@@ -97,15 +97,15 @@ var api = function api() {
     var utm = encodeURIComponent(config.utm);
     var posDez = encodeURIComponent(config.posDez);
     var map = encodeURIComponent(config.map);
-    return urlGeonorge + "/fop/fop?locationName=" + locationName + "&position1=" + position1 + "&position2=" + position2 + "&street=" + street + "&place=" + place + "&matrikkel=" + matrikkel + "&utm=" + utm + "&posDez=" + posDez + "&map=" + map;
+    return urlGeonorge + '/fop/fop?locationName=' + locationName + '&position1=' + position1 + '&position2=' + position2 + '&street=' + street + '&place=' + place + '&matrikkel=' + matrikkel + '&utm=' + utm + '&posDez=' + posDez + '&map=' + map;
   };
 
   _this.generateSearchMatrikkelVegUrl = function (query) {
-    return url + "ws/veg.py?" + encodeURIComponent(query);
+    return url + 'ws/veg.py?' + encodeURIComponent(query);
   };
 
   _this.generateSearchMatrikkelAdresseUrl = function (query) {
-    return url + "ws/adr.py?" + encodeURIComponent(query);
+    return url + 'ws/adr.py?' + encodeURIComponent(query);
   };
 
   _this.generateSearchStedsnavnUrl = function (query, side, antall) {
@@ -113,16 +113,16 @@ var api = function api() {
       var testquery = query.split(',');
 
       if (testquery.length >= 2) {
-        query = testquery[0] + "*&fylkeKommuneNavnListe=+" + testquery[1].trim();
-        return urlGeonorge + "SKWS3Index/v2/ssr/sok?navn=" + query + "&eksakteForst=true&antPerSide=" + antall + "&epsgKode=32633&side=" + side;
+        query = testquery[0] + '*&fylkeKommuneNavnListe=+' + testquery[1].trim();
+        return urlGeonorge + 'SKWS3Index/v2/ssr/sok?navn=' + query + '&eksakteForst=true&antPerSide=' + antall + '&epsgKode=32633&side=' + side;
       }
     }
 
-    return urlGeonorge + "SKWS3Index/v2/ssr/sok?navn=" + query + "*&eksakteForst=true&antPerSide=" + antall + "&epsgKode=32633&side=" + side;
+    return urlGeonorge + 'SKWS3Index/v2/ssr/sok?navn=' + query + '*&eksakteForst=true&antPerSide=' + antall + '&epsgKode=32633&side=' + side;
   };
 
   _this.generateSearchAdresseUrl = function (query) {
-    return urlGeonorge + "AdresseWS/adresse/sok?sokestreng=" + encodeURIComponent(query) + "&antPerSide=1000&side=0";
+    return urlGeonorge + 'AdresseWS/adresse/sok?sokestreng=' + encodeURIComponent(query) + '&antPerSide=1000&side=0';
   };
 
   _this.generateElevationPointUrl = function (lat, lon, epsgNumber) {
@@ -130,11 +130,11 @@ var api = function api() {
   };
 
   _this.generateMatrikkelInfoUrl = function (minx, miny, maxx, maxy) {
-    return url + "ws/wfs.teig.py?bbox=" + minx + "," + miny + "," + maxx + "," + maxy;
+    return url + 'ws/wfs.teig.py?bbox=' + minx + ',' + miny + ',' + maxx + ',' + maxy;
   };
 
   _this.generateSeEiendomUrl = function (knr, gnr, bnr, fnr, snr) {
-    return urlSeEiendom + "services/Matrikkel.svc/GetDetailPage?type=property&knr=" + knr + "&gnr=" + gnr + "&bnr=" + bnr + "&fnr=" + fnr + "&snr=" + snr + "&customer=kartverket";
+    return urlSeEiendom + 'services/Matrikkel.svc/GetDetailPage?type=property&knr=' + knr + '&gnr=' + gnr + '&bnr=' + bnr + '&fnr=' + fnr + '&snr=' + snr + '&customer=kartverket';
   };
 
   _this.generateFaktaarkUrl = function (stedsnummer) {
@@ -148,15 +148,15 @@ var api = function api() {
   };
 
   _this.generateSeHavnivaaUrl = function (lat, lon) {
-    return urlHavnivaa + "tideapi.php?lat=" + lat + "&lon=" + lon + "&lang=nb&year=" + new Date().getFullYear() + "&place=&tide_request=tidetable";
+    return urlHavnivaa + 'tideapi.php?lat=' + lat + '&lon=' + lon + '&lang=nb&year=' + new Date().getFullYear() + '&place=&tide_request=tidetable';
   };
 
   _this.generateLagTurkartUrl = function () {
-    return urlGeonorge + "freeprint/getprint_sverige.py";
+    return urlGeonorge + 'freeprint/getprint_sverige.py';
   };
 
   _this.generateLagFargeleggingskartUrl = function () {
-    return urlGeonorge + "freeprint/getprint_f.py";
+    return urlGeonorge + 'freeprint/getprint_f.py';
   };
 
   _this.generateEmergencyPosterPointUrl = function (lat, lon) {
@@ -201,14 +201,14 @@ var api = function api() {
   _this.generateEiendomAddress = function (kommunenr, gardsnr, bruksnr, festnr, sectionsnr) {
     var baseUrl = url + 'ws/eiendom.py?';
 
-    if (festnr !== "0") {
-      if (sectionsnr === "0") {
-        baseUrl += kommunenr + "-" + gardsnr + "/" + bruksnr + "/" + festnr;
+    if (festnr !== '0') {
+      if (sectionsnr === '0') {
+        baseUrl += kommunenr + '-' + gardsnr + '/' + bruksnr + '/' + festnr;
       } else {
-        baseUrl += kommunenr + "-" + gardsnr + "/" + bruksnr + "/" + festnr + "/" + sectionsnr;
+        baseUrl += kommunenr + '-' + gardsnr + '/' + bruksnr + '/' + festnr + '/' + sectionsnr;
       }
     } else {
-      baseUrl += kommunenr + "-" + gardsnr + "/" + bruksnr;
+      baseUrl += kommunenr + '-' + gardsnr + '/' + bruksnr;
     }
 
     return baseUrl + '&KILDE:Eiendom KOMMUNENR:' + kommunenr + ' GARDSNR:' + gardsnr + ' BRUKSNR:' + bruksnr + ' SEKSJONSNR:' + sectionsnr + ' FESTENR:' + festnr;
@@ -218,13 +218,13 @@ var api = function api() {
     return url + 'ws/faq.py?code=' + code;
   };
   /*
-   // No CORS
-   this.generateSeHavnivaaUrl = function (lat, lon) {
-   return urlHavnivaa + "tideapi.php?lat=" + lat + "&lon=" + lon + "&refcode=cd&place=&lang=nb&file=&tide_request=locationlevels";
-     };                this.generateSearchEiendomUrl = function (query) {
-   return "http://eiendom.statkart.no/Search.ashx?filter=KILDE:sted,matreiendom,SITEURLKEY:httpwwwseeiendomno,LESEGRUPPER:guests&term=" + query;
-   };
-   */
+     // No CORS
+     this.generateSeHavnivaaUrl = function (lat, lon) {
+     return urlHavnivaa + "tideapi.php?lat=" + lat + "&lon=" + lon + "&refcode=cd&place=&lang=nb&file=&tide_request=locationlevels";
+      };                this.generateSearchEiendomUrl = function (query) {
+     return "http://eiendom.statkart.no/Search.ashx?filter=KILDE:sted,matreiendom,SITEURLKEY:httpwwwseeiendomno,LESEGRUPPER:guests&term=" + query;
+     };
+     */
 
 
   _this.sosiCodes = [{
@@ -290,11 +290,11 @@ var api = function api() {
       // UTM zone 33 for all of Norway
 
       /*
-      MinX : -128551.4542,
-      MaxX : 1148218.099,
-      MinY : 6404024.705, // Norway
-      MaxY : 8010780.591 // Norway
-      */
+                MinX : -128551.4542,
+                MaxX : 1148218.099,
+                MinY : 6404024.705, // Norway
+                MaxY : 8010780.591 // Norway
+                */
 
     }
   }, {
@@ -540,17 +540,17 @@ var api = function api() {
     type: 'extended',
     bbox: {}
     /*
-            ,{
-              Name: "Lokalt nett, Oslo",
-              SOSI: 101,
-              bbox: {
-                MinX : -13231.52378,
-                MaxX : 13557.59229,
-                MinY : -11742.49708,
-                MaxY : 25100.80578
-              }
-            }
-    */
+                ,{
+                  Name: "Lokalt nett, Oslo",
+                  SOSI: 101,
+                  bbox: {
+                    MinX : -13231.52378,
+                    MaxX : 13557.59229,
+                    MinY : -11742.49708,
+                    MaxY : 25100.80578
+                  }
+                }
+        */
     //{ESRI: null,EPSG: null,SOSI: null,name: 'what3words',viewable: false,forward: true,key: 'w3w',type: 'extended',bbox: {}}
     //{'ESRI': null, 'EPSG': null, 'SOSI': null, 'name': 'Geohash', 'viewable': false, 'forward': true}
     //{'ESRI': null, 'EPSG': null, 'SOSI': 53, 'name': 'Møre-A'},

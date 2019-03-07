@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Legend from "./Legend";
-import style from "./InlineLegend.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Legend from './Legend';
+import style from './InlineLegend.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const InlineLegend = props => {
   const [expanded, toggleExpand] = useState(false);
@@ -13,17 +13,17 @@ const InlineLegend = props => {
         <>
           <div className={style.toggle} onClick={() => toggleExpand(!expanded)}>
             <span className={style.label}>
-              {expanded ? "Skjul tegnforklaring" : "Vis tegnforklaring"}{" "}
+              {expanded ? 'Skjul tegnforklaring' : 'Vis tegnforklaring'}{' '}
             </span>
-            <FontAwesomeIcon icon={expanded ? ["fas", "angle-up"] : ["fas", "angle-down"]} />
+            <FontAwesomeIcon icon={expanded ? ['fas', 'angle-up'] : ['fas', 'angle-down']} />
           </div>
-          <div className={ expanded ? style.legend : style.legend + " " + style.closed }>
+          <div className={ expanded ? style.legend : style.legend + ' ' + style.closed }>
             <Legend legendUrl={props.legendUrl} legendAlternative="Legend" />
           </div>
         </>
       );
     } else {
-      return "";
+      return '';
     }
   };
 

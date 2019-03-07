@@ -1,5 +1,7 @@
 "use strict";
 
+var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -15,12 +17,10 @@ var _Groups = _interopRequireDefault(require("./Groups"));
 
 var _Layers = _interopRequireDefault(require("./Layers"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 var Map = function Map(mapImplementation, eventHandler, featureInfo) {
   /*
-      Start up functions Start
-   */
+        Start up functions Start
+     */
   var mapConfiguration;
   var categoryHandler;
   var groupHandler;
@@ -80,12 +80,12 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
     mapImplementation.RefreshLayerByGuid(guid, featureObj);
   }
   /*
-      Start up functions End
-   */
+        Start up functions End
+     */
 
   /*
-      Layer functions Start
-   */
+        Layer functions Start
+     */
 
 
   function addLayer(isyLayer) {
@@ -171,12 +171,12 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
     return layerHandler.shouldBeVisible(subLayer);
   }
   /*
-      Layer functions End
-   */
+        Layer functions End
+     */
 
   /*
-   Categories functions Start
-   */
+     Categories functions Start
+     */
 
 
   function getCategoryById(id) {
@@ -187,12 +187,12 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
     return categoryHandler.getCategories();
   }
   /*
-   Categories functions End
-   */
+     Categories functions End
+     */
 
   /*
-   Groups functions Start
-   */
+     Groups functions Start
+     */
 
 
   function getGroupById(id) {
@@ -203,12 +203,12 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
     return groupHandler.GetGroups();
   }
   /*
-   Groups functions End
-   */
+     Groups functions End
+     */
 
   /*
-      Export functions Start
-   */
+        Export functions Start
+     */
 
 
   function exportMap(callback) {
@@ -227,12 +227,12 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
     return mapImplementation.RenderSync();
   }
   /*
-      Export functions End
-   */
+        Export functions End
+     */
 
   /*
-      Feature Info Start
-   */
+        Feature Info Start
+     */
 
 
   function setImageInfoMarker(path) {
@@ -364,12 +364,12 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
     mapImplementation.HandlePointSelect(coordinate);
   }
   /*
-      Feature Info End
-   */
+        Feature Info End
+     */
 
   /*
-      Measure Start
-   */
+        Measure Start
+     */
 
 
   function activateMeasure(options) {
@@ -380,12 +380,12 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
     mapImplementation.DeactivateMeasure();
   }
   /*
-      Measure End
-   */
+        Measure End
+     */
 
   /*
-   Measure line Start
-   */
+     Measure line Start
+     */
 
 
   function activateMeasureLine(options) {
@@ -396,12 +396,12 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
     mapImplementation.DeactivateMeasureLine();
   }
   /*
-   Measure line End
-   */
+     Measure line End
+     */
 
   /*
-   Add Feature Start
-   */
+     Add Feature Start
+     */
 
 
   function activateAddLayerFeature(options) {
@@ -412,12 +412,12 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
     mapImplementation.DeactivateAddLayerFeature();
   }
   /*
-   Add Feature End
-   */
+     Add Feature End
+     */
 
   /*
-   Add Feature Gps Start
-   */
+     Add Feature Gps Start
+     */
 
 
   function activateAddFeatureGps(options) {
@@ -432,12 +432,12 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
     mapImplementation.DeactivateAddFeatureGps();
   }
   /*
-   Add Feature Gps End
-   */
+     Add Feature Gps End
+     */
 
   /*
-   Modify Feature Start
-   */
+     Modify Feature Start
+     */
 
 
   function activateModifyFeature(options) {
@@ -448,12 +448,12 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
     mapImplementation.DeactivateModifyFeature();
   }
   /*
-   Modify Feature End
-   */
+     Modify Feature End
+     */
 
   /*
-   DrawFeature Start
-   */
+     DrawFeature Start
+     */
 
 
   function activateDrawFeature(options) {
@@ -464,12 +464,12 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
     mapImplementation.DeactivateDrawFeature(options);
   }
   /*
-   DrawFeature End
-   */
+     DrawFeature End
+     */
 
   /*
-   Offline Start
-   */
+     Offline Start
+     */
 
 
   function initOffline() {
@@ -520,12 +520,12 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
     mapImplementation.DeactivateOffline();
   }
   /*
-   Offline End
-   */
+     Offline End
+     */
 
   /*
-   HoverInfo Start
-   */
+     HoverInfo Start
+     */
 
 
   function activateHoverInfo() {
@@ -536,12 +536,12 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
     mapImplementation.DeactivateHoverInfo();
   }
   /*
-   HoverInfo End
-   */
+     HoverInfo End
+     */
 
   /*
-   PrintBoxSelect Start
-   */
+     PrintBoxSelect Start
+     */
 
 
   function activatePrintBoxSelect(options) {
@@ -552,12 +552,12 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
     mapImplementation.DeactivatePrintBoxSelect();
   }
   /*
-   PrintBoxSelect End
-   */
+     PrintBoxSelect End
+     */
 
   /*
-   AddLayerUrl Start
-   */
+     AddLayerUrl Start
+     */
 
 
   function activateAddLayerUrl(options) {
@@ -568,12 +568,12 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
     mapImplementation.DeactivateAddLayerUrl();
   }
   /*
-   AddLayerUrl End
-   */
+     AddLayerUrl End
+     */
 
   /*
-      Utility functions Start
-   */
+        Utility functions Start
+     */
 
 
   function extentToGeoJson(x, y) {
@@ -585,7 +585,7 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
 
     if (viewPropertyObject.layers) {
       var layerGuids = viewPropertyObject.layers;
-      var guids = layerGuids.split(",");
+      var guids = layerGuids.split(',');
       guids.forEach(function (guid) {
         var layer = getLayerById(guid);
 
@@ -628,12 +628,12 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
     mapImplementation.AddScaleLine();
   }
   /*function addVectorTestData(){
-      var callback = function(data){
-          showHighlightedFeatures(featureParser.Parse(data));
-      };
-      var url = 'assets/mapConfig/testdata.json';
-      httpHelper.get(url).success(callback);
-  }*/
+        var callback = function(data){
+            showHighlightedFeatures(featureParser.Parse(data));
+        };
+        var url = 'assets/mapConfig/testdata.json';
+        httpHelper.get(url).success(callback);
+    }*/
 
 
   function zoomToLayer(isySubLayer) {
@@ -770,8 +770,8 @@ var Map = function Map(mapImplementation, eventHandler, featureInfo) {
     mapImplementation.ShowCustomMessage(message);
   }
   /*
-      Utility functions End
-   */
+        Utility functions End
+     */
 
 
   return {

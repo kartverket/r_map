@@ -1,15 +1,15 @@
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTimes, faBars, faAngleUp, faAngleDown, faArrowDown, faArrowUp } from '@fortawesome/pro-solid-svg-icons'
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faTimes, faBars, faAngleUp, faAngleDown, faArrowDown, faArrowUp } from '@fortawesome/pro-solid-svg-icons';
 import {
   faLayerGroup,
   faCheckSquare,
   faSquare,
   faCogs, faInfo, faCog, faSlidersH, faSortAmountDown, faSortAmountUp, faLevelUp, faLevelDown
-} from '@fortawesome/pro-regular-svg-icons'
+} from '@fortawesome/pro-regular-svg-icons';
 
 
 library.add(
-    [
+  [
     faTimes,
     faBars,
     faLayerGroup,
@@ -27,6 +27,6 @@ library.add(
     faLevelDown,
     faArrowDown,
     faArrowUp
-    ]
+  ]
 );
 

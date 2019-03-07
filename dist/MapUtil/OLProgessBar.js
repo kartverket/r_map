@@ -12,8 +12,8 @@ var OLProgressBar = function OLProgressBar(eventHandler) {
 
   var _progress;
   /*
-   Start up functions Start
-   */
+     Start up functions Start
+     */
 
 
   function init(map) {
@@ -79,10 +79,10 @@ var OLProgressBar = function OLProgressBar(eventHandler) {
     });
   }
   /**
-   * Renders a progress bar.
-   * @param {Element} el The target element.
-   * @constructor
-   */
+     * Renders a progress bar.
+     * @param {Element} el The target element.
+     * @constructor
+     */
 
 
   function Progress(el) {
@@ -91,8 +91,8 @@ var OLProgressBar = function OLProgressBar(eventHandler) {
     this.loaded = 0;
   }
   /**
-   * Increment the count of loading tiles.
-   */
+     * Increment the count of loading tiles.
+     */
 
 
   Progress.prototype.addLoading = function () {
@@ -104,8 +104,8 @@ var OLProgressBar = function OLProgressBar(eventHandler) {
     this.update();
   };
   /**
-   * Increment the count of loaded tiles.
-   */
+     * Increment the count of loaded tiles.
+     */
 
 
   Progress.prototype.addLoaded = function () {
@@ -119,8 +119,8 @@ var OLProgressBar = function OLProgressBar(eventHandler) {
     this_.update();
   };
   /**
-   * Update the progress bar.
-   */
+     * Update the progress bar.
+     */
 
 
   Progress.prototype.update = function () {
@@ -136,16 +136,16 @@ var OLProgressBar = function OLProgressBar(eventHandler) {
     }
   };
   /**
-   * Show the progress bar.
-   */
+     * Show the progress bar.
+     */
 
 
   Progress.prototype.show = function () {
     this.el.style.visibility = 'visible';
   };
   /**
-   * Hide the progress bar.
-   */
+     * Hide the progress bar.
+     */
 
 
   Progress.prototype.hide = function () {

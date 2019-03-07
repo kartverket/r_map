@@ -1,13 +1,27 @@
 "use strict";
 
+var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = exports.MapComponent = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _classCallCheck2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/classCallCheck"));
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
+var _createClass2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/getPrototypeOf"));
+
+var _assertThisInitialized2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/assertThisInitialized"));
+
+var _inherits2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/inherits"));
+
+var _defineProperty2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/defineProperty"));
+
+var _react = _interopRequireDefault(require("react"));
 
 var _CapabilitiesUtil = require("../../MapUtil/CapabilitiesUtil");
 
@@ -19,28 +33,6 @@ var _setQueryString = _interopRequireDefault(require("set-query-string"));
 
 var _MapComponent = _interopRequireDefault(require("./MapComponent.scss"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 /**
  * @class The Map Component
  * @extends React.Component
@@ -48,7 +40,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var MapComponent =
 /*#__PURE__*/
 function (_React$Component) {
-  _inherits(MapComponent, _React$Component);
+  (0, _inherits2.default)(MapComponent, _React$Component);
 
   /**
    * The prop types.
@@ -62,11 +54,9 @@ function (_React$Component) {
   function MapComponent(props) {
     var _this;
 
-    _classCallCheck(this, MapComponent);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(MapComponent).call(this, props));
-
-    _defineProperty(_assertThisInitialized(_this), "updateMapInfoState", function () {
+    (0, _classCallCheck2.default)(this, MapComponent);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(MapComponent).call(this, props));
+    (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "updateMapInfoState", function () {
       var center = _maplibHelper.map.GetCenter();
 
       var queryValues = _queryString.default.parse(window.location.search);
@@ -81,16 +71,15 @@ function (_React$Component) {
       queryValues.zoom = center.zoom;
       (0, _setQueryString.default)(queryValues);
     });
-
     _this.state = {
-      activeKey: "1"
+      activeKey: '1'
     };
 
     var _queryValues = _queryString.default.parse(window.location.search);
 
-    var lon = Number(_queryValues["lon"] || props.lon);
-    var lat = Number(_queryValues["lat"] || props.lat);
-    var zoom = Number(_queryValues["zoom"] || props.zoom);
+    var lon = Number(_queryValues['lon'] || props.lon);
+    var lat = Number(_queryValues['lat'] || props.lat);
+    var zoom = Number(_queryValues['zoom'] || props.zoom);
     /*
     let wmts = Array(queryValues['wmts'] || [])
     let wfs = Array(queryValues['wfs'] || [])
@@ -106,16 +95,16 @@ function (_React$Component) {
     return _this;
   }
 
-  _createClass(MapComponent, [{
+  (0, _createClass2.default)(MapComponent, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.olMap = _maplibHelper.map.Init("map", this.newMapConfig);
+      this.olMap = _maplibHelper.map.Init('map', this.newMapConfig);
 
       _maplibHelper.map.AddZoom();
 
       _maplibHelper.map.AddScaleLine();
 
-      _maplibHelper.eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState);
+      _maplibHelper.eventHandler.RegisterEvent('MapMoveend', this.updateMapInfoState);
 
       this.props = {
         map: _maplibHelper.map
@@ -154,63 +143,19 @@ function (_React$Component) {
       }, _react.default.createElement("div", {
         id: "map",
         style: {
-          position: "relative",
-          width: "100%",
-          height: "100%",
+          position: 'relative',
+          width: '100%',
+          height: '100%',
           zIndex: 0
         }
       }));
     }
   }]);
-
   return MapComponent;
 }(_react.default.Component);
 
 exports.MapComponent = MapComponent;
-
-_defineProperty(MapComponent, "propTypes", {
-  /**
-   * @type {Number}
-   */
-  lon: _propTypes.default.number,
-
-  /**
-   * @type {Number}
-   */
-  lat: _propTypes.default.number,
-
-  /**
-   * @type {Number}
-   */
-  zoom: _propTypes.default.number,
-
-  /**
-   * @type {Function}
-   */
-  onChangeLon: _propTypes.default.func,
-
-  /**
-   * @type {Function}
-   */
-  onChangeLat: _propTypes.default.func,
-
-  /**
-   * @type {Function}
-   */
-  onChangeZoom: _propTypes.default.func,
-
-  /**
-   * @type {Function}
-   */
-  onMapViewChanges: _propTypes.default.func,
-
-  /**
-   * @type {Array}
-   */
-  services: _propTypes.default.arrayOf(_propTypes.default.object)
-});
-
-_defineProperty(MapComponent, "defaultProps", {
+(0, _defineProperty2.default)(MapComponent, "defaultProps", {
   onMapViewChanges: function onMapViewChanges() {},
   onChangeLon: function onChangeLon() {},
   onChangeLat: function onChangeLat() {},
@@ -219,6 +164,5 @@ _defineProperty(MapComponent, "defaultProps", {
   lat: 7197860,
   zoom: 4
 });
-
 var _default = MapComponent;
 exports.default = _default;
