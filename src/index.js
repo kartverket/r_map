@@ -5,16 +5,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import * as serviceWorker from './serviceWorker';
 
-const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
-const rootElement = document.getElementById('root');
+import './Utils/icons';
 
-ReactDOM.render(
-    <BrowserRouter basename={baseUrl}>
-      <App />
-    </BrowserRouter>,
-    rootElement);
-  
-  registerServiceWorker();
-  
+import AddServicePanel from './components/AddServicePanel/AddServicePanel';
+import BackgroundChooser from './components/BackgroundChooser/BackgroundChooser';
+import MapComponent from './components/MapComponent/MapComponent';
+import MapContainer from './components/MapContainer/MapContainer';
+import Legend from './components/Legend/Legend';
+
+ReactDOM.render(<App />, document.getElementById('root'));
+
+serviceWorker.unregister();
+
+export { AddServicePanel, BackgroundChooser, MapComponent, MapContainer, Legend };

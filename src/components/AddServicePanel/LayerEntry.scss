@@ -1,0 +1,35 @@
+:local(.movelayerBtn) {
+    border: none;
+    font-size: .8em;
+    margin-right: 5px;
+    &:hover {
+        cursor: pointer;
+    }
+    > svg {
+        position: relative;
+        top: 5px;
+        left: 5px;
+        font-size: 1.3em;
+    }
+}
+label {
+    &:hover {
+        cursor: pointer;
+    }
+}
+:local(.priority) {
+    font-size: .8em;
+    margin-left: 20px;
+}
+:local(.slider) {
+    font-size: .8em;
+    > input {
+    position: relative;
+    top: 6px;
+    left: 6px;
+    width: 150px;
+    }
+}
+:local(.settings) {
+    margin-bottom: 10px;
+}
