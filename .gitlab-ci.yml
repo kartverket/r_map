@@ -2,5 +2,7 @@ image: node:10.15.0
 
 job1:
   script:
-    - yarn
-    - yarn build
+    - echo @fortawesome:registry=https://npm.fontawesome.com/ >.npmrc
+    - echo //npm.fontawesome.com/:_authToken=${API_TOKEN} >>.npmrc
+    - npm
+    - npm build
