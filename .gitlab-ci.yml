@@ -1,0 +1,6 @@
+image: node:10.15.0
+
+job1:
+  script:
+    - yarn
+    - yarn build
