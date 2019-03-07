@@ -4,5 +4,5 @@ job1:
   script:
     - echo @fortawesome:registry=https://npm.fontawesome.com/ >.npmrc
     - echo //npm.fontawesome.com/:_authToken=${API_TOKEN} >>.npmrc
-    - npm
-    - npm build
+    - npm i
+    - npm run build
