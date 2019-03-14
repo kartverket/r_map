@@ -177,8 +177,7 @@ export default class MapContainer extends React.Component {
       isExpanded: !this.state.isExpanded
     });
   }
-  toogleMap() {
-    console.log("lukke kartet");
+  toogleMap() {    
     window.history.back();
     // TODO: get paramtere to check for url til goto for closing map
   }
@@ -197,7 +196,7 @@ export default class MapContainer extends React.Component {
               <div>{this.renderServiceList()}</div>
             </div>
           ) : (
-            <div>Gå til kartkatalogen</div>
+            <div className={style.link} onClick={() => this.toogleMap()}>Gå til kartkatalogen</div>
           )}
 
           <div className={style.closeMap}>
