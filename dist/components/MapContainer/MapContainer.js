@@ -207,7 +207,6 @@ function (_React$Component) {
   }, {
     key: "toogleMap",
     value: function toogleMap() {
-      console.log("lukke kartet");
       window.history.back(); // TODO: get paramtere to check for url til goto for closing map
     }
     /**
@@ -229,7 +228,12 @@ function (_React$Component) {
         },
         className: _MapContainer.default.toggleBtn,
         icon: this.state.isExpanded ? ["far", "layer-group"] : "times"
-      }), _react.default.createElement("div", null, this.renderServiceList())) : _react.default.createElement("div", null, "G\xE5 til kartkatalogen"), _react.default.createElement("div", {
+      }), _react.default.createElement("div", null, this.renderServiceList())) : _react.default.createElement("div", {
+        className: _MapContainer.default.link,
+        onClick: function onClick() {
+          return _this4.toogleMap();
+        }
+      }, "G\xE5 til kartkatalogen"), _react.default.createElement("div", {
         className: _MapContainer.default.closeMap
       }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
         title: "Lukk kartet",

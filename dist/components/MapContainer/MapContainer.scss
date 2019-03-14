@@ -21,7 +21,13 @@
     background-color: $color-toggle-on;
   }
 }
-
+:local(.link) {
+  text-decoration: underline;
+  margin-left: 10px;
+  &:hover {
+    cursor: pointer;
+  }
+}
 .ol-control button:focus {
   outline: transparent;
 }
