@@ -143,6 +143,8 @@
   }
   &.open {
     overflow: visible;
+    overflow-x: hidden;
+    overflow-y: auto;
     width: auto;
     max-width: 400px;
     height: 100%;
