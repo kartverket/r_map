@@ -8,7 +8,7 @@ const LayerEntry = props => {
   const [options, toggleOptions] = useState(false);
   const [checked, setChecked] = useState(props.layer.isVisible);
   const [transparency, setTransparency] = useState(50);
-  const [index, setIndex] = useState(0);
+  //const [index, setIndex] = useState(0);
 
   const layer = props.layer;
   const copyright = layer.copyright;
@@ -38,10 +38,17 @@ const LayerEntry = props => {
     map.SetLayerOpacity(layer, transparency / 100);
   };
 
+  /**
+   *
+
   const setLayerIndex = newIndex => {
     setIndex(newIndex);
     map.SetZIndex(layer.subLayers[0], newIndex);
   };
+   */
+  /**
+   *
+   */
   const checkResolution = () => {
     const resolution = window.olMap.getView().getResolution();
     if (layer.subLayers[0].maxScale <= resolution) {
@@ -73,12 +80,13 @@ const LayerEntry = props => {
       </label>
       {options ? (
         <div className={style.settings}>
-          {/** TODO: Style layer up and down */}
+          {/** Tar ut prio buttone for nå *
           <div>
             <button className={style.movelayerBtn} onClick={() => setLayerIndex(index + 1)}>Flytt fremover<FontAwesomeIcon title="Vis laget over"  icon={['fas', 'arrow-up']} /></button>
             <button className={style.movelayerBtn} onClick={() => setLayerIndex(index - 1)}>Flytt bakover <FontAwesomeIcon  title="Vis laget under" icon={['fas','arrow-down']} /></button>
             <span className={style.priority}>Prioritet: {index}</span>
           </div>
+           */}
           {/** TODO: STYLE the slider */}
           <label className={style.slider}>
             Gjennomsiktighet:
