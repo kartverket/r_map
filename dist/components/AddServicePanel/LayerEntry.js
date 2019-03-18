@@ -41,12 +41,8 @@ var LayerEntry = function LayerEntry(props) {
   var _useState5 = (0, _react.useState)(50),
       _useState6 = _slicedToArray(_useState5, 2),
       transparency = _useState6[0],
-      setTransparency = _useState6[1];
+      setTransparency = _useState6[1]; //const [index, setIndex] = useState(0);
 
-  var _useState7 = (0, _react.useState)(0),
-      _useState8 = _slicedToArray(_useState7, 2),
-      index = _useState8[0],
-      setIndex = _useState8[1];
 
   var layer = props.layer;
   var copyright = layer.copyright;
@@ -76,12 +72,18 @@ var LayerEntry = function LayerEntry(props) {
 
     _maplibHelper.map.SetLayerOpacity(layer, transparency / 100);
   };
-
-  var setLayerIndex = function setLayerIndex(newIndex) {
+  /**
+   *
+   const setLayerIndex = newIndex => {
     setIndex(newIndex);
-
-    _maplibHelper.map.SetZIndex(layer.subLayers[0], newIndex);
+    map.SetZIndex(layer.subLayers[0], newIndex);
   };
+   */
+
+  /**
+   *
+   */
+
 
   var checkResolution = function checkResolution() {
     var resolution = window.olMap.getView().getResolution();
@@ -118,25 +120,7 @@ var LayerEntry = function LayerEntry(props) {
     color: options ? "red" : "black"
   })), options ? _react.default.createElement("div", {
     className: _LayerEntry.default.settings
-  }, _react.default.createElement("div", null, _react.default.createElement("button", {
-    className: _LayerEntry.default.movelayerBtn,
-    onClick: function onClick() {
-      return setLayerIndex(index + 1);
-    }
-  }, "Flytt fremover", _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-    title: "Vis laget over",
-    icon: ['fas', 'arrow-up']
-  })), _react.default.createElement("button", {
-    className: _LayerEntry.default.movelayerBtn,
-    onClick: function onClick() {
-      return setLayerIndex(index - 1);
-    }
-  }, "Flytt bakover ", _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-    title: "Vis laget under",
-    icon: ['fas', 'arrow-down']
-  })), _react.default.createElement("span", {
-    className: _LayerEntry.default.priority
-  }, "Prioritet: ", index)), _react.default.createElement("label", {
+  }, _react.default.createElement("label", {
     className: _LayerEntry.default.slider
   }, "Gjennomsiktighet:", _react.default.createElement("input", {
     type: "range",
