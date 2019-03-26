@@ -2,7 +2,7 @@ import OlWMSCapabilities from 'ol/format/WMSCapabilities';
 import WMTSCapabilities from 'ol/format/WMTSCapabilities.js';
 import {
   Layer
-} from './Domain'
+} from './Domain';
 
 import get from 'lodash/get.js';
 import {
@@ -10,14 +10,14 @@ import {
   getWmsUrl,
   mapConfig,
   createNotExistGroup
-} from './maplibHelper'
+} from './maplibHelper';
 
 import {
   Jsonix
-} from '@boundlessgeo/jsonix'
+} from '@boundlessgeo/jsonix';
 import {
   XLink_1_0
-} from 'w3c-schemas'
+} from 'w3c-schemas';
 import {
   OWS_1_1_0,
   OWS_1_0_0,
@@ -29,18 +29,18 @@ import {
   SMIL_2_0_Language,
   WFS_1_1_0,
   WFS_2_0
-} from 'ogc-schemas/scripts/'
+} from 'ogc-schemas/scripts/';
 
 export const newMaplibLayer = (sourceType, source) => {
-  let catIds = [999]
+  let catIds = [999];
   if (source.groupid !== undefined) {
     catIds = source.groupid.toString().split(',').map((item) => {
-      return parseInt(item, 10)
-    })
-    createNotExistGroup(catIds, source.name, source.namelng)
+      return parseInt(item, 10);
+    });
+    createNotExistGroup(catIds, source.name, source.namelng);
   } else {
     if (source.options.isbaselayer === 'false') {
-      createDummyGroup()
+      createDummyGroup();
     }
   }
   const newIsyLayer = new Layer({
@@ -101,9 +101,9 @@ export const newMaplibLayer = (sourceType, source) => {
     thumbnail: source.thumbnail,
     label: source.name,
     value: source.name
-  })
-  return newIsyLayer
-}
+  });
+  return newIsyLayer;
+};
 
 var context_wfs_2_0_0 = new Jsonix.Context([XLink_1_0, OWS_1_1_0, GML_2_1_2, Filter_2_0, WFS_2_0]);
 var unmarshaller_wfs_2_0_0 = context_wfs_2_0_0.createUnmarshaller();
@@ -148,20 +148,20 @@ export class CapabilitiesUtil {
     const getMapUrl = get(wmsGetMapConfig, 'DCPType[0].HTTP.Get.OnlineResource');
     return layersInCapabilities.map((layerObj) =>
       newMaplibLayer('WMS', {
-        type: "map",
+        type: 'map',
         name: get(layerObj, nameField),
         url: getMapUrl,
         legendurl: get(layerObj, 'Style[0].LegendURL[0].OnlineResource'),
         params: {
           layers: get(layerObj, 'Name'),
-          format: "image/png",
+          format: 'image/png',
           'VERSION': wmsVersion
         },
-        guid: "1.temakart",
+        guid: '1.temakart',
         options: {
-          isbaselayer: "false",
-          singletile: "false",
-          visibility: "true",
+          isbaselayer: 'false',
+          singletile: 'false',
+          visibility: 'true',
           maxscale: layerObj.MaxScaleDenominator || '',
           minscale: layerObj.MinScaleDenominator || '',
           queryable: layerObj.queryable
@@ -191,35 +191,38 @@ export class CapabilitiesUtil {
     return featureTypesInCapabilities.map((layerObj) => {
       featureNS[layerObj.name.prefix] = layerObj.name.namespaceURI;
       return newMaplibLayer('WFS', {
-        type: "map",
+        type: 'map',
         name: get(layerObj, nameField),
         url: url,
         version: version,
         params: {
           layers: get(layerObj, nameField),
-          format: "image/png"
+          format: 'image/png'
         },
-        guid: "1.temakart",
+        guid: '1.temakart',
         options: {
-          isbaselayer: "false",
-          singletile: "false",
-          visibility: "true",
+          isbaselayer: 'false',
+          singletile: 'false',
+          visibility: 'true',
           maxscale: layerObj.MaxScaleDenominator || '',
           minscale: layerObj.MinScaleDenominator || ''
         },
-        featureNS:featureNS,
-        featureType:layerObj.name.prefix + ':' + layerObj.name.localPart
-      })});
+        featureNS: featureNS,
+        featureType: layerObj.name.prefix + ':' + layerObj.name.localPart
+      });
+    });
   }
   static parseWFSCapabilities(capabilitiesUrl) {
     return fetch(capabilitiesUrl)
       .then((response) => response.text())
       .then((data) => {
-        let parser, xmlDoc, result;
+        let parser;
+        let xmlDoc;
+        let result;
         parser = new DOMParser();
-        xmlDoc = parser.parseFromString(data, "text/xml");
+        xmlDoc = parser.parseFromString(data, 'text/xml');
 
-        let version = xmlDoc.getElementsByTagName("WFS_Capabilities")[0].attributes.version.value;
+        let version = xmlDoc.getElementsByTagName('WFS_Capabilities')[0].attributes.version.value;
         switch (version) {
           case '1.1.0':
             result = unmarshaller_wfs_1_1_0.unmarshalString(data);
@@ -228,12 +231,31 @@ export class CapabilitiesUtil {
             result = unmarshaller_wfs_2_0_0.unmarshalString(data);
             break;
           default:
-            console.warn('No matching WFS version parser found.')
+            console.warn('No matching WFS version parser found.');
         }
-        return result
+        return result;
       });
-
-  };
+  }
+  static addGeoJson(url) {
+    return fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        return [newMaplibLayer('VECTOR', {
+          type: 'map',
+          name: data.name,
+          url: url,
+          params: {
+            layers: data.name
+          },
+          guid: '1.temakart',
+          options: {
+            isbaselayer: 'false',
+            singletile: 'false',
+            visibility: 'true'
+          }
+        })];
+      });
+  }
 
 
 }

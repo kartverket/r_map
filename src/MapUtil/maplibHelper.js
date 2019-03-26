@@ -376,7 +376,7 @@ updateMapConfigWithGroups(mapConfig)
 updateMapConfigWithImageLayers(mapConfig)
 mapConfig = MapConfig(mapConfig)
 mapConfig.instance = 'geoportal'
-mapConfig.proxyHost = '/?'
+mapConfig.proxyHost = ''
 
 export const eventHandler = EventHandler()
 export const mapImplementation = OLMap(null, eventHandler)

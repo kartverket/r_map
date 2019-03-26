@@ -1,14 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
-import { map } from "../../MapUtil/maplibHelper";
+import { CapabilitiesUtil } from '../../MapUtil/CapabilitiesUtil';
+import { map } from '../../MapUtil/maplibHelper';
 
-import "./AddServicePanel.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import './AddServicePanel.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import InlineLegend from "../Legend/InlineLegend";
-import LayerEntry from "./LayerEntry";
+import InlineLegend from '../Legend/InlineLegend';
+import LayerEntry from './LayerEntry';
 
 /**
  * Panel containing a (checkable) list.
@@ -29,6 +29,7 @@ export default class AddServicePanel extends React.Component {
      * @type {Object} -- required
      */
     services: PropTypes.object.isRequired,
+    removeMapItem: PropTypes.object
   };
 
   /**
@@ -45,8 +46,8 @@ export default class AddServicePanel extends React.Component {
 
   getCapabilitites() {
     switch (this.props.services.DistributionProtocol) {
-      case "WMS":
-      case "OGC:WMS":
+      case 'WMS':
+      case 'OGC:WMS':
         CapabilitiesUtil.parseWmsCapabilities(
           this.props.services.GetCapabilitiesUrl
         )
@@ -64,7 +65,7 @@ export default class AddServicePanel extends React.Component {
           })
           .catch(e => console.log(e));
         break;
-      case "WFS":
+      case 'WFS':
         CapabilitiesUtil.parseWFSCapabilities(
           this.props.services.GetCapabilitiesUrl
         )
@@ -76,8 +77,17 @@ export default class AddServicePanel extends React.Component {
           })
           .catch(e => console.log(e));
         break;
+      case 'GEOJSON':
+        CapabilitiesUtil.addGeoJson(this.props.services.url)
+          .then(layers => {
+            this.setState({
+              wmsLayers: layers
+            });
+          })
+          .catch(e => console.log(e));
+        break;
       default:
-        console.warn("No service type specified");
+        console.warn('No service type specified');
         break;
     }
   }
@@ -105,11 +115,11 @@ export default class AddServicePanel extends React.Component {
         <FontAwesomeIcon
           className="remove-inline"
           onClick={this.props.removeMapItem}
-          icon={["fas", "times"]}
+          icon={['fas', 'times']}
         />
       );
     } else {
-      return "";
+      return '';
     }
   }
 
@@ -126,7 +136,7 @@ export default class AddServicePanel extends React.Component {
       });
       return wmsLayersList;
     } else {
-      return "";
+      return '';
     }
   }
 
@@ -136,18 +146,22 @@ export default class AddServicePanel extends React.Component {
   render() {
     return (
       <div>
-        <div onClick={() => this.toggleExpand()} className={"expand-layers-btn"} >
-          <span className={"ellipsis-toggle"}>{this.props.services.Title}</span>
+        <div
+          onClick={() => this.toggleExpand()}
+          className={'expand-layers-btn'}
+        >
+          <span className={'ellipsis-toggle'}>{this.props.services.Title}</span>
           <FontAwesomeIcon
             icon={
-              this.state.expanded ? ["fas", "angle-up"] : ["fas", "angle-down"]
+              this.state.expanded ? ['fas', 'angle-up'] : ['fas', 'angle-down']
             }
           />
         </div>
         {this.renderRemoveButton()}
 
-        <div className={
-            this.state.expanded ? "selectedlayers open" : "selectedlayers"
+        <div
+          className={
+            this.state.expanded ? 'selectedlayers open' : 'selectedlayers'
           }
         >
           {this.renderSelectedLayers()}
