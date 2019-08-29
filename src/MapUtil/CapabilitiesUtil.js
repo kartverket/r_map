@@ -34,9 +34,7 @@ import {
 export const newMaplibLayer = (sourceType, source) => {
   let catIds = [999];
   if (source.groupid !== undefined) {
-    catIds = source.groupid.toString().split(',').map((item) => {
-      return parseInt(item, 10);
-    });
+    catIds = source.groupid.toString().split(',').map((item) => parseInt(item, 10));
     createNotExistGroup(catIds, source.name, source.namelng);
   } else {
     if (source.options.isbaselayer === 'false') {
@@ -99,6 +97,7 @@ export const newMaplibLayer = (sourceType, source) => {
     legendGraphicUrls: [],
     selectedLayerOpen: false,
     thumbnail: source.thumbnail,
+    abstract: source.abstract,
     label: source.name,
     value: source.name
   });
@@ -149,7 +148,8 @@ export class CapabilitiesUtil {
     return layersInCapabilities.map((layerObj) =>
       newMaplibLayer('WMS', {
         type: 'map',
-        name: get(layerObj, nameField),
+        name: get(layerObj, nameField) || get(layerObj, 'Title'),
+        abstract: get(layerObj, 'Abstract'),
         url: getMapUrl,
         legendurl: get(layerObj, 'Style[0].LegendURL[0].OnlineResource'),
         params: {

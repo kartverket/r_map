@@ -37,9 +37,9 @@ export const LegendGraphic = (config) => {
 };
 
 export const SubLayer = (config) => {
-  var id = Guid.newGuid();
+  const id = Guid.newGuid();
 
-  var defaults = {
+  const defaults = {
     name: '',
     providerName: '', //f.eks Fiskeridirektoratet
     source: SOURCES.wmts,
@@ -67,17 +67,16 @@ export const SubLayer = (config) => {
     featureNS: '',
     geometryName: 'geometry'
   };
-  var instance = Object.assign({}, defaults, config); // subLayerInstance
+  let instance = Object.assign({}, defaults, config); // subLayerInstance
 
   if (instance.legendGraphicUrl.indexOf('?') === -1) {
     instance.legendGraphicUrl += '?';
   }
   if (instance.legendGraphicUrl !== '') {
-    var legendGraphic = LegendGraphic({
+    instance.legendGraphicUrl = LegendGraphic({
       url: instance.legendGraphicUrl,
       layer: instance.name
-    });
-    instance.legendGraphicUrl = legendGraphic;
+    });;
   }
 
   return instance;
@@ -99,7 +98,7 @@ export const FORMATS = {
   geoJson: 'application/json'
 };
 export const Layer = (config) => {
-  var defaults = {
+  const defaults = {
     guid: '',
     subLayers: [],
     name: '',
@@ -116,10 +115,10 @@ export const Layer = (config) => {
     legendGraphicUrls: [],
     selectedLayerOpen: false //todo johben temp
   };
-  var layerInstance = Object.assign({}, defaults, config); // layerInstance
+  let layerInstance = Object.assign({}, defaults, config);
 
-  var subLayers = [];
-  for (var i = 0; i < config.subLayers.length; i++) {
+  let subLayers = [];
+  for (let i = 0; i < config.subLayers.length; i++) {
     subLayers.push(SubLayer(config.subLayers[i]));
   }
 

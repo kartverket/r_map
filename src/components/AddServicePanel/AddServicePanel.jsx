@@ -112,11 +112,7 @@ export default class AddServicePanel extends React.Component {
   renderRemoveButton() {
     if (this.props.removeMapItem) {
       return (
-        <FontAwesomeIcon
-          className="remove-inline"
-          onClick={this.props.removeMapItem}
-          icon={['fas', 'times']}
-        />
+        <FontAwesomeIcon className="remove-inline" onClick={this.props.removeMapItem} icon={['fas', 'times']}/>
       );
     } else {
       return '';
@@ -146,23 +142,18 @@ export default class AddServicePanel extends React.Component {
   render() {
     return (
       <div>
-        <div
-          onClick={() => this.toggleExpand()}
-          className={'expand-layers-btn'}
-        >
+        <div onClick={() => this.toggleExpand()} className={'expand-layers-btn'} >
           <span className={'ellipsis-toggle'}>{this.props.services.Title}</span>
-          <FontAwesomeIcon
-            icon={
-              this.state.expanded ? ['fas', 'angle-up'] : ['fas', 'angle-down']
-            }
+          <FontAwesomeIcon icon={
+            this.state.expanded ? ['fas', 'angle-up'] : ['fas', 'angle-down']
+          }
           />
         </div>
         {this.renderRemoveButton()}
 
-        <div
-          className={
-            this.state.expanded ? 'selectedlayers open' : 'selectedlayers'
-          }
+        <div className={
+          this.state.expanded ? 'selectedlayers open' : 'selectedlayers'
+        }
         >
           {this.renderSelectedLayers()}
         </div>
