@@ -15,7 +15,7 @@
     "@fortawesome/pro-solid-svg-icons": "^5.6.3",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "fast-xml-parser": "^3.12.13",
-    "jquery": "^3.3.1",
+    "jquery": "^3.4.0",
     "node-sass": "^4.11.0",
     "ogc-schemas": "https://github.com/highsource/ogc-schemas",
     "ol": "^5.3.1",
