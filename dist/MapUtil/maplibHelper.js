@@ -399,7 +399,7 @@ updateMapConfigWithGroups(mapConfig);
 updateMapConfigWithImageLayers(mapConfig);
 exports.mapConfig = mapConfig = (0, _Repository.MapConfig)(mapConfig);
 mapConfig.instance = 'geoportal';
-mapConfig.proxyHost = '/?';
+mapConfig.proxyHost = '';
 var eventHandler = (0, _EventHandler.EventHandler)();
 exports.eventHandler = eventHandler;
 var mapImplementation = (0, _OLMap.OLMap)(null, eventHandler);

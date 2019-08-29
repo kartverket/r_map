@@ -16,8 +16,8 @@ const LayerEntry = props => {
     return layer.abstract ? (
       <span>{`${layer.label} - ${layer.abstract}:`}</span>
     ) : (
-      <span>{`${layer.label}`}</span>
-    );
+        <span>{`${layer.label}`}</span>
+      );
   };
 
   const onSelectionChange = currentNode => {
@@ -55,7 +55,7 @@ const LayerEntry = props => {
       console.warn("Resolution mismatch, layer " + layer.name + " doesn't show at this zoom level ");
     }
   }
-  window.olMap.getView().on('change:resolution', function(e) {
+  window.olMap.getView().on('change:resolution', function (e) {
     checkResolution()
   });
 
@@ -63,20 +63,14 @@ const LayerEntry = props => {
     <>
       <input className="checkbox" id={layer.id} type="checkbox" />
       <label onClick={() => onSelectionChange(layer)} htmlFor={layer.id}>
-        <FontAwesomeIcon
-          className="svg-checkbox"
-          icon={checked ? ["far", "check-square"] : ["far", "square"]}
-        />
+        <FontAwesomeIcon className="svg-checkbox" icon={checked ? ["far", "check-square"] : ["far", "square"]} />
       </label>{" "}
       {abstractTextSpan()}
       {copyright ? (
         <FontAwesomeIcon className="infoIcon" icon={["info"]} />
       ) : null}
       <label onClick={() => toggleOptions(!options)}>
-        <FontAwesomeIcon
-          icon={["far", "sliders-h"]}
-          color={options ? "red" : "black"}
-        />
+        <FontAwesomeIcon icon={["far", "sliders-h"]} color={options ? "red" : "black"} />
       </label>
       {options ? (
         <div className={style.settings}>
@@ -100,8 +94,8 @@ const LayerEntry = props => {
           </label>
         </div>
       ) : (
-        ""
-      )}
+          ""
+        )}
       {props.children}
     </>
   );

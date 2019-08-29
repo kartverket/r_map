@@ -101,8 +101,8 @@ function (_React$Component) {
       var _this2 = this;
 
       switch (this.props.services.DistributionProtocol) {
-        case "WMS":
-        case "OGC:WMS":
+        case 'WMS':
+        case 'OGC:WMS':
           _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(this.props.services.GetCapabilitiesUrl).then(_CapabilitiesUtil.CapabilitiesUtil.getLayersFromWmsCapabilties).then(function (layers) {
             if (_this2.props.services.addLayers.length > 0) {
               var layersToBeAdded = layers.filter(function (e) {
@@ -122,7 +122,7 @@ function (_React$Component) {
 
           break;
 
-        case "WFS":
+        case 'WFS':
           _CapabilitiesUtil.CapabilitiesUtil.parseWFSCapabilities(this.props.services.GetCapabilitiesUrl).then(_CapabilitiesUtil.CapabilitiesUtil.getLayersFromWfsCapabilties).then(function (layers) {
             _this2.setState({
               wmsLayers: layers
@@ -133,8 +133,19 @@ function (_React$Component) {
 
           break;
 
+        case 'GEOJSON':
+          _CapabilitiesUtil.CapabilitiesUtil.addGeoJson(this.props.services.url).then(function (layers) {
+            _this2.setState({
+              wmsLayers: layers
+            });
+          }).catch(function (e) {
+            return console.log(e);
+          });
+
+          break;
+
         default:
-          console.warn("No service type specified");
+          console.warn('No service type specified');
           break;
       }
     }
@@ -154,10 +165,10 @@ function (_React$Component) {
         return _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
           className: "remove-inline",
           onClick: this.props.removeMapItem,
-          icon: ["fas", "times"]
+          icon: ['fas', 'times']
         });
       } else {
-        return "";
+        return '';
       }
     }
   }, {
@@ -178,7 +189,7 @@ function (_React$Component) {
         });
         return wmsLayersList;
       } else {
-        return "";
+        return '';
       }
     }
     /**
@@ -194,13 +205,13 @@ function (_React$Component) {
         onClick: function onClick() {
           return _this3.toggleExpand();
         },
-        className: "expand-layers-btn"
+        className: 'expand-layers-btn'
       }, _react.default.createElement("span", {
-        className: "ellipsis-toggle"
+        className: 'ellipsis-toggle'
       }, this.props.services.Title), _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-        icon: this.state.expanded ? ["fas", "angle-up"] : ["fas", "angle-down"]
+        icon: this.state.expanded ? ['fas', 'angle-up'] : ['fas', 'angle-down']
       })), this.renderRemoveButton(), _react.default.createElement("div", {
-        className: this.state.expanded ? "selectedlayers open" : "selectedlayers"
+        className: this.state.expanded ? 'selectedlayers open' : 'selectedlayers'
       }, this.renderSelectedLayers()));
     }
   }]);
@@ -215,5 +226,6 @@ _defineProperty(AddServicePanel, "propTypes", {
    * The services to be parsed and shown in the panel
    * @type {Object} -- required
    */
-  services: _propTypes.default.object.isRequired
+  services: _propTypes.default.object.isRequired,
+  removeMapItem: _propTypes.default.object
 });
