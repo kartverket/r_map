@@ -565,10 +565,9 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
     };
 
     if (features && features.length > 0) {
-      var featureIsOk = true;
-
+      //var featureIsOk = true;
       if (!featureIsValid(features)) {
-        featureIsOk = false;
+        //featureIsOk = false;
         console.log(isySubLayer.name + ' does not have valid coordinates!');
       }
 

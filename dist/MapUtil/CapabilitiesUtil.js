@@ -99,6 +99,7 @@ var newMaplibLayer = function newMaplibLayer(sourceType, source) {
     legendGraphicUrls: [],
     selectedLayerOpen: false,
     thumbnail: source.thumbnail,
+    abstract: source.abstract,
     label: source.name,
     value: source.name
   });
@@ -159,20 +160,21 @@ function () {
       var getMapUrl = (0, _get.default)(wmsGetMapConfig, 'DCPType[0].HTTP.Get.OnlineResource');
       return layersInCapabilities.map(function (layerObj) {
         return newMaplibLayer('WMS', {
-          type: "map",
-          name: (0, _get.default)(layerObj, nameField),
+          type: 'map',
+          name: (0, _get.default)(layerObj, nameField) || (0, _get.default)(layerObj, 'Title'),
+          abstract: (0, _get.default)(layerObj, 'Abstract'),
           url: getMapUrl,
           legendurl: (0, _get.default)(layerObj, 'Style[0].LegendURL[0].OnlineResource'),
           params: {
             layers: (0, _get.default)(layerObj, 'Name'),
-            format: "image/png",
+            format: 'image/png',
             'VERSION': wmsVersion
           },
-          guid: "1.temakart",
+          guid: '1.temakart',
           options: {
-            isbaselayer: "false",
-            singletile: "false",
-            visibility: "true",
+            isbaselayer: 'false',
+            singletile: 'false',
+            visibility: 'true',
             maxscale: layerObj.MaxScaleDenominator || '',
             minscale: layerObj.MinScaleDenominator || '',
             queryable: layerObj.queryable
@@ -209,19 +211,19 @@ function () {
       return featureTypesInCapabilities.map(function (layerObj) {
         featureNS[layerObj.name.prefix] = layerObj.name.namespaceURI;
         return newMaplibLayer('WFS', {
-          type: "map",
+          type: 'map',
           name: (0, _get.default)(layerObj, nameField),
           url: url,
           version: version,
           params: {
             layers: (0, _get.default)(layerObj, nameField),
-            format: "image/png"
+            format: 'image/png'
           },
-          guid: "1.temakart",
+          guid: '1.temakart',
           options: {
-            isbaselayer: "false",
-            singletile: "false",
-            visibility: "true",
+            isbaselayer: 'false',
+            singletile: 'false',
+            visibility: 'true',
             maxscale: layerObj.MaxScaleDenominator || '',
             minscale: layerObj.MinScaleDenominator || ''
           },
@@ -236,10 +238,12 @@ function () {
       return fetch(capabilitiesUrl).then(function (response) {
         return response.text();
       }).then(function (data) {
-        var parser, xmlDoc, result;
+        var parser;
+        var xmlDoc;
+        var result;
         parser = new DOMParser();
-        xmlDoc = parser.parseFromString(data, "text/xml");
-        var version = xmlDoc.getElementsByTagName("WFS_Capabilities")[0].attributes.version.value;
+        xmlDoc = parser.parseFromString(data, 'text/xml');
+        var version = xmlDoc.getElementsByTagName('WFS_Capabilities')[0].attributes.version.value;
 
         switch (version) {
           case '1.1.0':
@@ -255,6 +259,28 @@ function () {
         }
 
         return result;
+      });
+    }
+  }, {
+    key: "addGeoJson",
+    value: function addGeoJson(url) {
+      return fetch(url).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        return [newMaplibLayer('VECTOR', {
+          type: 'map',
+          name: data.name,
+          url: url,
+          params: {
+            layers: data.name
+          },
+          guid: '1.temakart',
+          options: {
+            isbaselayer: 'false',
+            singletile: 'false',
+            visibility: 'true'
+          }
+        })];
       });
     }
   }]);

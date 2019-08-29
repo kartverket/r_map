@@ -34,11 +34,11 @@ var LegendGraphic = function LegendGraphic(config) {
   }
 
   var defaults = {
-    width: "20",
-    height: "20",
-    format: "image/png",
-    request: "GetLegendGraphic",
-    version: "1.0.0",
+    width: '20',
+    height: '20',
+    format: 'image/png',
+    request: 'GetLegendGraphic',
+    version: '1.0.0',
     service: 'wms',
     layer: ''
   };
@@ -86,11 +86,11 @@ var SubLayer = function SubLayer(config) {
   }
 
   if (instance.legendGraphicUrl !== '') {
-    var legendGraphic = LegendGraphic({
+    instance.legendGraphicUrl = LegendGraphic({
       url: instance.legendGraphicUrl,
       layer: instance.name
     });
-    instance.legendGraphicUrl = legendGraphic;
+    ;
   }
 
   return instance;
@@ -98,19 +98,19 @@ var SubLayer = function SubLayer(config) {
 
 exports.SubLayer = SubLayer;
 var SOURCES = {
-  wmts: "WMTS",
-  wms: "WMS",
-  vector: "VECTOR",
-  proxyWmts: "proxyWmts",
-  proxyWms: "proxyWms",
-  tms: "TMS",
-  wfs: "WFS"
+  wmts: 'WMTS',
+  wms: 'WMS',
+  vector: 'VECTOR',
+  proxyWmts: 'proxyWmts',
+  proxyWms: 'proxyWms',
+  tms: 'TMS',
+  wfs: 'WFS'
 };
 exports.SOURCES = SOURCES;
 var FORMATS = {
-  imagepng: "image/png",
-  imagejpeg: "image/jpeg",
-  geoJson: "application/json"
+  imagepng: 'image/png',
+  imagejpeg: 'image/jpeg',
+  geoJson: 'application/json'
 };
 exports.FORMATS = FORMATS;
 
@@ -134,8 +134,7 @@ var Layer = function Layer(config) {
     selectedLayerOpen: false //todo johben temp
 
   };
-  var layerInstance = Object.assign({}, defaults, config); // layerInstance
-
+  var layerInstance = Object.assign({}, defaults, config);
   var subLayers = [];
 
   for (var i = 0; i < config.subLayers.length; i++) {
