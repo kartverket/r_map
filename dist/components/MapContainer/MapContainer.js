@@ -19,7 +19,7 @@ var _setQueryString = _interopRequireDefault(require("set-query-string"));
 
 var _BackgroundChooser = _interopRequireDefault(require("../BackgroundChooser/BackgroundChooser"));
 
-var _AddServicePanel = _interopRequireDefault(require("../AddServicePanel/AddServicePanel"));
+var _ServicePanel = _interopRequireDefault(require("../ServicePanel/ServicePanel"));
 
 var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
@@ -47,8 +47,8 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var ListItem = function ListItem(props) {
-  return _react.default.createElement(_AddServicePanel.default, {
+var ServiceListItem = function ServiceListItem(props) {
+  return _react.default.createElement(_ServicePanel.default, {
     services: props.listItem,
     removeMapItem: props.removeMapItem,
     draggable: true
@@ -177,7 +177,7 @@ function (_React$Component) {
       var _this3 = this;
 
       return this.props.services.map(function (listItem, i) {
-        return _react.default.createElement(ListItem, {
+        return _react.default.createElement(ServiceListItem, {
           listItem: listItem,
           removeMapItem: _this3.props.removeMapItem ? _this3.props.removeMapItem : null,
           key: i,

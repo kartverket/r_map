@@ -3,10 +3,10 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-Object.defineProperty(exports, "AddServicePanel", {
+Object.defineProperty(exports, "ServicePanel", {
   enumerable: true,
   get: function get() {
-    return _AddServicePanel.default;
+    return _ServicePanel.default;
   }
 });
 Object.defineProperty(exports, "BackgroundChooser", {
@@ -46,7 +46,7 @@ var serviceWorker = _interopRequireWildcard(require("./serviceWorker"));
 
 require("./Utils/icons");
 
-var _AddServicePanel = _interopRequireDefault(require("./components/AddServicePanel/AddServicePanel"));
+var _ServicePanel = _interopRequireDefault(require("./components/ServicePanel/ServicePanel"));
 
 var _BackgroundChooser = _interopRequireDefault(require("./components/BackgroundChooser/BackgroundChooser"));
 

@@ -13,7 +13,9 @@ var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
 var _LayerEntry = _interopRequireDefault(require("./LayerEntry.scss"));
 
-var _maplibHelper = require("../../MapUtil/maplibHelper");
+var _InlineLegend = _interopRequireDefault(require("../Legend/InlineLegend"));
+
+var _CapabilitiesUtil = require("../../MapUtil/CapabilitiesUtil");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -33,63 +35,75 @@ var LayerEntry = function LayerEntry(props) {
       options = _useState2[0],
       toggleOptions = _useState2[1];
 
-  var _useState3 = (0, _react.useState)(props.layer.isVisible),
+  var _useState3 = (0, _react.useState)(),
       _useState4 = _slicedToArray(_useState3, 2),
-      checked = _useState4[0],
-      setChecked = _useState4[1];
+      olLayer = _useState4[0],
+      setLayer = _useState4[1];
 
-  var _useState5 = (0, _react.useState)(50),
+  var _useState5 = (0, _react.useState)(props.layer.isVisible),
       _useState6 = _slicedToArray(_useState5, 2),
-      transparency = _useState6[0],
-      setTransparency = _useState6[1]; //const [index, setIndex] = useState(0);
+      checked = _useState6[0],
+      setChecked = _useState6[1];
 
+  var _useState7 = (0, _react.useState)(50),
+      _useState8 = _slicedToArray(_useState7, 2),
+      transparency = _useState8[0],
+      setTransparency = _useState8[1];
 
   var layer = props.layer;
   var copyright = layer.copyright;
 
   var abstractTextSpan = function abstractTextSpan() {
-    return layer.abstract ? _react.default.createElement("span", null, "".concat(layer.label, " - ").concat(layer.abstract, ":")) : _react.default.createElement("span", null, "".concat(layer.label));
+    var textSpan = '';
+
+    if (layer.Name && layer.Name.length > 0) {
+      textSpan = layer.Name;
+    }
+
+    if (layer.Title && layer.Title.length > 0 && layer.Title !== layer.Name) {
+      textSpan = textSpan.length === 0 ? layer.Title : textSpan + ' - ' + layer.Title;
+    }
+
+    if (layer.Abstract && layer.Abstract.length > 0 && layer.Abstract !== layer.Title && layer.Abstract !== layer.Name) {
+      textSpan = textSpan.length === 0 ? layer.Abstract : textSpan + ' - ' + layer.Abstract;
+    }
+
+    return _react.default.createElement("span", null, textSpan);
   };
 
   var onSelectionChange = function onSelectionChange(currentNode) {
-    if (!_maplibHelper.map.GetOverlayLayers().includes(currentNode)) {
-      _maplibHelper.map.AddLayer(currentNode);
-    } else {
-      if (_maplibHelper.map.GetVisibleSubLayers().find(function (el) {
-        return el.id === currentNode.id;
-      })) {
-        _maplibHelper.map.HideLayer(currentNode);
-      } else {
-        _maplibHelper.map.ShowLayer(currentNode);
-      }
-    }
+    var isNewLayer = true;
 
-    setChecked(currentNode.isVisible);
+    var currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmsCapabilities(props.meta, currentNode);
+
+    setLayer(currentLayer);
+    window.olMap.getLayers().forEach(function (maplayer) {
+      if (maplayer.get('name') === (currentNode.Name || currentNode.Title)) {
+        isNewLayer = false;
+        maplayer.getVisible() ? maplayer.setVisible(false) : maplayer.setVisible(true);
+        setChecked(maplayer.getVisible());
+      }
+    });
+
+    if (isNewLayer) {
+      window.olMap.addLayer(currentLayer);
+      setChecked(currentLayer.getVisible());
+    }
   };
 
   var setOpacity = function setOpacity(value) {
     setTransparency(value);
 
-    _maplibHelper.map.SetLayerOpacity(layer, transparency / 100);
+    if (olLayer) {
+      olLayer.setOpacity(Math.min(transparency / 100, 1));
+    }
   };
-  /**
-   *
-   const setLayerIndex = newIndex => {
-    setIndex(newIndex);
-    map.SetZIndex(layer.subLayers[0], newIndex);
-  };
-   */
-
-  /**
-   *
-   */
-
 
   var checkResolution = function checkResolution() {
     var resolution = window.olMap.getView().getResolution();
 
-    if (layer.subLayers[0].maxScale <= resolution) {
-      console.warn("Resolution mismatch, layer " + layer.name + " doesn't show at this zoom level ");
+    if (layer.MaxScaleDenominator <= resolution) {
+      console.warn("Resolution mismatch, layer " + layer.Name + " doesn't show at this zoom level ");
     }
   };
 
@@ -98,13 +112,13 @@ var LayerEntry = function LayerEntry(props) {
   });
   return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("input", {
     className: "checkbox",
-    id: layer.id,
+    id: layer.Title,
     type: "checkbox"
   }), _react.default.createElement("label", {
     onClick: function onClick() {
       return onSelectionChange(layer);
     },
-    htmlFor: layer.id
+    htmlFor: layer.Title
   }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     className: "svg-checkbox",
     icon: checked ? ["far", "check-square"] : ["far", "square"]
@@ -118,7 +132,9 @@ var LayerEntry = function LayerEntry(props) {
   }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     icon: ["far", "sliders-h"],
     color: options ? "red" : "black"
-  })), options ? _react.default.createElement("div", {
+  })), _react.default.createElement(_InlineLegend.default, {
+    legendUrl: layer.Style ? layer.Style[0].LegendURL[0].OnlineResource : ''
+  }), options ? _react.default.createElement("div", {
     className: _LayerEntry.default.settings
   }, _react.default.createElement("label", {
     className: _LayerEntry.default.slider
@@ -134,7 +150,8 @@ var LayerEntry = function LayerEntry(props) {
 };
 
 LayerEntry.propTypes = {
-  layer: _propTypes.default.object
+  layer: _propTypes.default.object,
+  meta: _propTypes.default.object
 };
 var _default = LayerEntry;
 exports.default = _default;

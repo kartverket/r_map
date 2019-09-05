@@ -20,7 +20,7 @@
         > label {padding: 0 4px;}
     }
     &.open {
-        max-height: 1000px;
+        max-height: 80000px;
     }
 }
 .ellipsis-toggle {
@@ -66,5 +66,22 @@
         max-width: 75%;
         overflow: hidden;
     }
-
+}
+.facet-sub {
+  margin: 0 0 0 15px;
+  > input[type="checkbox"] {
+      overflow: hidden;
+      visibility: hidden;
+      display: none;
+  }
+  label > svg {
+      margin: 0 5px;
+      font-size: 1.1em;
+  }
+  label > span {
+      display: inline-block;
+      text-overflow: ellipsis;
+      max-width: 75%;
+      overflow: hidden;
+  }
 }

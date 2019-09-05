@@ -6,5 +6,5 @@ const TEST_DATA = {
     addLayers:['Niv_fastmerker','Landsnettpunkt']
 };
 
-<AddServicePanel services={TEST_DATA} />
+<ServicePanel services={TEST_DATA} />
 ```
