@@ -75,7 +75,13 @@ var LayerEntry = function LayerEntry(props) {
     var isNewLayer = true;
 
     if (layer.Name) {
-      var currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmsCapabilities(props.meta, currentNode);
+      var currentLayer;
+
+      if (props.meta.Type === 'OGC:WMS') {
+        currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmsCapabilities(props.meta, currentNode);
+      } else if (props.meta.Type === 'GEOJSON') {
+        currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromGeoJson(currentNode);
+      }
 
       setLayer(currentLayer);
       window.olMap.getLayers().forEach(function (maplayer) {

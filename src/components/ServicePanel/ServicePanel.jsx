@@ -12,25 +12,36 @@ const ServicePanel = props => {
   const [expanded, setState] = useState(false)
 
   useEffect(() => {
+    let newMetaInfo = {}
     switch (props.services.DistributionProtocol) {
       case 'WMS':
       case 'OGC:WMS':
         CapabilitiesUtil.parseWmsCapabilities(props.services.GetCapabilitiesUrl)
           .then((capa) => {
             setCapabilities(capa)
-            setMeta(CapabilitiesUtil.getMetaCapabilities(capa))
+            newMetaInfo = CapabilitiesUtil.getMetaCapabilities(capa)
+            newMetaInfo.Type = 'OGC:WMS'
+            setMeta(newMetaInfo)
           })
           .catch(e => console.log(e))
         break
       case 'WFS':
         CapabilitiesUtil.parseWFSCapabilities(props.services.GetCapabilitiesUrl)
           //.then(CapabilitiesUtil.getLayersFromWfsCapabilties)
-          .then((capa) => setCapabilities(capa))
+          .then((capa) => {
+            setCapabilities(capa)
+            newMetaInfo.Type = 'WFS'
+            setMeta(newMetaInfo)
+          })
           .catch(e => console.log(e))
         break;
       case 'GEOJSON':
-        CapabilitiesUtil.addGeoJson(props.services.url)
-          .then(layers => setCapabilities(layers))
+        CapabilitiesUtil.getGeoJson(props.services.url)
+          .then(layers => {
+            setCapabilities(layers)
+            newMetaInfo.Type = 'GEOJSON'
+            setMeta(newMetaInfo)
+          })
           .catch(e => console.log(e));
         break;
       default:
@@ -63,6 +74,12 @@ const ServicePanel = props => {
           </div>
         )
       })
+    } else if (capabilities && capabilities.features) {
+      return (
+        <div className="facet">
+          <LayerEntry layer={capabilities} meta={meta} />
+        </div>
+      )
     } else {
       console.warn('Something went wrong when parsing the capabilities')
       console.warn(capabilities)

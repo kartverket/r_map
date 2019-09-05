@@ -32,7 +32,12 @@ const LayerEntry = props => {
   const onSelectionChange = currentNode => {
     let isNewLayer = true
     if (layer.Name) {
-      const currentLayer = CapabilitiesUtil.getOlLayerFromWmsCapabilities(props.meta, currentNode);
+      let currentLayer;
+      if (props.meta.Type === 'OGC:WMS') {
+        currentLayer = CapabilitiesUtil.getOlLayerFromWmsCapabilities(props.meta, currentNode);
+      } else if (props.meta.Type === 'GEOJSON') {
+        currentLayer = CapabilitiesUtil.getOlLayerFromGeoJson(currentNode);
+      }
       setLayer(currentLayer)
 
       window.olMap.getLayers().forEach(function (maplayer) {

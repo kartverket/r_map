@@ -3,9 +3,11 @@ import WMTSCapabilities from 'ol/format/WMTSCapabilities.js';
 import OlSourceImageWMS from 'ol/source/ImageWMS';
 import OlLayerImage from 'ol/layer/Image';
 
-import {
-  Layer
-} from './Domain';
+import GeoJSON from 'ol/format/GeoJSON.js';
+import { Vector as VectorLayer } from 'ol/layer.js';
+import { Vector as VectorSource } from 'ol/source.js';
+
+import { Layer } from './Domain';
 
 import get from 'lodash/get.js';
 import {
@@ -239,45 +241,43 @@ export class CapabilitiesUtil {
         return result;
       });
   }
-  static addGeoJson(url) {
+  static getGeoJson(url) {
     return fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        return [newMaplibLayer('VECTOR', {
-          type: 'map',
-          name: data.name,
-          url: url,
-          params: {
-            layers: data.name
-          },
-          guid: '1.temakart',
-          options: {
-            isbaselayer: 'false',
-            singletile: 'false',
-            visibility: 'true'
-          }
-        })];
-      });
+        data.Name = data.name
+        return data
+      })
+  }
+  static getOlLayerFromGeoJson(layerCapabilities) {
+    const vectorSource = new VectorSource({
+      features: (new GeoJSON()).readFeatures(layerCapabilities, {
+        featureProjection: 'EPSG:3857'
+      })
+    })
+    return new VectorLayer({
+      source: vectorSource,
+    });
   }
   static getMetaCapabilities(capabilities) {
     let Meta = {}
     const wmsGetMapConfig = get(capabilities, 'Capability.Request.GetMap')
     Meta.Version = get(capabilities, 'version')
-    Meta.Attributions=  get(capabilities, 'Service.AccessConstraints')
-    Meta.MapUrl =  get(wmsGetMapConfig, 'DCPType[0].HTTP.Get.OnlineResource')
+    Meta.Attributions = get(capabilities, 'Service.AccessConstraints')
+    Meta.MapUrl = get(wmsGetMapConfig, 'DCPType[0].HTTP.Get.OnlineResource')
     Meta.FeatureInfoConfig = get(capabilities, 'Capability.Request.GetFeatureInfo')
     Meta.FeatureInfoUrl = get(Meta.FeatureInfoConfig, 'DCPType[0].HTTP.Get.OnlineResource')
     Meta.LegendUrl = get(capabilities, 'Capability.Layer.Layer').length > 0 ? get(get(capabilities, 'Capability.Layer.Layer')[0], 'Style[0].LegendURL[0].OnlineResource') : null
 
     return Meta
   }
-/**
-   * Returns an OpenlLayers Layer ready to be added to the map
-   *
-   * @param {Object} metaCapabilities The generell top capabilities object.
-   * @param {Object} layerCapabilities A layer spesific capabilities object.
-   * @return {OlLayerTile[]} Array of OlLayerTile
-   */
+  /**
+     * Returns an OpenlLayers Layer ready to be added to the map
+     *
+     * @param {Object} metaCapabilities The generell top capabilities object.
+     * @param {Object} layerCapabilities A layer spesific capabilities object.
+     * @return {OlLayerTile[]} Array of OlLayerTile
+     */
   static getOlLayerFromWmsCapabilities(metaCapabilities, layerCapabilities) {
     return new OlLayerImage({
       opacity: 1,

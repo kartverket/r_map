@@ -13,6 +13,12 @@ var _ImageWMS = _interopRequireDefault(require("ol/source/ImageWMS"));
 
 var _Image = _interopRequireDefault(require("ol/layer/Image"));
 
+var _GeoJSON = _interopRequireDefault(require("ol/format/GeoJSON.js"));
+
+var _layer = require("ol/layer.js");
+
+var _source = require("ol/source.js");
+
 var _Domain = require("./Domain");
 
 var _get = _interopRequireDefault(require("lodash/get.js"));
@@ -266,25 +272,25 @@ function () {
       });
     }
   }, {
-    key: "addGeoJson",
-    value: function addGeoJson(url) {
+    key: "getGeoJson",
+    value: function getGeoJson(url) {
       return fetch(url).then(function (response) {
         return response.json();
       }).then(function (data) {
-        return [newMaplibLayer('VECTOR', {
-          type: 'map',
-          name: data.name,
-          url: url,
-          params: {
-            layers: data.name
-          },
-          guid: '1.temakart',
-          options: {
-            isbaselayer: 'false',
-            singletile: 'false',
-            visibility: 'true'
-          }
-        })];
+        data.Name = data.name;
+        return data;
+      });
+    }
+  }, {
+    key: "getOlLayerFromGeoJson",
+    value: function getOlLayerFromGeoJson(layerCapabilities) {
+      var vectorSource = new _source.Vector({
+        features: new _GeoJSON.default().readFeatures(layerCapabilities, {
+          featureProjection: 'EPSG:3857'
+        })
+      });
+      return new _layer.Vector({
+        source: vectorSource
       });
     }
   }, {

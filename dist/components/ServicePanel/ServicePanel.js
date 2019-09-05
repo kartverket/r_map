@@ -48,12 +48,16 @@ var ServicePanel = function ServicePanel(props) {
       setState = _useState6[1];
 
   (0, _react.useEffect)(function () {
+    var newMetaInfo = {};
+
     switch (props.services.DistributionProtocol) {
       case 'WMS':
       case 'OGC:WMS':
         _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(props.services.GetCapabilitiesUrl).then(function (capa) {
           setCapabilities(capa);
-          setMeta(_CapabilitiesUtil.CapabilitiesUtil.getMetaCapabilities(capa));
+          newMetaInfo = _CapabilitiesUtil.CapabilitiesUtil.getMetaCapabilities(capa);
+          newMetaInfo.Type = 'OGC:WMS';
+          setMeta(newMetaInfo);
         }).catch(function (e) {
           return console.log(e);
         });
@@ -63,7 +67,9 @@ var ServicePanel = function ServicePanel(props) {
       case 'WFS':
         _CapabilitiesUtil.CapabilitiesUtil.parseWFSCapabilities(props.services.GetCapabilitiesUrl) //.then(CapabilitiesUtil.getLayersFromWfsCapabilties)
         .then(function (capa) {
-          return setCapabilities(capa);
+          setCapabilities(capa);
+          newMetaInfo.Type = 'WFS';
+          setMeta(newMetaInfo);
         }).catch(function (e) {
           return console.log(e);
         });
@@ -71,8 +77,10 @@ var ServicePanel = function ServicePanel(props) {
         break;
 
       case 'GEOJSON':
-        _CapabilitiesUtil.CapabilitiesUtil.addGeoJson(props.services.url).then(function (layers) {
-          return setCapabilities(layers);
+        _CapabilitiesUtil.CapabilitiesUtil.getGeoJson(props.services.url).then(function (layers) {
+          setCapabilities(layers);
+          newMetaInfo.Type = 'GEOJSON';
+          setMeta(newMetaInfo);
         }).catch(function (e) {
           return console.log(e);
         });
@@ -117,6 +125,13 @@ var ServicePanel = function ServicePanel(props) {
           }));
         }) : '');
       });
+    } else if (capabilities && capabilities.features) {
+      return _react.default.createElement("div", {
+        className: "facet"
+      }, _react.default.createElement(_LayerEntry.default, {
+        layer: capabilities,
+        meta: meta
+      }));
     } else {
       console.warn('Something went wrong when parsing the capabilities');
       console.warn(capabilities);
