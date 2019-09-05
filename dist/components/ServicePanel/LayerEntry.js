@@ -129,21 +129,21 @@ var LayerEntry = function LayerEntry(props) {
       return onSelectionChange(layer);
     },
     htmlFor: layer.Title
-  }, " "), " ", abstractTextSpan(), info ? _react.default.createElement("div", {
+  }, " "), abstractTextSpan(), info ? _react.default.createElement("div", {
     class: "info"
   }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     className: "infoIcon",
     icon: ["far", "info"]
   }), _react.default.createElement("span", {
     class: "infoText"
-  }, info)) : null, _react.default.createElement("label", {
+  }, info)) : null, layer.Name ? _react.default.createElement("label", {
     onClick: function onClick() {
       return toggleOptions(!options);
     }
   }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     icon: ["far", "sliders-h"],
     color: options ? "red" : "black"
-  })), _react.default.createElement(_InlineLegend.default, {
+  })) : '', _react.default.createElement(_InlineLegend.default, {
     legendUrl: layer.Style && layer.Style[0].LegendURL ? layer.Style[0].LegendURL[0].OnlineResource : ''
   }), options ? _react.default.createElement("div", {
     className: _LayerEntry.default.settings

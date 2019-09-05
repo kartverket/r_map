@@ -79,7 +79,6 @@ const LayerEntry = props => {
       ) : (
           <label onClick={() => onSelectionChange(layer)} htmlFor={layer.Title}> </label>
         )}
-      {" "}
       {abstractTextSpan()}
       {info ? (
         <div class="info">
@@ -87,9 +86,11 @@ const LayerEntry = props => {
           <span class="infoText">{info}</span>
         </div>
       ) : null}
-      <label onClick={() => toggleOptions(!options)}>
-        <FontAwesomeIcon icon={["far", "sliders-h"]} color={options ? "red" : "black"} />
-      </label>
+      {layer.Name ? (
+        <label onClick={() => toggleOptions(!options)}>
+          <FontAwesomeIcon icon={["far", "sliders-h"]} color={options ? "red" : "black"} />
+        </label>
+      ) : ('')}
       <InlineLegend legendUrl={((layer.Style && layer.Style[0].LegendURL) ? layer.Style[0].LegendURL[0].OnlineResource : '')} />
       {options ? (
         <div className={style.settings}>
