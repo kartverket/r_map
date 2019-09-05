@@ -9,6 +9,10 @@ var _WMSCapabilities = _interopRequireDefault(require("ol/format/WMSCapabilities
 
 var _WMTSCapabilities = _interopRequireDefault(require("ol/format/WMTSCapabilities.js"));
 
+var _ImageWMS = _interopRequireDefault(require("ol/source/ImageWMS"));
+
+var _Image = _interopRequireDefault(require("ol/layer/Image"));
+
 var _Domain = require("./Domain");
 
 var _get = _interopRequireDefault(require("lodash/get.js"));
@@ -281,6 +285,49 @@ function () {
             visibility: 'true'
           }
         })];
+      });
+    }
+  }, {
+    key: "getMetaCapabilities",
+    value: function getMetaCapabilities(capabilities) {
+      var Meta = {};
+      var wmsGetMapConfig = (0, _get.default)(capabilities, 'Capability.Request.GetMap');
+      Meta.Version = (0, _get.default)(capabilities, 'version');
+      Meta.Attributions = (0, _get.default)(capabilities, 'Service.AccessConstraints');
+      Meta.MapUrl = (0, _get.default)(wmsGetMapConfig, 'DCPType[0].HTTP.Get.OnlineResource');
+      Meta.FeatureInfoConfig = (0, _get.default)(capabilities, 'Capability.Request.GetFeatureInfo');
+      Meta.FeatureInfoUrl = (0, _get.default)(Meta.FeatureInfoConfig, 'DCPType[0].HTTP.Get.OnlineResource');
+      Meta.LegendUrl = (0, _get.default)(capabilities, 'Capability.Layer.Layer').length > 0 ? (0, _get.default)((0, _get.default)(capabilities, 'Capability.Layer.Layer')[0], 'Style[0].LegendURL[0].OnlineResource') : null;
+      return Meta;
+    }
+    /**
+       * Returns an OpenlLayers Layer ready to be added to the map
+       *
+       * @param {Object} metaCapabilities The generell top capabilities object.
+       * @param {Object} layerCapabilities A layer spesific capabilities object.
+       * @return {OlLayerTile[]} Array of OlLayerTile
+       */
+
+  }, {
+    key: "getOlLayerFromWmsCapabilities",
+    value: function getOlLayerFromWmsCapabilities(metaCapabilities, layerCapabilities) {
+      return new _Image.default({
+        opacity: 1,
+        title: layerCapabilities.Title,
+        name: layerCapabilities.Name,
+        abstract: layerCapabilities.Abstract,
+        getFeatureInfoUrl: metaCapabilities.FeatureInfoUrl,
+        getFeatureInfoFormats: (0, _get.default)(metaCapabilities.FeatureInfoConfig, 'Format'),
+        legendUrl: metaCapabilities.LegendUrl,
+        queryable: layerCapabilities.queryable,
+        source: new _ImageWMS.default({
+          url: metaCapabilities.MapUrl,
+          attributions: metaCapabilities.Attribution,
+          params: {
+            'LAYERS': layerCapabilities.Name,
+            'VERSION': metaCapabilities.Version
+          }
+        })
       });
     }
   }]);

@@ -5,13 +5,13 @@ import PropTypes from "prop-types";
 import queryString from "query-string";
 import setQuery from "set-query-string";
 import BackgroundChooser from "../BackgroundChooser/BackgroundChooser";
-import AddServicePanel from "../AddServicePanel/AddServicePanel";
+import ServicePanel from "../ServicePanel/ServicePanel";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import style from "./MapContainer.scss";
 
-const ListItem = props => (
-  <AddServicePanel services={props.listItem} removeMapItem={props.removeMapItem} draggable/>
+const ServiceListItem = props => (
+  <ServicePanel services={props.listItem} removeMapItem={props.removeMapItem} draggable/>
 );
 
 /**
@@ -146,9 +146,7 @@ export default class MapContainer extends React.Component {
   };
 
   addWMS() {
-    CapabilitiesUtil.parseWmsCapabilities(
-      this.props.services.GetCapabilitiesUrl
-    )
+    CapabilitiesUtil.parseWmsCapabilities(this.props.services.GetCapabilitiesUrl)
       .then(CapabilitiesUtil.getLayersFromWmsCapabilties)
       .then(layers => {
         this.setState({
@@ -160,7 +158,7 @@ export default class MapContainer extends React.Component {
 
   renderServiceList() {
     return this.props.services.map((listItem, i) => (
-      <ListItem listItem={listItem} removeMapItem={ this.props.removeMapItem ? this.props.removeMapItem : null } key={i} map={map}/>
+      <ServiceListItem listItem={listItem} removeMapItem={ this.props.removeMapItem ? this.props.removeMapItem : null } key={i} map={map}/>
     ));
   }
   renderLayerButton() {
@@ -177,7 +175,7 @@ export default class MapContainer extends React.Component {
       isExpanded: !this.state.isExpanded
     });
   }
-  toogleMap() {    
+  toogleMap() {
     window.history.back();
     // TODO: get paramtere to check for url til goto for closing map
   }

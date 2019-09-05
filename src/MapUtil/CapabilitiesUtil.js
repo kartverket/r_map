@@ -1,5 +1,8 @@
 import OlWMSCapabilities from 'ol/format/WMSCapabilities';
 import WMTSCapabilities from 'ol/format/WMTSCapabilities.js';
+import OlSourceImageWMS from 'ol/source/ImageWMS';
+import OlLayerImage from 'ol/layer/Image';
+
 import {
   Layer
 } from './Domain';
@@ -256,8 +259,45 @@ export class CapabilitiesUtil {
         })];
       });
   }
+  static getMetaCapabilities(capabilities) {
+    let Meta = {}
+    const wmsGetMapConfig = get(capabilities, 'Capability.Request.GetMap')
+    Meta.Version = get(capabilities, 'version')
+    Meta.Attributions=  get(capabilities, 'Service.AccessConstraints')
+    Meta.MapUrl =  get(wmsGetMapConfig, 'DCPType[0].HTTP.Get.OnlineResource')
+    Meta.FeatureInfoConfig = get(capabilities, 'Capability.Request.GetFeatureInfo')
+    Meta.FeatureInfoUrl = get(Meta.FeatureInfoConfig, 'DCPType[0].HTTP.Get.OnlineResource')
+    Meta.LegendUrl = get(capabilities, 'Capability.Layer.Layer').length > 0 ? get(get(capabilities, 'Capability.Layer.Layer')[0], 'Style[0].LegendURL[0].OnlineResource') : null
 
-
+    return Meta
+  }
+/**
+   * Returns an OpenlLayers Layer ready to be added to the map
+   *
+   * @param {Object} metaCapabilities The generell top capabilities object.
+   * @param {Object} layerCapabilities A layer spesific capabilities object.
+   * @return {OlLayerTile[]} Array of OlLayerTile
+   */
+  static getOlLayerFromWmsCapabilities(metaCapabilities, layerCapabilities) {
+    return new OlLayerImage({
+      opacity: 1,
+      title: layerCapabilities.Title,
+      name: layerCapabilities.Name,
+      abstract: layerCapabilities.Abstract,
+      getFeatureInfoUrl: metaCapabilities.FeatureInfoUrl,
+      getFeatureInfoFormats: get(metaCapabilities.FeatureInfoConfig, 'Format'),
+      legendUrl: metaCapabilities.LegendUrl,
+      queryable: layerCapabilities.queryable,
+      source: new OlSourceImageWMS({
+        url: metaCapabilities.MapUrl,
+        attributions: metaCapabilities.Attribution,
+        params: {
+          'LAYERS': layerCapabilities.Name,
+          'VERSION': metaCapabilities.Version
+        }
+      })
+    })
+  }
 }
 
 export default CapabilitiesUtil;
