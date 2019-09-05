@@ -324,10 +324,6 @@ function () {
     value: function shouldBeVisible()
     /*isySubLayer*/
     {
-      // todo johben: Logic could include zoom levels in case of a layer with both wms and wfs.
-      // I.E.
-      // var currentZoomLevel = this.mapImplementation.getCurrentZoomLevel();
-      // return subLayer.StartZoomLevel < currentZoomLevel && subLayer.EndZoomLevel > currentZoomLevel
       return true;
     }
   }, {

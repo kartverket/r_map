@@ -33,3 +33,23 @@ label {
 :local(.settings) {
     margin-bottom: 10px;
 }
+.info {
+  position: relative;
+  display: inline-block;
+  .infoIcon {
+    margin: 0px 0px 0px 10px;
+  }
+  .infoText {
+    visibility: hidden;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+
+    position: absolute;
+    z-index: 1;
+  }
+}
+.info:hover .infoText {
+  visibility: visible;
+}

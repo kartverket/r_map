@@ -51,7 +51,7 @@ var LayerEntry = function LayerEntry(props) {
       setTransparency = _useState8[1];
 
   var layer = props.layer;
-  var copyright = layer.copyright;
+  var info = ''; // layer.Abstract  //Prepare for some info text, for example the Abstract info or more.
 
   var abstractTextSpan = function abstractTextSpan() {
     var textSpan = '';
@@ -61,10 +61,10 @@ var LayerEntry = function LayerEntry(props) {
     }
 
     if (layer.Title && layer.Title.length > 0 && layer.Title !== layer.Name) {
-      textSpan = textSpan.length === 0 ? layer.Title : textSpan + ' - ' + layer.Title;
+      textSpan = layer.Title;
     }
 
-    if (layer.Abstract && layer.Abstract.length > 0 && layer.Abstract !== layer.Title && layer.Abstract !== layer.Name) {
+    if (layer.Abstract && layer.Abstract.length > 0 && layer.Abstract !== layer.Title && layer.Abstract !== layer.Name && textSpan.length === 0) {
       textSpan = textSpan.length === 0 ? layer.Abstract : textSpan + ' - ' + layer.Abstract;
     }
 
@@ -74,20 +74,22 @@ var LayerEntry = function LayerEntry(props) {
   var onSelectionChange = function onSelectionChange(currentNode) {
     var isNewLayer = true;
 
-    var currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmsCapabilities(props.meta, currentNode);
+    if (layer.Name) {
+      var currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmsCapabilities(props.meta, currentNode);
 
-    setLayer(currentLayer);
-    window.olMap.getLayers().forEach(function (maplayer) {
-      if (maplayer.get('name') === (currentNode.Name || currentNode.Title)) {
-        isNewLayer = false;
-        maplayer.getVisible() ? maplayer.setVisible(false) : maplayer.setVisible(true);
-        setChecked(maplayer.getVisible());
+      setLayer(currentLayer);
+      window.olMap.getLayers().forEach(function (maplayer) {
+        if (maplayer.get('name') === (currentNode.Name || currentNode.Title)) {
+          isNewLayer = false;
+          maplayer.getVisible() ? maplayer.setVisible(false) : maplayer.setVisible(true);
+          setChecked(maplayer.getVisible());
+        }
+      });
+
+      if (isNewLayer) {
+        window.olMap.addLayer(currentLayer);
+        setChecked(currentLayer.getVisible());
       }
-    });
-
-    if (isNewLayer) {
-      window.olMap.addLayer(currentLayer);
-      setChecked(currentLayer.getVisible());
     }
   };
 
@@ -110,9 +112,9 @@ var LayerEntry = function LayerEntry(props) {
   window.olMap.getView().on('change:resolution', function (e) {
     checkResolution();
   });
-  return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("input", {
+  return _react.default.createElement(_react.default.Fragment, null, layer.Name ? _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("input", {
     className: "checkbox",
-    id: layer.Title,
+    id: layer.Name,
     type: "checkbox"
   }), _react.default.createElement("label", {
     onClick: function onClick() {
@@ -122,10 +124,19 @@ var LayerEntry = function LayerEntry(props) {
   }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     className: "svg-checkbox",
     icon: checked ? ["far", "check-square"] : ["far", "square"]
-  })), " ", abstractTextSpan(), copyright ? _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+  }))) : _react.default.createElement("label", {
+    onClick: function onClick() {
+      return onSelectionChange(layer);
+    },
+    htmlFor: layer.Title
+  }, " "), " ", abstractTextSpan(), info ? _react.default.createElement("div", {
+    class: "info"
+  }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     className: "infoIcon",
-    icon: ["info"]
-  }) : null, _react.default.createElement("label", {
+    icon: ["far", "info"]
+  }), _react.default.createElement("span", {
+    class: "infoText"
+  }, info)) : null, _react.default.createElement("label", {
     onClick: function onClick() {
       return toggleOptions(!options);
     }
@@ -133,7 +144,7 @@ var LayerEntry = function LayerEntry(props) {
     icon: ["far", "sliders-h"],
     color: options ? "red" : "black"
   })), _react.default.createElement(_InlineLegend.default, {
-    legendUrl: layer.Style ? layer.Style[0].LegendURL[0].OnlineResource : ''
+    legendUrl: layer.Style && layer.Style[0].LegendURL ? layer.Style[0].LegendURL[0].OnlineResource : ''
   }), options ? _react.default.createElement("div", {
     className: _LayerEntry.default.settings
   }, _react.default.createElement("label", {
