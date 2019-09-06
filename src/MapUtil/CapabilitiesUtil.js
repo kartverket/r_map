@@ -17,6 +17,7 @@ import {
   createNotExistGroup
 } from './maplibHelper';
 
+import { mergeDefaultParams } from '../Utils/MapHelper'
 import {
   Jsonix
 } from '@boundlessgeo/jsonix';
@@ -129,7 +130,11 @@ export class CapabilitiesUtil {
    * @return {Object} An object representing the WMS capabilities.
    */
   static parseWmsCapabilities(capabilitiesUrl) {
-    return fetch(capabilitiesUrl)
+    const newUrl = mergeDefaultParams(capabilitiesUrl, {
+      service: "WMS",
+      request: "GetCapabilities"
+    })
+    return fetch(newUrl)
       .then((response) => response.text())
       .then((data) => {
         const wmsCapabilitiesParser = new OlWMSCapabilities();
@@ -180,7 +185,11 @@ export class CapabilitiesUtil {
    * @return {Object} An object representing the WMTS capabilities.
    */
   static parseWmtsCapabilities(capabilitiesUrl) {
-    return fetch(capabilitiesUrl)
+    const newUrl = mergeDefaultParams(capabilitiesUrl, {
+      service: "WMTS",
+      request: "GetCapabilities"
+    })
+    return fetch(newUrl)
       .then((response) => response.text())
       .then((data) => {
         const wmtsCapabilitiesParser = new WMTSCapabilities();
@@ -218,7 +227,11 @@ export class CapabilitiesUtil {
     });
   }
   static parseWFSCapabilities(capabilitiesUrl) {
-    return fetch(capabilitiesUrl)
+    const newUrl = mergeDefaultParams(capabilitiesUrl, {
+      service: "WFS",
+      request: "GetCapabilities"
+    });
+    return fetch(newUrl)
       .then((response) => response.text())
       .then((data) => {
         let parser;
