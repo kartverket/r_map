@@ -25,6 +25,8 @@ var _get = _interopRequireDefault(require("lodash/get.js"));
 
 var _maplibHelper = require("./maplibHelper");
 
+var _MapHelper = require("../Utils/MapHelper");
+
 var _jsonix = require("@boundlessgeo/jsonix");
 
 var _w3cSchemas = require("w3c-schemas");
@@ -144,7 +146,11 @@ function () {
      * @return {Object} An object representing the WMS capabilities.
      */
     value: function parseWmsCapabilities(capabilitiesUrl) {
-      return fetch(capabilitiesUrl).then(function (response) {
+      var newUrl = (0, _MapHelper.mergeDefaultParams)(capabilitiesUrl, {
+        service: "WMS",
+        request: "GetCapabilities"
+      });
+      return fetch(newUrl).then(function (response) {
         return response.text();
       }).then(function (data) {
         var wmsCapabilitiesParser = new _WMSCapabilities.default();
@@ -202,7 +208,11 @@ function () {
   }, {
     key: "parseWmtsCapabilities",
     value: function parseWmtsCapabilities(capabilitiesUrl) {
-      return fetch(capabilitiesUrl).then(function (response) {
+      var newUrl = (0, _MapHelper.mergeDefaultParams)(capabilitiesUrl, {
+        service: "WMTS",
+        request: "GetCapabilities"
+      });
+      return fetch(newUrl).then(function (response) {
         return response.text();
       }).then(function (data) {
         var wmtsCapabilitiesParser = new _WMTSCapabilities.default();
@@ -245,7 +255,11 @@ function () {
   }, {
     key: "parseWFSCapabilities",
     value: function parseWFSCapabilities(capabilitiesUrl) {
-      return fetch(capabilitiesUrl).then(function (response) {
+      var newUrl = (0, _MapHelper.mergeDefaultParams)(capabilitiesUrl, {
+        service: "WFS",
+        request: "GetCapabilities"
+      });
+      return fetch(newUrl).then(function (response) {
         return response.text();
       }).then(function (data) {
         var parser;
