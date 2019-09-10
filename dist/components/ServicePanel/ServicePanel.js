@@ -52,10 +52,11 @@ var ServicePanel = function ServicePanel(props) {
 
     switch (props.services.DistributionProtocol) {
       case 'WMS':
+      case 'WMS-tjeneste':
       case 'OGC:WMS':
         _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(props.services.GetCapabilitiesUrl).then(function (capa) {
           setCapabilities(capa);
-          newMetaInfo = _CapabilitiesUtil.CapabilitiesUtil.getMetaCapabilities(capa);
+          newMetaInfo = _CapabilitiesUtil.CapabilitiesUtil.getWMSMetaCapabilities(capa);
           newMetaInfo.Type = 'OGC:WMS';
           setMeta(newMetaInfo);
         }).catch(function (e) {
@@ -65,9 +66,11 @@ var ServicePanel = function ServicePanel(props) {
         break;
 
       case 'WFS':
-        _CapabilitiesUtil.CapabilitiesUtil.parseWFSCapabilities(props.services.GetCapabilitiesUrl) //.then(CapabilitiesUtil.getLayersFromWfsCapabilties)
-        .then(function (capa) {
+      case 'WFS-tjeneste':
+      case 'OGC:WFS':
+        _CapabilitiesUtil.CapabilitiesUtil.parseWFSCapabilities(props.services.GetCapabilitiesUrl).then(function (capa) {
           setCapabilities(capa);
+          newMetaInfo = _CapabilitiesUtil.CapabilitiesUtil.getWFSMetaCapabilities(capa);
           newMetaInfo.Type = 'WFS';
           setMeta(newMetaInfo);
         }).catch(function (e) {
@@ -124,6 +127,17 @@ var ServicePanel = function ServicePanel(props) {
             key: isub
           }));
         }) : '');
+      });
+    } else if (capabilities && capabilities.value) {
+      return capabilities.value.featureTypeList.featureType.map(function (capaLayer, i) {
+        return _react.default.createElement("div", {
+          className: "facet",
+          key: i
+        }, _react.default.createElement(_LayerEntry.default, {
+          layer: capaLayer,
+          meta: meta,
+          key: i
+        }));
       });
     } else if (capabilities && capabilities.features) {
       return _react.default.createElement("div", {

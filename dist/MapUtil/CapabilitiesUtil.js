@@ -13,11 +13,19 @@ var _ImageWMS = _interopRequireDefault(require("ol/source/ImageWMS"));
 
 var _Image = _interopRequireDefault(require("ol/layer/Image"));
 
+var _format = require("ol/format");
+
+var _GML = _interopRequireDefault(require("ol/format/GML2"));
+
+var _GML2 = _interopRequireDefault(require("ol/format/GML32"));
+
 var _GeoJSON = _interopRequireDefault(require("ol/format/GeoJSON.js"));
 
 var _layer = require("ol/layer.js");
 
 var _source = require("ol/source.js");
+
+var _loadingstrategy = require("ol/loadingstrategy.js");
 
 var _Domain = require("./Domain");
 
@@ -34,6 +42,8 @@ var _w3cSchemas = require("w3c-schemas");
 var _scripts = require("ogc-schemas/scripts/");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -253,6 +263,103 @@ function () {
       });
     }
   }, {
+    key: "getOlLayerFromWFS",
+    value: function getOlLayerFromWFS(metaCapabilities, capabilities) {
+      var nameField = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'name.localPart';
+      var version = '1.1.0'; //get(metaCapabilities, 'Version')
+
+      var url = (0, _get.default)(metaCapabilities, 'MapUrl');
+      var projection = window.olMap.getView().getProjection();
+
+      var parseResponse = function parseResponse(response) {
+        response = new DOMParser().parseFromString(response, "text/xml");
+
+        if (typeof vectorSource.format === 'undefined') {
+          var gmlFormat;
+
+          switch (version) {
+            case '1.0.0':
+              gmlFormat = new _GML.default();
+              break;
+
+            case '1.1.0':
+              gmlFormat = new _GML2.default();
+              break;
+
+            case '2.0.0':
+              gmlFormat = new _GML2.default();
+              break;
+
+            default:
+              gmlFormat = new _format.GML();
+              break;
+          }
+
+          var featureNS = ''; // capabilities.featureNS || response.firstChild.namespaceURI || 'http://www.opengis.net/gml/3.2'
+
+          vectorSource.format = new _format.WFS({
+            featureNS: featureNS,
+            featureTypes: [capabilities.name.prefix + ':' + capabilities.name.localPart],
+            gmlFormat: gmlFormat
+          });
+        }
+
+        var features = vectorSource.format.readFeatures(response);
+
+        if (features && features.length > 0) {
+          features.forEach(function (featureitem) {
+            console.log(featureitem);
+          });
+          vectorSource.addFeatures(features);
+          console.log(features[0].getGeometryName());
+        }
+
+        return features;
+      };
+
+      var loader = function loader(extent) {
+        url = (0, _MapHelper.mergeDefaultParams)(url, {
+          service: "WFS",
+          request: "GetFeature",
+          version: version,
+          typename: capabilities.Name,
+          srsname: projection.getCode(),
+          bbox: extent.join(',') + ',' + projection.getCode(),
+          outputFormat: 'text/xml; subtype=gml/3.2.1'
+        });
+        return fetch(url).then(function (response) {
+          return response.text();
+        }).then(function (response) {
+          if (_typeof(response) === 'object') {
+            if (response.firstChild.childElementCount === 0) {
+              return;
+            }
+          } else {
+            return parseResponse(response);
+          }
+        });
+      };
+
+      var vectorSource = new _source.Vector({
+        loader: loader,
+        strategy: _loadingstrategy.bbox,
+        projection: projection
+      });
+      window.olMap.on('click', function (event) {
+        var features = window.olMap.getFeaturesAtPixel(event.pixel);
+
+        if (!features) {
+          return;
+        }
+
+        var feature = features[0];
+        console.log(feature.getProperties());
+      });
+      return new _layer.Vector({
+        source: vectorSource
+      });
+    }
+  }, {
     key: "parseWFSCapabilities",
     value: function parseWFSCapabilities(capabilitiesUrl) {
       var newUrl = (0, _MapHelper.mergeDefaultParams)(capabilitiesUrl, {
@@ -262,11 +369,9 @@ function () {
       return fetch(newUrl).then(function (response) {
         return response.text();
       }).then(function (data) {
-        var parser;
-        var xmlDoc;
+        var parser = new DOMParser();
+        var xmlDoc = parser.parseFromString(data, 'text/xml');
         var result;
-        parser = new DOMParser();
-        xmlDoc = parser.parseFromString(data, 'text/xml');
         var version = xmlDoc.getElementsByTagName('WFS_Capabilities')[0].attributes.version.value;
 
         switch (version) {
@@ -308,8 +413,8 @@ function () {
       });
     }
   }, {
-    key: "getMetaCapabilities",
-    value: function getMetaCapabilities(capabilities) {
+    key: "getWMSMetaCapabilities",
+    value: function getWMSMetaCapabilities(capabilities) {
       var Meta = {};
       var wmsGetMapConfig = (0, _get.default)(capabilities, 'Capability.Request.GetMap');
       Meta.Version = (0, _get.default)(capabilities, 'version');
@@ -318,6 +423,15 @@ function () {
       Meta.FeatureInfoConfig = (0, _get.default)(capabilities, 'Capability.Request.GetFeatureInfo');
       Meta.FeatureInfoUrl = (0, _get.default)(Meta.FeatureInfoConfig, 'DCPType[0].HTTP.Get.OnlineResource');
       Meta.LegendUrl = (0, _get.default)(capabilities, 'Capability.Layer.Layer').length > 0 ? (0, _get.default)((0, _get.default)(capabilities, 'Capability.Layer.Layer')[0], 'Style[0].LegendURL[0].OnlineResource') : null;
+      return Meta;
+    }
+  }, {
+    key: "getWFSMetaCapabilities",
+    value: function getWFSMetaCapabilities(capabilities) {
+      var Meta = {};
+      Meta.Version = (0, _get.default)(capabilities, 'value.version');
+      Meta.Attributions = (0, _get.default)(capabilities, 'Service.AccessConstraints');
+      Meta.MapUrl = (0, _get.default)(capabilities, 'value.operationsMetadata.operation[0].dcp[0].http.getOrPost[0].value.href');
       return Meta;
     }
     /**

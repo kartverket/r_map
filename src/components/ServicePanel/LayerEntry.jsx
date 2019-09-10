@@ -14,6 +14,7 @@ const LayerEntry = props => {
 
   const layer = props.layer
   const info = '' // layer.Abstract  //Prepare for some info text, for example the Abstract info or more.
+  layer.Name = (layer.name && typeof layer.name === 'object') ? layer.name.localPart : layer.Name
 
   const abstractTextSpan = () => {
     let textSpan = ''
@@ -33,10 +34,12 @@ const LayerEntry = props => {
     let isNewLayer = true
     if (layer.Name) {
       let currentLayer;
-      if (props.meta.Type === 'OGC:WMS') {
+      if (props.meta.Type === 'OGC:WMS' || props.meta.Type === 'WMS' || props.meta.Type === 'WMS-tjeneste') {
         currentLayer = CapabilitiesUtil.getOlLayerFromWmsCapabilities(props.meta, currentNode);
       } else if (props.meta.Type === 'GEOJSON') {
         currentLayer = CapabilitiesUtil.getOlLayerFromGeoJson(currentNode);
+      } else if (props.meta.Type === 'OGC:WFS' || props.meta.Type === 'WFS' || props.meta.Type === 'WFS-tjeneste') {
+        currentLayer = CapabilitiesUtil.getOlLayerFromWFS(props.meta, currentNode);
       }
       setLayer(currentLayer)
 

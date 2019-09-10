@@ -2,10 +2,18 @@ import OlWMSCapabilities from 'ol/format/WMSCapabilities';
 import WMTSCapabilities from 'ol/format/WMTSCapabilities.js';
 import OlSourceImageWMS from 'ol/source/ImageWMS';
 import OlLayerImage from 'ol/layer/Image';
+import {
+  GML as GMLFormat,
+  WFS as WFSFormat
+} from 'ol/format';
+import GML2Format from 'ol/format/GML2'
+//import GML3Format from 'ol/format/GML3'
+import GML32Format from 'ol/format/GML32'
 
 import GeoJSON from 'ol/format/GeoJSON.js';
 import { Vector as VectorLayer } from 'ol/layer.js';
 import { Vector as VectorSource } from 'ol/source.js';
+import { bbox as bboxStrategy } from 'ol/loadingstrategy.js';
 
 import { Layer } from './Domain';
 
@@ -196,7 +204,6 @@ export class CapabilitiesUtil {
         return wmtsCapabilitiesParser.read(data);
       });
   }
-
   static getLayersFromWfsCapabilties(capabilities, nameField = 'name.localPart') {
     const version = '1.1.0'; //get(capabilities, 'value.version');
     const featureTypesInCapabilities = get(capabilities, 'value.featureTypeList.featureType');
@@ -226,33 +233,120 @@ export class CapabilitiesUtil {
       });
     });
   }
+
+  static getOlLayerFromWFS(metaCapabilities, capabilities, nameField = 'name.localPart') {
+    const version = '1.1.0' //get(metaCapabilities, 'Version')
+    let url = get(metaCapabilities, 'MapUrl')
+    const projection = window.olMap.getView().getProjection()
+
+    const parseResponse = (response) => {
+      response = new DOMParser().parseFromString(response, "text/xml")
+
+      if (typeof vectorSource.format === 'undefined') {
+        let gmlFormat;
+        switch (version) {
+          case '1.0.0':
+            gmlFormat = new GML2Format()
+            break
+          case '1.1.0':
+            gmlFormat = new GML32Format()
+            break
+          case '2.0.0':
+            gmlFormat = new GML32Format()
+            break
+          default:
+            gmlFormat = new GMLFormat()
+            break
+        }
+
+        let featureNS = '' // capabilities.featureNS || response.firstChild.namespaceURI || 'http://www.opengis.net/gml/3.2'
+        vectorSource.format = new WFSFormat({
+          featureNS: featureNS,
+          featureTypes: [capabilities.name.prefix + ':' + capabilities.name.localPart],
+          gmlFormat: gmlFormat
+        })
+      }
+
+      let features = vectorSource.format.readFeatures(response)
+
+      if (features && features.length > 0) {
+        features.forEach(function (featureitem) {
+          console.log(featureitem)
+        });
+        vectorSource.addFeatures(features);
+        console.log(features[0].getGeometryName())
+      }
+
+      return features
+    }
+
+    const loader = (extent) => {
+      url = mergeDefaultParams(url, {
+        service: "WFS",
+        request: "GetFeature",
+        version: version,
+        typename: capabilities.Name,
+        srsname: projection.getCode(),
+        bbox: extent.join(',') + ',' + projection.getCode(),
+        outputFormat: 'text/xml; subtype=gml/3.2.1'
+      })
+      return fetch(url)
+        .then((response) => response.text())
+        .then(response => {
+          if (typeof response === 'object') {
+            if (response.firstChild.childElementCount === 0) {
+              return
+            }
+          } else {
+            return parseResponse(response)
+          }
+        })
+    }
+
+    var vectorSource = new VectorSource({
+      loader: loader,
+      strategy: bboxStrategy,
+      projection: projection
+    })
+
+    window.olMap.on('click', function(event) {
+      var features = window.olMap.getFeaturesAtPixel(event.pixel);
+      if (!features) {
+        return
+      }
+      var feature = features[0]
+      console.log(feature.getProperties())
+    })
+
+    return new VectorLayer({
+      source: vectorSource
+    })
+  }
+
   static parseWFSCapabilities(capabilitiesUrl) {
     const newUrl = mergeDefaultParams(capabilitiesUrl, {
       service: "WFS",
       request: "GetCapabilities"
-    });
+    })
     return fetch(newUrl)
       .then((response) => response.text())
       .then((data) => {
-        let parser;
-        let xmlDoc;
+        let parser = new DOMParser()
+        let xmlDoc = parser.parseFromString(data, 'text/xml')
         let result;
-        parser = new DOMParser();
-        xmlDoc = parser.parseFromString(data, 'text/xml');
-
         let version = xmlDoc.getElementsByTagName('WFS_Capabilities')[0].attributes.version.value;
         switch (version) {
           case '1.1.0':
-            result = unmarshaller_wfs_1_1_0.unmarshalString(data);
+            result = unmarshaller_wfs_1_1_0.unmarshalString(data)
             break;
           case '2.0.0':
-            result = unmarshaller_wfs_2_0_0.unmarshalString(data);
+            result = unmarshaller_wfs_2_0_0.unmarshalString(data)
             break;
           default:
-            console.warn('No matching WFS version parser found.');
+            console.warn('No matching WFS version parser found.')
         }
-        return result;
-      });
+        return result
+      })
   }
   static getGeoJson(url) {
     return fetch(url)
@@ -272,7 +366,7 @@ export class CapabilitiesUtil {
       source: vectorSource,
     });
   }
-  static getMetaCapabilities(capabilities) {
+  static getWMSMetaCapabilities(capabilities) {
     let Meta = {}
     const wmsGetMapConfig = get(capabilities, 'Capability.Request.GetMap')
     Meta.Version = get(capabilities, 'version')
@@ -281,6 +375,14 @@ export class CapabilitiesUtil {
     Meta.FeatureInfoConfig = get(capabilities, 'Capability.Request.GetFeatureInfo')
     Meta.FeatureInfoUrl = get(Meta.FeatureInfoConfig, 'DCPType[0].HTTP.Get.OnlineResource')
     Meta.LegendUrl = get(capabilities, 'Capability.Layer.Layer').length > 0 ? get(get(capabilities, 'Capability.Layer.Layer')[0], 'Style[0].LegendURL[0].OnlineResource') : null
+
+    return Meta
+  }
+  static getWFSMetaCapabilities(capabilities) {
+    let Meta = {}
+    Meta.Version = get(capabilities, 'value.version')
+    Meta.Attributions = get(capabilities, 'Service.AccessConstraints')
+    Meta.MapUrl = get(capabilities, 'value.operationsMetadata.operation[0].dcp[0].http.getOrPost[0].value.href')
 
     return Meta
   }
