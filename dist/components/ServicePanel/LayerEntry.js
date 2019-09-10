@@ -169,7 +169,15 @@ var LayerEntry = function LayerEntry(props) {
     onChange: function onChange(e) {
       return setOpacity(e.target.value);
     }
-  }))) : "", props.children);
+  }))) : "", props.children, layer.Layer ? layer.Layer.map(function (subLayer, isub) {
+    return _react.default.createElement("div", {
+      className: "facet-sub"
+    }, _react.default.createElement(LayerEntry, {
+      layer: subLayer,
+      meta: props.meta,
+      key: isub
+    }));
+  }) : '');
 };
 
 LayerEntry.propTypes = {

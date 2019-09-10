@@ -69,15 +69,11 @@ const ServicePanel = props => {
         return (
           <div className="facet" key={i}>
             <LayerEntry layer={capaLayer} meta={meta} key={i} />
-            {
-              capaLayer.Layer ? (
-                capaLayer.Layer.map((subLayer, isub) => (<div className="facet-sub"><LayerEntry layer={subLayer} meta={meta} key={isub} /></div>))
-              ) : ('')
-            }
+            
           </div>
         )
       })
-    } else if (capabilities && capabilities.value ) {
+    } else if (capabilities && capabilities.value) {
       return capabilities.value.featureTypeList.featureType.map((capaLayer, i) => {
         return (
           <div className="facet" key={i}>
@@ -85,7 +81,7 @@ const ServicePanel = props => {
           </div>
         )
       })
-    }  else if (capabilities && capabilities.features) {
+    } else if (capabilities && capabilities.features) {
       return (
         <div className="facet">
           <LayerEntry layer={capabilities} meta={meta} />

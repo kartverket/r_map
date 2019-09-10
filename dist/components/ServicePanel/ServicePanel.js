@@ -118,15 +118,7 @@ var ServicePanel = function ServicePanel(props) {
           layer: capaLayer,
           meta: meta,
           key: i
-        }), capaLayer.Layer ? capaLayer.Layer.map(function (subLayer, isub) {
-          return _react.default.createElement("div", {
-            className: "facet-sub"
-          }, _react.default.createElement(_LayerEntry.default, {
-            layer: subLayer,
-            meta: meta,
-            key: isub
-          }));
-        }) : '');
+        }));
       });
     } else if (capabilities && capabilities.value) {
       return capabilities.value.featureTypeList.featureType.map(function (capaLayer, i) {
