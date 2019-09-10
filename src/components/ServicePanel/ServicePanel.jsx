@@ -15,21 +15,24 @@ const ServicePanel = props => {
     let newMetaInfo = {}
     switch (props.services.DistributionProtocol) {
       case 'WMS':
+      case 'WMS-tjeneste':
       case 'OGC:WMS':
         CapabilitiesUtil.parseWmsCapabilities(props.services.GetCapabilitiesUrl)
           .then((capa) => {
             setCapabilities(capa)
-            newMetaInfo = CapabilitiesUtil.getMetaCapabilities(capa)
+            newMetaInfo = CapabilitiesUtil.getWMSMetaCapabilities(capa)
             newMetaInfo.Type = 'OGC:WMS'
             setMeta(newMetaInfo)
           })
           .catch(e => console.log(e))
         break
       case 'WFS':
+      case 'WFS-tjeneste':
+      case 'OGC:WFS':
         CapabilitiesUtil.parseWFSCapabilities(props.services.GetCapabilitiesUrl)
-          //.then(CapabilitiesUtil.getLayersFromWfsCapabilties)
           .then((capa) => {
             setCapabilities(capa)
+            newMetaInfo = CapabilitiesUtil.getWFSMetaCapabilities(capa)
             newMetaInfo.Type = 'WFS'
             setMeta(newMetaInfo)
           })
@@ -74,7 +77,15 @@ const ServicePanel = props => {
           </div>
         )
       })
-    } else if (capabilities && capabilities.features) {
+    } else if (capabilities && capabilities.value ) {
+      return capabilities.value.featureTypeList.featureType.map((capaLayer, i) => {
+        return (
+          <div className="facet" key={i}>
+            <LayerEntry layer={capaLayer} meta={meta} key={i} />
+          </div>
+        )
+      })
+    }  else if (capabilities && capabilities.features) {
       return (
         <div className="facet">
           <LayerEntry layer={capabilities} meta={meta} />

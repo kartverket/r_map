@@ -21,6 +21,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -53,6 +55,8 @@ var LayerEntry = function LayerEntry(props) {
   var layer = props.layer;
   var info = ''; // layer.Abstract  //Prepare for some info text, for example the Abstract info or more.
 
+  layer.Name = layer.name && _typeof(layer.name) === 'object' ? layer.name.localPart : layer.Name;
+
   var abstractTextSpan = function abstractTextSpan() {
     var textSpan = '';
 
@@ -77,10 +81,12 @@ var LayerEntry = function LayerEntry(props) {
     if (layer.Name) {
       var currentLayer;
 
-      if (props.meta.Type === 'OGC:WMS') {
+      if (props.meta.Type === 'OGC:WMS' || props.meta.Type === 'WMS' || props.meta.Type === 'WMS-tjeneste') {
         currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmsCapabilities(props.meta, currentNode);
       } else if (props.meta.Type === 'GEOJSON') {
         currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromGeoJson(currentNode);
+      } else if (props.meta.Type === 'OGC:WFS' || props.meta.Type === 'WFS' || props.meta.Type === 'WFS-tjeneste') {
+        currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWFS(props.meta, currentNode);
       }
 
       setLayer(currentLayer);
