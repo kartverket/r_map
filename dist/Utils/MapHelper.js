@@ -125,7 +125,7 @@ var createOlWMSFromCap = function createOlWMSFromCap(map, getCapLayer, project) 
     if (Array.isArray(getCapLayer.MetadataURL)) {
         metadata = getCapLayer.MetadataURL[0].OnlineResource;
     }
-          layer = createOlWMS(map, layerParam, {
+        layer = createOlWMS(map, layerParam, {
           url: getCapLayer.url,
           label: getCapLayer.title,
           attribution: attribution,
@@ -186,6 +186,12 @@ var mergeDefaultParams = function mergeDefaultParams(url, defaultParams) {
   var parsedUrl = _queryString.default.parseUrl(url);
 
   var urlParams = parsedUrl.query;
+  var URLParser = typeof URL === 'undefined' ? require('url').URL : URL;
+  var urlObj = new URLParser(parsedUrl.url); //force https
+
+  if (window.location.protocol === 'https:' && urlObj.protocol === 'http:') {
+    urlObj.protocol = 'https:';
+  }
 
   for (var p in urlParams) {
     defaultParams[p] = urlParams[p];
@@ -195,7 +201,7 @@ var mergeDefaultParams = function mergeDefaultParams(url, defaultParams) {
     }
   }
 
-  return parsedUrl.url + "?" + _queryString.default.stringify(defaultParams);
+  return urlObj.href + "?" + _queryString.default.stringify(defaultParams);
 };
 
 exports.mergeDefaultParams = mergeDefaultParams;

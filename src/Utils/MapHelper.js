@@ -160,19 +160,21 @@ export const createOlWMSFromCap = (map, getCapLayer, project) => {
 
 export const mergeDefaultParams = (url, defaultParams) => {
     //merge URL parameters with default ones
-    var parsedUrl = queryString.parseUrl(url);
-    var urlParams = parsedUrl.query;
-
+    const parsedUrl = queryString.parseUrl(url);
+    const urlParams = parsedUrl.query;
+    const URLParser = typeof URL === 'undefined' ? require('url').URL : URL;
+    const urlObj = new URLParser(parsedUrl.url);
+    //force https
+    if (window.location.protocol === 'https:' && urlObj.protocol === 'http:') {
+      urlObj.protocol = 'https:';
+    }
     for (var p in urlParams) {
         defaultParams[p] = urlParams[p];
-        if (
-            defaultParams.hasOwnProperty(p.toLowerCase()) &&
-            p !== p.toLowerCase()
-        ) {
+        if ( defaultParams.hasOwnProperty(p.toLowerCase()) && p !== p.toLowerCase()) {
             delete defaultParams[p.toLowerCase()];
         }
     }
-    return parsedUrl.url + "?" + queryString.stringify(defaultParams);
+    return urlObj.href + "?" + queryString.stringify(defaultParams);
 };
 export const parseWmsCapabilities = (data) => {
     if (data && parser.validate(data) === true) { //optional
