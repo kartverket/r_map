@@ -9,9 +9,10 @@ import ServicePanel from "../ServicePanel/ServicePanel";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import style from "./MapContainer.scss";
+import Position from '../Position/Position'
 
 const ServiceListItem = props => (
-  <ServicePanel services={props.listItem} removeMapItem={props.removeMapItem} draggable/>
+  <ServicePanel services={props.listItem} removeMapItem={props.removeMapItem} draggable />
 );
 
 /**
@@ -70,10 +71,10 @@ export default class MapContainer extends React.Component {
   };
 
   static defaultProps = {
-    onMapViewChanges: () => {},
-    onChangeLon: () => {},
-    onChangeLat: () => {},
-    onChangeZoom: () => {},
+    onMapViewChanges: () => { },
+    onChangeLon: () => { },
+    onChangeLat: () => { },
+    onChangeZoom: () => { },
     lon: 396722,
     lat: 7197860,
     zoom: 4,
@@ -158,7 +159,7 @@ export default class MapContainer extends React.Component {
 
   renderServiceList() {
     return this.props.services.map((listItem, i) => (
-      <ServiceListItem listItem={listItem} removeMapItem={ this.props.removeMapItem ? this.props.removeMapItem : null } key={i} map={map}/>
+      <ServiceListItem listItem={listItem} removeMapItem={this.props.removeMapItem ? this.props.removeMapItem : null} key={i} map={map} />
     ));
   }
   renderLayerButton() {
@@ -184,18 +185,19 @@ export default class MapContainer extends React.Component {
    *
    */
   render() {
+    let map = this.props.map
     return (
       <div className={style.mapContainer}>
         <BackgroundChooser />
         <div>
           {this.renderLayerButton() ? (
-            <div className={ this.state.isExpanded ? style.container + " closed" : style.container + " open" }>
-              <FontAwesomeIcon onClick={() => this.toogleLayers()} className={style.toggleBtn} icon={this.state.isExpanded ? ["far", "layer-group"] : "times"}/>
+            <div className={this.state.isExpanded ? style.container + " closed" : style.container + " open"}>
+              <FontAwesomeIcon onClick={() => this.toogleLayers()} className={style.toggleBtn} icon={this.state.isExpanded ? ["far", "layer-group"] : "times"} />
               <div>{this.renderServiceList()}</div>
             </div>
           ) : (
-            <div className={style.link} onClick={() => this.toogleMap()}>Gå til kartkatalogen</div>
-          )}
+              <div className={style.link} onClick={() => this.toogleMap()}>Gå til kartkatalogen</div>
+            )}
 
           <div className={style.closeMap}>
             <FontAwesomeIcon title="Lukk kartet" onClick={() => this.toogleMap()} className={style.toggleBtn} icon={"times"} />
@@ -211,6 +213,7 @@ export default class MapContainer extends React.Component {
             zIndex: 0
           }}
         />
+        <Position map={map} projection={'EPSG:25833'}></Position>
       </div>
     );
   }

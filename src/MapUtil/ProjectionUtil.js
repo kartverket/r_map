@@ -1,6 +1,8 @@
 import proj4 from 'proj4'
 import { Projection, addProjection } from 'ol/proj';
 import {register} from 'ol/proj/proj4.js';
+import { METERS_PER_UNIT } from 'ol/proj/Units';
+
 /**
  * Helper class for projection handling. Makes use of
  * [Proj4js](http://proj4js.org/).
@@ -69,5 +71,38 @@ export default class ProjectionUtil {
         });
 
         addProjection(proj);
+    }
+
+    static toDms(value) {
+      const deg = parseInt(value, 10);
+      const min = parseInt((value - deg) * 60, 10);
+      const sec = ((value - deg - min / 60) * 3600);
+      return `${deg}° ${ProjectionUtil.zerofill(min)}' ${ProjectionUtil.zerofill(sec.toFixed(2))}''`;
+    }
+    static zerofill(value) {
+      return value < 10 ? `0${value}` : value;
+    }
+    static getResolutionForScale (scale, units) {
+      let dpi = 25.4 / 0.28;
+      let mpu = METERS_PER_UNIT[units];
+      let inchesPerMeter = 39.37;
+
+      return parseFloat(scale) / (mpu * inchesPerMeter * dpi);
+    }
+    static roundScale(scale) {
+      let roundScale;
+      if (scale < 100) {
+        roundScale = Math.round(scale, 10);
+      }
+      if (scale >= 100 && scale < 10000 ) {
+        roundScale = Math.round(scale / 10) * 10;
+      }
+      if (scale >= 10000 && scale < 1000000 ) {
+        roundScale = Math.round(scale / 100) * 100;
+      }
+      if (scale >= 1000000) {
+        roundScale = Math.round(scale / 1000) * 1000;
+      }
+      return roundScale;
     }
 };

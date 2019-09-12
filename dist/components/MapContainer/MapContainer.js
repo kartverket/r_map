@@ -25,6 +25,8 @@ var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
 var _MapContainer = _interopRequireDefault(require("./MapContainer.scss"));
 
+var _Position = _interopRequireDefault(require("../Position/Position"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -218,6 +220,7 @@ function (_React$Component) {
     value: function render() {
       var _this4 = this;
 
+      var map = this.props.map;
       return _react.default.createElement("div", {
         className: _MapContainer.default.mapContainer
       }, _react.default.createElement(_BackgroundChooser.default, null), _react.default.createElement("div", null, this.renderLayerButton() ? _react.default.createElement("div", {
@@ -252,6 +255,9 @@ function (_React$Component) {
           height: "100%",
           zIndex: 0
         }
+      }), _react.default.createElement(_Position.default, {
+        map: map,
+        projection: 'EPSG:25833'
       }));
     }
   }]);
