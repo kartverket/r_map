@@ -69,7 +69,6 @@ const ServicePanel = props => {
         return (
           <div className="facet" key={i}>
             <LayerEntry layer={capaLayer} meta={meta} key={i} />
-            
           </div>
         )
       })
@@ -88,8 +87,7 @@ const ServicePanel = props => {
         </div>
       )
     } else {
-      console.warn('Something went wrong when parsing the capabilities')
-      console.warn(capabilities)
+      // console.warn(capabilities)
       return ''
     }
   }

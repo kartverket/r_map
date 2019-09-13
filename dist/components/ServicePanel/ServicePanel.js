@@ -139,8 +139,7 @@ var ServicePanel = function ServicePanel(props) {
         meta: meta
       }));
     } else {
-      console.warn('Something went wrong when parsing the capabilities');
-      console.warn(capabilities);
+      // console.warn(capabilities)
       return '';
     }
   };
