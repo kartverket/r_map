@@ -309,7 +309,7 @@ export class CapabilitiesUtil {
       projection: projection
     })
 
-    window.olMap.on('click', function(event) {
+    window.olMap.on('click', function (event) {
       var features = window.olMap.getFeaturesAtPixel(event.pixel);
       if (!features) {
         return
@@ -374,7 +374,7 @@ export class CapabilitiesUtil {
     Meta.MapUrl = get(wmsGetMapConfig, 'DCPType[0].HTTP.Get.OnlineResource')
     Meta.FeatureInfoConfig = get(capabilities, 'Capability.Request.GetFeatureInfo')
     Meta.FeatureInfoUrl = get(Meta.FeatureInfoConfig, 'DCPType[0].HTTP.Get.OnlineResource')
-    Meta.LegendUrl = get(capabilities, 'Capability.Layer.Layer').length > 0 ? get(get(capabilities, 'Capability.Layer.Layer')[0], 'Style[0].LegendURL[0].OnlineResource') : null
+    Meta.LegendUrl = get(capabilities, 'Capability.Layer.Layer') ? (get(capabilities, 'Capability.Layer.Layer').length > 0 ? get(get(capabilities, 'Capability.Layer.Layer')[0], 'Style[0].LegendURL[0].OnlineResource') : null) : null
 
     return Meta
   }
