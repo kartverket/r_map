@@ -9,19 +9,9 @@ var _react = _interopRequireWildcard(require("react"));
 
 require("./Position.scss");
 
-var _proj = require("ol/proj.js");
-
-var _extent = require("ol/extent.js");
-
 var _coordinate = require("ol/coordinate.js");
 
-var _View = _interopRequireDefault(require("ol/View"));
-
 var _MousePosition = _interopRequireDefault(require("ol/control/MousePosition"));
-
-var _ProjectionUtil = _interopRequireDefault(require("../../MapUtil/ProjectionUtil"));
-
-var _this = void 0;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -73,50 +63,6 @@ var Position = function Position(props) {
       var _mousePositionControl = new _MousePosition.default(options);
 
       map.addControl(_mousePositionControl);
-    }
-  };
-  /**
-   * Handler to set projection of map - called if coordinate system in
-   * CoordinateReferenceSystemCombo was changed
-   *
-   * @param {Object} crsObj The object returned by CoordinateReferenceSystemCombo
-   *
-   */
-
-
-  var setProjection = function setProjection(crsObj) {
-    var _this$props = _this.props,
-        map = _this$props.map,
-        mapScales = _this$props.mapScales;
-    var currentProjection = map.getView().getProjection();
-    var newProj = (0, _proj.get)("EPSG:".concat(crsObj.code));
-    var fromToTransform = (0, _proj.getTransform)(currentProjection, newProj);
-    var currentExtent = map.getView().calculateExtent(map.getSize());
-    var transformedExtent = (0, _extent.applyTransform)(currentExtent, fromToTransform);
-    var resolutions = mapScales.map(function (scale) {
-      return _ProjectionUtil.default.getResolutionForScale(scale, newProj.getUnits());
-    }).reverse();
-    var newView = new _View.default({
-      projection: newProj,
-      resolutions: resolutions
-    });
-    map.setView(newView);
-    newView.fit(transformedExtent);
-    var mousePositionControl = map.getControls().getArray().find(function (c) {
-      return c instanceof _MousePosition.default;
-    });
-
-    if (mousePositionControl) {
-      var isWgs84 = map.getView().getProjection().getCode() === "EPSG:4326";
-
-      var wgs84Format = function wgs84Format(coordinate) {
-        return coordinate.map(function (coord) {
-          return _ProjectionUtil.default.toDms(coord);
-        });
-      };
-
-      mousePositionControl.setProjection(newProj);
-      mousePositionControl.setCoordinateFormat(isWgs84 ? wgs84Format : (0, _coordinate.createStringXY)(2));
     }
   };
 
