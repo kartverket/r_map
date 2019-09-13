@@ -41,22 +41,6 @@ export default class MapContainer extends React.Component {
      */
     zoom: PropTypes.number,
     /**
-     * @type {Function}
-     */
-    onChangeLon: PropTypes.func,
-    /**
-     * @type {Function}
-     */
-    onChangeLat: PropTypes.func,
-    /**
-     * @type {Function}
-     */
-    onChangeZoom: PropTypes.func,
-    /**
-     * @type {Function}
-     */
-    onMapViewChanges: PropTypes.func,
-    /**
      * @type {String}
      */
     wms: PropTypes.string,
@@ -71,10 +55,6 @@ export default class MapContainer extends React.Component {
   };
 
   static defaultProps = {
-    onMapViewChanges: () => { },
-    onChangeLon: () => { },
-    onChangeLat: () => { },
-    onChangeZoom: () => { },
     lon: 396722,
     lat: 7197860,
     zoom: 4,
@@ -89,10 +69,7 @@ export default class MapContainer extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleSelect = this.handleSelect.bind(this);
-
     this.state = {
-      activeKey: "1",
       open: false,
       menu: this.props.menu
     };
@@ -109,9 +86,8 @@ export default class MapContainer extends React.Component {
     let wmts = Array(queryValues['wmts'] || [])
     let wfs = Array(queryValues['wfs'] || [])
     let projectName = queryValues['project'] || 'norgeskart'
-    let epsg = queryValues['epsg'] || 'EPSG:3857'
-*/
-    //  this.props = { lon: lon, lat: lat, zoom: zoom };
+    */
+    mapConfig.coordinate_system = queryValues['epsg'] || 'EPSG:25833'
     let defaultConfig = JSON.parse(JSON.stringify(mapConfig))
     this.newMapConfig = Object.assign({}, defaultConfig, {
       center: [lon, lat],
@@ -164,11 +140,6 @@ export default class MapContainer extends React.Component {
   }
   renderLayerButton() {
     return this.props.services && this.props.services.length > 0;
-  }
-  handleSelect(activeKey) {
-    this.setState({
-      activeKey
-    });
   }
 
   toogleLayers() {

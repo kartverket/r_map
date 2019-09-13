@@ -82,10 +82,6 @@ function (_React$Component) {
       (0, _setQueryString.default)(queryValues);
     });
 
-    _this.state = {
-      activeKey: "1"
-    };
-
     var _queryValues = _queryString.default.parse(window.location.search);
 
     var lon = Number(_queryValues["lon"] || props.lon);
@@ -98,6 +94,7 @@ function (_React$Component) {
     */
     //  this.props = { lon: lon, lat: lat, zoom: zoom };
 
+    _maplibHelper.mapConfig.coordinate_system = _queryValues['epsg'] || 'EPSG:25833';
     _this.newMapConfig = Object.assign({}, _maplibHelper.mapConfig, {
       center: [lon, lat],
       zoom: zoom
@@ -185,36 +182,12 @@ _defineProperty(MapComponent, "propTypes", {
   zoom: _propTypes.default.number,
 
   /**
-   * @type {Function}
-   */
-  onChangeLon: _propTypes.default.func,
-
-  /**
-   * @type {Function}
-   */
-  onChangeLat: _propTypes.default.func,
-
-  /**
-   * @type {Function}
-   */
-  onChangeZoom: _propTypes.default.func,
-
-  /**
-   * @type {Function}
-   */
-  onMapViewChanges: _propTypes.default.func,
-
-  /**
    * @type {Array}
    */
   services: _propTypes.default.arrayOf(_propTypes.default.object)
 });
 
 _defineProperty(MapComponent, "defaultProps", {
-  onMapViewChanges: function onMapViewChanges() {},
-  onChangeLon: function onChangeLon() {},
-  onChangeLat: function onChangeLat() {},
-  onChangeZoom: function onChangeZoom() {},
   lon: 396722,
   lat: 7197860,
   zoom: 4

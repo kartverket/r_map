@@ -32,32 +32,12 @@ export class MapComponent extends React.Component {
      */
     zoom: PropTypes.number,
     /**
-     * @type {Function}
-     */
-    onChangeLon: PropTypes.func,
-    /**
-     * @type {Function}
-     */
-    onChangeLat: PropTypes.func,
-    /**
-     * @type {Function}
-     */
-    onChangeZoom: PropTypes.func,
-    /**
-     * @type {Function}
-     */
-    onMapViewChanges: PropTypes.func,
-    /**
      * @type {Array}
      */
     services: PropTypes.arrayOf(PropTypes.object),
   };
 
   static defaultProps = {
-    onMapViewChanges: () => { },
-    onChangeLon: () => { },
-    onChangeLat: () => { },
-    onChangeZoom: () => { },
     lon: 396722,
     lat: 7197860,
     zoom: 4
@@ -69,10 +49,6 @@ export class MapComponent extends React.Component {
    */
   constructor(props) {
     super(props);
-
-    this.state = {
-      activeKey: "1"
-    };
 
     const queryValues = queryString.parse(window.location.search);
 
@@ -86,6 +62,7 @@ export class MapComponent extends React.Component {
     let epsg = queryValues['epsg'] || 'EPSG:3857'
 */
     //  this.props = { lon: lon, lat: lat, zoom: zoom };
+    mapConfig.coordinate_system = queryValues['epsg'] || 'EPSG:25833'
     this.newMapConfig = Object.assign({}, mapConfig, {
       center: [lon, lat],
       zoom: zoom

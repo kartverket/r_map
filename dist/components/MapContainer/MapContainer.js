@@ -103,9 +103,7 @@ function (_React$Component) {
       (0, _setQueryString.default)(queryValues);
     });
 
-    _this.handleSelect = _this.handleSelect.bind(_assertThisInitialized(_this));
     _this.state = {
-      activeKey: "1",
       open: false,
       menu: _this.props.menu
     };
@@ -121,10 +119,9 @@ function (_React$Component) {
     let wmts = Array(queryValues['wmts'] || [])
     let wfs = Array(queryValues['wfs'] || [])
     let projectName = queryValues['project'] || 'norgeskart'
-    let epsg = queryValues['epsg'] || 'EPSG:3857'
     */
-    //  this.props = { lon: lon, lat: lat, zoom: zoom };
 
+    _maplibHelper.mapConfig.coordinate_system = _queryValues['epsg'] || 'EPSG:25833';
     var defaultConfig = JSON.parse(JSON.stringify(_maplibHelper.mapConfig));
     _this.newMapConfig = Object.assign({}, defaultConfig, {
       center: [lon, lat],
@@ -191,13 +188,6 @@ function (_React$Component) {
     key: "renderLayerButton",
     value: function renderLayerButton() {
       return this.props.services && this.props.services.length > 0;
-    }
-  }, {
-    key: "handleSelect",
-    value: function handleSelect(activeKey) {
-      this.setState({
-        activeKey: activeKey
-      });
     }
   }, {
     key: "toogleLayers",
@@ -284,26 +274,6 @@ _defineProperty(MapContainer, "propTypes", {
   zoom: _propTypes.default.number,
 
   /**
-   * @type {Function}
-   */
-  onChangeLon: _propTypes.default.func,
-
-  /**
-   * @type {Function}
-   */
-  onChangeLat: _propTypes.default.func,
-
-  /**
-   * @type {Function}
-   */
-  onChangeZoom: _propTypes.default.func,
-
-  /**
-   * @type {Function}
-   */
-  onMapViewChanges: _propTypes.default.func,
-
-  /**
    * @type {String}
    */
   wms: _propTypes.default.string,
@@ -320,10 +290,6 @@ _defineProperty(MapContainer, "propTypes", {
 });
 
 _defineProperty(MapContainer, "defaultProps", {
-  onMapViewChanges: function onMapViewChanges() {},
-  onChangeLon: function onChangeLon() {},
-  onChangeLat: function onChangeLat() {},
-  onChangeZoom: function onChangeZoom() {},
   lon: 396722,
   lat: 7197860,
   zoom: 4,
