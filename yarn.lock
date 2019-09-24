@@ -6569,15 +6569,6 @@ jsonify@~0.0.0:
   resolved "https://registry.yarnpkg.com/jsonify/-/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
   integrity sha1-LHS27kHZPKUbe1qu6PUDYx0lKnM=
 
-jsonix@>=2.4.0:
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/jsonix/-/jsonix-2.4.1.tgz#7ca914a85a369f27b30f13cc0c15a2258b894b33"
-  integrity sha1-fKkUqFo2nyezDxPMDBWiJYuJSzM=
-  dependencies:
-    amdefine "0.x.x"
-    xmldom ">=0.1.21"
-    xmlhttprequest "1.x.x"
-
 jsprim@^1.2.2:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/jsprim/-/jsprim-1.4.1.tgz#313e66bc1e5cc06e438bc1b7499c2e5c56acb6a2"
@@ -7757,10 +7748,6 @@ obuf@^1.0.0, obuf@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
-
-"ogc-schemas@https://github.com/highsource/ogc-schemas":
-  version "0.0.0"
-  resolved "https://github.com/highsource/ogc-schemas#18ce89928006eee08ed7e5a6ce6ea016436a444b"
 
 ol@^5.3.3:
   version "5.3.3"
@@ -11539,13 +11526,6 @@ w3c-hr-time@^1.0.1:
   integrity sha1-gqwr/2PZUOqeMYmlimViX+3xkEU=
   dependencies:
     browser-process-hrtime "^0.1.2"
-
-w3c-schemas@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/w3c-schemas/-/w3c-schemas-1.4.0.tgz#f4dafe92d97af56a99b3faa1520f592df2998428"
-  integrity sha1-9Nr+ktl69WqZs/qhUg9ZLfKZhCg=
-  dependencies:
-    jsonix ">=2.4.0"
 
 walker@~1.0.5:
   version "1.0.7"
