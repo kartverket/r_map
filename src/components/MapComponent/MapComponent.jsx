@@ -75,7 +75,7 @@ export class MapComponent extends React.Component {
     map.AddZoom();
     map.AddScaleLine();
     eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState);
-    this.props = { map: map };
+    this.setState({map: map });
     this.addWMS();
   }
 

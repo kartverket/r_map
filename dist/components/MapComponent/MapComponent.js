@@ -114,9 +114,9 @@ function (_React$Component) {
 
       _maplibHelper.eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState);
 
-      this.props = {
+      this.setState({
         map: _maplibHelper.map
-      };
+      });
       this.addWMS();
     }
   }, {
