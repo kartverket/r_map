@@ -1,6 +1,6 @@
 const path = require('path')
 module.exports = {
-  title: "rMapComponent",
+  title: "r_map Documentation",
   styleguideDir: "docs",
 
   webpackConfig: require('react-scripts/config/webpack.config.js'),
@@ -24,20 +24,8 @@ module.exports = {
   }, {
     name: 'Components',
     sections: [{
-      name: 'AddServicePanel',
-      components: 'src/components/AddServicePanel/**/*.jsx'
-    }, {
-      name: 'BackgroundChooser',
-      components: 'src/components/BackgroundChooser/**/*.jsx'
-    }, {
-      name: 'Legend',
-      components: 'src/components/Legend/**/*.jsx'
-    }, {
       name: 'MapComponent',
       components: 'src/components/MapComponent/**/*.jsx'
-    }, {
-      name: 'MapContainer',
-      components: 'src/components/MapContainer/**/*.jsx'
     }]
   }],
   template: {

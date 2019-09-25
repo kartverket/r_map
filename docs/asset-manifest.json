@@ -1,15 +1,12 @@
 {
-  "files": {
-    "main.css": "/static/css/main.3ea9b9ac.chunk.css",
-    "main.js": "/build/main.20360020.js",
-    "runtime~main.js": "/build/bundle.ff6ec29f.js",
-    "static/css/2.2a99b240.chunk.css": "/static/css/2.2a99b240.chunk.css",
-    "build/2.bb286195.js": "/build/2.bb286195.js",
-    "index.html": "/index.html",
-    "precache-manifest.a2bf3806294eaa3ebe869002adb65bcb.js": "/precache-manifest.a2bf3806294eaa3ebe869002adb65bcb.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/2.2a99b240.chunk.css.map": "/static/css/2.2a99b240.chunk.css.map",
-    "static/css/main.3ea9b9ac.chunk.css.map": "/static/css/main.3ea9b9ac.chunk.css.map",
-    "static/media/BackgroundChooser.scss": "/static/media/terreng.3faff875.png"
-  }
+  "main.css": "/static/css/main.e7b3a76b.chunk.css",
+  "main.js": "/build/main.65ea1ae3.js",
+  "runtime~main.js": "/build/bundle.d9cae474.js",
+  "static/css/2.a45de57a.chunk.css": "/static/css/2.a45de57a.chunk.css",
+  "build/2.479f59ae.js": "/build/2.479f59ae.js",
+  "index.html": "/index.html",
+  "precache-manifest.1a697edd83dc19e883949eaef368c985.js": "/precache-manifest.1a697edd83dc19e883949eaef368c985.js",
+  "service-worker.js": "/service-worker.js",
+  "static/css/2.a45de57a.chunk.css.map": "/static/css/2.a45de57a.chunk.css.map",
+  "static/css/main.e7b3a76b.chunk.css.map": "/static/css/main.e7b3a76b.chunk.css.map"
 }
