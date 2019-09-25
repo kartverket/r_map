@@ -1,12 +1,13 @@
 {
-  "main.css": "/static/css/main.e7b3a76b.chunk.css",
-  "main.js": "/build/main.65ea1ae3.js",
+  "main.css": "/static/css/main.fb8be88d.chunk.css",
+  "main.js": "/build/main.8c23e51e.js",
   "runtime~main.js": "/build/bundle.d9cae474.js",
   "static/css/2.a45de57a.chunk.css": "/static/css/2.a45de57a.chunk.css",
-  "build/2.479f59ae.js": "/build/2.479f59ae.js",
+  "build/2.ecf0975c.js": "/build/2.ecf0975c.js",
   "index.html": "/index.html",
-  "precache-manifest.1a697edd83dc19e883949eaef368c985.js": "/precache-manifest.1a697edd83dc19e883949eaef368c985.js",
+  "precache-manifest.95dff0c43b36bc8ffdc4c8c687ad0776.js": "/precache-manifest.95dff0c43b36bc8ffdc4c8c687ad0776.js",
   "service-worker.js": "/service-worker.js",
   "static/css/2.a45de57a.chunk.css.map": "/static/css/2.a45de57a.chunk.css.map",
-  "static/css/main.e7b3a76b.chunk.css.map": "/static/css/main.e7b3a76b.chunk.css.map"
+  "static/css/main.fb8be88d.chunk.css.map": "/static/css/main.fb8be88d.chunk.css.map",
+  "static/media/BackgroundChooser.scss": "/static/media/terreng.3faff875.png"
 }

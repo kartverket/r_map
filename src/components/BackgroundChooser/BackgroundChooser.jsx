@@ -3,7 +3,7 @@ import { map, eventHandler } from "../../MapUtil/maplibHelper";
 import { ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 import "./BackgroundChooser.scss";
 /**
- * Panel containing a list of backgroundLayers.
+ * Panel containing a list of backgroundLayers. To be used in MapContainer
  */
 const BackgroundChooser = () => {
   const [baseLayers, setBaseLayers] = useState([]);

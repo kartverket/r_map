@@ -26,6 +26,12 @@ module.exports = {
     sections: [{
       name: 'MapComponent',
       components: 'src/components/MapComponent/**/*.jsx'
+    }, {
+      name: 'BackgroundChooser',
+      components: 'src/components/BackgroundChooser/**/*.jsx'
+    }, {
+      name: 'Legend',
+      components: 'src/components/Legend/**/*.jsx'
     }]
   }],
   template: {
