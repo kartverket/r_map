@@ -6,13 +6,14 @@ import queryString from "query-string";
 import setQuery from "set-query-string";
 import BackgroundChooser from "../BackgroundChooser/BackgroundChooser";
 import ServicePanel from "../ServicePanel/ServicePanel";
+import SearchBar from "../SearchBar/SearchBar";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import style from "./MapContainer.scss";
 import Position from '../Position/Position'
 
 const ServiceListItem = props => (
-  <ServicePanel services={props.listItem} removeMapItem={props.removeMapItem} draggable />
+  <ServicePanel services={ props.listItem } removeMapItem={ props.removeMapItem } draggable />
 );
 
 /**
@@ -140,7 +141,7 @@ export default class MapContainer extends React.Component {
 
   renderServiceList() {
     return this.props.services.map((listItem, i) => (
-      <ServiceListItem listItem={listItem} removeMapItem={this.props.removeMapItem ? this.props.removeMapItem : null} key={i} map={map} />
+      <ServiceListItem listItem={ listItem } removeMapItem={ this.props.removeMapItem ? this.props.removeMapItem : null } key={ i } map={ map } />
     ));
   }
   renderLayerButton() {
@@ -163,33 +164,34 @@ export default class MapContainer extends React.Component {
   render() {
     let map = this.props.map
     return (
-      <div className={style.mapContainer}>
+      <div className={ style.mapContainer }>
+        <SearchBar searchText="This is initial search text"/>
         <BackgroundChooser />
         <div>
-          {this.renderLayerButton() ? (
-            <div className={this.state.isExpanded ? style.container + " closed" : style.container + " open"}>
-              <FontAwesomeIcon onClick={() => this.toogleLayers()} className={style.toggleBtn} icon={this.state.isExpanded ? ["far", "layer-group"] : "times"} />
-              <div>{this.renderServiceList()}</div>
+          { this.renderLayerButton() ? (
+            <div className={ this.state.isExpanded ? style.container + " closed" : style.container + " open" }>
+              <FontAwesomeIcon onClick={ () => this.toogleLayers() } className={ style.toggleBtn } icon={ this.state.isExpanded ? ["far", "layer-group"] : "times" } />
+              <div>{ this.renderServiceList() }</div>
             </div>
           ) : (
-              <div className={style.link} onClick={() => this.toogleMap()}>Gå til kartkatalogen</div>
-            )}
+              <div className={ style.link } onClick={ () => this.toogleMap() }>Gå til kartkatalogen</div>
+            ) }
 
-          <div className={style.closeMap}>
-            <FontAwesomeIcon title="Lukk kartet" onClick={() => this.toogleMap()} className={style.toggleBtn} icon={"times"} />
-            <span className={style.closeButtonLabel}>Lukk kartet</span>
+          <div className={ style.closeMap }>
+            <FontAwesomeIcon title="Lukk kartet" onClick={ () => this.toogleMap() } className={ style.toggleBtn } icon={ "times" } />
+            <span className={ style.closeButtonLabel }>Lukk kartet</span>
           </div>
         </div>
         <div
           id="map"
-          style={{
+          style={ {
             position: "relative",
             width: "100%",
             height: "100%",
             zIndex: 0
-          }}
+          } }
         />
-        <Position map={map} projection={this.props.crs}></Position>
+        <Position map={ map } projection={ this.props.crs }></Position>
       </div>
     );
   }
