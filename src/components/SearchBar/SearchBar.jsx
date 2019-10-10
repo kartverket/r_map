@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react"
 import PropTypes from 'prop-types'
-import "./SearchBar.scss"
-import { generateAdresseSokUrl, generateSearchStedsnavnUrl } from "../../Utils/n3api"
-import {transform} from 'ol/proj'
-import Overlay from 'ol/Overlay';
 
+import { transform } from 'ol/proj'
+import Overlay from 'ol/Overlay';
+import queryString from "query-string"
+import setQuery from "set-query-string"
+
+import { generateAdresseSokUrl, generateSearchStedsnavnUrl } from "../../Utils/n3api"
+import "./SearchBar.scss"
 import pin from '../../../src/assets/img/pin-md-orange.png'
 
-var parser = require('fast-xml-parser');
+const parser = require('fast-xml-parser');
 
 
 const SearchResult = (props) => {
   window.olMap.getOverlays().clear()
+
   const showInfoMarker = (coordinate) => {
     let markerElement = document.createElement('img')
     markerElement.src = pin
@@ -58,13 +62,16 @@ const SearchResult = (props) => {
  * @param {*} props
  */
 const SearchBar = props => {
-  const [searchText, setSearchText] = useState()
+  let queryValues = queryString.parse(window.location.search)
+  const [searchText, setSearchText] = useState(queryValues["search"])
   const [searchResult, setSearchResult] = useState()
   const [searchResultSSR, setSearchResultSSR] = useState()
   const { placeholder } = props
 
   useEffect(() => {
     if (searchText) {
+      queryValues.search = searchText
+      setQuery(queryValues)
       fetch(generateAdresseSokUrl(searchText))
       .then(response => {
         if (!response.ok) {
