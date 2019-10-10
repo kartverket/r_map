@@ -2,4 +2,6 @@
 .searchResult {
   display: inline-grid;
   padding: 5px;
+  position: absolute;
+  z-index: 16;
 }

@@ -34,7 +34,7 @@ const SearchResult = (props) => {
   const constructPoint = (coord, epsgTo = 'EPSG:25833') => transform([Number(coord.lon), Number(coord.lat)], coord.epsg, epsgTo)
 
   return (
-    <div className="searchResult list-group">
+    <div className="list-group">
       {
         props.searchResult.searchResult && props.searchResult.searchResult.adresser.map((data, idx) => {
         showInfoMarker(constructPoint(data.representasjonspunkt))
@@ -110,7 +110,7 @@ const SearchBar = props => {
       <div className='input-group col col-lg-2'>
         <input className='form-control' onChange={ onChangeBound } placeholder={ placeholder } type="text" value={ searchText } aria-describedby="button-addon1"/>
       </div>
-      <div>
+      <div className='searchResult'>
         {
           searchResult && <SearchResult searchResult={ { searchResult, searchResultSSR } }></SearchResult>
         }
