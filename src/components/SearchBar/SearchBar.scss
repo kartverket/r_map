@@ -1,7 +1,10 @@
 
 .searchResult {
   display: inline-grid;
-  padding: 5px;
   position: absolute;
   z-index: 16;
+  overflow: visible;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 98%;
 }
