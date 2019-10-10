@@ -1,20 +1,19 @@
-import React from "react";
-import { map, eventHandler, mapConfig } from "../../MapUtil/maplibHelper";
-import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
-import PropTypes from "prop-types";
-import queryString from "query-string";
-import setQuery from "set-query-string";
-import BackgroundChooser from "../BackgroundChooser/BackgroundChooser";
-import ServicePanel from "../ServicePanel/ServicePanel";
-import SearchBar from "../SearchBar/SearchBar";
+import React from "react"
+import { map, eventHandler, mapConfig } from "../../MapUtil/maplibHelper"
+import PropTypes from "prop-types"
+import queryString from "query-string"
+import setQuery from "set-query-string"
+import BackgroundChooser from "../BackgroundChooser/BackgroundChooser"
+import ServicePanel from "../ServicePanel/ServicePanel"
+import SearchBar from "../SearchBar/SearchBar"
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import style from "./MapContainer.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import style from "./MapContainer.scss"
 import Position from '../Position/Position'
 
 const ServiceListItem = props => (
   <ServicePanel services={ props.listItem } removeMapItem={ props.removeMapItem } draggable />
-);
+)
 
 /**
  * @class The Map Component
@@ -23,7 +22,7 @@ const ServiceListItem = props => (
 export default class MapContainer extends React.Component {
   state = {
     layers: []
-  };
+  }
   /**
    * The prop types.
    * @type {Object}
@@ -57,7 +56,7 @@ export default class MapContainer extends React.Component {
      * @type {String}
      */
     crs: PropTypes.string
-  };
+  }
 
   static defaultProps = {
     lon: 396722,
@@ -66,28 +65,28 @@ export default class MapContainer extends React.Component {
     wms: "",
     menu: true,
     crs: 'EPSG:25833'
-  };
+  }
 
   /**
    *
    *@constructs Map
    */
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       open: false,
       menu: this.props.menu
-    };
+    }
 
-    const queryValues = queryString.parse(window.location.search);
+    const queryValues = queryString.parse(window.location.search)
 
-    let lon = Number(queryValues["lon"] || props.lon);
-    let lat = Number(queryValues["lat"] || props.lat);
-    let zoom = Number(queryValues["zoom"] || props.zoom);
+    let lon = Number(queryValues["lon"] || props.lon)
+    let lat = Number(queryValues["lat"] || props.lat)
+    let zoom = Number(queryValues["zoom"] || props.zoom)
 
-    this.wms = queryValues["wms"] || "";
-    this.layers = Array(queryValues["layers"] || []);
+    this.wms = queryValues["wms"] || ""
+    this.layers = Array(queryValues["layers"] || [])
     /*
     let wmts = Array(queryValues['wmts'] || [])
     let wfs = Array(queryValues['wfs'] || [])
@@ -98,63 +97,59 @@ export default class MapContainer extends React.Component {
     this.newMapConfig = Object.assign({}, defaultConfig, {
       center: [lon, lat],
       zoom: zoom
-    });
+    })
   }
 
   /**
    *
    */
   componentDidMount() {
-    if (this.props.wms) {
-      this.addWMS(this.wms, this.layers);
-    }
-    window.olMap = map.Init("map", this.newMapConfig);
-    map.AddZoom();
-    map.AddScaleLine();
-    eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState);
-    this.props = { map: map };
+    window.olMap = map.Init("map", this.newMapConfig)
+    map.AddZoom()
+    map.AddScaleLine()
+    eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState)
+    this.props = { map: map }
   }
 
   /**
    *
    */
   updateMapInfoState = () => {
-    let center = map.GetCenter();
-    const queryValues = queryString.parse(window.location.search);
-    this.props = { lon: center.lon, lat: center.lat, zoom: center.zoom };
-    queryValues.lon = center.lon;
-    queryValues.lat = center.lat;
-    queryValues.zoom = center.zoom;
-    setQuery(queryValues);
-  };
-
-  addWMS() {
-    CapabilitiesUtil.parseWmsCapabilities(this.props.services.GetCapabilitiesUrl)
-      .then(CapabilitiesUtil.getLayersFromWmsCapabilties)
-      .then(layers => {
-        this.setState({
-          wmsLayers: layers
-        });
-      })
-      .catch(() => alert("Could not parse capabilities document."));
+    let center = map.GetCenter()
+    const queryValues = queryString.parse(window.location.search)
+    this.props = { lon: center.lon, lat: center.lat, zoom: center.zoom }
+    queryValues.lon = center.lon
+    queryValues.lat = center.lat
+    queryValues.zoom = center.zoom
+    setQuery(queryValues)
   }
 
   renderServiceList() {
+    if (this.wms) {
+      const addedWms = {
+        'Title': 'Added WMS from url',
+        'DistributionProtocol': 'OGC:WMS',
+        'GetCapabilitiesUrl': this.wms,
+        addLayers: []
+      }
+      this.props.services.push(addedWms)
+    }
+
     return this.props.services.map((listItem, i) => (
       <ServiceListItem listItem={ listItem } removeMapItem={ this.props.removeMapItem ? this.props.removeMapItem : null } key={ i } map={ map } />
-    ));
+    ))
   }
   renderLayerButton() {
-    return this.props.services && this.props.services.length > 0;
+    return this.props.services && this.props.services.length > 0
   }
 
   toogleLayers() {
     this.setState({
       isExpanded: !this.state.isExpanded
-    });
+    })
   }
   toogleMap() {
-    window.history.back();
+    window.history.back()
     // TODO: get paramtere to check for url til goto for closing map
   }
 
@@ -165,7 +160,7 @@ export default class MapContainer extends React.Component {
     let map = this.props.map
     return (
       <div className={ style.mapContainer }>
-        <SearchBar searchText="This is initial search text"/>
+        <SearchBar searchText="This is initial search text" />
         <BackgroundChooser />
         <div>
           { this.renderLayerButton() ? (
@@ -193,6 +188,6 @@ export default class MapContainer extends React.Component {
         />
         <Position map={ map } projection={ this.props.crs }></Position>
       </div>
-    );
+    )
   }
 }
