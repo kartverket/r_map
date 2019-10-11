@@ -101,6 +101,23 @@ var LayerEntry = function LayerEntry(props) {
       if (isNewLayer) {
         window.olMap.addLayer(currentLayer);
         setChecked(currentLayer.getVisible());
+
+        if (currentNode.queryable) {
+          window.olMap.on('singleclick', function (evt) {
+            var viewResolution = window.olMap.getView().getResolution();
+            var url = currentLayer.getSource().getGetFeatureInfoUrl(evt.coordinate, viewResolution, window.olMap.getView().getProjection(), {
+              INFO_FORMAT: 'text/plain'
+            });
+
+            if (url && currentLayer.getVisible()) {
+              fetch(url).then(function (response) {
+                return response.text();
+              }).then(function (data) {
+                console.log(data);
+              });
+            }
+          });
+        }
       }
     }
   };

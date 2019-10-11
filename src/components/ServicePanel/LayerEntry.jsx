@@ -53,6 +53,20 @@ const LayerEntry = props => {
       if (isNewLayer) {
         window.olMap.addLayer(currentLayer)
         setChecked(currentLayer.getVisible())
+
+        if (currentNode.queryable) {
+          window.olMap.on('singleclick', function (evt) {
+            const viewResolution = (window.olMap.getView().getResolution());
+            const url = currentLayer.getSource().getGetFeatureInfoUrl(evt.coordinate, viewResolution, window.olMap.getView().getProjection(), { INFO_FORMAT: 'text/plain' })
+            if (url && currentLayer.getVisible()) {
+              fetch(url)
+                .then((response) => response.text())
+                .then((data) => {
+                  console.log(data)
+                })
+            }
+          })
+        }
       }
     }
   }
