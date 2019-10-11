@@ -52,9 +52,12 @@ var LayerEntry = function LayerEntry(props) {
       transparency = _useState8[0],
       setTransparency = _useState8[1];
 
-  var layer = props.layer;
-  var info = ''; // layer.Abstract  //Prepare for some info text, for example the Abstract info or more.
+  var _useState9 = (0, _react.useState)(''),
+      _useState10 = _slicedToArray(_useState9, 2),
+      info = _useState10[0],
+      setInfo = _useState10[1];
 
+  var layer = props.layer;
   layer.Name = layer.name && _typeof(layer.name) === 'object' ? layer.name.localPart : layer.Name;
 
   var abstractTextSpan = function abstractTextSpan() {
@@ -113,6 +116,7 @@ var LayerEntry = function LayerEntry(props) {
               fetch(url).then(function (response) {
                 return response.text();
               }).then(function (data) {
+                //setInfo(data)
                 console.log(data);
               });
             }
@@ -159,12 +163,12 @@ var LayerEntry = function LayerEntry(props) {
     },
     htmlFor: layer.Title
   }, " "), abstractTextSpan(), info ? _react.default.createElement("div", {
-    class: "info"
+    className: "info"
   }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     className: "infoIcon",
     icon: ["far", "info"]
   }), _react.default.createElement("span", {
-    class: "infoText"
+    className: "infoText"
   }, info)) : null, layer.Name ? _react.default.createElement("label", {
     onClick: function onClick() {
       return toggleOptions(!options);
