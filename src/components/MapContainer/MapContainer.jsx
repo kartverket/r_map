@@ -10,6 +10,10 @@ import SearchBar from "../SearchBar/SearchBar"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import style from "./MapContainer.scss"
 import Position from '../Position/Position'
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab'
+import Accordion from 'react-bootstrap/Accordion'
+import Card from 'react-bootstrap/Card'
 
 const ServiceListItem = props => (
   <ServicePanel services={ props.listItem } removeMapItem={ props.removeMapItem } draggable />
@@ -159,14 +163,41 @@ export default class MapContainer extends React.Component {
   render() {
     let map = this.props.map
     return (
-      <div className={ style.mapContainer }>
-        <SearchBar searchText="This is initial search text" />
+      <div id="MapContainer" className={ style.mapContainer }>
         <BackgroundChooser />
         <div>
           { this.renderLayerButton() ? (
             <div className={ this.state.isExpanded ? style.container + " closed" : style.container + " open" }>
+              <Tabs defaultActiveKey="search" id="tab">
+                <Tab eventKey="search" title="Søk">
+                  <Accordion defaultActiveKey="0">
+                    <Card>
+                        <Accordion.Toggle as={ Card.Header } eventKey="0">
+                          SØK
+                        </Accordion.Toggle>
+                      <Accordion.Collapse eventKey="0">
+                        <SearchBar searchText="This is initial search text" />
+                      </Accordion.Collapse>
+                    </Card>
+                    <Card>
+                        <Accordion.Toggle as={ Card.Header } eventKey="1">
+                          Lagene
+                        </Accordion.Toggle>
+                      <Accordion.Collapse eventKey="1">
+                        <div id="ServiceList">{ this.renderServiceList() }</div>
+                      </Accordion.Collapse>
+                    </Card>
+                  </Accordion>
+                </Tab>
+                <Tab eventKey="tools" title="Verktøy">
+                  <div>tools</div>
+                </Tab>
+                <Tab eventKey="info" title="Info">
+                  <div>FAQ</div>
+                </Tab>
+              </Tabs>
               <FontAwesomeIcon onClick={ () => this.toogleLayers() } className={ style.toggleBtn } icon={ this.state.isExpanded ? ["far", "layer-group"] : "times" } />
-              <div>{ this.renderServiceList() }</div>
+
             </div>
           ) : (
               <div className={ style.link } onClick={ () => this.toogleMap() }>Gå til kartkatalogen</div>
