@@ -58,6 +58,7 @@ var ServicePanel = function ServicePanel(props) {
           setCapabilities(capa);
           newMetaInfo = _CapabilitiesUtil.CapabilitiesUtil.getWMSMetaCapabilities(capa);
           newMetaInfo.Type = 'OGC:WMS';
+          newMetaInfo.Params = props.services.customParams || '';
           setMeta(newMetaInfo);
         }).catch(function (e) {
           return console.log(e);
@@ -72,6 +73,7 @@ var ServicePanel = function ServicePanel(props) {
           setCapabilities(capa);
           newMetaInfo = _CapabilitiesUtil.CapabilitiesUtil.getWFSMetaCapabilities(capa);
           newMetaInfo.Type = 'WFS';
+          newMetaInfo.Params = props.services.customParams || '';
           setMeta(newMetaInfo);
         }).catch(function (e) {
           return console.log(e);

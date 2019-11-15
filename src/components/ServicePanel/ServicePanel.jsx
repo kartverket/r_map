@@ -22,6 +22,7 @@ const ServicePanel = props => {
             setCapabilities(capa)
             newMetaInfo = CapabilitiesUtil.getWMSMetaCapabilities(capa)
             newMetaInfo.Type = 'OGC:WMS'
+            newMetaInfo.Params= props.services.customParams || ''
             setMeta(newMetaInfo)
           })
           .catch(e => console.log(e))
@@ -34,6 +35,7 @@ const ServicePanel = props => {
             setCapabilities(capa)
             newMetaInfo = CapabilitiesUtil.getWFSMetaCapabilities(capa)
             newMetaInfo.Type = 'WFS'
+            newMetaInfo.Params= props.services.customParams || ''
             setMeta(newMetaInfo)
           })
           .catch(e => console.log(e))

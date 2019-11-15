@@ -10,14 +10,23 @@ const TEST_DATA = [
     'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.fastmerker2?request=GetCapabilities&service=WMS',
     addLayers: ['Niv_fastmerker','Landsnettpunkt']
   },*/
-
   {
     'Uuid': '8045628b-230a-4ba4-a6e0-xxxxx',
     'Title': 'Abas',
     'DistributionProtocol': 'OGC:WMS',
     'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.adm_enheter?request=GetCapabilities&service=WMS',
     addLayers: []
-  },/*
+  },
+  {
+    'Title': 'SFKB-Transakjsoner',
+    'DistributionProtocol': 'OGC:WMS',
+    'customParams': {
+        TIME: '2019-01-01 00:00:00/2020-01-01 00:00:00'
+    },
+    'GetCapabilitiesUrl': 'https://wms.geonorge.no/skwms1/wms.sfkb-transaksjoner?request=GetCapabilities&service=WMS',
+    'addLayers': ['bygning_N1']
+}
+/*
     {
     'Uuid': '8c2c434b-07f7-4ebc-9bc6-9c15cdd75c4c',
     'Title': 'Kulturminner20180301',

@@ -445,6 +445,9 @@ function () {
   }, {
     key: "getOlLayerFromWmsCapabilities",
     value: function getOlLayerFromWmsCapabilities(metaCapabilities, layerCapabilities) {
+      var params = metaCapabilities.Params || {};
+      params['LAYERS'] = layerCapabilities.Name;
+      params['VERSION'] = metaCapabilities.Version;
       return new _Image.default({
         opacity: 1,
         title: layerCapabilities.Title,
@@ -457,10 +460,7 @@ function () {
         source: new _ImageWMS.default({
           url: metaCapabilities.MapUrl,
           attributions: metaCapabilities.Attribution,
-          params: {
-            'LAYERS': layerCapabilities.Name,
-            'VERSION': metaCapabilities.Version
-          }
+          params: params
         })
       });
     }
