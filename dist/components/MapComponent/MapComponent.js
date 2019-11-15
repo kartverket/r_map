@@ -90,11 +90,10 @@ function (_React$Component) {
     /*
     let wmts = Array(queryValues['wmts'] || [])
     let wfs = Array(queryValues['wfs'] || [])
-    let epsg = queryValues['epsg'] || 'EPSG:3857'
     */
     //  this.props = { lon: lon, lat: lat, zoom: zoom };
 
-    _maplibHelper.mapConfig.coordinate_system = _queryValues['epsg'] || 'EPSG:25833';
+    _maplibHelper.mapConfig.coordinate_system = _queryValues['crs'] || props.crs;
     _this.newMapConfig = Object.assign({}, _maplibHelper.mapConfig, {
       center: [lon, lat],
       zoom: zoom
@@ -114,9 +113,9 @@ function (_React$Component) {
 
       _maplibHelper.eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState);
 
-      this.props = {
+      this.setState({
         map: _maplibHelper.map
-      };
+      });
       this.addWMS();
     }
   }, {
@@ -184,13 +183,15 @@ _defineProperty(MapComponent, "propTypes", {
   /**
    * @type {Array}
    */
-  services: _propTypes.default.arrayOf(_propTypes.default.object)
+  services: _propTypes.default.arrayOf(_propTypes.default.object),
+  crs: _propTypes.default.string
 });
 
 _defineProperty(MapComponent, "defaultProps", {
   lon: 396722,
   lat: 7197860,
-  zoom: 4
+  zoom: 4,
+  crs: 'EPSG:25833'
 });
 
 var _default = MapComponent;

@@ -121,7 +121,7 @@ function (_React$Component) {
     let projectName = queryValues['project'] || 'norgeskart'
     */
 
-    _maplibHelper.mapConfig.coordinate_system = _queryValues['epsg'] || 'EPSG:25833';
+    _maplibHelper.mapConfig.coordinate_system = _queryValues['crs'] || props.crs;
     var defaultConfig = JSON.parse(JSON.stringify(_maplibHelper.mapConfig));
     _this.newMapConfig = Object.assign({}, defaultConfig, {
       center: [lon, lat],
@@ -247,7 +247,7 @@ function (_React$Component) {
         }
       }), _react.default.createElement(_Position.default, {
         map: map,
-        projection: 'EPSG:25833'
+        projection: this.props.crs
       }));
     }
   }]);
@@ -286,7 +286,12 @@ _defineProperty(MapContainer, "propTypes", {
   /**
    * @type {Boolean}
    */
-  menu: _propTypes.default.bool
+  menu: _propTypes.default.bool,
+
+  /**
+   * @type {String}
+   */
+  crs: _propTypes.default.string
 });
 
 _defineProperty(MapContainer, "defaultProps", {
@@ -294,5 +299,6 @@ _defineProperty(MapContainer, "defaultProps", {
   lat: 7197860,
   zoom: 4,
   wms: "",
-  menu: true
+  menu: true,
+  crs: 'EPSG:25833'
 });

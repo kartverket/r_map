@@ -11,6 +11,10 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/**
+ * Legend to be used in MapComponent
+ * @param {*} props
+ */
 var Legend = function Legend(props) {
   return _react.default.createElement("img", {
     src: props.legendUrl,

@@ -51,7 +51,11 @@ export default class MapContainer extends React.Component {
     /**
      * @type {Boolean}
      */
-    menu: PropTypes.bool
+    menu: PropTypes.bool,
+    /**
+     * @type {String}
+     */
+    crs: PropTypes.string
   };
 
   static defaultProps = {
@@ -59,7 +63,8 @@ export default class MapContainer extends React.Component {
     lat: 7197860,
     zoom: 4,
     wms: "",
-    menu: true
+    menu: true,
+    crs: 'EPSG:25833'
   };
 
   /**
@@ -87,7 +92,7 @@ export default class MapContainer extends React.Component {
     let wfs = Array(queryValues['wfs'] || [])
     let projectName = queryValues['project'] || 'norgeskart'
     */
-    mapConfig.coordinate_system = queryValues['epsg'] || 'EPSG:25833'
+    mapConfig.coordinate_system = queryValues['crs'] || props.crs
     let defaultConfig = JSON.parse(JSON.stringify(mapConfig))
     this.newMapConfig = Object.assign({}, defaultConfig, {
       center: [lon, lat],
@@ -184,7 +189,7 @@ export default class MapContainer extends React.Component {
             zIndex: 0
           }}
         />
-        <Position map={map} projection={'EPSG:25833'}></Position>
+        <Position map={map} projection={this.props.crs}></Position>
       </div>
     );
   }

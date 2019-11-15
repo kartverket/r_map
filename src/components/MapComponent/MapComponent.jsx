@@ -35,12 +35,15 @@ export class MapComponent extends React.Component {
      * @type {Array}
      */
     services: PropTypes.arrayOf(PropTypes.object),
+
+    crs: PropTypes.string
   };
 
   static defaultProps = {
     lon: 396722,
     lat: 7197860,
-    zoom: 4
+    zoom: 4,
+    crs: 'EPSG:25833'
   };
 
   /**
@@ -59,10 +62,9 @@ export class MapComponent extends React.Component {
     /*
     let wmts = Array(queryValues['wmts'] || [])
     let wfs = Array(queryValues['wfs'] || [])
-    let epsg = queryValues['epsg'] || 'EPSG:3857'
 */
     //  this.props = { lon: lon, lat: lat, zoom: zoom };
-    mapConfig.coordinate_system = queryValues['epsg'] || 'EPSG:25833'
+    mapConfig.coordinate_system = queryValues['crs'] || props.crs
     this.newMapConfig = Object.assign({}, mapConfig, {
       center: [lon, lat],
       zoom: zoom
@@ -75,7 +77,7 @@ export class MapComponent extends React.Component {
     map.AddZoom();
     map.AddScaleLine();
     eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState);
-    this.props = { map: map };
+    this.setState({map: map });
     this.addWMS();
   }
 

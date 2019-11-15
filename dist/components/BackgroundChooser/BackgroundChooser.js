@@ -24,7 +24,7 @@ function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 /**
- * Panel containing a list of backgroundLayers.
+ * Panel containing a list of backgroundLayers. To be used in MapContainer
  */
 var BackgroundChooser = function BackgroundChooser() {
   var _useState = (0, _react.useState)([]),

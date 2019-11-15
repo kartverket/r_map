@@ -35,12 +35,6 @@ var _maplibHelper = require("./maplibHelper");
 
 var _MapHelper = require("../Utils/MapHelper");
 
-var _jsonix = require("@boundlessgeo/jsonix");
-
-var _w3cSchemas = require("w3c-schemas");
-
-var _scripts = require("ogc-schemas/scripts/");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -127,17 +121,14 @@ var newMaplibLayer = function newMaplibLayer(sourceType, source) {
   });
   return newIsyLayer;
 };
-
-exports.newMaplibLayer = newMaplibLayer;
-var context_wfs_2_0_0 = new _jsonix.Jsonix.Context([_w3cSchemas.XLink_1_0, _scripts.OWS_1_1_0, _scripts.GML_2_1_2, _scripts.Filter_2_0, _scripts.WFS_2_0]);
-var unmarshaller_wfs_2_0_0 = context_wfs_2_0_0.createUnmarshaller();
-var context_wfs_1_1_0 = new _jsonix.Jsonix.Context([_w3cSchemas.XLink_1_0, _scripts.OWS_1_0_0, _scripts.OWS_1_1_0, _scripts.Filter_1_1_0, _scripts.GML_2_1_2, _scripts.GML_3_1_1, _scripts.SMIL_2_0, _scripts.SMIL_2_0_Language, _scripts.WFS_1_1_0]);
-var unmarshaller_wfs_1_1_0 = context_wfs_1_1_0.createUnmarshaller();
 /**
  * Helper class to parse capabilities of WMS layers
  *
  * @class CapabilitiesUtil
  */
+
+
+exports.newMaplibLayer = newMaplibLayer;
 
 var CapabilitiesUtil =
 /*#__PURE__*/
@@ -370,24 +361,7 @@ function () {
         return response.text();
       }).then(function (data) {
         var parser = new DOMParser();
-        var xmlDoc = parser.parseFromString(data, 'text/xml');
-        var result;
-        var version = xmlDoc.getElementsByTagName('WFS_Capabilities')[0].attributes.version.value;
-
-        switch (version) {
-          case '1.1.0':
-            result = unmarshaller_wfs_1_1_0.unmarshalString(data);
-            break;
-
-          case '2.0.0':
-            result = unmarshaller_wfs_2_0_0.unmarshalString(data);
-            break;
-
-          default:
-            console.warn('No matching WFS version parser found.');
-        }
-
-        return result;
+        return parser.parseFromString(data, 'text/xml');
       });
     }
   }, {
