@@ -29,7 +29,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "rm -rf dist && NODE_ENV=production babel src --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
-    "windows-build": "rm -rf dist && SET NODE_ENV=production&& babel src --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
+    "windows-build": "rimraf -rf dist && SET NODE_ENV=production&& babel src --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "styleguide": "styleguidist server",
@@ -49,6 +49,7 @@
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "babel-polyfill": "^6.26.0",
     "eslint-plugin-react-hooks": "^2.0.1",
-    "react-styleguidist": "^9.1.16"
+    "react-styleguidist": "^9.1.16",
+    "rimraf": "^3.0.0"
   }
 }

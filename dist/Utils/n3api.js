@@ -11,42 +11,28 @@ var _this = void 0;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 var nkapi = 'http://localhost:3001/api/v1/';
 
-var getCapabilitiesByUuid =
-/*#__PURE__*/
-function () {
-  var _ref = _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee(uuid) {
-    var response;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.next = 2;
-            return fetch(nkapi + 'capa/get/' + uuid);
+var getCapabilitiesByUuid = function getCapabilitiesByUuid(uuid) {
+  var response;
+  return regeneratorRuntime.async(function getCapabilitiesByUuid$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          _context.next = 2;
+          return regeneratorRuntime.awrap(fetch(nkapi + 'capa/get/' + uuid));
 
-          case 2:
-            response = _context.sent;
-            return _context.abrupt("return", response);
+        case 2:
+          response = _context.sent;
+          return _context.abrupt("return", response);
 
-          case 4:
-          case "end":
-            return _context.stop();
-        }
+        case 4:
+        case "end":
+          return _context.stop();
       }
-    }, _callee);
-  }));
-
-  return function getCapabilitiesByUuid(_x) {
-    return _ref.apply(this, arguments);
-  };
-}();
+    }
+  });
+};
 
 exports.getCapabilitiesByUuid = getCapabilitiesByUuid;
 
@@ -539,30 +525,30 @@ var api = function api() {
     key: 'ED50_UTM_36',
     type: 'extended',
     bbox: {}
-    /*
-            ,{
-              Name: "Lokalt nett, Oslo",
-              SOSI: 101,
-              bbox: {
-                MinX : -13231.52378,
-                MaxX : 13557.59229,
-                MinY : -11742.49708,
-                MaxY : 25100.80578
-              }
+  }
+  /*
+          ,{
+            Name: "Lokalt nett, Oslo",
+            SOSI: 101,
+            bbox: {
+              MinX : -13231.52378,
+              MaxX : 13557.59229,
+              MinY : -11742.49708,
+              MaxY : 25100.80578
             }
-    */
-    //{ESRI: null,EPSG: null,SOSI: null,name: 'what3words',viewable: false,forward: true,key: 'w3w',type: 'extended',bbox: {}}
-    //{'ESRI': null, 'EPSG': null, 'SOSI': null, 'name': 'Geohash', 'viewable': false, 'forward': true}
-    //{'ESRI': null, 'EPSG': null, 'SOSI': 53, 'name': 'Møre-A'},
-    //{'ESRI': null, 'EPSG': null, 'SOSI': 54, 'name': 'Møre-B'},
-    //{'ESRI': null, 'EPSG': null, 'SOSI': 84, 'name': 'EU89, Geografisk, sekunder'}
-    //{'ESRI': 4230, 'EPSG': 4230, 'SOSI': 4230, 'name': 'ED50 Geografisk, grader'},
-    //{'ESRI': 4231, 'EPSG': null, 'SOSI': 4231, 'name': 'ED87 Geografisk, grader'},
-    //{'ESRI': 4273, 'EPSG': 4273, 'SOSI': 4273, 'name': 'NGO1948 Geografisk, grader'},
-    //{'ESRI': null, 'EPSG': 4322, 'SOSI': 4322, 'name': 'WGS72 Geografisk, grader'},
-    //{'ESRI': 4326, 'EPSG': 4326, 'SOSI': 4326, 'name': 'EU89/WGS84 Geografisk, grader'}
-
-  }];
+          }
+  */
+  //{ESRI: null,EPSG: null,SOSI: null,name: 'what3words',viewable: false,forward: true,key: 'w3w',type: 'extended',bbox: {}}
+  //{'ESRI': null, 'EPSG': null, 'SOSI': null, 'name': 'Geohash', 'viewable': false, 'forward': true}
+  //{'ESRI': null, 'EPSG': null, 'SOSI': 53, 'name': 'Møre-A'},
+  //{'ESRI': null, 'EPSG': null, 'SOSI': 54, 'name': 'Møre-B'},
+  //{'ESRI': null, 'EPSG': null, 'SOSI': 84, 'name': 'EU89, Geografisk, sekunder'}
+  //{'ESRI': 4230, 'EPSG': 4230, 'SOSI': 4230, 'name': 'ED50 Geografisk, grader'},
+  //{'ESRI': 4231, 'EPSG': null, 'SOSI': 4231, 'name': 'ED87 Geografisk, grader'},
+  //{'ESRI': 4273, 'EPSG': 4273, 'SOSI': 4273, 'name': 'NGO1948 Geografisk, grader'},
+  //{'ESRI': null, 'EPSG': 4322, 'SOSI': 4322, 'name': 'WGS72 Geografisk, grader'},
+  //{'ESRI': 4326, 'EPSG': 4326, 'SOSI': 4326, 'name': 'EU89/WGS84 Geografisk, grader'}
+  ];
 
   _this.getSOSIfromEPSG = function (epsg) {
     return this.sosiCodes.filter(function (el) {

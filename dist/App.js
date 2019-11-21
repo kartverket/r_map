@@ -11,7 +11,9 @@ var _MapContainer = _interopRequireDefault(require("./components/MapContainer/Ma
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -46,7 +48,51 @@ var TEST_DATA = [
   'DistributionProtocol': 'OGC:WMS',
   'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.adm_enheter?request=GetCapabilities&service=WMS',
   addLayers: []
-}];
+}
+/*
+{
+'Uuid': '8c2c434b-07f7-4ebc-9bc6-9c15cdd75c4c',
+'Title': 'Kulturminner20180301',
+'DistributionProtocol': 'OGC:WMS',
+'GetCapabilitiesUrl': ' https://kart.ra.no/arcgis/services/Distribusjon/Kulturminner20180301/MapServer/WMSServer?request=GetCapabilities&service=WMS',
+addLayers: []
+},
+{
+'Uuid': '8045628b-230a-4ba4-a6e0-xxxxx',
+'Title': 'ssr2',
+'DistributionProtocol': 'OGC:WMS',
+'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.ssr2?request=GetCapabilities&service=WMS',
+addLayers: []
+}, {
+'Title': 'Dybdedata_dekning_dtm50_5',
+'DistributionProtocol': 'GEOJSON',
+'url': 'https://norgeskart.no/json/dekning/sjo/celler/dtm50_5.geojson',
+addLayers: []
+},
+{
+"Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
+"Title": "tilgjengelighet",
+"DistributionProtocol": "WFS",
+"GetCapabilitiesUrl":"http://wfs.geonorge.no/skwms1/wfs.tilgjengelighet_friluft?request=GetCapabilities&service=WFS"
+},
+{
+"Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
+"Title": "markagrenser",
+"DistributionProtocol": "WFS",
+"GetCapabilitiesUrl":"https://wfs.geonorge.no/skwms1/wfs.markagrensa?request=GetCapabilities&service=WFS"
+},
+{
+"Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
+"Title": "Kvikkleire ",
+"DistributionProtocol": "WFS",
+"GetCapabilitiesUrl":"https://wfs.geonorge.no/skwms1/wfs.kvikkleire?service=wfs&request=getcapabilities"
+},{
+"Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
+"Title": "Brannstasjoner ",
+"DistributionProtocol": "WFS",
+"GetCapabilitiesUrl":"https://wfs.geonorge.no/skwms1/wfs.brannstasjoner?service=wfs&request=getcapabilities"
+}*/
+];
 /**
  *
  */
