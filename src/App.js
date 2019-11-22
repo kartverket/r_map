@@ -44,7 +44,7 @@ const TEST_DATA = [
     'Title': 'Dybdedata_dekning_dtm50_5',
     'DistributionProtocol': 'GEOJSON',
     'url': 'https://norgeskart.no/json/dekning/sjo/celler/dtm50_5.geojson',
-    addLayers: []
+    addLayers: ['dcells_05m']
   },
   {
     "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",

@@ -123,29 +123,58 @@ function (_React$Component) {
       var _this2 = this;
 
       this.props.services.forEach(function (service) {
-        _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(service.GetCapabilitiesUrl).then(function (capa) {
-          var meta = _CapabilitiesUtil.CapabilitiesUtil.getWMSMetaCapabilities(capa);
+        var meta = {};
 
-          meta.Type = 'OGC:WMS';
-          meta.Params = service.customParams || '';
+        switch (service.DistributionProtocol) {
+          case 'WMS':
+          case 'WMS-tjeneste':
+          case 'OGC:WMS':
+            _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(service.GetCapabilitiesUrl).then(function (capa) {
+              meta = _CapabilitiesUtil.CapabilitiesUtil.getWMSMetaCapabilities(capa);
+              meta.Type = 'OGC:WMS';
+              meta.Params = service.customParams || '';
 
-          if (service.addLayers.length > 0) {
-            var layersToBeAdded = capa.Capability.Layer.Layer.filter(function (e) {
-              return service.addLayers.includes(e.Name);
+              if (service.addLayers.length > 0) {
+                var layersToBeAdded = capa.Capability.Layer.Layer.filter(function (e) {
+                  return service.addLayers.includes(e.Name);
+                });
+                layersToBeAdded.forEach(function (layer) {
+                  var laycapaLayerer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmsCapabilities(meta, layer);
+
+                  window.olMap.addLayer(laycapaLayerer);
+                });
+              }
+            }).then(function (layers) {
+              _this2.setState({
+                wmsLayers: layers
+              });
+            }).catch(function (e) {
+              return console.warn(e);
             });
-            layersToBeAdded.forEach(function (layer) {
-              var laycapaLayerer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmsCapabilities(meta, layer);
 
-              window.olMap.addLayer(laycapaLayerer);
+            break;
+
+          case 'GEOJSON':
+            _CapabilitiesUtil.CapabilitiesUtil.getGeoJson(service.url).then(function (layers) {
+              meta.Type = 'GEOJSON';
+
+              if (service.addLayers.length > 0) {
+                if (layers.name === service.addLayers['0']) {
+                  var currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromGeoJson(layers);
+
+                  window.olMap.addLayer(currentLayer);
+                }
+              }
+            }).catch(function (e) {
+              return console.log(e);
             });
-          }
-        }).then(function (layers) {
-          _this2.setState({
-            wmsLayers: layers
-          });
-        }).catch(function (e) {
-          return console.warn(e);
-        });
+
+            break;
+
+          default:
+            console.warn('No service type specified');
+            break;
+        }
       });
     }
   }, {

@@ -51,6 +51,15 @@ var TEST_DATA = [
 }
 /*
 {
+'Title': 'SFKB-Transakjsoner',
+'DistributionProtocol': 'OGC:WMS',
+'customParams': {
+    TIME: '2019-01-01 00:00:00/2020-01-01 00:00:00'
+},
+'GetCapabilitiesUrl': 'https://wms.geonorge.no/skwms1/wms.sfkb-transaksjoner?request=GetCapabilities&service=WMS',
+'addLayers': ['bygning']
+},
+{
 'Uuid': '8c2c434b-07f7-4ebc-9bc6-9c15cdd75c4c',
 'Title': 'Kulturminner20180301',
 'DistributionProtocol': 'OGC:WMS',
@@ -67,7 +76,7 @@ addLayers: []
 'Title': 'Dybdedata_dekning_dtm50_5',
 'DistributionProtocol': 'GEOJSON',
 'url': 'https://norgeskart.no/json/dekning/sjo/celler/dtm50_5.geojson',
-addLayers: []
+addLayers: ['dcells_05m']
 },
 {
 "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
