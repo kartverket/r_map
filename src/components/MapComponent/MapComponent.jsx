@@ -92,27 +92,50 @@ export class MapComponent extends React.Component {
 
   addWMS() {
     this.props.services.forEach(service => {
-      CapabilitiesUtil.parseWmsCapabilities(service.GetCapabilitiesUrl)
-        .then(capa => {
-          let meta = CapabilitiesUtil.getWMSMetaCapabilities(capa)
-          meta.Type = 'OGC:WMS'
-          meta.Params = service.customParams || ''
-          if (service.addLayers.length > 0) {
-            let layersToBeAdded = capa.Capability.Layer.Layer.filter(
-              e => service.addLayers.includes(e.Name)
-            )
-            layersToBeAdded.forEach(layer => {
-              let laycapaLayerer = CapabilitiesUtil.getOlLayerFromWmsCapabilities(meta, layer)
-              window.olMap.addLayer(laycapaLayerer)
+      let meta = {}
+      switch (service.DistributionProtocol) {
+        case 'WMS':
+        case 'WMS-tjeneste':
+        case 'OGC:WMS':
+          CapabilitiesUtil.parseWmsCapabilities(service.GetCapabilitiesUrl)
+            .then(capa => {
+              meta = CapabilitiesUtil.getWMSMetaCapabilities(capa)
+              meta.Type = 'OGC:WMS'
+              meta.Params = service.customParams || ''
+              if (service.addLayers.length > 0) {
+                let layersToBeAdded = capa.Capability.Layer.Layer.filter(
+                  e => service.addLayers.includes(e.Name)
+                )
+                layersToBeAdded.forEach(layer => {
+                  let laycapaLayerer = CapabilitiesUtil.getOlLayerFromWmsCapabilities(meta, layer)
+                  window.olMap.addLayer(laycapaLayerer)
+                })
+              }
             })
-          }
-        })
-        .then(layers => {
-          this.setState({
-            wmsLayers: layers
-          });
-        })
-        .catch(e => console.warn(e));
+            .then(layers => {
+              this.setState({
+                wmsLayers: layers
+              });
+            })
+            .catch(e => console.warn(e));
+          break;
+        case 'GEOJSON':
+          CapabilitiesUtil.getGeoJson(service.url)
+            .then(layers => {
+              meta.Type = 'GEOJSON'
+              if (service.addLayers.length > 0) {
+                if (layers.name === service.addLayers['0']) {
+                  let currentLayer = CapabilitiesUtil.getOlLayerFromGeoJson(layers)
+                  window.olMap.addLayer(currentLayer)
+                }
+              }
+            })
+            .catch(e => console.log(e));
+          break;
+        default:
+          console.warn('No service type specified')
+          break
+      }
     })
   }
 
