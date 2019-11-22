@@ -69,15 +69,14 @@ export class MapComponent extends React.Component {
       center: [lon, lat],
       zoom: zoom
     });
-    this.olMap = null;
   }
 
   componentDidMount() {
-    this.olMap = map.Init("map", this.newMapConfig);
+    window.olMap = map.Init("map", this.newMapConfig);
     map.AddZoom();
     map.AddScaleLine();
     eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState);
-    this.setState({map: map });
+    this.setState({ map: map });
     this.addWMS();
   }
 
@@ -94,33 +93,40 @@ export class MapComponent extends React.Component {
   addWMS() {
     this.props.services.forEach(service => {
       CapabilitiesUtil.parseWmsCapabilities(service.GetCapabilitiesUrl)
-      .then(CapabilitiesUtil.getLayersFromWmsCapabilties)
-      .then(layers => {
-        if (service.addLayers.length > 0) {
-          let layersToBeAdded = layers.filter(
-            e => service.addLayers.includes(e.name)
-          )
-          layersToBeAdded.forEach(layer => map.AddLayer(layer))
-        }
-        this.setState({
-          wmsLayers: layers
-        });
-      })
-      .catch(e => console.warn(e));
+        .then(capa => {
+          let meta = CapabilitiesUtil.getWMSMetaCapabilities(capa)
+          meta.Type = 'OGC:WMS'
+          meta.Params = service.customParams || ''
+          if (service.addLayers.length > 0) {
+            let layersToBeAdded = capa.Capability.Layer.Layer.filter(
+              e => service.addLayers.includes(e.Name)
+            )
+            layersToBeAdded.forEach(layer => {
+              let laycapaLayerer = CapabilitiesUtil.getOlLayerFromWmsCapabilities(meta, layer)
+              window.olMap.addLayer(laycapaLayerer)
+            })
+          }
+        })
+        .then(layers => {
+          this.setState({
+            wmsLayers: layers
+          });
+        })
+        .catch(e => console.warn(e));
     })
   }
 
   render() {
     return (
-      <div className={style.mapContainer}>
+      <div className={ style.mapContainer }>
         <div
           id="map"
-          style={{
+          style={ {
             position: "relative",
             width: "100%",
             height: "100%",
             zIndex: 0
-          }}
+          } }
         />
       </div>
     );

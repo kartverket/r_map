@@ -98,14 +98,13 @@ function (_React$Component) {
       center: [lon, lat],
       zoom: zoom
     });
-    _this.olMap = null;
     return _this;
   }
 
   _createClass(MapComponent, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.olMap = _maplibHelper.map.Init("map", this.newMapConfig);
+      window.olMap = _maplibHelper.map.Init("map", this.newMapConfig);
 
       _maplibHelper.map.AddZoom();
 
@@ -124,16 +123,23 @@ function (_React$Component) {
       var _this2 = this;
 
       this.props.services.forEach(function (service) {
-        _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(service.GetCapabilitiesUrl).then(_CapabilitiesUtil.CapabilitiesUtil.getLayersFromWmsCapabilties).then(function (layers) {
+        _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(service.GetCapabilitiesUrl).then(function (capa) {
+          var meta = _CapabilitiesUtil.CapabilitiesUtil.getWMSMetaCapabilities(capa);
+
+          meta.Type = 'OGC:WMS';
+          meta.Params = service.customParams || '';
+
           if (service.addLayers.length > 0) {
-            var layersToBeAdded = layers.filter(function (e) {
-              return service.addLayers.includes(e.name);
+            var layersToBeAdded = capa.Capability.Layer.Layer.filter(function (e) {
+              return service.addLayers.includes(e.Name);
             });
             layersToBeAdded.forEach(function (layer) {
-              return _maplibHelper.map.AddLayer(layer);
+              var laycapaLayerer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmsCapabilities(meta, layer);
+
+              window.olMap.addLayer(laycapaLayerer);
             });
           }
-
+        }).then(function (layers) {
           _this2.setState({
             wmsLayers: layers
           });

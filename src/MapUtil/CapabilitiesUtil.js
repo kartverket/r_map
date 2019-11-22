@@ -357,6 +357,9 @@ export class CapabilitiesUtil {
      * @return {OlLayerTile[]} Array of OlLayerTile
      */
   static getOlLayerFromWmsCapabilities(metaCapabilities, layerCapabilities) {
+    let params = metaCapabilities.Params || {}
+    params['LAYERS'] = layerCapabilities.Name
+    params['VERSION'] = metaCapabilities.Version
     return new OlLayerImage({
       opacity: 1,
       title: layerCapabilities.Title,
@@ -369,10 +372,7 @@ export class CapabilitiesUtil {
       source: new OlSourceImageWMS({
         url: metaCapabilities.MapUrl,
         attributions: metaCapabilities.Attribution,
-        params: {
-          'LAYERS': layerCapabilities.Name,
-          'VERSION': metaCapabilities.Version
-        }
+        params: params
       })
     })
   }
