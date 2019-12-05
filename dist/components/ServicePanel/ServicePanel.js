@@ -89,6 +89,7 @@ var ServicePanel = function ServicePanel(props) {
         _CapabilitiesUtil.CapabilitiesUtil.getGeoJson(props.services.url).then(function (layers) {
           setCapabilities(layers);
           newMetaInfo.Type = 'GEOJSON';
+          newMetaInfo.ShowPropertyName = props.services.ShowPropertyName || 'id';
           setMeta(newMetaInfo);
         }).catch(function (e) {
           return console.log(e);

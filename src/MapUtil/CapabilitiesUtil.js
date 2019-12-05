@@ -9,11 +9,11 @@ import {
 import GML2Format from 'ol/format/GML2'
 //import GML3Format from 'ol/format/GML3'
 import GML32Format from 'ol/format/GML32'
-
 import GeoJSON from 'ol/format/GeoJSON.js';
 import { Vector as VectorLayer } from 'ol/layer.js';
 import { Vector as VectorSource } from 'ol/source.js';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy.js';
+import { Fill, Stroke, Style, Text } from 'ol/style';
 
 import { Layer } from './Domain';
 
@@ -319,14 +319,37 @@ export class CapabilitiesUtil {
         return data
       })
   }
-  static getOlLayerFromGeoJson(layerCapabilities) {
+  static getOlLayerFromGeoJson(meta, layerCapabilities) {
     const vectorSource = new VectorSource({
       features: (new GeoJSON()).readFeatures(layerCapabilities, {
-        featureProjection: 'EPSG:3857'
+        dataProjection: 'EPSG:4326',
+        featureProjection: 'EPSG:25833'
       })
     })
     return new VectorLayer({
       source: vectorSource,
+      style: function (feature, resolution) {
+        return new Style({
+          fill: new Fill({
+            color: 'rgba(255, 255, 255, 0.6)'
+          }),
+          stroke: new Stroke({
+            color: '#319FD3',
+            width: 2
+          }),
+          text: new Text({
+            font: '12px Calibri,sans-serif',
+            fill: new Fill({
+              color: '#000'
+            }),
+            stroke: new Stroke({
+              color: '#fff',
+              width: 3
+            }),
+            text: feature.get(meta.ShowPropertyName)
+          })
+        })
+      }
     });
   }
   static getWMSMetaCapabilities(capabilities) {

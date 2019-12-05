@@ -37,7 +37,7 @@ const LayerEntry = props => {
       if (props.meta.Type === 'OGC:WMS' || props.meta.Type === 'WMS' || props.meta.Type === 'WMS-tjeneste') {
         currentLayer = CapabilitiesUtil.getOlLayerFromWmsCapabilities(props.meta, currentNode);
       } else if (props.meta.Type === 'GEOJSON') {
-        currentLayer = CapabilitiesUtil.getOlLayerFromGeoJson(currentNode);
+        currentLayer = CapabilitiesUtil.getOlLayerFromGeoJson(props.meta, currentNode);
       } else if (props.meta.Type === 'OGC:WFS' || props.meta.Type === 'WFS' || props.meta.Type === 'WFS-tjeneste') {
         currentLayer = CapabilitiesUtil.getOlLayerFromWFS(props.meta, currentNode);
       }
@@ -66,6 +66,21 @@ const LayerEntry = props => {
                 })
             }
           })
+        } else if (currentNode.type && currentNode.type === 'FeatureCollection') {
+          window.olMap.on('click', function(evt){
+            const feature = window.olMap.forEachFeatureAtPixel(evt.pixel,
+              function(feature, layer) {
+                return feature;
+              });
+            if (feature) {
+                const coord = feature.getGeometry().getCoordinates();
+                var content = feature.get('n');
+
+                console.info(feature.getProperties());
+                console.info(coord);
+                console.info(content);
+            }
+        });
         }
       }
     }

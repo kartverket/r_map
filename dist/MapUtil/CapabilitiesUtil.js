@@ -27,6 +27,8 @@ var _source = require("ol/source.js");
 
 var _loadingstrategy = require("ol/loadingstrategy.js");
 
+var _style = require("ol/style");
+
 var _Domain = require("./Domain");
 
 var _get = _interopRequireDefault(require("lodash/get.js"));
@@ -376,14 +378,37 @@ function () {
     }
   }, {
     key: "getOlLayerFromGeoJson",
-    value: function getOlLayerFromGeoJson(layerCapabilities) {
+    value: function getOlLayerFromGeoJson(meta, layerCapabilities) {
       var vectorSource = new _source.Vector({
         features: new _GeoJSON.default().readFeatures(layerCapabilities, {
-          featureProjection: 'EPSG:3857'
+          dataProjection: 'EPSG:4326',
+          featureProjection: 'EPSG:25833'
         })
       });
       return new _layer.Vector({
-        source: vectorSource
+        source: vectorSource,
+        style: function style(feature, resolution) {
+          return new _style.Style({
+            fill: new _style.Fill({
+              color: 'rgba(255, 255, 255, 0.6)'
+            }),
+            stroke: new _style.Stroke({
+              color: '#319FD3',
+              width: 2
+            }),
+            text: new _style.Text({
+              font: '12px Calibri,sans-serif',
+              fill: new _style.Fill({
+                color: '#000'
+              }),
+              stroke: new _style.Stroke({
+                color: '#fff',
+                width: 3
+              }),
+              text: feature.get(meta.ShowPropertyName)
+            })
+          });
+        }
       });
     }
   }, {
