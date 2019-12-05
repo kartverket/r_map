@@ -35,7 +35,7 @@ const ServicePanel = props => {
             setCapabilities(capa)
             newMetaInfo = CapabilitiesUtil.getWFSMetaCapabilities(capa)
             newMetaInfo.Type = 'WFS'
-            newMetaInfo.Params= props.services.customParams || ''
+            newMetaInfo.Params = props.services.customParams || ''
             setMeta(newMetaInfo)
           })
           .catch(e => console.log(e))
@@ -45,6 +45,7 @@ const ServicePanel = props => {
           .then(layers => {
             setCapabilities(layers)
             newMetaInfo.Type = 'GEOJSON'
+            newMetaInfo.ShowPropertyName = props.services.ShowPropertyName || 'id'
             setMeta(newMetaInfo)
           })
           .catch(e => console.log(e));

@@ -319,7 +319,7 @@ export class CapabilitiesUtil {
         return data
       })
   }
-  static getOlLayerFromGeoJson(layerCapabilities) {
+  static getOlLayerFromGeoJson(meta, layerCapabilities) {
     const vectorSource = new VectorSource({
       features: (new GeoJSON()).readFeatures(layerCapabilities, {
         dataProjection: 'EPSG:4326',
@@ -346,7 +346,7 @@ export class CapabilitiesUtil {
               color: '#fff',
               width: 3
             }),
-            text: feature.get('n')
+            text: feature.get(meta.ShowPropertyName)
           })
         })
       }
