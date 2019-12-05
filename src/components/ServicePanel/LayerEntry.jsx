@@ -66,6 +66,21 @@ const LayerEntry = props => {
                 })
             }
           })
+        } else if (currentNode.type && currentNode.type === 'FeatureCollection') {
+          window.olMap.on('click', function(evt){
+            const feature = window.olMap.forEachFeatureAtPixel(evt.pixel,
+              function(feature, layer) {
+                return feature;
+              });
+            if (feature) {
+                const coord = feature.getGeometry().getCoordinates();
+                var content = feature.get('n');
+
+                console.info(feature.getProperties());
+                console.info(coord);
+                console.info(content);
+            }
+        });
         }
       }
     }
