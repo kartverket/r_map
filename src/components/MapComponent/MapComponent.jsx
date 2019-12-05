@@ -123,9 +123,10 @@ export class MapComponent extends React.Component {
           CapabilitiesUtil.getGeoJson(service.url)
             .then(layers => {
               meta.Type = 'GEOJSON'
+              meta.ShowPropertyName = service.ShowPropertyName || 'id'
               if (service.addLayers.length > 0) {
                 if (layers.name === service.addLayers['0']) {
-                  let currentLayer = CapabilitiesUtil.getOlLayerFromGeoJson(layers)
+                  let currentLayer = CapabilitiesUtil.getOlLayerFromGeoJson(meta, layers)
                   window.olMap.addLayer(currentLayer)
                 }
               }
