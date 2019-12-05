@@ -322,7 +322,8 @@ export class CapabilitiesUtil {
   static getOlLayerFromGeoJson(layerCapabilities) {
     const vectorSource = new VectorSource({
       features: (new GeoJSON()).readFeatures(layerCapabilities, {
-        featureProjection: 'EPSG:3857'
+        dataProjection:'EPSG:4326',
+        featureProjection: 'EPSG:25833'
       })
     })
     return new VectorLayer({
