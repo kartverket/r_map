@@ -157,10 +157,11 @@ function (_React$Component) {
           case 'GEOJSON':
             _CapabilitiesUtil.CapabilitiesUtil.getGeoJson(service.url).then(function (layers) {
               meta.Type = 'GEOJSON';
+              meta.ShowPropertyName = service.ShowPropertyName || 'id';
 
               if (service.addLayers.length > 0) {
                 if (layers.name === service.addLayers['0']) {
-                  var currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromGeoJson(layers);
+                  var currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromGeoJson(meta, layers);
 
                   window.olMap.addLayer(currentLayer);
                 }
