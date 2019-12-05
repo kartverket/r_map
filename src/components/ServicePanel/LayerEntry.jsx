@@ -37,7 +37,7 @@ const LayerEntry = props => {
       if (props.meta.Type === 'OGC:WMS' || props.meta.Type === 'WMS' || props.meta.Type === 'WMS-tjeneste') {
         currentLayer = CapabilitiesUtil.getOlLayerFromWmsCapabilities(props.meta, currentNode);
       } else if (props.meta.Type === 'GEOJSON') {
-        currentLayer = CapabilitiesUtil.getOlLayerFromGeoJson(currentNode);
+        currentLayer = CapabilitiesUtil.getOlLayerFromGeoJson(props.meta, currentNode);
       } else if (props.meta.Type === 'OGC:WFS' || props.meta.Type === 'WFS' || props.meta.Type === 'WFS-tjeneste') {
         currentLayer = CapabilitiesUtil.getOlLayerFromWFS(props.meta, currentNode);
       }
