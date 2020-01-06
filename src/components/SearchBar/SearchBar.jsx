@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import PropTypes from 'prop-types'
 
 import { transform } from 'ol/proj'
-import Overlay from 'ol/Overlay';
+import Overlay from 'ol/Overlay'
 import queryString from "query-string"
 import setQuery from "set-query-string"
 
@@ -10,7 +10,7 @@ import { generateAdresseSokUrl, generateSearchStedsnavnUrl } from "../../Utils/n
 import "./SearchBar.scss"
 import pin from '../../../src/assets/img/pin-md-orange.png'
 
-const parser = require('fast-xml-parser');
+const parser = require('fast-xml-parser')
 
 
 const SearchResult = (props) => {
@@ -37,24 +37,24 @@ const SearchResult = (props) => {
     <div className="list-group">
       {
         props.searchResult.searchResult && props.searchResult.searchResult.adresser.map((data, idx) => {
-        showInfoMarker(constructPoint(data.representasjonspunkt))
-        return (
-          <button type="button" key={ idx } className="list-group-item list-group-item-action" onClick={ () => { centerPosition(constructPoint(data.representasjonspunkt)) } }>
-            Adresse: { data.adressetekst } , { data.kommunenavn }
-          </button>
-        )
-      }) }
+            showInfoMarker(constructPoint(data.representasjonspunkt))
+            return (
+              <button type="button" key={ idx } className="list-group-item list-group-item-action" onClick={ () => { centerPosition(constructPoint(data.representasjonspunkt)) } }>
+                Adresse: { data.adressetekst } , { data.kommunenavn }
+              </button>
+            )
+        }) }
       {
         props.searchResult.searchResultSSR && props.searchResult.searchResultSSR.sokRes.stedsnavn.map((data, idx) => {
-          showInfoMarker(constructPoint({ lon: data.aust, lat: data.nord, epsg: 'EPSG:25833' }))
-        return (
-          <button type="button" key={ idx } className="list-group-item list-group-item-action" onClick={ () => { centerPosition(constructPoint({ lon: data.aust, lat: data.nord, epsg: 'EPSG:25833' })) } }>
-            Stedsnavn: { data.stedsnavn } , { data.kommunenavn }
-          </button>
-        )
-    })
+            showInfoMarker(constructPoint({ lon: data.aust, lat: data.nord, epsg: 'EPSG:25833' }))
+            return (
+              <button type="button" key={ idx } className="list-group-item list-group-item-action" onClick={ () => { centerPosition(constructPoint({ lon: data.aust, lat: data.nord, epsg: 'EPSG:25833' })) } }>
+                Stedsnavn: { data.stedsnavn } , { data.kommunenavn }
+              </button>
+            )
+        })
       }
-  </div >
+    </div >
   )
 }
 /**
@@ -73,24 +73,25 @@ const SearchBar = props => {
       queryValues.search = searchText
       setQuery(queryValues)
       fetch(generateAdresseSokUrl(searchText))
-      .then(response => {
-        if (!response.ok) {
-          throw Error(response.statusText)
-        }
-        return response.json()
-      })
-      .then(result => { setSearchResult(result) })
-      .catch(error => { console.warn(error) })
+        .then(response => {
+          if (!response.ok) {
+            throw Error(response.statusText)
+          }
+          return response.json()
+        })
+        .then(result => { setSearchResult(result) })
+        .catch(error => { console.warn(error) })
 
-      fetch(generateSearchStedsnavnUrl(searchText,1,15))
-      .then(response => {
-        if (!response.ok) {
-          throw Error(response.statusText)
-        }
-        return response.text()
-      })
+      fetch(generateSearchStedsnavnUrl(searchText, 1, 15))
+        .then(response => {
+          if (!response.ok) {
+            throw Error(response.statusText)
+          }
+          return response.text()
+        })
         .then(result => {
           let response = parser.parse(result)
+          response.sokRes.stedsnavn = response.sokRes.stedsnavn[response.sokRes.stedsnavn.length -1] === "" ? response.sokRes.stedsnavn.slice(0, response.sokRes.stedsnavn.length - 1) : response.sokRes.stedsnavn
           response.sokRes.stedsnavn ? setSearchResultSSR(response) : setSearchResultSSR('')
         })
         .catch(error => { console.warn(error) })
@@ -108,7 +109,7 @@ const SearchBar = props => {
   return (
     <>
       <div className='input-group col col-lg-2'>
-        <input className='form-control' onChange={ onChangeBound } placeholder={ placeholder } type="text" value={ searchText } aria-describedby="button-addon1"/>
+        <input className='form-control' onChange={ onChangeBound } placeholder={ placeholder } type="text" value={ searchText } aria-describedby="button-addon1" />
       </div>
       <div className='searchResult'>
         {
