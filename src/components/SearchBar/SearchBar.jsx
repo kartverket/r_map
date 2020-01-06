@@ -91,8 +91,12 @@ const SearchBar = props => {
         })
         .then(result => {
           let response = parser.parse(result)
-          response.sokRes.stedsnavn = response.sokRes.stedsnavn[response.sokRes.stedsnavn.length -1] === "" ? response.sokRes.stedsnavn.slice(0, response.sokRes.stedsnavn.length - 1) : response.sokRes.stedsnavn
-          response.sokRes.stedsnavn ? setSearchResultSSR(response) : setSearchResultSSR('')
+          if (response.sokRes.stedsnavn) {
+            response.sokRes.stedsnavn = response.sokRes.stedsnavn[response.sokRes.stedsnavn.length -1] === "" ? response.sokRes.stedsnavn.slice(0, response.sokRes.stedsnavn.length - 1) : response.sokRes.stedsnavn
+            response.sokRes.stedsnavn ? setSearchResultSSR(response) : setSearchResultSSR('')
+          } else {
+            setSearchResultSSR(null)
+          }
         })
         .catch(error => { console.warn(error) })
     } else {
