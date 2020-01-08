@@ -10,6 +10,9 @@ import { generateAdresseSokUrl, generateSearchStedsnavnUrl } from "../../Utils/n
 import "./SearchBar.scss"
 import pin from '../../../src/assets/img/pin-md-orange.png'
 
+import Accordion from 'react-bootstrap/Accordion'
+import Card from 'react-bootstrap/Card'
+
 const parser = require('fast-xml-parser')
 
 
@@ -37,21 +40,22 @@ const SearchResult = (props) => {
     <div className="list-group">
       {
         props.searchResult.searchResult && props.searchResult.searchResult.adresser.map((data, idx) => {
-            showInfoMarker(constructPoint(data.representasjonspunkt))
-            return (
-              <button type="button" key={ idx } className="list-group-item list-group-item-action" onClick={ () => { centerPosition(constructPoint(data.representasjonspunkt)) } }>
-                Adresse: { data.adressetekst } , { data.kommunenavn }
-              </button>
-            )
-        }) }
+          showInfoMarker(constructPoint(data.representasjonspunkt))
+          return (
+            <button type="button" key={ idx } className="list-group-item list-group-item-action" onClick={ () => { centerPosition(constructPoint(data.representasjonspunkt)) } }>
+              { data.adressetekst } , { data.kommunenavn }
+            </button>
+          )
+        })
+      }
       {
         props.searchResult.searchResultSSR && props.searchResult.searchResultSSR.sokRes.stedsnavn.map((data, idx) => {
-            showInfoMarker(constructPoint({ lon: data.aust, lat: data.nord, epsg: 'EPSG:25833' }))
-            return (
-              <button type="button" key={ idx } className="list-group-item list-group-item-action" onClick={ () => { centerPosition(constructPoint({ lon: data.aust, lat: data.nord, epsg: 'EPSG:25833' })) } }>
-                Stedsnavn: { data.stedsnavn } , { data.kommunenavn }
-              </button>
-            )
+          showInfoMarker(constructPoint({ lon: data.aust, lat: data.nord, epsg: 'EPSG:25833' }))
+          return (
+            <button type="button" key={ idx } className="list-group-item list-group-item-action" onClick={ () => { centerPosition(constructPoint({ lon: data.aust, lat: data.nord, epsg: 'EPSG:25833' })) } }>
+              { data.stedsnavn } , { data.kommunenavn }
+            </button>
+          )
         })
       }
     </div >
@@ -92,7 +96,7 @@ const SearchBar = props => {
         .then(result => {
           let response = parser.parse(result)
           if (response.sokRes.stedsnavn) {
-            response.sokRes.stedsnavn = response.sokRes.stedsnavn[response.sokRes.stedsnavn.length -1] === "" ? response.sokRes.stedsnavn.slice(0, response.sokRes.stedsnavn.length - 1) : response.sokRes.stedsnavn
+            response.sokRes.stedsnavn = response.sokRes.stedsnavn[response.sokRes.stedsnavn.length - 1] === "" ? response.sokRes.stedsnavn.slice(0, response.sokRes.stedsnavn.length - 1) : response.sokRes.stedsnavn
             response.sokRes.stedsnavn ? setSearchResultSSR(response) : setSearchResultSSR('')
           } else {
             setSearchResultSSR(null)
@@ -117,7 +121,22 @@ const SearchBar = props => {
       </div>
       <div className='searchResult'>
         {
-          searchResult && <SearchResult searchResult={ { searchResult, searchResultSSR } }></SearchResult>
+          searchResult && (
+            <Accordion defaultActiveKey="0">
+              <Card>
+                <Accordion.Toggle as={ Card.Header } eventKey="0">ADRESSE</Accordion.Toggle>
+                <Accordion.Collapse eventKey="0">
+                  <SearchResult searchResult={ { searchResult } }></SearchResult>
+                </Accordion.Collapse>
+              </Card>
+              <Card>
+                <Accordion.Toggle as={ Card.Header } eventKey="1">STEDSNAVN</Accordion.Toggle>
+                <Accordion.Collapse eventKey="1">
+                  <SearchResult searchResult={ { searchResultSSR } }></SearchResult>
+                </Accordion.Collapse>
+              </Card>
+            </Accordion>
+          )
         }
       </div>
     </>
