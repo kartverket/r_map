@@ -699,7 +699,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                     layer = new VectorLayer({
                         source: new VectorSource({
                             format: new GeoJSONFormat({
-                                defaultDataProjection: isySubLayer.coordinate_system
+                              dataProjection: isySubLayer.coordinate_system
                             }),
                             url: isySubLayer.url
 
