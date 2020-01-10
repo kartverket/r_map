@@ -11,7 +11,9 @@ var _fastXmlParser = _interopRequireDefault(require("fast-xml-parser"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//import proj4 from "proj4";
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 /**
  * @ngdoc method
@@ -123,7 +125,7 @@ var createOlWMSFromCap = function createOlWMSFromCap(map, getCapLayer, project) 
     if (Array.isArray(getCapLayer.MetadataURL)) {
         metadata = getCapLayer.MetadataURL[0].OnlineResource;
     }
-          layer = createOlWMS(map, layerParam, {
+        layer = createOlWMS(map, layerParam, {
           url: getCapLayer.url,
           label: getCapLayer.title,
           attribution: attribution,
@@ -264,34 +266,44 @@ var parseCapabilities = function parseCapabilities(xml) {
   });
 };
 
-var getWMSCapabilities = function getWMSCapabilities(url) {
-  var newUrl;
-  return regeneratorRuntime.async(function getWMSCapabilities$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          if (url) {
-            newUrl = mergeDefaultParams(url, {
-              service: "WMS",
-              request: "GetCapabilities"
-            });
-            fetch(newUrl).then(function (response) {
-              return Promise.resolve(response.text());
-            }).then(function (text) {
-              var resultText = parseWmsCapabilities(text);
-              return resultText;
-            });
-          } else {
-            console.log("No wms parameter given");
-          }
+var getWMSCapabilities =
+/*#__PURE__*/
+function () {
+  var _ref = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee(url) {
+    var newUrl;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            if (url) {
+              newUrl = mergeDefaultParams(url, {
+                service: "WMS",
+                request: "GetCapabilities"
+              });
+              fetch(newUrl).then(function (response) {
+                return Promise.resolve(response.text());
+              }).then(function (text) {
+                var resultText = parseWmsCapabilities(text);
+                return resultText;
+              });
+            } else {
+              console.log("No wms parameter given");
+            }
 
-        case 1:
-        case "end":
-          return _context.stop();
+          case 1:
+          case "end":
+            return _context.stop();
+        }
       }
-    }
-  });
-};
+    }, _callee);
+  }));
+
+  return function getWMSCapabilities(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
 /*
 export const getLayerExtentFromGetCap = (map, getCapLayer) => {
     var extent = null;

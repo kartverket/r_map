@@ -13,7 +13,7 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _CapabilitiesUtil = require("../../MapUtil/CapabilitiesUtil");
 
-require("./ServicePanel.scss");
+var _ServicePanelModule = _interopRequireDefault(require("./ServicePanel.module.scss"));
 
 var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
@@ -106,7 +106,7 @@ var ServicePanel = function ServicePanel(props) {
   var renderRemoveButton = function renderRemoveButton() {
     if (props.removeMapItem) {
       return _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-        className: "remove-inline",
+        className: _ServicePanelModule.default.removeInline,
         onClick: _this.props.removeMapItem,
         icon: ['fas', 'times']
       });
@@ -119,7 +119,7 @@ var ServicePanel = function ServicePanel(props) {
     if (capabilities && capabilities.Capability) {
       return capabilities.Capability.Layer.Layer.map(function (capaLayer, i) {
         return _react.default.createElement("div", {
-          className: "facet",
+          className: _ServicePanelModule.default.facet,
           key: i
         }, _react.default.createElement(_LayerEntry.default, {
           layer: capaLayer,
@@ -130,7 +130,7 @@ var ServicePanel = function ServicePanel(props) {
     } else if (capabilities && capabilities.value) {
       return capabilities.value.featureTypeList.featureType.map(function (capaLayer, i) {
         return _react.default.createElement("div", {
-          className: "facet",
+          className: _ServicePanelModule.default.facet,
           key: i
         }, _react.default.createElement(_LayerEntry.default, {
           layer: capaLayer,
@@ -140,7 +140,7 @@ var ServicePanel = function ServicePanel(props) {
       });
     } else if (capabilities && capabilities.features) {
       return _react.default.createElement("div", {
-        className: "facet"
+        className: _ServicePanelModule.default.facet
       }, _react.default.createElement(_LayerEntry.default, {
         layer: capabilities,
         meta: meta
@@ -155,13 +155,13 @@ var ServicePanel = function ServicePanel(props) {
     onClick: function onClick() {
       return setState(!expanded);
     },
-    className: 'expand-layers-btn'
+    className: _ServicePanelModule.default.expandLayersBtn
   }, _react.default.createElement("span", {
-    className: 'ellipsis-toggle'
+    className: _ServicePanelModule.default.ellipsisToggle
   }, props.services.Title), _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     icon: expanded ? ['fas', 'angle-up'] : ['fas', 'angle-down']
   })), renderRemoveButton(), _react.default.createElement("div", {
-    className: expanded ? 'selectedlayers open' : 'selectedlayers'
+    className: expanded ? "".concat(_ServicePanelModule.default.selectedlayers, " ").concat(_ServicePanelModule.default.open) : _ServicePanelModule.default.selectedlayers
   }, renderCapabilites()));
 };
 
