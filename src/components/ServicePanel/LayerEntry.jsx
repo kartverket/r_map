@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import style from './LayerEntry.scss'
+import style from './LayerEntry.module.scss'
 import InlineLegend from '../Legend/InlineLegend';
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
 
@@ -118,9 +118,9 @@ const LayerEntry = props => {
         )}
       {abstractTextSpan()}
       {info ? (
-        <div class="info">
-          <FontAwesomeIcon className="infoIcon" icon={["far", "info"]} />
-          <span class="infoText">{info}</span>
+        <div class={style.info}>
+          <FontAwesomeIcon className={style.infoIcon} icon={["far", "info"]} />
+          <span class={style.infoText}>{info}</span>
         </div>
       ) : null}
       {layer.Name ? (

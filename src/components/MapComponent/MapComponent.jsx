@@ -7,7 +7,7 @@ import { map, eventHandler, mapConfig } from "../../MapUtil/maplibHelper";
 import queryString from "query-string";
 import setQuery from "set-query-string";
 
-import style from "./MapComponent.scss";
+import style from "./MapComponent.module.scss";
 
 /**
  * @class The Map Component

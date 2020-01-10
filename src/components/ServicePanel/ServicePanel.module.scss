@@ -1,4 +1,4 @@
-.remove-inline {
+:local(.removeInline) {
     font-size: 1.5em;
     position: relative;
     top: 2px;
@@ -7,10 +7,7 @@
         cursor: pointer;
     }
 }
-.node-label {
-    padding-left: 5px;
-}
-.selectedlayers {
+:local(.selectedlayers) {
     max-height: 0;
     overflow: hidden;
     transition: .3s all ease-in-out;
@@ -19,11 +16,11 @@
         padding: 2px 0;
         > label {padding: 0 4px;}
     }
-    &.open {
+    &:local(.open) {
         max-height: 80000px;
     }
 }
-.ellipsis-toggle {
+:local(.ellipsisToggle) {
     width: 90%;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -34,7 +31,7 @@
     font-weight: 400;
     white-space: nowrap;
 }
-.expand-layers-btn {
+:local(.expandLayersBtn) {
     display: inline-block;
     width: 90%;
     margin-bottom: 10px;
@@ -49,7 +46,7 @@
         left: 6px;
     }
 }
-.facet {
+:local(.facet) {
     margin: 2px 0 10px 0;
     > input[type="checkbox"] {
         overflow: hidden;
@@ -66,22 +63,4 @@
         max-width: 75%;
         overflow: hidden;
     }
-}
-.facet-sub {
-  margin: 0 0 0 15px;
-  > input[type="checkbox"] {
-      overflow: hidden;
-      visibility: hidden;
-      display: none;
-  }
-  label > svg {
-      margin: 0 5px;
-      font-size: 1.1em;
-  }
-  label > span {
-      display: inline-block;
-      text-overflow: ellipsis;
-      max-width: 75%;
-      overflow: hidden;
-  }
 }

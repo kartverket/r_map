@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { map, eventHandler } from "../../MapUtil/maplibHelper";
 import { ToggleButton, ToggleButtonGroup } from "react-bootstrap";
-import "./BackgroundChooser.scss";
+import style from "./BackgroundChooser.module.scss";
 /**
  * Panel containing a list of backgroundLayers. To be used in MapContainer
  */
@@ -17,22 +17,26 @@ const BackgroundChooser = () => {
     setBaseLayer(baseLayer);
   };
 
-  const renderBaseLayers = baseLayers => {
-    return baseLayers.map((baseLayer, index) => (
-      <ToggleButton key={index} className={"icon_" + baseLayer.id} value={baseLayer}>
+  const renderBaseLayers = (baseLayers, selectedBaseLayer) => {
+    return baseLayers.map((baseLayer, index) => {
+      const iconClass = style[`icon_${baseLayer.id}`];
+      const activeClass = baseLayer.id === selectedBaseLayer.id ? style.active : '';
+      return (
+      <ToggleButton key={index} className={`${iconClass} ${activeClass}`} value={baseLayer}>
         <span> {baseLayer.name} </span>
       </ToggleButton>
-    ));
+    );
+    });
   };
   return (
     <ToggleButtonGroup
       type="radio"
       name="Backgound"
-      className="backgroundChooser"
+      className={style.backgroundChooser}
       onChange={setAsBaseLayer}
       value={baseLayer}
     >
-      {renderBaseLayers(baseLayers)}
+      {renderBaseLayers(baseLayers, baseLayer)}
     </ToggleButtonGroup>
   );
 };

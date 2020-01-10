@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from 'prop-types';
 import Legend from "./Legend";
-import style from "./InlineLegend.scss";
+import style from "./InlineLegend.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 /**
  * Legend to be used in the ServicePanel
