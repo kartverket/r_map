@@ -204,7 +204,7 @@ var LayerEntry = function LayerEntry(props) {
     }
   }))) : "", props.children, layer.Layer ? layer.Layer.map(function (subLayer, isub) {
     return _react.default.createElement("div", {
-      className: "facet-sub",
+      className: _LayerEntryModule.default.facetSub,
       key: isub
     }, _react.default.createElement(LayerEntry, {
       layer: subLayer,
