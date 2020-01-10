@@ -12,7 +12,8 @@ import pin from '../../../src/assets/img/pin-md-orange.png'
 
 import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import style from "./SearchBar.scss"
 const parser = require('fast-xml-parser')
 
 
@@ -114,12 +115,19 @@ const SearchBar = props => {
     setSearchText(event.target.value)
   }
 
+  const resetSearch = () => {
+    setSearchText("")
+  }
+
   return (
     <>
       <div className='input-group col col-lg-2'>
         <input className='form-control' onChange={ onChangeBound } placeholder={ placeholder } type="text" value={ searchText } aria-describedby="button-addon1" />
+        <div className='input-group-append'>
+          <button class="btn btn-outline-secondary" type="button" id="button-addon1" onClick={ () => resetSearch() }>{ searchText ? <FontAwesomeIcon icon={ "times" } /> : ''}</button>
+        </div>
       </div>
-      <div className='searchResult'>
+      <div className='searchResult col col-lg-2'>
         {
           searchResult && (
             <Accordion defaultActiveKey="0">
