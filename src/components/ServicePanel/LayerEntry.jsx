@@ -154,7 +154,7 @@ const LayerEntry = props => {
           ""
         )}
       {props.children}
-      {layer.Layer ? (layer.Layer.map((subLayer, isub) => (<div className="facet-sub" key={isub}><LayerEntry layer={subLayer} meta={props.meta} key={isub} /></div>))) : ('')}
+      {layer.Layer ? (layer.Layer.map((subLayer, isub) => (<div className={style.facetSub} key={isub}><LayerEntry layer={subLayer} meta={props.meta} key={isub} /></div>))) : ('')}
     </>
   );
 };
