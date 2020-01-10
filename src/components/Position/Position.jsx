@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import style from './Position.module.scss';
-import { format } from 'ol/coordinate.js';
-import OlMousePositionControl from 'ol/control/MousePosition';
+import React, { useState, useEffect } from "react"
+import style from './Position.module.scss'
+import { format } from 'ol/coordinate.js'
+import OlMousePositionControl from 'ol/control/MousePosition'
 
 const Position = props => {
-  const [projection, setProjectionString] = useState();
+  const [projection, setProjectionString] = useState()
 
   useEffect(() => {
     createOlMousePositionControl(window.olMap)
@@ -36,11 +36,11 @@ const Position = props => {
   }
 
   return (
-    <div className={style.mouseposition}>
-      <span>{(projection)}</span>
+    <div className={ style.mouseposition }>
+      <span>{ (projection) }</span>
       <div id="mouse-position" />
     </div>
   )
 }
 
-export default Position;
+export default Position

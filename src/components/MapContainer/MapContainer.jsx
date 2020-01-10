@@ -1,19 +1,20 @@
-import React from "react";
-import { map, eventHandler, mapConfig } from "../../MapUtil/maplibHelper";
-import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
-import PropTypes from "prop-types";
-import queryString from "query-string";
-import setQuery from "set-query-string";
-import BackgroundChooser from "../BackgroundChooser/BackgroundChooser";
-import ServicePanel from "../ServicePanel/ServicePanel";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import style from "./MapContainer.module.scss";
+import React from "react"
+import { map, mapConfig } from "../../MapUtil/maplibHelper"
+import PropTypes from "prop-types"
+import queryString from "query-string"
+import setQuery from "set-query-string"
+import BackgroundChooser from "../BackgroundChooser/BackgroundChooser"
+import ServicePanel from "../ServicePanel/ServicePanel"
+import SearchBar from "../SearchBar/SearchBar"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import style from "./MapContainer.module.scss"
 import Position from '../Position/Position'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
-import Accordion from 'react-bootstrap/Accordion'
-import Card from 'react-bootstrap/Card'
+import { Messaging } from '../../Utils/communication'
+
+import 'ol/ol.css'
+
 
 const ServiceListItem = props => (
   <ServicePanel services={ props.listItem } removeMapItem={ props.removeMapItem } draggable />
@@ -102,6 +103,7 @@ export default class MapContainer extends React.Component {
       center: [lon, lat],
       zoom: zoom
     })
+
   }
 
   /**
@@ -111,8 +113,25 @@ export default class MapContainer extends React.Component {
     window.olMap = map.Init("map", this.newMapConfig)
     map.AddZoom()
     map.AddScaleLine()
-    eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState)
+    //eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState)
     this.props = { map: map }
+    window.olMap.on('click', function (evt) {
+      // Handling geojson features on click
+      const features = window.olMap.getFeaturesAtPixel(evt.pixel, (feature, layer) => feature)
+      if (features) {
+        features.forEach(feature => {
+          const coord = feature.getGeometry().getCoordinates()
+          let content = feature.get('n')
+          let message = {
+            cmd: 'featureSelected',
+            featureId: feature.getId(),
+            properties: content,
+            coordinates: coord
+          }
+          Messaging.postMessage(JSON.stringify(message))
+        })
+      }
+    })
   }
 
   /**
@@ -143,6 +162,11 @@ export default class MapContainer extends React.Component {
       <ServiceListItem listItem={ listItem } removeMapItem={ this.props.removeMapItem ? this.props.removeMapItem : null } key={ i } map={ map } />
     ))
   }
+
+  renderInfo() {
+    return <div>test</div>
+  }
+
   renderLayerButton() {
     return this.props.services && this.props.services.length > 0
   }
@@ -163,18 +187,29 @@ export default class MapContainer extends React.Component {
   render() {
     let map = this.props.map
     return (
-      <div id="MapContainer" className={ style.mapContainer }>
+      <div id="MapContainer" className={ `${style.mapContainer}` }>
         <BackgroundChooser />
         <div>
-          {this.renderLayerButton() ? (
-            <div className={`${style.container} ${this.state.isExpanded ? style.closed : style.open}`}>
-              <FontAwesomeIcon onClick={() => this.toogleLayers()} className={style.toggleBtn} icon={this.state.isExpanded ? ["far", "layer-group"] : "times"} />
-              <div>{this.renderServiceList()}</div>
+          { this.renderLayerButton() ? (
+            <div className={ `${style.container} ${this.state.isExpanded ? style.closed : style.open}` }>
+              <Tabs defaultActiveKey="search" id="tab">
+                <Tab eventKey="search" title="Søk" >
+                  <SearchBar />
+                </Tab>
+                <Tab eventKey="tools" title="Lag-Verktøy">
+                  <div id="ServiceList">{ this.renderServiceList() }</div>
+                </Tab>
+                {
+                  <Tab eventKey="info" title="Info">
+                    <div id="InfoList">{ this.renderInfo() }</div>
+                  </Tab>
+                }
+              </Tabs>
+              <FontAwesomeIcon onClick={ () => this.toogleLayers() } className={ style.toggleBtn } icon={ this.state.isExpanded ? ["far", "layer-group"] : "times" } />
             </div>
           ) : (
               <div className={ style.link } onClick={ () => this.toogleMap() }>Gå til kartkatalogen</div>
             ) }
-
           <div className={ style.closeMap }>
             <FontAwesomeIcon title="Lukk kartet" onClick={ () => this.toogleMap() } className={ style.toggleBtn } icon={ "times" } />
             <span className={ style.closeButtonLabel }>Lukk kartet</span>

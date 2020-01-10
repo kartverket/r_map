@@ -31,9 +31,9 @@ var _Tabs = _interopRequireDefault(require("react-bootstrap/Tabs"));
 
 var _Tab = _interopRequireDefault(require("react-bootstrap/Tab"));
 
-var _Accordion = _interopRequireDefault(require("react-bootstrap/Accordion"));
+var _communication = require("../../Utils/communication");
 
-var _Card = _interopRequireDefault(require("react-bootstrap/Card"));
+require("ol/ol.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -149,13 +149,33 @@ function (_React$Component) {
 
       _maplibHelper.map.AddZoom();
 
-      _maplibHelper.map.AddScaleLine();
+      _maplibHelper.map.AddScaleLine(); //eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState)
 
-      _maplibHelper.eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState);
 
       this.props = {
         map: _maplibHelper.map
       };
+      window.olMap.on('click', function (evt) {
+        // Handling geojson features on click
+        var features = window.olMap.getFeaturesAtPixel(evt.pixel, function (feature, layer) {
+          return feature;
+        });
+
+        if (features) {
+          features.forEach(function (feature) {
+            var coord = feature.getGeometry().getCoordinates();
+            var content = feature.get('n');
+            var message = {
+              cmd: 'featureSelected',
+              featureId: feature.getId(),
+              properties: content,
+              coordinates: coord
+            };
+
+            _communication.Messaging.postMessage(JSON.stringify(message));
+          });
+        }
+      });
     }
     /**
      *
@@ -186,6 +206,11 @@ function (_React$Component) {
       });
     }
   }, {
+    key: "renderInfo",
+    value: function renderInfo() {
+      return _react.default.createElement("div", null, "test");
+    }
+  }, {
     key: "renderLayerButton",
     value: function renderLayerButton() {
       return this.props.services && this.props.services.length > 0;
@@ -214,45 +239,33 @@ function (_React$Component) {
       var map = this.props.map;
       return _react.default.createElement("div", {
         id: "MapContainer",
-        className: _MapContainer.default.mapContainer
+        className: "".concat(_MapContainerModule.default.mapContainer)
       }, _react.default.createElement(_BackgroundChooser.default, null), _react.default.createElement("div", null, this.renderLayerButton() ? _react.default.createElement("div", {
-        className: this.state.isExpanded ? _MapContainer.default.container + " closed" : _MapContainer.default.container + " open"
+        className: "".concat(_MapContainerModule.default.container, " ").concat(this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open)
       }, _react.default.createElement(_Tabs.default, {
         defaultActiveKey: "search",
         id: "tab"
       }, _react.default.createElement(_Tab.default, {
         eventKey: "search",
         title: "S\xF8k"
-      }, _react.default.createElement(_Accordion.default, {
-        defaultActiveKey: "0"
-      }, _react.default.createElement(_Card.default, null, _react.default.createElement(_Accordion.default.Toggle, {
-        as: _Card.default.Header,
-        eventKey: "0"
-      }, "S\xD8K"), _react.default.createElement(_Accordion.default.Collapse, {
-        eventKey: "0"
-      }, _react.default.createElement(_SearchBar.default, {
-        searchText: "This is initial search text"
-      }))), _react.default.createElement(_Card.default, null, _react.default.createElement(_Accordion.default.Toggle, {
-        as: _Card.default.Header,
-        eventKey: "1"
-      }, "Lagene"), _react.default.createElement(_Accordion.default.Collapse, {
-        eventKey: "1"
+      }, _react.default.createElement(_SearchBar.default, null)), _react.default.createElement(_Tab.default, {
+        eventKey: "tools",
+        title: "Lag-Verkt\xF8y"
       }, _react.default.createElement("div", {
         id: "ServiceList"
-      }, this.renderServiceList()))))), _react.default.createElement(_Tab.default, {
-        eventKey: "tools",
-        title: "Verkt\xF8y"
-      }, _react.default.createElement("div", null, "tools")), _react.default.createElement(_Tab.default, {
+      }, this.renderServiceList())), _react.default.createElement(_Tab.default, {
         eventKey: "info",
         title: "Info"
-      }, _react.default.createElement("div", null, "FAQ"))), _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+      }, _react.default.createElement("div", {
+        id: "InfoList"
+      }, this.renderInfo()))), _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
         onClick: function onClick() {
           return _this3.toogleLayers();
         },
         className: _MapContainerModule.default.toggleBtn,
         icon: this.state.isExpanded ? ["far", "layer-group"] : "times"
       })) : _react.default.createElement("div", {
-        className: _MapContainer.default.link,
+        className: _MapContainerModule.default.link,
         onClick: function onClick() {
           return _this3.toogleMap();
         }

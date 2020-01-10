@@ -21,9 +21,15 @@ var _setQueryString = _interopRequireDefault(require("set-query-string"));
 
 var _n3api = require("../../Utils/n3api");
 
-require("./SearchBar.scss");
+var _SearchBar = _interopRequireDefault(require("./SearchBar.scss"));
 
 var _pinMdOrange = _interopRequireDefault(require("../../../src/assets/img/pin-md-orange.png"));
+
+var _Accordion = _interopRequireDefault(require("react-bootstrap/Accordion"));
+
+var _Card = _interopRequireDefault(require("react-bootstrap/Card"));
+
+var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -76,7 +82,7 @@ var SearchResult = function SearchResult(props) {
       onClick: function onClick() {
         centerPosition(constructPoint(data.representasjonspunkt));
       }
-    }, "Adresse: ", data.adressetekst, " , ", data.kommunenavn);
+    }, data.adressetekst, " , ", data.kommunenavn);
   }), props.searchResult.searchResultSSR && props.searchResult.searchResultSSR.sokRes.stedsnavn.map(function (data, idx) {
     showInfoMarker(constructPoint({
       lon: data.aust,
@@ -94,7 +100,7 @@ var SearchResult = function SearchResult(props) {
           epsg: 'EPSG:25833'
         }));
       }
-    }, "Stedsnavn: ", data.stedsnavn, " , ", data.kommunenavn);
+    }, data.stedsnavn, " , ", data.kommunenavn);
   }));
 };
 /**
@@ -145,7 +151,13 @@ var SearchBar = function SearchBar(props) {
         return response.text();
       }).then(function (result) {
         var response = parser.parse(result);
-        response.sokRes.stedsnavn ? setSearchResultSSR(response) : setSearchResultSSR('');
+
+        if (response.sokRes.stedsnavn) {
+          response.sokRes.stedsnavn = response.sokRes.stedsnavn[response.sokRes.stedsnavn.length - 1] === "" ? response.sokRes.stedsnavn.slice(0, response.sokRes.stedsnavn.length - 1) : response.sokRes.stedsnavn;
+          response.sokRes.stedsnavn ? setSearchResultSSR(response) : setSearchResultSSR('');
+        } else {
+          setSearchResultSSR(null);
+        }
       }).catch(function (error) {
         console.warn(error);
       });
@@ -160,6 +172,10 @@ var SearchBar = function SearchBar(props) {
     setSearchText(event.target.value);
   };
 
+  var resetSearch = function resetSearch() {
+    setSearchText("");
+  };
+
   return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
     className: "input-group col col-lg-2"
   }, _react.default.createElement("input", {
@@ -169,14 +185,40 @@ var SearchBar = function SearchBar(props) {
     type: "text",
     value: searchText,
     "aria-describedby": "button-addon1"
-  })), _react.default.createElement("div", {
-    className: "searchResult"
-  }, searchResult && _react.default.createElement(SearchResult, {
+  }), _react.default.createElement("div", {
+    className: "input-group-append"
+  }, _react.default.createElement("button", {
+    className: "btn btn-outline-secondary",
+    type: "button",
+    id: "button-addon1",
+    onClick: function onClick() {
+      return resetSearch();
+    }
+  }, searchText ? _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+    icon: "times"
+  }) : ''))), _react.default.createElement("div", {
+    className: "searchResult col col-lg-2"
+  }, searchResult && _react.default.createElement(_Accordion.default, {
+    defaultActiveKey: "0"
+  }, _react.default.createElement(_Card.default, null, _react.default.createElement(_Accordion.default.Toggle, {
+    as: _Card.default.Header,
+    eventKey: "0"
+  }, "ADRESSE"), _react.default.createElement(_Accordion.default.Collapse, {
+    eventKey: "0"
+  }, _react.default.createElement(SearchResult, {
     searchResult: {
-      searchResult: searchResult,
+      searchResult: searchResult
+    }
+  }))), _react.default.createElement(_Card.default, null, _react.default.createElement(_Accordion.default.Toggle, {
+    as: _Card.default.Header,
+    eventKey: "1"
+  }, "STEDSNAVN"), _react.default.createElement(_Accordion.default.Collapse, {
+    eventKey: "1"
+  }, _react.default.createElement(SearchResult, {
+    searchResult: {
       searchResultSSR: searchResultSSR
     }
-  })));
+  }))))));
 };
 
 SearchBar.propTypes = {
@@ -190,7 +232,7 @@ SearchBar.propTypes = {
 SearchBar.defaultProps = {
   classNames: '',
   searchText: '',
-  placeholder: 'Search text',
+  placeholder: 'Søk etter steder eller adresser',
   onChange: null,
   onEnter: null,
   onSearchClick: null

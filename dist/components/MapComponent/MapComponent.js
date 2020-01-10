@@ -17,6 +17,8 @@ var _queryString = _interopRequireDefault(require("query-string"));
 
 var _setQueryString = _interopRequireDefault(require("set-query-string"));
 
+var _communication = require("../../Utils/communication");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -39,10 +41,6 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-/**
- * @class The Map Component
- * @extends React.Component
- */
 var MapComponent =
 /*#__PURE__*/
 function (_React$Component) {
@@ -114,6 +112,24 @@ function (_React$Component) {
         map: _maplibHelper.map
       });
       this.addWMS();
+      window.olMap.on('click', function (evt) {
+        var feature = window.olMap.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+          return feature;
+        });
+
+        if (feature) {
+          var coord = feature.getGeometry().getCoordinates();
+          var content = feature.get('n');
+          var message = {
+            cmd: 'featureSelected',
+            featureId: feature.getId(),
+            properties: content,
+            coordinates: coord
+          };
+
+          _communication.Messaging.postMessage(JSON.stringify(message));
+        }
+      });
     }
   }, {
     key: "addWMS",
@@ -180,7 +196,7 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       return _react.default.createElement("div", {
-        id: "map",
+        id: "MapComponent",
         style: {
           position: "relative",
           width: "100%",

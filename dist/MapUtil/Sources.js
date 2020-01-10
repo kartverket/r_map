@@ -432,7 +432,7 @@ var Vector = function Vector(isySubLayer) {
     case _Domain.FORMATS.geoJson:
       source = new _source.Vector({
         format: new _format.GeoJSON({
-          defaultDataProjection: isySubLayer.coordinate_system
+          dataProjection: isySubLayer.coordinate_system
         }),
         url: isySubLayer.url
       });

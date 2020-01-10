@@ -2,22 +2,45 @@ import React, { Component } from 'react';
 import MapContainer from './components/MapContainer/MapContainer';
 
 const TEST_DATA = [
-  /*
   {
     'Uuid': '8c2c434b-07f7-4ebc-9bc6-9c15cdd75c4c',
     'Title': 'Fastmerker & Basestajoner WMS',
     'DistributionProtocol': 'OGC:WMS',
     'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.fastmerker2?request=GetCapabilities&service=WMS',
     addLayers: ['Niv_fastmerker','Landsnettpunkt']
-  },*/
-
+  },
   {
-    'Uuid': '8045628b-230a-4ba4-a6e0-xxxxx',
     'Title': 'Abas',
     'DistributionProtocol': 'OGC:WMS',
-    'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.adm_enheter?request=GetCapabilities&service=WMS',
+    'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.adm_enheter2?request=GetCapabilities&service=WMS'
+  },
+  {
+    'Title': 'Dybdedata_dekning_dtm50_5',
+    'DistributionProtocol': 'GEOJSON',
+    'ShowPropertyName': 'n',
+    'url': 'https://norgeskart.no/json/dekning/sjo/celler/dtm50_5.geojson',
+    addLayers: ['dcells_05m']
+  },
+  {
+    'Title': 'Ruter_entinelSkyfritt2018Uint16',
+    'DistributionProtocol': 'GEOJSON',
+    'ShowPropertyName': 'n',
+    'url': 'https://norgeskart.no/json/tema/Ruter_entinelSkyfritt2018Uint16.geojson',
+    addLayers: ['Ruteinndeling_SatellittdataSentinelSkyfritt2018Uint16']
+  }
+  /*
+  {
+    'Title': 'ssr2',
+    'DistributionProtocol': 'OGC:WMS',
+    'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.ssr2?request=GetCapabilities&service=WMS'
+  },
+  {
+    'Uuid': '8045628b-230a-4ba4-a6e0-xxxxx',
+    'Title': 'fisk',
+    'DistributionProtocol': 'OGC:WMS',
+    'GetCapabilitiesUrl': 'https://wms.geonorge.no/skwms1/wms.nib-prosjekter?request=GetCapabilities&service=WMS',
     addLayers: []
-  },/*
+  },
   {
     'Title': 'SFKB-Transakjsoner',
     'DistributionProtocol': 'OGC:WMS',
@@ -83,3 +106,4 @@ export default class App extends Component {
     );
   }
 }
+

@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState } from "react"
+import PropTypes from "prop-types"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import style from './LayerEntry.module.scss'
-import InlineLegend from '../Legend/InlineLegend';
-import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
+import InlineLegend from '../Legend/InlineLegend'
+import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 
+import { Messaging } from '../../Utils/communication'
 
 const LayerEntry = props => {
   const [options, toggleOptions] = useState(false)
@@ -32,13 +33,13 @@ const LayerEntry = props => {
   const onSelectionChange = currentNode => {
     let isNewLayer = true
     if (layer.Name) {
-      let currentLayer;
+      let currentLayer
       if (props.meta.Type === 'OGC:WMS' || props.meta.Type === 'WMS' || props.meta.Type === 'WMS-tjeneste') {
-        currentLayer = CapabilitiesUtil.getOlLayerFromWmsCapabilities(props.meta, currentNode);
+        currentLayer = CapabilitiesUtil.getOlLayerFromWmsCapabilities(props.meta, currentNode)
       } else if (props.meta.Type === 'GEOJSON') {
-        currentLayer = CapabilitiesUtil.getOlLayerFromGeoJson(props.meta, currentNode);
+        currentLayer = CapabilitiesUtil.getOlLayerFromGeoJson(props.meta, currentNode)
       } else if (props.meta.Type === 'OGC:WFS' || props.meta.Type === 'WFS' || props.meta.Type === 'WFS-tjeneste') {
-        currentLayer = CapabilitiesUtil.getOlLayerFromWFS(props.meta, currentNode);
+        currentLayer = CapabilitiesUtil.getOlLayerFromWFS(props.meta, currentNode)
       }
       setLayer(currentLayer)
 
@@ -61,26 +62,45 @@ const LayerEntry = props => {
               fetch(url)
                 .then((response) => response.text())
                 .then((data) => {
+                  if (data.includes('Layer')) {
+                    let featureInfo = data.split("\n\n")
+                    featureInfo.shift()
+                    data = featureInfo.map((layer) => {
+                      let r_layer = {}
+                      let subf = layer.split(/(Layer[^\r\n]*)/)
+                      subf.shift()
+                      let layerName = subf.splice(0, 1)[0].split('Layer ')[1].replace(/'/g, '')
+                      r_layer[layerName] = subf.map((f) => {
+                        let feature = f.split(/(Feature[^\r\n]*)/)
+                        let tmp_feature = {}
+                        feature.shift()
+                        let faetureId = feature.splice(0, 1)[0].split('Feature ')[1].replace(/:/g, '').trim()
+                        feature = feature.map((item) => {
+                          item = item.trim()
+                          item = item.replace(/=/g, ':').split('\n').map((item) => {
+                            let obj = {}
+                            let [key, value] = item.trim().split(' :')
+                            obj[key] = value.replace(/'/g, '').trim()
+                            return obj
+                          })
+                          return { ...item }
+                        })
+                        tmp_feature[faetureId] = feature.flat()
+                        return tmp_feature
+                      })
+                      return r_layer
+                    })
+                    console.log({ getFeauteInfo: data })
+                  }
                   //setInfo(data) /** TODO: decide where to place the info and design is needed, check what info_format should be used */
-                  console.log(data)
+                  let message = {
+                    cmd: 'featureSelected',
+                    properties: data,
+                  }
+                  Messaging.postMessage(JSON.stringify(message))
                 })
             }
           })
-        } else if (currentNode.type && currentNode.type === 'FeatureCollection') {
-          window.olMap.on('click', function(evt){
-            const feature = window.olMap.forEachFeatureAtPixel(evt.pixel,
-              function(feature, layer) {
-                return feature;
-              });
-            if (feature) {
-                const coord = feature.getGeometry().getCoordinates();
-                var content = feature.get('n');
-
-                console.info(feature.getProperties());
-                console.info(coord);
-                console.info(content);
-            }
-        });
         }
       }
     }
@@ -89,7 +109,7 @@ const LayerEntry = props => {
   const setOpacity = value => {
     setTransparency(value)
     if (olLayer) {
-      olLayer.setOpacity(Math.min(transparency / 100, 1));
+      olLayer.setOpacity(Math.min(transparency / 100, 1))
     }
   }
 
@@ -114,13 +134,13 @@ const LayerEntry = props => {
           </label>
         </>
       ) : (
-          <label onClick={() => onSelectionChange(layer)} htmlFor={layer.Title}> </label>
-        )}
-      {abstractTextSpan()}
-      {info ? (
-        <div class={style.info}>
-          <FontAwesomeIcon className={style.infoIcon} icon={["far", "info"]} />
-          <span class={style.infoText}>{info}</span>
+          <label onClick={ () => onSelectionChange(layer) } htmlFor={ layer.Title }> </label>
+        ) }
+      { abstractTextSpan() }
+      { info ? (
+        <div class={ style.info }>
+          <FontAwesomeIcon className={ style.infoIcon } icon={ ["far", "info"] } />
+          <span class={ style.infoText }>{ info }</span>
         </div>
       ) : null }
       { layer.Name ? (
@@ -154,14 +174,14 @@ const LayerEntry = props => {
           ""
         ) }
       { props.children }
-      { layer.Layer ? (layer.Layer.map((subLayer, isub) => (<div className="facet-sub" key={ isub }><LayerEntry layer={ subLayer } meta={ props.meta } key={ isub } /></div>))) : ('') }
+      { layer.Layer ? (layer.Layer.map((subLayer, isub) => (<div className={ style.facetSub } key={ isub }><LayerEntry layer={ subLayer } meta={ props.meta } key={ isub } /></div>))) : ('') }
     </>
-  );
-};
+  )
+}
 
 LayerEntry.propTypes = {
   layer: PropTypes.object,
   meta: PropTypes.object
-};
+}
 
-export default LayerEntry;
+export default LayerEntry

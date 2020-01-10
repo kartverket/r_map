@@ -17,11 +17,19 @@ var _InlineLegend = _interopRequireDefault(require("../Legend/InlineLegend"));
 
 var _CapabilitiesUtil = require("../../MapUtil/CapabilitiesUtil");
 
+var _communication = require("../../Utils/communication");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -110,7 +118,7 @@ var LayerEntry = function LayerEntry(props) {
         if (currentNode.queryable) {
           window.olMap.on('singleclick', function (evt) {
             var viewResolution = window.olMap.getView().getResolution();
-            var url = currentLayer.getSource().getGetFeatureInfoUrl(evt.coordinate, viewResolution, window.olMap.getView().getProjection(), {
+            var url = currentLayer.getSource().getFeatureInfoUrl(evt.coordinate, viewResolution, window.olMap.getView().getProjection(), {
               INFO_FORMAT: 'text/plain'
             });
 
@@ -118,23 +126,52 @@ var LayerEntry = function LayerEntry(props) {
               fetch(url).then(function (response) {
                 return response.text();
               }).then(function (data) {
-                //setInfo(data) /** TODO: decide where to place the info and design is needed, check what info_format should be used */
-                console.log(data);
-              });
-            }
-          });
-        } else if (currentNode.type && currentNode.type === 'FeatureCollection') {
-          window.olMap.on('click', function (evt) {
-            var feature = window.olMap.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
-              return feature;
-            });
+                if (data.includes('Layer')) {
+                  var featureInfo = data.split("\n\n");
+                  featureInfo.shift();
+                  data = featureInfo.map(function (layer) {
+                    var r_layer = {};
+                    var subf = layer.split(/(Layer[^\r\n]*)/);
+                    subf.shift();
+                    var layerName = subf.splice(0, 1)[0].split('Layer ')[1].replace(/'/g, '');
+                    r_layer[layerName] = subf.map(function (f) {
+                      var feature = f.split(/(Feature[^\r\n]*)/);
+                      var tmp_feature = {};
+                      feature.shift();
+                      var faetureId = feature.splice(0, 1)[0].split('Feature ')[1].replace(/:/g, '').trim();
+                      feature = feature.map(function (item) {
+                        item = item.trim();
+                        item = item.replace(/=/g, ':').split('\n').map(function (item) {
+                          var obj = {};
 
-            if (feature) {
-              var coord = feature.getGeometry().getCoordinates();
-              var content = feature.get('n');
-              console.info(feature.getProperties());
-              console.info(coord);
-              console.info(content);
+                          var _item$trim$split = item.trim().split(' :'),
+                              _item$trim$split2 = _slicedToArray(_item$trim$split, 2),
+                              key = _item$trim$split2[0],
+                              value = _item$trim$split2[1];
+
+                          obj[key] = value.replace(/'/g, '').trim();
+                          return obj;
+                        });
+                        return _objectSpread({}, item);
+                      });
+                      tmp_feature[faetureId] = feature.flat();
+                      return tmp_feature;
+                    });
+                    return r_layer;
+                  });
+                  console.log({
+                    getFeauteInfo: data
+                  });
+                } //setInfo(data) /** TODO: decide where to place the info and design is needed, check what info_format should be used */
+
+
+                var message = {
+                  cmd: 'featureSelected',
+                  properties: data
+                };
+
+                _communication.Messaging.postMessage(JSON.stringify(message));
+              });
             }
           });
         }
@@ -179,12 +216,12 @@ var LayerEntry = function LayerEntry(props) {
     },
     htmlFor: layer.Title
   }, " "), abstractTextSpan(), info ? _react.default.createElement("div", {
-    className: "info"
+    class: _LayerEntryModule.default.info
   }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     className: _LayerEntryModule.default.infoIcon,
     icon: ["far", "info"]
   }), _react.default.createElement("span", {
-    className: "infoText"
+    class: _LayerEntryModule.default.infoText
   }, info)) : null, layer.Name ? _react.default.createElement("label", {
     onClick: function onClick() {
       return toggleOptions(!options);
@@ -208,7 +245,7 @@ var LayerEntry = function LayerEntry(props) {
     }
   }))) : "", props.children, layer.Layer ? layer.Layer.map(function (subLayer, isub) {
     return _react.default.createElement("div", {
-      className: "facet-sub",
+      className: _LayerEntryModule.default.facetSub,
       key: isub
     }, _react.default.createElement(LayerEntry, {
       layer: subLayer,

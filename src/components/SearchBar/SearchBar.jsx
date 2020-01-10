@@ -124,7 +124,7 @@ const SearchBar = props => {
       <div className='input-group col col-lg-2'>
         <input className='form-control' onChange={ onChangeBound } placeholder={ placeholder } type="text" value={ searchText } aria-describedby="button-addon1" />
         <div className='input-group-append'>
-          <button class="btn btn-outline-secondary" type="button" id="button-addon1" onClick={ () => resetSearch() }>{ searchText ? <FontAwesomeIcon icon={ "times" } /> : ''}</button>
+          <button className="btn btn-outline-secondary" type="button" id="button-addon1" onClick={ () => resetSearch() }>{ searchText ? <FontAwesomeIcon icon={ "times" } /> : '' }</button>
         </div>
       </div>
       <div className='searchResult col col-lg-2'>
@@ -163,7 +163,7 @@ SearchBar.propTypes = {
 SearchBar.defaultProps = {
   classNames: '',
   searchText: '',
-  placeholder: 'Search text',
+  placeholder: 'Søk etter steder eller adresser',
   onChange: null,
   onEnter: null,
   onSearchClick: null,

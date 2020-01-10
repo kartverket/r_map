@@ -7,6 +7,7 @@ import { map, eventHandler, mapConfig } from "../../MapUtil/maplibHelper";
 import queryString from "query-string";
 import setQuery from "set-query-string";
 
+import {Messaging} from '../../Utils/communication'
 
 /**
  * @class The Map Component
@@ -77,6 +78,20 @@ export class MapComponent extends React.Component {
     eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState);
     this.setState({ map: map });
     this.addWMS();
+    window.olMap.on('click', function (evt) {
+      const feature = window.olMap.forEachFeatureAtPixel(evt.pixel, (feature, layer) => feature)
+      if (feature) {
+        const coord = feature.getGeometry().getCoordinates()
+        let content = feature.get('n')
+        let message = {
+          cmd: 'featureSelected',
+          featureId: feature.getId(),
+          properties: content,
+          coordinates: coord
+        }
+        Messaging.postMessage(JSON.stringify(message))
+      }
+    })
   }
 
   updateMapInfoState = () => {
@@ -142,7 +157,7 @@ export class MapComponent extends React.Component {
   render() {
     return (
       <div
-        id="map"
+        id="MapComponent"
         style={ {
           position: "relative",
           width: "100%",
