@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import './Position.scss';
+import style from './Position.module.scss';
 import { format } from 'ol/coordinate.js';
 import OlMousePositionControl from 'ol/control/MousePosition';
 
@@ -36,7 +36,7 @@ const Position = props => {
   }
 
   return (
-    <div className="mouseposition">
+    <div className={style.mouseposition}>
       <span>{(projection)}</span>
       <div id="mouse-position" />
     </div>

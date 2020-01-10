@@ -8,7 +8,7 @@ import BackgroundChooser from "../BackgroundChooser/BackgroundChooser";
 import ServicePanel from "../ServicePanel/ServicePanel";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import style from "./MapContainer.scss";
+import style from "./MapContainer.module.scss";
 import Position from '../Position/Position'
 
 const ServiceListItem = props => (
@@ -167,7 +167,7 @@ export default class MapContainer extends React.Component {
         <BackgroundChooser />
         <div>
           {this.renderLayerButton() ? (
-            <div className={this.state.isExpanded ? style.container + " closed" : style.container + " open"}>
+            <div className={`${style.container} ${this.state.isExpanded ? style.closed : style.open}`}>
               <FontAwesomeIcon onClick={() => this.toogleLayers()} className={style.toggleBtn} icon={this.state.isExpanded ? ["far", "layer-group"] : "times"} />
               <div>{this.renderServiceList()}</div>
             </div>
