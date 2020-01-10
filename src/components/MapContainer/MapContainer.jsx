@@ -1,14 +1,14 @@
-import React from "react"
-import { map, eventHandler, mapConfig } from "../../MapUtil/maplibHelper"
-import PropTypes from "prop-types"
-import queryString from "query-string"
-import setQuery from "set-query-string"
-import BackgroundChooser from "../BackgroundChooser/BackgroundChooser"
-import ServicePanel from "../ServicePanel/ServicePanel"
-import SearchBar from "../SearchBar/SearchBar"
+import React from "react";
+import { map, eventHandler, mapConfig } from "../../MapUtil/maplibHelper";
+import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
+import PropTypes from "prop-types";
+import queryString from "query-string";
+import setQuery from "set-query-string";
+import BackgroundChooser from "../BackgroundChooser/BackgroundChooser";
+import ServicePanel from "../ServicePanel/ServicePanel";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import style from "./MapContainer.scss"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import style from "./MapContainer.module.scss";
 import Position from '../Position/Position'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
@@ -166,38 +166,10 @@ export default class MapContainer extends React.Component {
       <div id="MapContainer" className={ style.mapContainer }>
         <BackgroundChooser />
         <div>
-          { this.renderLayerButton() ? (
-            <div className={ this.state.isExpanded ? style.container + " closed" : style.container + " open" }>
-              <Tabs defaultActiveKey="search" id="tab">
-                <Tab eventKey="search" title="Søk">
-                  <Accordion defaultActiveKey="0">
-                    <Card>
-                        <Accordion.Toggle as={ Card.Header } eventKey="0">
-                          SØK
-                        </Accordion.Toggle>
-                      <Accordion.Collapse eventKey="0">
-                        <SearchBar searchText="This is initial search text" />
-                      </Accordion.Collapse>
-                    </Card>
-                    <Card>
-                        <Accordion.Toggle as={ Card.Header } eventKey="1">
-                          Lagene
-                        </Accordion.Toggle>
-                      <Accordion.Collapse eventKey="1">
-                        <div id="ServiceList">{ this.renderServiceList() }</div>
-                      </Accordion.Collapse>
-                    </Card>
-                  </Accordion>
-                </Tab>
-                <Tab eventKey="tools" title="Verktøy">
-                  <div>tools</div>
-                </Tab>
-                <Tab eventKey="info" title="Info">
-                  <div>FAQ</div>
-                </Tab>
-              </Tabs>
-              <FontAwesomeIcon onClick={ () => this.toogleLayers() } className={ style.toggleBtn } icon={ this.state.isExpanded ? ["far", "layer-group"] : "times" } />
-
+          {this.renderLayerButton() ? (
+            <div className={`${style.container} ${this.state.isExpanded ? style.closed : style.open}`}>
+              <FontAwesomeIcon onClick={() => this.toogleLayers()} className={style.toggleBtn} icon={this.state.isExpanded ? ["far", "layer-group"] : "times"} />
+              <div>{this.renderServiceList()}</div>
             </div>
           ) : (
               <div className={ style.link } onClick={ () => this.toogleMap() }>Gå til kartkatalogen</div>

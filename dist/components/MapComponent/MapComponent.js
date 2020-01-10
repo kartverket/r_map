@@ -17,8 +17,6 @@ var _queryString = _interopRequireDefault(require("query-string"));
 
 var _setQueryString = _interopRequireDefault(require("set-query-string"));
 
-var _MapComponent = _interopRequireDefault(require("./MapComponent.scss"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -182,8 +180,6 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       return _react.default.createElement("div", {
-        className: _MapComponent.default.mapContainer
-      }, _react.default.createElement("div", {
         id: "map",
         style: {
           position: "relative",
@@ -191,7 +187,7 @@ function (_React$Component) {
           height: "100%",
           zIndex: 0
         }
-      }));
+      });
     }
   }]);
 

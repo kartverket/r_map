@@ -7,7 +7,6 @@ import { map, eventHandler, mapConfig } from "../../MapUtil/maplibHelper";
 import queryString from "query-string";
 import setQuery from "set-query-string";
 
-import style from "./MapComponent.scss";
 
 /**
  * @class The Map Component
@@ -142,17 +141,15 @@ export class MapComponent extends React.Component {
 
   render() {
     return (
-      <div className={ style.mapContainer }>
-        <div
-          id="map"
-          style={ {
-            position: "relative",
-            width: "100%",
-            height: "100%",
-            zIndex: 0
-          } }
-        />
-      </div>
+      <div
+        id="map"
+        style={ {
+          position: "relative",
+          width: "100%",
+          height: "100%",
+          zIndex: 0
+        } }
+      />
     );
   }
 }

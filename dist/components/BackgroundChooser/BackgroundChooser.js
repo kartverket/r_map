@@ -13,7 +13,9 @@ var _maplibHelper = require("../../MapUtil/maplibHelper");
 
 var _reactBootstrap = require("react-bootstrap");
 
-require("./BackgroundChooser.scss");
+var _BackgroundChooserModule = _interopRequireDefault(require("./BackgroundChooser.module.scss"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -53,11 +55,14 @@ var BackgroundChooser = function BackgroundChooser() {
     setBaseLayer(baseLayer);
   };
 
-  var renderBaseLayers = function renderBaseLayers(baseLayers) {
+  var renderBaseLayers = function renderBaseLayers(baseLayers, selectedBaseLayer) {
     return baseLayers.map(function (baseLayer, index) {
+      var iconClass = _BackgroundChooserModule.default["icon_".concat(baseLayer.id)];
+
+      var activeClass = baseLayer.id === selectedBaseLayer.id ? _BackgroundChooserModule.default.active : '';
       return _react.default.createElement(_reactBootstrap.ToggleButton, {
         key: index,
-        className: "icon_" + baseLayer.id,
+        className: "".concat(iconClass, " ").concat(activeClass),
         value: baseLayer
       }, _react.default.createElement("span", null, " ", baseLayer.name, " "));
     });
@@ -66,10 +71,10 @@ var BackgroundChooser = function BackgroundChooser() {
   return _react.default.createElement(_reactBootstrap.ToggleButtonGroup, {
     type: "radio",
     name: "Backgound",
-    className: "backgroundChooser",
+    className: _BackgroundChooserModule.default.backgroundChooser,
     onChange: setAsBaseLayer,
     value: baseLayer
-  }, renderBaseLayers(baseLayers));
+  }, renderBaseLayers(baseLayers, baseLayer));
 };
 
 var _default = BackgroundChooser;

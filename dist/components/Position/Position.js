@@ -9,7 +9,7 @@ exports.default = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-require("./Position.scss");
+var _PositionModule = _interopRequireDefault(require("./Position.module.scss"));
 
 var _coordinate = require("ol/coordinate.js");
 
@@ -71,7 +71,7 @@ var Position = function Position(props) {
   };
 
   return _react.default.createElement("div", {
-    className: "mouseposition"
+    className: _PositionModule.default.mouseposition
   }, _react.default.createElement("span", null, projection), _react.default.createElement("div", {
     id: "mouse-position"
   }));

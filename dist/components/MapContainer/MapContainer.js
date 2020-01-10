@@ -23,7 +23,7 @@ var _SearchBar = _interopRequireDefault(require("../SearchBar/SearchBar"));
 
 var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
-var _MapContainer = _interopRequireDefault(require("./MapContainer.scss"));
+var _MapContainerModule = _interopRequireDefault(require("./MapContainer.module.scss"));
 
 var _Position = _interopRequireDefault(require("../Position/Position"));
 
@@ -249,7 +249,7 @@ function (_React$Component) {
         onClick: function onClick() {
           return _this3.toogleLayers();
         },
-        className: _MapContainer.default.toggleBtn,
+        className: _MapContainerModule.default.toggleBtn,
         icon: this.state.isExpanded ? ["far", "layer-group"] : "times"
       })) : _react.default.createElement("div", {
         className: _MapContainer.default.link,
@@ -257,16 +257,16 @@ function (_React$Component) {
           return _this3.toogleMap();
         }
       }, "G\xE5 til kartkatalogen"), _react.default.createElement("div", {
-        className: _MapContainer.default.closeMap
+        className: _MapContainerModule.default.closeMap
       }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
         title: "Lukk kartet",
         onClick: function onClick() {
           return _this3.toogleMap();
         },
-        className: _MapContainer.default.toggleBtn,
+        className: _MapContainerModule.default.toggleBtn,
         icon: "times"
       }), _react.default.createElement("span", {
-        className: _MapContainer.default.closeButtonLabel
+        className: _MapContainerModule.default.closeButtonLabel
       }, "Lukk kartet"))), _react.default.createElement("div", {
         id: "map",
         style: {

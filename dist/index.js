@@ -40,7 +40,7 @@ var _react = _interopRequireDefault(require("react"));
 
 var _reactDom = _interopRequireDefault(require("react-dom"));
 
-require("./index.css");
+require("./index.scss");
 
 require("bootstrap/dist/css/bootstrap.min.css");
 

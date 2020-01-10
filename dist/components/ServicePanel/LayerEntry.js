@@ -11,7 +11,7 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
-var _LayerEntry = _interopRequireDefault(require("./LayerEntry.scss"));
+var _LayerEntryModule = _interopRequireDefault(require("./LayerEntry.module.scss"));
 
 var _InlineLegend = _interopRequireDefault(require("../Legend/InlineLegend"));
 
@@ -181,7 +181,7 @@ var LayerEntry = function LayerEntry(props) {
   }, " "), abstractTextSpan(), info ? _react.default.createElement("div", {
     className: "info"
   }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-    className: "infoIcon",
+    className: _LayerEntryModule.default.infoIcon,
     icon: ["far", "info"]
   }), _react.default.createElement("span", {
     className: "infoText"
@@ -195,9 +195,9 @@ var LayerEntry = function LayerEntry(props) {
   })) : '', _react.default.createElement(_InlineLegend.default, {
     legendUrl: layer.Style && layer.Style[0].LegendURL ? layer.Style[0].LegendURL[0].OnlineResource : ''
   }), options ? _react.default.createElement("div", {
-    className: _LayerEntry.default.settings
+    className: _LayerEntryModule.default.settings
   }, _react.default.createElement("label", {
-    className: _LayerEntry.default.slider
+    className: _LayerEntryModule.default.slider
   }, "Gjennomsiktighet:", _react.default.createElement("input", {
     type: "range",
     min: 0,
