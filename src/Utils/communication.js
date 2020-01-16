@@ -7,14 +7,12 @@ import { Icon } from 'ol/style'
 export class Messaging {
 
   static postMessage = function (msg) {
-    console.log({ postMessage: msg })
     window.parent.postMessage(JSON.stringify(msg), '*')
   }
   static listener = function (event) {
     if (event.origin === "http://localhost:3000" || "http://skrivte57.statkart.no" || "http:://geonorge.no" || "http://labs.norgeskart.no" || "https://register.geonorge.no/" || "http://www.kartverket.no/" || "https://www.norgeskart.no/") {
       try {
         let json = JSON.parse(JSON.stringify(event.data))
-        console.log({listener: json})
         if (json) {
           if (json.cmd === 'setCenter') {
             window.olMap.getView().setCenter([json.x, json.y])

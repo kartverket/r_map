@@ -90,7 +90,7 @@ const LayerEntry = props => {
                       })
                       return r_layer
                     })
-                    console.log({ getFeauteInfo: data })
+                    console.log({ GetFeatureInfo : data })
                   }
                   //setInfo(data) /** TODO: decide where to place the info and design is needed, check what info_format should be used */
                   let message = {

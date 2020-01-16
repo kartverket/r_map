@@ -15,6 +15,7 @@ import { Messaging } from '../../Utils/communication'
 
 import 'ol/ol.css'
 
+const FeatureInfoItem = (props) => (<div>Reservert plass til FeatureInfo</div>)
 
 const ServiceListItem = props => (
   <ServicePanel services={ props.listItem } removeMapItem={ props.removeMapItem } draggable />
@@ -163,10 +164,6 @@ export default class MapContainer extends React.Component {
     ))
   }
 
-  renderInfo() {
-    return <div>test</div>
-  }
-
   renderLayerButton() {
     return this.props.services && this.props.services.length > 0
   }
@@ -201,7 +198,7 @@ export default class MapContainer extends React.Component {
                 </Tab>
                 {
                   <Tab eventKey="info" title="Info">
-                    <div id="InfoList">{ this.renderInfo() }</div>
+                    <FeatureInfoItem></FeatureInfoItem>
                   </Tab>
                 }
               </Tabs>
