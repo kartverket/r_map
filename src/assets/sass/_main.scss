@@ -1308,11 +1308,14 @@ input::-ms-clear {
 
 .tab-content {
   min-height: 100px;
-  border-right: 1px solid $color-toggle-on;
-  border-left: 1px solid $color-toggle-on;
-  border-bottom: 1px solid $color-toggle-on;
+  border-right: 1px solid $gray;
+  border-left: 1px solid $gray;
+  border-bottom: 1px solid $gray;
+  border-top: 1px solid $gray;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
   padding: 10px;
 }
 
