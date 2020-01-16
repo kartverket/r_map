@@ -123,7 +123,7 @@ const SearchBar = props => {
       <div className='input-group col'>
         <input className='form-control' onChange={ onChangeBound } placeholder={ placeholder } type="text" value={ searchText } aria-describedby="button-addon1" />
         <div className='input-group-append'>
-          <button className="btn btn-outline-secondary" type="button" id="button-addon1" onClick={ () => resetSearch() }>{ searchText ? <FontAwesomeIcon icon={ "times" } /> : '' }</button>
+          <button className="btn btn-link" type="button" id="button-addon1" onClick={ () => resetSearch() }>{ searchText ? <FontAwesomeIcon icon={ "times" } /> : '' }</button>
         </div>
       </div>
       <div className='searchResult col'>
@@ -132,7 +132,7 @@ const SearchBar = props => {
             <>
               <div>
                 <div onClick={ () => setStateAdress(!expandedAdress) } className={ style.expandBtn } >
-                  <span className={ style.ellipsisToggle }>ADRESSE</span>
+                  <span className={ style.ellipsisToggle }>ADRESSER</span>
                   <FontAwesomeIcon icon={ expandedAdress ? ['fas', 'angle-up'] : ['fas', 'angle-down'] } />
                 </div>
                 <div className={ expandedAdress ? `${style.selected} ${style.open}` : style.selected } >
