@@ -121,13 +121,13 @@ const SearchBar = props => {
 
   return (
     <>
-      <div className='input-group col col-lg-2'>
+      <div className='input-group col'>
         <input className='form-control' onChange={ onChangeBound } placeholder={ placeholder } type="text" value={ searchText } aria-describedby="button-addon1" />
         <div className='input-group-append'>
           <button className="btn btn-outline-secondary" type="button" id="button-addon1" onClick={ () => resetSearch() }>{ searchText ? <FontAwesomeIcon icon={ "times" } /> : '' }</button>
         </div>
       </div>
-      <div className='searchResult col col-lg-2'>
+      <div className='searchResult col'>
         {
           searchResult && (
             <Accordion defaultActiveKey="0">
