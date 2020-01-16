@@ -7,13 +7,10 @@ import queryString from "query-string"
 import setQuery from "set-query-string"
 
 import { generateAdresseSokUrl, generateSearchStedsnavnUrl } from "../../Utils/n3api"
-import "./SearchBar.scss"
 import pin from '../../../src/assets/img/pin-md-orange.png'
 
-import Accordion from 'react-bootstrap/Accordion'
-import Card from 'react-bootstrap/Card'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import style from "./SearchBar.scss"
+import style from "./SearchBar.module.scss"
 const parser = require('fast-xml-parser')
 
 
@@ -72,6 +69,8 @@ const SearchBar = props => {
   const [searchResult, setSearchResult] = useState()
   const [searchResultSSR, setSearchResultSSR] = useState()
   const { placeholder } = props
+  const [expandedAdress, setStateAdress] = useState(false)
+  const [expandedSsr, setStateSsr] = useState(false)
 
   useEffect(() => {
     if (searchText) {
@@ -130,20 +129,26 @@ const SearchBar = props => {
       <div className='searchResult col'>
         {
           searchResult && (
-            <Accordion defaultActiveKey="0">
-              <Card>
-                <Accordion.Toggle as={ Card.Header } eventKey="0">ADRESSE</Accordion.Toggle>
-                <Accordion.Collapse eventKey="0">
+            <>
+              <div>
+                <div onClick={ () => setStateAdress(!expandedAdress) } className={ style.expandBtn } >
+                  <span className={ style.ellipsisToggle }>ADRESSE</span>
+                  <FontAwesomeIcon icon={ expandedAdress ? ['fas', 'angle-up'] : ['fas', 'angle-down'] } />
+                </div>
+                <div className={ expandedAdress ? `${style.selected} ${style.open}` : style.selected } >
                   <SearchResult searchResult={ { searchResult } }></SearchResult>
-                </Accordion.Collapse>
-              </Card>
-              <Card>
-                <Accordion.Toggle as={ Card.Header } eventKey="1">STEDSNAVN</Accordion.Toggle>
-                <Accordion.Collapse eventKey="1">
+                </div>
+              </div>
+              <div>
+                <div onClick={ () => setStateSsr(!expandedSsr) } className={ style.expandBtn } >
+                  <span className={ style.ellipsisToggle }>STEDSNAVN</span>
+                  <FontAwesomeIcon icon={ expandedSsr ? ['fas', 'angle-up'] : ['fas', 'angle-down'] } />
+                </div>
+                <div className={ expandedSsr ? `${style.selected} ${style.open}` : style.selected } >
                   <SearchResult searchResult={ { searchResultSSR } }></SearchResult>
-                </Accordion.Collapse>
-              </Card>
-            </Accordion>
+                </div>
+              </div>
+            </>
           )
         }
       </div>
