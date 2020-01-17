@@ -15,8 +15,6 @@ import { Messaging } from '../../Utils/communication'
 
 import 'ol/ol.css'
 
-const FeatureInfoItem = (props) => (<div>Reservert plass til FeatureInfo</div>)
-
 const ServiceListItem = props => (
   <ServicePanel services={ props.listItem } removeMapItem={ props.removeMapItem } draggable />
 )
@@ -196,11 +194,6 @@ export default class MapContainer extends React.Component {
                 <Tab eventKey="tools" title="Lag-Verktøy">
                   <div id="ServiceList">{ this.renderServiceList() }</div>
                 </Tab>
-                {
-                  <Tab eventKey="info" title="Info">
-                    <FeatureInfoItem></FeatureInfoItem>
-                  </Tab>
-                }
               </Tabs>
               <FontAwesomeIcon onClick={ () => this.toogleLayers() } className={ style.toggleBtn } icon={ this.state.isExpanded ? ["far", "layer-group"] : "times" } />
             </div>

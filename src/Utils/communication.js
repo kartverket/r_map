@@ -1,8 +1,8 @@
 import { Polygon, Point } from 'ol/geom'
 import LinearRing from 'ol/geom/LinearRing'
-import Overlay from 'ol/Overlay';
+import Overlay from 'ol/Overlay'
 import Feature from 'ol/Feature'
-import { Icon } from 'ol/style'
+//import { Icon } from 'ol/style'
 
 export class Messaging {
 
@@ -195,26 +195,28 @@ export class Messaging {
               positioning: 'center-center',
               element: document.getElementById('marker'),
               stopEvent: false
-            });
-            window.olMap.addOverlay(marker);
+            })
+            window.olMap.addOverlay(marker)
 
-            var size = [20, 25]
-            var offset = [-(size.w / 2), -size.h]
-            var icon = new Icon('/theme/norgeskart/img/embed-marker.png', size, offset)
+            /*
+              var size = [20, 25]
+              var offset = [-(size.w / 2), -size.h]
+              var icon = new Icon('/theme/norgeskart/img/embed-marker.png', size, offset)
+             */
           } else if (json.cmd === 'clearMarkers') {
-            var markerLayers = window.olMap.getLayersByClass("OpenLayers.Layer.Markers").slice()
-            for (let i = 0, j = markerLayers.length; i < j; i += 1) {
-              markerLayers[i].destroy()
+            var markerLayersForClearing = window.olMap.getLayersByClass("OpenLayers.Layer.Markers").slice()
+            for (let i = 0, j = markerLayersForClearing.length; i < j; i += 1) {
+              markerLayersForClearing[i].destroy()
             }
           } else if (json.cmd === 'removeMarker') {
-            var markerLayers = window.olMap.getLayersByClass("OpenLayers.Layer.Markers").slice()
-            for (let i = 0, j = markerLayers.length; i < j; i += 1) {
-              markerLayers[i].removeMarker(json.x + ',' + json.y)
+            var markerLayersForRemoving = window.olMap.getLayersByClass("OpenLayers.Layer.Markers").slice()
+            for (let i = 0, j = markerLayersForRemoving.length; i < j; i += 1) {
+              markerLayersForRemoving[i].removeMarker(json.x + ',' + json.y)
             }
           }
         }
       } catch (e) {
-        console.error(e);
+        console.error(e)
       }
 
     }

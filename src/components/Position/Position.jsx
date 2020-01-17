@@ -3,12 +3,12 @@ import style from './Position.module.scss'
 import { format } from 'ol/coordinate.js'
 import OlMousePositionControl from 'ol/control/MousePosition'
 
-const Position = props => {
+const Position = () => {
   const [projection, setProjectionString] = useState()
 
   useEffect(() => {
     createOlMousePositionControl(window.olMap)
-  }, [window.olMap])
+  })
 
   /**
    * Creates and adds the mouse position control to the map.

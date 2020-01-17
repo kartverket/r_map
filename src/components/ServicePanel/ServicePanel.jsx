@@ -54,7 +54,7 @@ const ServicePanel = props => {
         console.warn('No service type specified')
         break
     }
-  }, [props.services.DistributionProtocol, props.services.GetCapabilitiesUrl, props.services.url])
+  }, [props.services.DistributionProtocol, props.services.GetCapabilitiesUrl, props.services.url, props.services.ShowPropertyName, props.services.customParams])
 
   const renderRemoveButton = () => {
     if (props.removeMapItem) {
