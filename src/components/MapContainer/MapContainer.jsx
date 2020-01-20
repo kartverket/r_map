@@ -191,7 +191,7 @@ export default class MapContainer extends React.Component {
                 <Tab eventKey="search" title="Søk" >
                   <SearchBar />
                 </Tab>
-                <Tab eventKey="tools" title="Lag-Verktøy">
+                <Tab eventKey="tools" title="Visning">
                   <div id="ServiceList">{ this.renderServiceList() }</div>
                 </Tab>
               </Tabs>
@@ -215,6 +215,7 @@ export default class MapContainer extends React.Component {
           } }
         />
         <Position map={ map } projection={ this.props.crs }></Position>
+        <div id="mapPopover"></div>
       </div>
     )
   }

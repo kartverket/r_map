@@ -1,18 +1,36 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import style from './LayerEntry.module.scss'
 import InlineLegend from '../Legend/InlineLegend'
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 
-import { Messaging } from '../../Utils/communication'
+//import { Messaging } from '../../Utils/communication'
 
+import ReactDOM from 'react-dom'
+import Modal from 'react-bootstrap/Modal'
+
+const FeatureInfoItem = props => {
+  /* Show the text/plain from a getFeatureInfo call for now in a <pre> tag from bootstrap modal, need more testing and work to decide on text/plain vs text/gml */
+  const [show, setShow] = useState(props.show)
+  const handleClose = () => setShow(false)
+  useEffect(() => {
+    setShow(props.show)
+  }, [props])
+  return (
+    <Modal show={ show } onHide={ handleClose }>
+      <Modal.Header closeButton>
+        <Modal.Title>Feature Info</Modal.Title>
+      </Modal.Header>
+      <Modal.Body><pre>{ props.info }</pre></Modal.Body>
+    </Modal>
+  )
+}
 const LayerEntry = props => {
   const [options, toggleOptions] = useState(false)
   const [olLayer, setLayer] = useState()
   const [checked, setChecked] = useState(props.layer.isVisible)
   const [transparency, setTransparency] = useState(50)
-  const [info, setInfo] = useState('')
   const layer = props.layer
   layer.Name = (layer.name && typeof layer.name === 'object') ? layer.name.localPart : layer.Name
 
@@ -62,6 +80,8 @@ const LayerEntry = props => {
               fetch(url)
                 .then((response) => response.text())
                 .then((data) => {
+                  const responseText = data
+                  /*
                   if (data.includes('Layer')) {
                     let featureInfo = data.split("\n\n")
                     featureInfo.shift()
@@ -90,14 +110,15 @@ const LayerEntry = props => {
                       })
                       return r_layer
                     })
-                    console.log({ GetFeatureInfo : data })
+                    console.log({ GetFeatureInfo: data })
                   }
-                  //setInfo(data) /** TODO: decide where to place the info and design is needed, check what info_format should be used */
                   let message = {
                     cmd: 'featureSelected',
                     properties: data,
                   }
                   Messaging.postMessage(JSON.stringify(message))
+                  */
+                  ReactDOM.render(<FeatureInfoItem info={ responseText } show={ true }></FeatureInfoItem>, document.getElementById('mapPopover'))
                 })
             }
           })
@@ -137,12 +158,6 @@ const LayerEntry = props => {
           <label onClick={ () => onSelectionChange(layer) } htmlFor={ layer.Title }> </label>
         ) }
       { abstractTextSpan() }
-      { info ? (
-        <div class={ style.info }>
-          <FontAwesomeIcon className={ style.infoIcon } icon={ ["far", "info"] } />
-          <span class={ style.infoText }>{ info }</span>
-        </div>
-      ) : null }
       { layer.Name ? (
         <label onClick={ () => toggleOptions(!options) }>
           <FontAwesomeIcon icon={ ["far", "sliders-h"] } color={ options ? "red" : "black" } />
