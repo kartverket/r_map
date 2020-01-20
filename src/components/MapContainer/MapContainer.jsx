@@ -12,6 +12,7 @@ import Position from '../Position/Position'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import { Messaging } from '../../Utils/communication'
+import FeatureInfoItem from '../ServicePanel/FeatureInfoItem'
 
 import 'ol/ol.css'
 
@@ -215,7 +216,7 @@ export default class MapContainer extends React.Component {
           } }
         />
         <Position map={ map } projection={ this.props.crs }></Position>
-        <div id="mapPopover"></div>
+        <div id="mapPopover"><FeatureInfoItem info={ '' } show={ false }></FeatureInfoItem></div>
       </div>
     )
   }

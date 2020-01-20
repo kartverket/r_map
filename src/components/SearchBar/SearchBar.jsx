@@ -11,6 +11,10 @@ import pin from '../../../src/assets/img/pin-md-orange.png'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import style from "./SearchBar.module.scss"
+
+import { useDispatch, useSelector } from 'react-redux'
+import { updateSearchString } from '../../actions/SearchActions'
+
 const parser = require('fast-xml-parser')
 
 
@@ -64,6 +68,9 @@ const SearchResult = (props) => {
  * @param {*} props
  */
 const SearchBar = props => {
+  const search_query = useSelector(state => state.search_query)
+  const dispatch = useDispatch()
+
   let queryValues = queryString.parse(window.location.search)
   const [searchText, setSearchText] = useState(queryValues["search"])
   const [searchResult, setSearchResult] = useState()
@@ -74,6 +81,8 @@ const SearchBar = props => {
 
   useEffect(() => {
     if (searchText) {
+      dispatch(updateSearchString(searchText))
+
       queryValues.search = searchText
       setQuery(queryValues)
       fetch(generateAdresseSokUrl(searchText))
@@ -113,7 +122,7 @@ const SearchBar = props => {
   const onChangeBound = (event) => {
     setSearchText(event.target.value)
   }
-
+  //const updateQuery = search_query => dispatch({ type: 'UPDATE_SEARCH_STRING', payload: search_query })
   const resetSearch = () => {
     setSearchText("")
   }
@@ -157,7 +166,6 @@ const SearchBar = props => {
 }
 
 SearchBar.propTypes = {
-  classNames: PropTypes.string,
   searchText: PropTypes.string,
   placeholder: PropTypes.string,
   onChange: PropTypes.func,
@@ -166,7 +174,6 @@ SearchBar.propTypes = {
 }
 
 SearchBar.defaultProps = {
-  classNames: '',
   searchText: '',
   placeholder: 'Søk etter steder eller adresser',
   onChange: null,
