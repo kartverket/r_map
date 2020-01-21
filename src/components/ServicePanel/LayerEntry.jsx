@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import PropTypes from "prop-types"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import style from './LayerEntry.module.scss'
@@ -8,7 +8,6 @@ import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 //import { Messaging } from '../../Utils/communication'
 import { useDispatch } from "react-redux"
 
-import ReactDOM from 'react-dom'
 
 const LayerEntry = props => {
   const [options, toggleOptions] = useState(false)

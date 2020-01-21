@@ -3,7 +3,12 @@ import { SET_FEATURES, SHOW_FEATURES, HIDE_FEATURES } from '../actions/FeatureAc
 export default function (state = {}, action) {
   switch (action.type) {
     case SET_FEATURES:
-      const appendedAInfo = state.info.concat(action.info)
+      let appendedAInfo = ''
+      if (state.info) {
+        appendedAInfo = state.info.concat(action.info)
+      } else {
+        appendedAInfo = action.info
+      }
       return {
         ...state,
         info: appendedAInfo,
@@ -15,7 +20,7 @@ export default function (state = {}, action) {
         info: action.info,
         show: true
       }
-      case HIDE_FEATURES:
+    case HIDE_FEATURES:
       return {
         ...state,
         info: action.info,
