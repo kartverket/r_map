@@ -3,12 +3,7 @@ import { SET_FEATURES, SHOW_FEATURES, HIDE_FEATURES } from '../actions/FeatureAc
 export default function (state = {}, action) {
   switch (action.type) {
     case SET_FEATURES:
-      let appendedAInfo = ''
-      if (state.info) {
-        appendedAInfo = state.info.concat(action.info)
-      } else {
-        appendedAInfo = action.info
-      }
+      const appendedAInfo = state.info ? state.info.concat(action.info) : action.info
       return {
         ...state,
         info: appendedAInfo,

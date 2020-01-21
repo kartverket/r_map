@@ -7,7 +7,7 @@ import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 
 //import { Messaging } from '../../Utils/communication'
 import { useDispatch } from "react-redux"
-
+import { setFeature } from '../../actions/FeatureActions'
 
 const LayerEntry = props => {
   const [options, toggleOptions] = useState(false)
@@ -102,10 +102,7 @@ const LayerEntry = props => {
                   }
                   Messaging.postMessage(JSON.stringify(message))
                   */
-                  dispatch({
-                    type: "SET_FEATURES",
-                    info: responseText
-                  })
+                 dispatch(setFeature(responseText))
                 })
             }
           })
