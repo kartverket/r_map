@@ -18,10 +18,10 @@ export default function (state = {}, action) {
     case HIDE_FEATURES:
       return {
         ...state,
-        info: action.info,
+        info: [],
         show: false
       }
     default:
-      return { ...state, info: '', show: false }
+      return { ...state, info: [], show: false }
   }
 }
