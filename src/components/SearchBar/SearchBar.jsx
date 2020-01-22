@@ -19,8 +19,6 @@ const parser = require('fast-xml-parser')
 
 
 const SearchResult = (props) => {
-  window.olMap.getOverlays().clear()
-
   const showInfoMarker = (coordinate) => {
     let markerElement = document.createElement('img')
     markerElement.src = pin
@@ -81,6 +79,7 @@ const SearchBar = props => {
 
   useEffect(() => {
     if (searchText) {
+      window.olMap.getOverlays().clear()
       dispatch(updateSearchString(searchText))
 
       queryValues.search = searchText
