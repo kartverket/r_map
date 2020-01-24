@@ -15,6 +15,7 @@ const parseGmlFeatureInfo = (data) => {
 }
 
 const parsePlainFeatureInfo = (data) => {
+  // TODO : find a way tomake this function more robust
   let parsedFeatureInfo
   if (data.includes('Layer')) {
     let featureInfo = data.split("\n\n")
@@ -37,7 +38,7 @@ const parsePlainFeatureInfo = (data) => {
             obj[key] = value.replace(/'/g, '').trim()
             return obj
           })
-          return { ...item }
+          return item
         })
         tmp_feature[faetureId] = feature.flat()
         return tmp_feature
@@ -58,7 +59,7 @@ const parsePlainFeatureInfo = (data) => {
 export const setFeature = (features) => {
   return {
     type: SET_FEATURES,
-    info: parseGmlFeatureInfo(features)
+    info: parsePlainFeatureInfo(features)
   }
 }
 
