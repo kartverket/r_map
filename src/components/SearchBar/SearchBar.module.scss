@@ -46,3 +46,9 @@
       left: 6px;
   }
 }
+:local(.searchInput) {
+  width: 90%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  border-radius: 2px;
+}

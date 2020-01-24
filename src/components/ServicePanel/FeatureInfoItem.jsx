@@ -1,6 +1,7 @@
 import React from "react"
 import Modal from 'react-bootstrap/Modal'
 import { useSelector, useDispatch } from "react-redux"
+import style from './FeatureInfoItem.module.scss'
 
 
 const FeatureInfoItem = props => {
@@ -18,14 +19,15 @@ const FeatureInfoItem = props => {
           for (const key in feature) {
             const item = feature[key]
             if (typeof item !== 'object') {
-              items.push(<div><i>{ key } </i> : { item }</div>)
+              items.push(<li><i>{ key } </i> = <strong>{ item }</strong> </li>)
             }
           }
         }
-      }
-      layers.push(<div><b>LAGNAVN { layer.name }</b>{ items }</div>)
+      }      
+      layers.push(<div><h3>{ layer.name }</h3>{ items }</div>)
     }
-    return (<div>{ layers }</div>)
+    
+    return (<ul className={style.ulContainer}>{ layers }</ul>)
   }
 
   return (

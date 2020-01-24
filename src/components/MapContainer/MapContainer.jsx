@@ -187,24 +187,31 @@ export default class MapContainer extends React.Component {
         <BackgroundChooser />
         <div>
           { this.renderLayerButton() ? (
+           <div>
+
+
+          <div className={ style.closeMap }>
+            <FontAwesomeIcon title="Lukk kartet" onClick={ () => this.toogleMap() } className={ style.toggleBtn } icon={ "times" } />
+            <span className={ style.closeButtonLabel }>Lukk kartet</span>
+          </div>
+
+
             <div className={ `${style.container} ${this.state.isExpanded ? style.closed : style.open}` }>
-              <Tabs defaultActiveKey="search" id="tab">
-                <Tab eventKey="search" title="Søk" >
+              <FontAwesomeIcon onClick={ () => this.toogleLayers() } className={ style.toggleBtn } icon={ this.state.isExpanded ? ["far", "layer-group"] : "times" } />
+              <Tabs className={ `${style.tabs} ${this.state.isExpanded ? style.closed : style.open}`} defaultActiveKey="search" id="tab">
+                <Tab className={ `${style.search} ${this.state.isExpanded ? style.closed : style.open}`} eventKey="search" title="Søk" >
                   <SearchBar />
                 </Tab>
                 <Tab eventKey="tools" title="Visning">
                   <div id="ServiceList">{ this.renderServiceList() }</div>
                 </Tab>
               </Tabs>
-              <FontAwesomeIcon onClick={ () => this.toogleLayers() } className={ style.toggleBtn } icon={ this.state.isExpanded ? ["far", "layer-group"] : "times" } />
+             </div>               
             </div>
           ) : (
               <div className={ style.link } onClick={ () => this.toogleMap() }>Gå til kartkatalogen</div>
             ) }
-          <div className={ style.closeMap }>
-            <FontAwesomeIcon title="Lukk kartet" onClick={ () => this.toogleMap() } className={ style.toggleBtn } icon={ "times" } />
-            <span className={ style.closeButtonLabel }>Lukk kartet</span>
-          </div>
+         
         </div>
         <div
           id="map"
