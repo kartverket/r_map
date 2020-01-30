@@ -115,23 +115,6 @@ export default class MapContainer extends React.Component {
     map.AddScaleLine()
     //eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState)
     this.props = { map: map }
-    window.olMap.on('click', function (evt) {
-      // Handling geojson features on click
-      const features = window.olMap.getFeaturesAtPixel(evt.pixel, (feature, layer) => feature)
-      if (features) {
-        features.forEach(feature => {
-          const coord = feature.getGeometry().getCoordinates()
-          let content = feature.get('n')
-          let message = {
-            cmd: 'featureSelected',
-            featureId: feature.getId(),
-            properties: content,
-            coordinates: coord
-          }
-          Messaging.postMessage(JSON.stringify(message))
-        })
-      }
-    })
   }
 
   /**
@@ -206,12 +189,12 @@ export default class MapContainer extends React.Component {
                   <div id="ServiceList">{ this.renderServiceList() }</div>
                 </Tab>
               </Tabs>
-             </div>               
+             </div>
             </div>
           ) : (
               <div className={ style.link } onClick={ () => this.toogleMap() }>Gå til kartkatalogen</div>
             ) }
-         
+
         </div>
         <div
           id="map"

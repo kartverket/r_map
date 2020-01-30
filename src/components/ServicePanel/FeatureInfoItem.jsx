@@ -9,6 +9,7 @@ const FeatureInfoItem = props => {
   const featureState = useSelector(state => state.FeatureReducer)
 
   const testFormat = (s) => {
+    if (typeof s === 'object') return 'isObject'
     const rX = /^((\d+)|(true|false)|(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\+\d{2})|([\w\W]+))$/i
     const M = rX.exec(s)
     if (!M) return ''
@@ -53,18 +54,21 @@ const FeatureInfoItem = props => {
     for (const key in info) {
       let layer = info[key]
       let featureRow = []
-      for (const key in layer) {
-        if (key !== 'name') {
-          const feature = layer[key]
-          for (const key in feature) {
-            const items = feature[key]
-            for (const key in items) {
-              const item = items[key]
-              for (let [key, value] of Object.entries(item)) {
+      if (Array.isArray(layer)) {
+        for (const key in layer) {
+          if (key !== 'name') {
+            const feature = layer[key]
+            for (const key in feature) {
+              const items = feature[key]
+              for (let [key, value] of Object.entries(items)) {
                 featureRow.push(<li><i>{ key } </i> = <strong>{ prepareItemFormat(value) }</strong> </li>)
               }
             }
           }
+        }
+      } else {
+        for (let [key, value] of Object.entries(layer)) {
+          featureRow.push(<li><i>{ key } </i> = <strong>{ prepareItemFormat(value) }</strong> </li>)
         }
       }
       layers.push(<div><h3>{ key }</h3>{ featureRow }</div>)

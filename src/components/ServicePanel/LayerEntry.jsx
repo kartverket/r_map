@@ -9,6 +9,7 @@ import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 import { useDispatch } from "react-redux"
 import { setFeature } from '../../actions/FeatureActions'
 
+
 const LayerEntry = props => {
   const [options, toggleOptions] = useState(false)
   const [olLayer, setLayer] = useState()
@@ -59,11 +60,41 @@ const LayerEntry = props => {
         if (currentNode.queryable) {
           window.olMap.on('singleclick', function (evt) {
             const viewResolution = (window.olMap.getView().getResolution())
-            const url = currentLayer.getSource().getFeatureInfoUrl(evt.coordinate, viewResolution, window.olMap.getView().getProjection(), { INFO_FORMAT: 'text/plain' })
+            const formats = currentLayer.getProperties().getFeatureInfoFormats
+            let indexFormat = 0
+            if (formats.indexOf('text/plain') > 0) { indexFormat = formats.indexOf('text/plain') }
+            else if (formats.indexOf('text/xml') > 0) { indexFormat = formats.indexOf('text/xml') }
+            else if (formats.indexOf('application/vnd.ogc.gml') > 0) { indexFormat = formats.indexOf('application/vnd.ogc.gml') }
+            else if (formats.indexOf('application/json') > 0) { indexFormat = formats.indexOf('application/json') }
+            else if (formats.indexOf('text/html') === 0) { indexFormat = 1 }
+
+            const url = currentLayer.getSource().getFeatureInfoUrl(evt.coordinate, viewResolution, window.olMap.getView().getProjection(), { INFO_FORMAT: formats[indexFormat] })
             if (url && currentLayer.getVisible()) {
               fetch(url)
                 .then((response) => response.text())
-                .then((data) => dispatch(setFeature(data)))
+                .then((data) => dispatch(setFeature(data, formats[indexFormat])))
+                .catch((error) => {
+                  console.error('Error:', error)
+                })
+            }
+          })
+        } else {
+          // Assume if not queryable then it could be geojson features
+          window.olMap.on('click', function (evt) {
+            const features = window.olMap.getFeaturesAtPixel(evt.pixel, (feature, layer) => feature)
+            if (features) {
+              features.forEach(feature => {
+                const coord = feature.getGeometry().getCoordinates()
+                let content = feature.get('n')
+                let message = {
+                  cmd: 'featureSelected',
+                  featureId: feature.getId(),
+                  properties: content,
+                  coordinates: coord
+                }
+                console.log(message)
+                //dispatch(setFeature(message))
+              })
             }
           })
         }
