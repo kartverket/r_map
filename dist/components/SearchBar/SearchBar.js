@@ -21,15 +21,15 @@ var _setQueryString = _interopRequireDefault(require("set-query-string"));
 
 var _n3api = require("../../Utils/n3api");
 
-var _SearchBar = _interopRequireDefault(require("./SearchBar.scss"));
-
 var _pinMdOrange = _interopRequireDefault(require("../../../src/assets/img/pin-md-orange.png"));
 
-var _Accordion = _interopRequireDefault(require("react-bootstrap/Accordion"));
-
-var _Card = _interopRequireDefault(require("react-bootstrap/Card"));
-
 var _reactFontawesome = require("@fortawesome/react-fontawesome");
+
+var _SearchBarModule = _interopRequireDefault(require("./SearchBar.module.scss"));
+
+var _reactRedux = require("react-redux");
+
+var _SearchActions = require("../../actions/SearchActions");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -48,8 +48,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var parser = require('fast-xml-parser');
 
 var SearchResult = function SearchResult(props) {
-  window.olMap.getOverlays().clear();
-
   var showInfoMarker = function showInfoMarker(coordinate) {
     var markerElement = document.createElement('img');
     markerElement.src = _pinMdOrange.default;
@@ -110,6 +108,11 @@ var SearchResult = function SearchResult(props) {
 
 
 var SearchBar = function SearchBar(props) {
+  var search_query = (0, _reactRedux.useSelector)(function (state) {
+    return state.search_query;
+  });
+  var dispatch = (0, _reactRedux.useDispatch)();
+
   var queryValues = _queryString.default.parse(window.location.search);
 
   var _useState = (0, _react.useState)(queryValues["search"]),
@@ -128,8 +131,21 @@ var SearchBar = function SearchBar(props) {
       setSearchResultSSR = _useState6[1];
 
   var placeholder = props.placeholder;
+
+  var _useState7 = (0, _react.useState)(false),
+      _useState8 = _slicedToArray(_useState7, 2),
+      expandedAdress = _useState8[0],
+      setStateAdress = _useState8[1];
+
+  var _useState9 = (0, _react.useState)(false),
+      _useState10 = _slicedToArray(_useState9, 2),
+      expandedSsr = _useState10[0],
+      setStateSsr = _useState10[1];
+
   (0, _react.useEffect)(function () {
     if (searchText) {
+      window.olMap.getOverlays().clear();
+      dispatch((0, _SearchActions.updateSearchString)(searchText));
       queryValues.search = searchText;
       (0, _setQueryString.default)(queryValues);
       fetch((0, _n3api.generateAdresseSokUrl)(searchText)).then(function (response) {
@@ -170,16 +186,17 @@ var SearchBar = function SearchBar(props) {
 
   var onChangeBound = function onChangeBound(event) {
     setSearchText(event.target.value);
-  };
+  }; //const updateQuery = search_query => dispatch({ type: 'UPDATE_SEARCH_STRING', payload: search_query })
+
 
   var resetSearch = function resetSearch() {
     setSearchText("");
   };
 
   return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
-    className: "input-group col col-lg-2"
+    className: "input-group col"
   }, _react.default.createElement("input", {
-    className: "form-control",
+    className: _SearchBarModule.default.searchInput,
     onChange: onChangeBound,
     placeholder: placeholder,
     type: "text",
@@ -188,7 +205,7 @@ var SearchBar = function SearchBar(props) {
   }), _react.default.createElement("div", {
     className: "input-group-append"
   }, _react.default.createElement("button", {
-    className: "btn btn-outline-secondary",
+    className: "btn btn-link",
     type: "button",
     id: "button-addon1",
     onClick: function onClick() {
@@ -197,23 +214,33 @@ var SearchBar = function SearchBar(props) {
   }, searchText ? _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     icon: "times"
   }) : ''))), _react.default.createElement("div", {
-    className: "searchResult col col-lg-2"
-  }, searchResult && _react.default.createElement(_Accordion.default, {
-    defaultActiveKey: "0"
-  }, _react.default.createElement(_Card.default, null, _react.default.createElement(_Accordion.default.Toggle, {
-    as: _Card.default.Header,
-    eventKey: "0"
-  }, "ADRESSE"), _react.default.createElement(_Accordion.default.Collapse, {
-    eventKey: "0"
+    className: "searchResult col"
+  }, searchResult && _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", null, _react.default.createElement("div", {
+    onClick: function onClick() {
+      return setStateAdress(!expandedAdress);
+    },
+    className: _SearchBarModule.default.expandBtn
+  }, _react.default.createElement("span", {
+    className: _SearchBarModule.default.ellipsisToggle
+  }, "ADRESSER"), _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+    icon: expandedAdress ? ['fas', 'angle-up'] : ['fas', 'angle-down']
+  })), _react.default.createElement("div", {
+    className: expandedAdress ? "".concat(_SearchBarModule.default.selected, " ").concat(_SearchBarModule.default.open) : _SearchBarModule.default.selected
   }, _react.default.createElement(SearchResult, {
     searchResult: {
       searchResult: searchResult
     }
-  }))), _react.default.createElement(_Card.default, null, _react.default.createElement(_Accordion.default.Toggle, {
-    as: _Card.default.Header,
-    eventKey: "1"
-  }, "STEDSNAVN"), _react.default.createElement(_Accordion.default.Collapse, {
-    eventKey: "1"
+  }))), _react.default.createElement("div", null, _react.default.createElement("div", {
+    onClick: function onClick() {
+      return setStateSsr(!expandedSsr);
+    },
+    className: _SearchBarModule.default.expandBtn
+  }, _react.default.createElement("span", {
+    className: _SearchBarModule.default.ellipsisToggle
+  }, "STEDSNAVN"), _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+    icon: expandedSsr ? ['fas', 'angle-up'] : ['fas', 'angle-down']
+  })), _react.default.createElement("div", {
+    className: expandedSsr ? "".concat(_SearchBarModule.default.selected, " ").concat(_SearchBarModule.default.open) : _SearchBarModule.default.selected
   }, _react.default.createElement(SearchResult, {
     searchResult: {
       searchResultSSR: searchResultSSR
@@ -222,7 +249,6 @@ var SearchBar = function SearchBar(props) {
 };
 
 SearchBar.propTypes = {
-  classNames: _propTypes.default.string,
   searchText: _propTypes.default.string,
   placeholder: _propTypes.default.string,
   onChange: _propTypes.default.func,
@@ -230,7 +256,6 @@ SearchBar.propTypes = {
   onSearchClick: _propTypes.default.func
 };
 SearchBar.defaultProps = {
-  classNames: '',
   searchText: '',
   placeholder: 'Søk etter steder eller adresser',
   onChange: null,

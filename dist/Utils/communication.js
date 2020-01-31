@@ -13,14 +13,13 @@ var _Overlay = _interopRequireDefault(require("ol/Overlay"));
 
 var _Feature = _interopRequireDefault(require("ol/Feature"));
 
-var _style = require("ol/style");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//import { Icon } from 'ol/style'
 var Messaging = function Messaging() {
   _classCallCheck(this, Messaging);
 };
@@ -28,9 +27,6 @@ var Messaging = function Messaging() {
 exports.Messaging = Messaging;
 
 _defineProperty(Messaging, "postMessage", function (msg) {
-  console.log({
-    postMessage: msg
-  });
   window.parent.postMessage(JSON.stringify(msg), '*');
 });
 
@@ -38,9 +34,6 @@ _defineProperty(Messaging, "listener", function (event) {
   if (event.origin === "http://localhost:3000" || "http://skrivte57.statkart.no" || "http:://geonorge.no" || "http://labs.norgeskart.no" || "https://register.geonorge.no/" || "http://www.kartverket.no/" || "https://www.norgeskart.no/") {
     try {
       var json = JSON.parse(JSON.stringify(event.data));
-      console.log({
-        listener: json
-      });
 
       if (json) {
         if (json.cmd === 'setCenter') {
@@ -236,20 +229,22 @@ _defineProperty(Messaging, "listener", function (event) {
             stopEvent: false
           });
           window.olMap.addOverlay(marker);
-          var size = [20, 25];
-          var offset = [-(size.w / 2), -size.h];
-          var icon = new _style.Icon('/theme/norgeskart/img/embed-marker.png', size, offset);
+          /*
+            var size = [20, 25]
+            var offset = [-(size.w / 2), -size.h]
+            var icon = new Icon('/theme/norgeskart/img/embed-marker.png', size, offset)
+           */
         } else if (json.cmd === 'clearMarkers') {
-          var markerLayers = window.olMap.getLayersByClass("OpenLayers.Layer.Markers").slice();
+          var markerLayersForClearing = window.olMap.getLayersByClass("OpenLayers.Layer.Markers").slice();
 
-          for (var _i4 = 0, _j4 = markerLayers.length; _i4 < _j4; _i4 += 1) {
-            markerLayers[_i4].destroy();
+          for (var _i4 = 0, _j4 = markerLayersForClearing.length; _i4 < _j4; _i4 += 1) {
+            markerLayersForClearing[_i4].destroy();
           }
         } else if (json.cmd === 'removeMarker') {
-          var markerLayers = window.olMap.getLayersByClass("OpenLayers.Layer.Markers").slice();
+          var markerLayersForRemoving = window.olMap.getLayersByClass("OpenLayers.Layer.Markers").slice();
 
-          for (var _i5 = 0, _j5 = markerLayers.length; _i5 < _j5; _i5 += 1) {
-            markerLayers[_i5].removeMarker(json.x + ',' + json.y);
+          for (var _i5 = 0, _j5 = markerLayersForRemoving.length; _i5 < _j5; _i5 += 1) {
+            markerLayersForRemoving[_i5].removeMarker(json.x + ',' + json.y);
           }
         }
       }

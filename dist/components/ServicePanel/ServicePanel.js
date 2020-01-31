@@ -101,7 +101,7 @@ var ServicePanel = function ServicePanel(props) {
         console.warn('No service type specified');
         break;
     }
-  }, [props.services.DistributionProtocol, props.services.GetCapabilitiesUrl, props.services.url]);
+  }, [props.services.DistributionProtocol, props.services.GetCapabilitiesUrl, props.services.url, props.services.ShowPropertyName, props.services.customParams]);
 
   var renderRemoveButton = function renderRemoveButton() {
     if (props.removeMapItem) {

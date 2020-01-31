@@ -33,6 +33,8 @@ var _Tab = _interopRequireDefault(require("react-bootstrap/Tab"));
 
 var _communication = require("../../Utils/communication");
 
+var _FeatureInfoItem = _interopRequireDefault(require("../ServicePanel/FeatureInfoItem"));
+
 require("ol/ol.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -155,27 +157,6 @@ function (_React$Component) {
       this.props = {
         map: _maplibHelper.map
       };
-      window.olMap.on('click', function (evt) {
-        // Handling geojson features on click
-        var features = window.olMap.getFeaturesAtPixel(evt.pixel, function (feature, layer) {
-          return feature;
-        });
-
-        if (features) {
-          features.forEach(function (feature) {
-            var coord = feature.getGeometry().getCoordinates();
-            var content = feature.get('n');
-            var message = {
-              cmd: 'featureSelected',
-              featureId: feature.getId(),
-              properties: content,
-              coordinates: coord
-            };
-
-            _communication.Messaging.postMessage(JSON.stringify(message));
-          });
-        }
-      });
     }
     /**
      *
@@ -204,11 +185,6 @@ function (_React$Component) {
           map: _maplibHelper.map
         });
       });
-    }
-  }, {
-    key: "renderInfo",
-    value: function renderInfo() {
-      return _react.default.createElement("div", null, "test");
     }
   }, {
     key: "renderLayerButton",
@@ -240,36 +216,7 @@ function (_React$Component) {
       return _react.default.createElement("div", {
         id: "MapContainer",
         className: "".concat(_MapContainerModule.default.mapContainer)
-      }, _react.default.createElement(_BackgroundChooser.default, null), _react.default.createElement("div", null, this.renderLayerButton() ? _react.default.createElement("div", {
-        className: "".concat(_MapContainerModule.default.container, " ").concat(this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open)
-      }, _react.default.createElement(_Tabs.default, {
-        defaultActiveKey: "search",
-        id: "tab"
-      }, _react.default.createElement(_Tab.default, {
-        eventKey: "search",
-        title: "S\xF8k"
-      }, _react.default.createElement(_SearchBar.default, null)), _react.default.createElement(_Tab.default, {
-        eventKey: "tools",
-        title: "Lag-Verkt\xF8y"
-      }, _react.default.createElement("div", {
-        id: "ServiceList"
-      }, this.renderServiceList())), _react.default.createElement(_Tab.default, {
-        eventKey: "info",
-        title: "Info"
-      }, _react.default.createElement("div", {
-        id: "InfoList"
-      }, this.renderInfo()))), _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-        onClick: function onClick() {
-          return _this3.toogleLayers();
-        },
-        className: _MapContainerModule.default.toggleBtn,
-        icon: this.state.isExpanded ? ["far", "layer-group"] : "times"
-      })) : _react.default.createElement("div", {
-        className: _MapContainerModule.default.link,
-        onClick: function onClick() {
-          return _this3.toogleMap();
-        }
-      }, "G\xE5 til kartkatalogen"), _react.default.createElement("div", {
+      }, _react.default.createElement(_BackgroundChooser.default, null), _react.default.createElement("div", null, this.renderLayerButton() ? _react.default.createElement("div", null, _react.default.createElement("div", {
         className: _MapContainerModule.default.closeMap
       }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
         title: "Lukk kartet",
@@ -280,7 +227,33 @@ function (_React$Component) {
         icon: "times"
       }), _react.default.createElement("span", {
         className: _MapContainerModule.default.closeButtonLabel
-      }, "Lukk kartet"))), _react.default.createElement("div", {
+      }, "Lukk kartet")), _react.default.createElement("div", {
+        className: "".concat(_MapContainerModule.default.container, " ").concat(this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open)
+      }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+        onClick: function onClick() {
+          return _this3.toogleLayers();
+        },
+        className: _MapContainerModule.default.toggleBtn,
+        icon: this.state.isExpanded ? ["far", "layer-group"] : "times"
+      }), _react.default.createElement(_Tabs.default, {
+        className: "".concat(_MapContainerModule.default.tabs, " ").concat(this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open),
+        defaultActiveKey: "search",
+        id: "tab"
+      }, _react.default.createElement(_Tab.default, {
+        className: "".concat(_MapContainerModule.default.search, " ").concat(this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open),
+        eventKey: "search",
+        title: "S\xF8k"
+      }, _react.default.createElement(_SearchBar.default, null)), _react.default.createElement(_Tab.default, {
+        eventKey: "tools",
+        title: "Visning"
+      }, _react.default.createElement("div", {
+        id: "ServiceList"
+      }, this.renderServiceList()))))) : _react.default.createElement("div", {
+        className: _MapContainerModule.default.link,
+        onClick: function onClick() {
+          return _this3.toogleMap();
+        }
+      }, "G\xE5 til kartkatalogen")), _react.default.createElement("div", {
         id: "map",
         style: {
           position: "relative",
@@ -291,7 +264,12 @@ function (_React$Component) {
       }), _react.default.createElement(_Position.default, {
         map: map,
         projection: this.props.crs
-      }));
+      }), _react.default.createElement("div", {
+        id: "mapPopover"
+      }, _react.default.createElement(_FeatureInfoItem.default, {
+        info: '',
+        show: false
+      })));
     }
   }]);
 

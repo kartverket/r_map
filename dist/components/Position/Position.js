@@ -29,7 +29,7 @@ function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) ||
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var Position = function Position(props) {
+var Position = function Position() {
   var _useState = (0, _react.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
       projection = _useState2[0],
@@ -37,7 +37,7 @@ var Position = function Position(props) {
 
   (0, _react.useEffect)(function () {
     createOlMousePositionControl(window.olMap);
-  }, [window.olMap]);
+  });
   /**
    * Creates and adds the mouse position control to the map.
    *

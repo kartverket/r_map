@@ -191,6 +191,10 @@ textarea{
   background-color: $color-important;
   color: white!important;
 }
+.nav-item.nav-link.active {
+  background-color: #e87722 !important;
+  color: white !important;
+}
 
 input{
   border-radius: 4px;
