@@ -1,13 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from "react"
+import PropTypes from "prop-types"
+import queryString from "query-string"
+import setQuery from "set-query-string"
 
-import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
-import { map, eventHandler, mapConfig } from "../../MapUtil/maplibHelper";
+import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
+import { map, eventHandler, mapConfig } from "../../MapUtil/maplibHelper"
+import { Messaging } from '../../Utils/communication'
 
-import queryString from "query-string";
-import setQuery from "set-query-string";
-
-import {Messaging} from '../../Utils/communication'
 
 /**
  * @class The Map Component
@@ -51,14 +50,11 @@ export class MapComponent extends React.Component {
    *@constructs Map
    */
   constructor(props) {
-    super(props);
-
-    const queryValues = queryString.parse(window.location.search);
-
-    let lon = Number(queryValues["lon"] || props.lon);
-    let lat = Number(queryValues["lat"] || props.lat);
-    let zoom = Number(queryValues["zoom"] || props.zoom);
-
+    super(props)
+    const queryValues = queryString.parse(window.location.search)
+    let lon = Number(queryValues["lon"] || props.lon)
+    let lat = Number(queryValues["lat"] || props.lat)
+    let zoom = Number(queryValues["zoom"] || props.zoom)
     /*
     let wmts = Array(queryValues['wmts'] || [])
     let wfs = Array(queryValues['wfs'] || [])
@@ -68,16 +64,16 @@ export class MapComponent extends React.Component {
     this.newMapConfig = Object.assign({}, mapConfig, {
       center: [lon, lat],
       zoom: zoom
-    });
+    })
   }
 
   componentDidMount() {
-    window.olMap = map.Init("map", this.newMapConfig);
-    map.AddZoom();
-    map.AddScaleLine();
-    eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState);
-    this.setState({ map: map });
-    this.addWMS();
+    window.olMap = map.Init("map", this.newMapConfig)
+    map.AddZoom()
+    map.AddScaleLine()
+    eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState)
+    this.setState({ map: map })
+    this.addWMS()
     window.olMap.on('click', function (evt) {
       const feature = window.olMap.forEachFeatureAtPixel(evt.pixel, (feature, layer) => feature)
       if (feature) {
@@ -95,13 +91,13 @@ export class MapComponent extends React.Component {
   }
 
   updateMapInfoState = () => {
-    let center = map.GetCenter();
-    const queryValues = queryString.parse(window.location.search);
-    this.props = { lon: center.lon, lat: center.lat, zoom: center.zoom };
-    queryValues.lon = center.lon;
-    queryValues.lat = center.lat;
-    queryValues.zoom = center.zoom;
-    setQuery(queryValues);
+    let center = map.GetCenter()
+    const queryValues = queryString.parse(window.location.search)
+    this.props = { lon: center.lon, lat: center.lat, zoom: center.zoom }
+    queryValues.lon = center.lon
+    queryValues.lat = center.lat
+    queryValues.zoom = center.zoom
+    setQuery(queryValues)
   };
 
   addWMS() {
@@ -117,9 +113,16 @@ export class MapComponent extends React.Component {
               meta.Type = 'OGC:WMS'
               meta.Params = service.customParams || ''
               if (service.addLayers.length > 0) {
-                let layersToBeAdded = capa.Capability.Layer.Layer.filter(
+                let layersToBeAdded = []
+                layersToBeAdded = capa.Capability.Layer.Layer.filter(
                   e => service.addLayers.includes(e.Name)
                 )
+                if (layersToBeAdded.length === 0 || layersToBeAdded.length !== service.addLayers.length) {
+                  layersToBeAdded = []
+                  service.addLayers.forEach(layerName => {
+                    layersToBeAdded.push({ Name: layerName })
+                  })
+                }
                 layersToBeAdded.forEach(layer => {
                   let laycapaLayerer = CapabilitiesUtil.getOlLayerFromWmsCapabilities(meta, layer)
                   window.olMap.addLayer(laycapaLayerer)
@@ -129,10 +132,10 @@ export class MapComponent extends React.Component {
             .then(layers => {
               this.setState({
                 wmsLayers: layers
-              });
+              })
             })
-            .catch(e => console.warn(e));
-          break;
+            .catch(e => console.warn(e))
+          break
         case 'GEOJSON':
           CapabilitiesUtil.getGeoJson(service.url)
             .then(layers => {
@@ -145,8 +148,8 @@ export class MapComponent extends React.Component {
                 }
               }
             })
-            .catch(e => console.log(e));
-          break;
+            .catch(e => console.log(e))
+          break
         default:
           console.warn('No service type specified')
           break
@@ -157,7 +160,7 @@ export class MapComponent extends React.Component {
   render() {
     return (
       <div
-        id="MapComponent"
+        id="map"
         style={ {
           position: "relative",
           width: "100%",
@@ -165,8 +168,8 @@ export class MapComponent extends React.Component {
           zIndex: 0
         } }
       />
-    );
+    )
   }
 }
 
-export default MapComponent;
+export default MapComponent
