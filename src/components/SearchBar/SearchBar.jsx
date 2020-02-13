@@ -41,6 +41,7 @@ const SearchResult = (props) => {
   }
   const centerPosition = (coordinate) => {
     window.olMap.getView().setCenter(coordinate)
+    window.olMap.getView().setZoom(14)
   }
   const constructPoint = (coord, epsgTo = 'EPSG:25833') => transform([Number(coord.lon), Number(coord.lat)], coord.epsg, epsgTo)
 
