@@ -23,8 +23,8 @@
   border-right-color: white;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
-  width: 80px;
-  height: 80px;
+  width: 76px;
+  height: 76px;
 
   &:hover {
     background: #e5e5e5;
@@ -80,8 +80,8 @@
   }
 
   &:local(.closed) {
-    width: 80px;
-    height: 80px;
+    width: 76px;
+    height: 76px;
 
     &:hover {
       background: #e5e5e5;
