@@ -1,40 +1,41 @@
-import OlWMSCapabilities from 'ol/format/WMSCapabilities';
-import WMTSCapabilities from 'ol/format/WMTSCapabilities.js';
-import OlSourceImageWMS from 'ol/source/ImageWMS';
-import OlLayerImage from 'ol/layer/Image';
+import OlWMSCapabilities from 'ol/format/WMSCapabilities'
+import WMTSCapabilities from 'ol/format/WMTSCapabilities.js'
+import OlSourceImageWMS from 'ol/source/ImageWMS'
+import OlLayerImage from 'ol/layer/Image'
 import {
   GML as GMLFormat,
   WFS as WFSFormat
-} from 'ol/format';
+} from 'ol/format'
 import GML2Format from 'ol/format/GML2'
 //import GML3Format from 'ol/format/GML3'
 import GML32Format from 'ol/format/GML32'
-import GeoJSON from 'ol/format/GeoJSON.js';
-import { Vector as VectorLayer } from 'ol/layer.js';
-import { Vector as VectorSource } from 'ol/source.js';
-import { bbox as bboxStrategy } from 'ol/loadingstrategy.js';
-import { Fill, Stroke, Style, Text } from 'ol/style';
+import GeoJSON from 'ol/format/GeoJSON.js'
+import { Vector as VectorLayer } from 'ol/layer.js'
+import { Vector as VectorSource } from 'ol/source.js'
+import { bbox as bboxStrategy } from 'ol/loadingstrategy.js'
+import { Fill, Stroke, Style, Text } from 'ol/style'
+import { Icon } from 'ol/style'
+import { Layer } from './Domain'
+import pin from '../../src/assets/img/pin-md-orange.png'
 
-import { Layer } from './Domain';
-
-import get from 'lodash/get.js';
+import get from 'lodash/get.js'
 import {
   createDummyGroup,
   getWmsUrl,
   mapConfig,
   createNotExistGroup
-} from './maplibHelper';
+} from './maplibHelper'
 
 import { mergeDefaultParams } from '../Utils/MapHelper'
 
 export const newMaplibLayer = (sourceType, source) => {
-  let catIds = [999];
+  let catIds = [999]
   if (source.groupid !== undefined) {
-    catIds = source.groupid.toString().split(',').map((item) => parseInt(item, 10));
-    createNotExistGroup(catIds, source.name, source.namelng);
+    catIds = source.groupid.toString().split(',').map((item) => parseInt(item, 10))
+    createNotExistGroup(catIds, source.name, source.namelng)
   } else {
     if (source.options.isbaselayer === 'false') {
-      createDummyGroup();
+      createDummyGroup()
     }
   }
   const newIsyLayer = new Layer({
@@ -96,9 +97,9 @@ export const newMaplibLayer = (sourceType, source) => {
     abstract: source.abstract,
     label: source.name,
     value: source.name
-  });
-  return newIsyLayer;
-};
+  })
+  return newIsyLayer
+}
 
 /**
  * Helper class to parse capabilities of WMS layers
@@ -121,9 +122,9 @@ export class CapabilitiesUtil {
     return fetch(newUrl)
       .then((response) => response.text())
       .then((data) => {
-        const wmsCapabilitiesParser = new OlWMSCapabilities();
-        return wmsCapabilitiesParser.read(data);
-      });
+        const wmsCapabilitiesParser = new OlWMSCapabilities()
+        return wmsCapabilitiesParser.read(data)
+      })
   }
 
   /**
@@ -135,10 +136,10 @@ export class CapabilitiesUtil {
    * @return {OlLayerTile[]} Array of OlLayerTile
    */
   static getLayersFromWmsCapabilties(capabilities, nameField = 'Name') {
-    const wmsVersion = get(capabilities, 'version');
-    const layersInCapabilities = get(capabilities, 'Capability.Layer.Layer');
-    const wmsGetMapConfig = get(capabilities, 'Capability.Request.GetMap');
-    const getMapUrl = get(wmsGetMapConfig, 'DCPType[0].HTTP.Get.OnlineResource');
+    const wmsVersion = get(capabilities, 'version')
+    const layersInCapabilities = get(capabilities, 'Capability.Layer.Layer')
+    const wmsGetMapConfig = get(capabilities, 'Capability.Request.GetMap')
+    const getMapUrl = get(wmsGetMapConfig, 'DCPType[0].HTTP.Get.OnlineResource')
     return layersInCapabilities.map((layerObj) =>
       newMaplibLayer('WMS', {
         type: 'map',
@@ -160,7 +161,7 @@ export class CapabilitiesUtil {
           minscale: layerObj.MinScaleDenominator || '',
           queryable: layerObj.queryable
         }
-      }));
+      }))
   }
   /**
    * Parses the given WMTS Capabilities string.
@@ -176,17 +177,17 @@ export class CapabilitiesUtil {
     return fetch(newUrl)
       .then((response) => response.text())
       .then((data) => {
-        const wmtsCapabilitiesParser = new WMTSCapabilities();
-        return wmtsCapabilitiesParser.read(data);
-      });
+        const wmtsCapabilitiesParser = new WMTSCapabilities()
+        return wmtsCapabilitiesParser.read(data)
+      })
   }
   static getLayersFromWfsCapabilties(capabilities, nameField = 'name.localPart') {
-    const version = '1.1.0'; //get(capabilities, 'value.version');
-    const featureTypesInCapabilities = get(capabilities, 'value.featureTypeList.featureType');
-    const url = get(capabilities, 'value.operationsMetadata.operation[0].dcp[0].http.getOrPost[0].value.href');
-    let featureNS = {};
+    const version = '1.1.0' //get(capabilities, 'value.version');
+    const featureTypesInCapabilities = get(capabilities, 'value.featureTypeList.featureType')
+    const url = get(capabilities, 'value.operationsMetadata.operation[0].dcp[0].http.getOrPost[0].value.href')
+    let featureNS = {}
     return featureTypesInCapabilities.map((layerObj) => {
-      featureNS[layerObj.name.prefix] = layerObj.name.namespaceURI;
+      featureNS[layerObj.name.prefix] = layerObj.name.namespaceURI
       return newMaplibLayer('WFS', {
         type: 'map',
         name: get(layerObj, nameField),
@@ -206,8 +207,8 @@ export class CapabilitiesUtil {
         },
         featureNS: featureNS,
         featureType: layerObj.name.prefix + ':' + layerObj.name.localPart
-      });
-    });
+      })
+    })
   }
 
   static getOlLayerFromWFS(metaCapabilities, capabilities, nameField = 'name.localPart') {
@@ -219,7 +220,7 @@ export class CapabilitiesUtil {
       response = new DOMParser().parseFromString(response, "text/xml")
 
       if (typeof vectorSource.format === 'undefined') {
-        let gmlFormat;
+        let gmlFormat
         switch (version) {
           case '1.0.0':
             gmlFormat = new GML2Format()
@@ -248,8 +249,8 @@ export class CapabilitiesUtil {
       if (features && features.length > 0) {
         features.forEach(function (featureitem) {
           console.log(featureitem)
-        });
-        vectorSource.addFeatures(features);
+        })
+        vectorSource.addFeatures(features)
         console.log(features[0].getGeometryName())
       }
 
@@ -286,7 +287,7 @@ export class CapabilitiesUtil {
     })
 
     window.olMap.on('click', function (event) {
-      var features = window.olMap.getFeaturesAtPixel(event.pixel);
+      var features = window.olMap.getFeaturesAtPixel(event.pixel)
       if (!features) {
         return
       }
@@ -329,28 +330,52 @@ export class CapabilitiesUtil {
     return new VectorLayer({
       source: vectorSource,
       style: function (feature, resolution) {
-        return new Style({
-          fill: new Fill({
-            color: 'rgba(255, 255, 255, 0.6)'
-          }),
-          stroke: new Stroke({
-            color: '#319FD3',
-            width: 2
-          }),
-          text: new Text({
-            font: '12px Calibri,sans-serif',
+        var geom_name = feature.getGeometry().getType()
+        console.log(geom_name)
+        if (geom_name === 'Point') {
+          return new Style({
+            image: new Icon({
+              anchor: [0.5, 46],
+              anchorXUnits: 'fraction',
+              anchorYUnits: 'pixels',
+              src: pin
+            }),
+            text: new Text({
+              font: '12px Calibri,sans-serif',
+              fill: new Fill({
+                color: '#000'
+              }),
+              stroke: new Stroke({
+                color: '#fff',
+                width: 3
+              }),
+              text: feature.get(meta.ShowPropertyName)
+            })
+          })
+        } else {
+          return new Style({
             fill: new Fill({
-              color: '#000'
+              color: 'rgba(255, 255, 255, 0.6)'
             }),
             stroke: new Stroke({
-              color: '#fff',
-              width: 3
+              color: '#319FD3',
+              width: 2
             }),
-            text: feature.get(meta.ShowPropertyName)
+            text: new Text({
+              font: '12px Calibri,sans-serif',
+              fill: new Fill({
+                color: '#000'
+              }),
+              stroke: new Stroke({
+                color: '#fff',
+                width: 3
+              }),
+              text: feature.get(meta.ShowPropertyName)
+            })
           })
-        })
+        }
       }
-    });
+    })
   }
   static getWMSMetaCapabilities(capabilities) {
     let Meta = {}
@@ -401,4 +426,4 @@ export class CapabilitiesUtil {
   }
 }
 
-export default CapabilitiesUtil;
+export default CapabilitiesUtil

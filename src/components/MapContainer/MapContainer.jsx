@@ -13,7 +13,7 @@ import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import { Messaging } from '../../Utils/communication'
 import FeatureInfoItem from '../ServicePanel/FeatureInfoItem'
-
+import Print from '../PrintComponent/PrintComponent'
 import 'ol/ol.css'
 
 const ServiceListItem = props => (
@@ -170,26 +170,25 @@ export default class MapContainer extends React.Component {
         <BackgroundChooser />
         <div>
           { this.renderLayerButton() ? (
-           <div>
-
-
-          <div className={ style.closeMap }>
-            <FontAwesomeIcon title="Lukk kartet" onClick={ () => this.toogleMap() } className={ style.toggleBtn } icon={ "times" } />
-            <span className={ style.closeButtonLabel }>Lukk kartet</span>
-          </div>
-
-
-            <div className={ `${style.container} ${this.state.isExpanded ? style.closed : style.open}` }>
-              <FontAwesomeIcon onClick={ () => this.toogleLayers() } className={ style.toggleBtn } icon={ this.state.isExpanded ? ["far", "layer-group"] : "times" } />
-              <Tabs className={ `${style.tabs} ${this.state.isExpanded ? style.closed : style.open}`} defaultActiveKey="search" id="tab">
-                <Tab className={ `${style.search} ${this.state.isExpanded ? style.closed : style.open}`} eventKey="search" title="Søk" >
-                  <SearchBar />
-                </Tab>
-                <Tab eventKey="tools" title="Visning">
-                  <div id="ServiceList">{ this.renderServiceList() }</div>
-                </Tab>
-              </Tabs>
-             </div>
+            <div>
+              <div className={ style.closeMap }>
+                <FontAwesomeIcon title="Lukk kartet" onClick={ () => this.toogleMap() } className={ style.toggleBtn } icon={ "times" } />
+                <span className={ style.closeButtonLabel }>Lukk kartet</span>
+              </div>
+              <div className={ `${style.container} ${this.state.isExpanded ? style.closed : style.open}` }>
+                <FontAwesomeIcon onClick={ () => this.toogleLayers() } className={ style.toggleBtn } icon={ this.state.isExpanded ? ["far", "layer-group"] : "times" } />
+                <Tabs className={ `${style.tabs} ${this.state.isExpanded ? style.closed : style.open}` } defaultActiveKey="search" id="tab">
+                  <Tab className={ `${style.search} ${this.state.isExpanded ? style.closed : style.open}` } eventKey="search" title="Søk" >
+                    <SearchBar />
+                  </Tab>
+                  <Tab eventKey="layers" title="Visning">
+                    <div id="ServiceList">{ this.renderServiceList() }</div>
+                  </Tab>
+{/*                   <Tab eventKey="tools" title="Tools">
+                    <Print />
+                  </Tab>
+ */}                </Tabs>
+              </div>
             </div>
           ) : (
               <div className={ style.link } onClick={ () => this.toogleMap() }>Gå til kartkatalogen</div>
