@@ -1,34 +1,43 @@
 import React, { useState, useEffect } from "react"
 import PropTypes from 'prop-types'
-
-import { transform } from 'ol/proj'
-import Overlay from 'ol/Overlay'
 import queryString from "query-string"
 import setQuery from "set-query-string"
 
-import { generateAdresseSokUrl, generateSearchStedsnavnUrl } from "../../Utils/n3api"
 import pin from '../../../src/assets/img/pin-md-orange.png'
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import style from "./SearchBar.module.scss"
 
-import { useDispatch, useSelector } from 'react-redux'
-import { updateSearchString } from '../../actions/SearchActions'
+import { transform } from 'ol/proj'
+import { Vector as VectorLayer } from 'ol/layer.js'
+import { Vector as VectorSource } from 'ol/source.js'
+import Feature from 'ol/Feature.js'
+import { Style } from 'ol/style'
+import { Icon } from 'ol/style'
+import Point from 'ol/geom/Point'
 
+import { generateAdresseSokUrl, generateSearchStedsnavnUrl } from "../../Utils/n3api"
 const parser = require('fast-xml-parser')
 
+let vectorSource = new VectorSource({})
 
 const SearchResult = (props) => {
-  const showInfoMarker = (coordinate) => {
-    let markerElement = document.createElement('img')
-    markerElement.src = pin
+  const vectorLayer = new VectorLayer({ source: vectorSource })
+  window.olMap.addLayer(vectorLayer)
 
-    const marker = new Overlay({
-      position: coordinate,
-      positioning: "center-center",
-      element: markerElement
+  const showInfoMarker = (coordinate) => {
+    let iconFeature = new Feature({
+      geometry: new Point(coordinate)
     })
-    window.olMap.addOverlay(marker)
+    const iconStyle = new Style({
+      image: new Icon({
+        anchor: [0.5, 46],
+        anchorXUnits: 'fraction',
+        anchorYUnits: 'pixels',
+        src: pin
+      })
+    })
+    iconFeature.setStyle(iconStyle)
+    vectorSource.addFeature(iconFeature)
   }
   const centerPosition = (coordinate) => {
     window.olMap.getView().setCenter(coordinate)
@@ -65,9 +74,6 @@ const SearchResult = (props) => {
  * @param {*} props
  */
 const SearchBar = props => {
-  const search_query = useSelector(state => state.search_query)
-  const dispatch = useDispatch()
-
   let queryValues = queryString.parse(window.location.search)
   const [searchText, setSearchText] = useState(queryValues["search"])
   const [searchResult, setSearchResult] = useState()
@@ -78,9 +84,7 @@ const SearchBar = props => {
 
   useEffect(() => {
     if (searchText) {
-      window.olMap.getOverlays().clear()
-      dispatch(updateSearchString(searchText))
-
+      vectorSource.clear()
       queryValues.search = searchText
       setQuery(queryValues)
       fetch(generateAdresseSokUrl(searchText))
@@ -128,7 +132,7 @@ const SearchBar = props => {
   return (
     <>
       <div className='input-group col'>
-        <input className={style.searchInput} onChange={ onChangeBound } placeholder={ placeholder } type="text" value={ searchText } aria-describedby="button-addon1" />
+        <input className={ style.searchInput } onChange={ onChangeBound } placeholder={ placeholder } type="text" value={ searchText } aria-describedby="button-addon1" />
         <div className='input-group-append'>
           <button className="btn btn-link" type="button" id="button-addon1" onClick={ () => resetSearch() }>{ searchText ? <FontAwesomeIcon icon={ "times" } /> : '' }</button>
         </div>
