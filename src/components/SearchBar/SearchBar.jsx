@@ -26,8 +26,7 @@ const SearchResult = (props) => {
     const marker = new Overlay({
       position: coordinate,
       positioning: "center-center",
-      element: markerElement,
-      stopEvent: false
+      element: markerElement
     })
     window.olMap.addOverlay(marker)
   }
