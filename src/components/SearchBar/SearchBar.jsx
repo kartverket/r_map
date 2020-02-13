@@ -97,7 +97,7 @@ const SearchBar = props => {
         .then(result => { setSearchResult(result) })
         .catch(error => { console.warn(error) })
 
-      fetch(generateSearchStedsnavnUrl(searchText, 1, 15))
+      fetch(generateSearchStedsnavnUrl(searchText, 0, 15))
         .then(response => {
           if (!response.ok) {
             throw Error(response.statusText)
