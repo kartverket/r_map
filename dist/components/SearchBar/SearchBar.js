@@ -11,15 +11,9 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _proj = require("ol/proj");
-
-var _Overlay = _interopRequireDefault(require("ol/Overlay"));
-
 var _queryString = _interopRequireDefault(require("query-string"));
 
 var _setQueryString = _interopRequireDefault(require("set-query-string"));
-
-var _n3api = require("../../Utils/n3api");
 
 var _pinMdOrange = _interopRequireDefault(require("../../../src/assets/img/pin-md-orange.png"));
 
@@ -27,9 +21,19 @@ var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
 var _SearchBarModule = _interopRequireDefault(require("./SearchBar.module.scss"));
 
-var _reactRedux = require("react-redux");
+var _proj = require("ol/proj");
 
-var _SearchActions = require("../../actions/SearchActions");
+var _layer = require("ol/layer.js");
+
+var _source = require("ol/source.js");
+
+var _Feature = _interopRequireDefault(require("ol/Feature.js"));
+
+var _style = require("ol/style");
+
+var _Point = _interopRequireDefault(require("ol/geom/Point"));
+
+var _n3api = require("../../Utils/n3api");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47,17 +51,28 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var parser = require('fast-xml-parser');
 
+var vectorSource = new _source.Vector({});
+
 var SearchResult = function SearchResult(props) {
+  var vectorLayer = new _layer.Vector({
+    source: vectorSource
+  });
+  window.olMap.addLayer(vectorLayer);
+
   var showInfoMarker = function showInfoMarker(coordinate) {
-    var markerElement = document.createElement('img');
-    markerElement.src = _pinMdOrange.default;
-    var marker = new _Overlay.default({
-      position: coordinate,
-      positioning: "center-center",
-      element: markerElement,
-      stopEvent: false
+    var iconFeature = new _Feature.default({
+      geometry: new _Point.default(coordinate)
     });
-    window.olMap.addOverlay(marker);
+    var iconStyle = new _style.Style({
+      image: new _style.Icon({
+        anchor: [0.5, 46],
+        anchorXUnits: 'fraction',
+        anchorYUnits: 'pixels',
+        src: _pinMdOrange.default
+      })
+    });
+    iconFeature.setStyle(iconStyle);
+    vectorSource.addFeature(iconFeature);
   };
 
   var centerPosition = function centerPosition(coordinate) {
@@ -108,11 +123,6 @@ var SearchResult = function SearchResult(props) {
 
 
 var SearchBar = function SearchBar(props) {
-  var search_query = (0, _reactRedux.useSelector)(function (state) {
-    return state.search_query;
-  });
-  var dispatch = (0, _reactRedux.useDispatch)();
-
   var queryValues = _queryString.default.parse(window.location.search);
 
   var _useState = (0, _react.useState)(queryValues["search"]),
@@ -144,8 +154,7 @@ var SearchBar = function SearchBar(props) {
 
   (0, _react.useEffect)(function () {
     if (searchText) {
-      window.olMap.getOverlays().clear();
-      dispatch((0, _SearchActions.updateSearchString)(searchText));
+      vectorSource.clear();
       queryValues.search = searchText;
       (0, _setQueryString.default)(queryValues);
       fetch((0, _n3api.generateAdresseSokUrl)(searchText)).then(function (response) {
@@ -159,7 +168,7 @@ var SearchBar = function SearchBar(props) {
       }).catch(function (error) {
         console.warn(error);
       });
-      fetch((0, _n3api.generateSearchStedsnavnUrl)(searchText, 1, 15)).then(function (response) {
+      fetch((0, _n3api.generateSearchStedsnavnUrl)(searchText, 0, 15)).then(function (response) {
         if (!response.ok) {
           throw Error(response.statusText);
         }
@@ -214,7 +223,7 @@ var SearchBar = function SearchBar(props) {
   }, searchText ? _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     icon: "times"
   }) : ''))), _react.default.createElement("div", {
-    className: "searchResult col"
+    className: _SearchBarModule.default.searchResult
   }, searchResult && _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", null, _react.default.createElement("div", {
     onClick: function onClick() {
       return setStateAdress(!expandedAdress);

@@ -1,5 +1,5 @@
 
-.searchResult {
+:local(.searchResult) {
   display: inline-grid;
   z-index: 16;
   overflow: visible;
@@ -28,7 +28,7 @@
   position: relative;
   top: 4px;
   margin-right: 4px;
-  font-weight: 400;
+  font-weight: 600;
   white-space: nowrap;
 }
 :local(.expandBtn) {

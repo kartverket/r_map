@@ -77,7 +77,9 @@ var LayerEntry = function LayerEntry(props) {
       textSpan = textSpan.length === 0 ? layer.Abstract : textSpan + ' - ' + layer.Abstract;
     }
 
-    return _react.default.createElement("span", null, textSpan);
+    return _react.default.createElement("span", {
+      className: _LayerEntryModule.default.spanCheckbox
+    }, textSpan);
   };
 
   var onSelectionChange = function onSelectionChange(currentNode) {

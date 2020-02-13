@@ -123,7 +123,7 @@ var createOlWMSFromCap = function createOlWMSFromCap(map, getCapLayer, project) 
     if (Array.isArray(getCapLayer.MetadataURL)) {
         metadata = getCapLayer.MetadataURL[0].OnlineResource;
     }
-          layer = createOlWMS(map, layerParam, {
+        layer = createOlWMS(map, layerParam, {
           url: getCapLayer.url,
           label: getCapLayer.title,
           attribution: attribution,

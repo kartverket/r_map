@@ -35,6 +35,8 @@ var _communication = require("../../Utils/communication");
 
 var _FeatureInfoItem = _interopRequireDefault(require("../ServicePanel/FeatureInfoItem"));
 
+var _PrintComponent = _interopRequireDefault(require("../PrintComponent/PrintComponent"));
+
 require("ol/ol.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -244,11 +246,11 @@ function (_React$Component) {
         eventKey: "search",
         title: "S\xF8k"
       }, _react.default.createElement(_SearchBar.default, null)), _react.default.createElement(_Tab.default, {
-        eventKey: "tools",
+        eventKey: "layers",
         title: "Visning"
       }, _react.default.createElement("div", {
         id: "ServiceList"
-      }, this.renderServiceList()))))) : _react.default.createElement("div", {
+      }, this.renderServiceList())), "                "))) : _react.default.createElement("div", {
         className: _MapContainerModule.default.link,
         onClick: function onClick() {
           return _this3.toogleMap();

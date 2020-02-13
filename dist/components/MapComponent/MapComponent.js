@@ -9,13 +9,13 @@ var _react = _interopRequireDefault(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _CapabilitiesUtil = require("../../MapUtil/CapabilitiesUtil");
-
-var _maplibHelper = require("../../MapUtil/maplibHelper");
-
 var _queryString = _interopRequireDefault(require("query-string"));
 
 var _setQueryString = _interopRequireDefault(require("set-query-string"));
+
+var _CapabilitiesUtil = require("../../MapUtil/CapabilitiesUtil");
+
+var _maplibHelper = require("../../MapUtil/maplibHelper");
 
 var _communication = require("../../Utils/communication");
 
@@ -149,9 +149,20 @@ function (_React$Component) {
               meta.Params = service.customParams || '';
 
               if (service.addLayers.length > 0) {
-                var layersToBeAdded = capa.Capability.Layer.Layer.filter(function (e) {
+                var layersToBeAdded = [];
+                layersToBeAdded = capa.Capability.Layer.Layer.filter(function (e) {
                   return service.addLayers.includes(e.Name);
                 });
+
+                if (layersToBeAdded.length === 0 || layersToBeAdded.length !== service.addLayers.length) {
+                  layersToBeAdded = [];
+                  service.addLayers.forEach(function (layerName) {
+                    layersToBeAdded.push({
+                      Name: layerName
+                    });
+                  });
+                }
+
                 layersToBeAdded.forEach(function (layer) {
                   var laycapaLayerer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmsCapabilities(meta, layer);
 
@@ -196,7 +207,7 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       return _react.default.createElement("div", {
-        id: "MapComponent",
+        id: "map",
         style: {
           position: "relative",
           width: "100%",

@@ -159,7 +159,7 @@ var parsePlainFeatureInfo = function parsePlainFeatureInfo(data) {
       r_layer[layerName] = subf.map(function (f) {
         var feature = f.split(/(Feature[^\r\n]*)/);
         feature.shift();
-        var faetureId = feature.splice(0, 1)[0].split('Feature ')[1].replace(/:/g, '').trim();
+        feature.splice(0, 1)[0].split('Feature ')[1].replace(/:/g, '').trim();
         feature = feature.map(function (item) {
           item = item.trim().replace(/=/g, ':').split('\n');
           return arrayToObject(item);
