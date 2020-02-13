@@ -108,6 +108,7 @@ const SearchBar = props => {
           let response = parser.parse(result)
           if (response.sokRes.stedsnavn) {
             response.sokRes.stedsnavn = response.sokRes.stedsnavn[response.sokRes.stedsnavn.length - 1] === "" ? response.sokRes.stedsnavn.slice(0, response.sokRes.stedsnavn.length - 1) : response.sokRes.stedsnavn
+            response.sokRes.stedsnavn = Array.isArray(response.sokRes.stedsnavn) ? response.sokRes.stedsnavn : new Array(response.sokRes.stedsnavn)
             response.sokRes.stedsnavn ? setSearchResultSSR(response) : setSearchResultSSR('')
           } else {
             setSearchResultSSR(null)
@@ -117,7 +118,8 @@ const SearchBar = props => {
     } else {
       setSearchResult('')
       setSearchResultSSR('')
-      window.olMap.getOverlays().clear()
+      vectorSource.clear()
+      setQuery()
     }
   }, [searchText])
 
@@ -137,7 +139,7 @@ const SearchBar = props => {
           <button className="btn btn-link" type="button" id="button-addon1" onClick={ () => resetSearch() }>{ searchText ? <FontAwesomeIcon icon={ "times" } /> : '' }</button>
         </div>
       </div>
-      <div className={style.searchResult}>
+      <div className={ style.searchResult }>
         {
           searchResult && (
             <>
