@@ -30,7 +30,7 @@ const LayerEntry = props => {
     if (layer.Abstract && layer.Abstract.length > 0 && layer.Abstract !== layer.Title && layer.Abstract !== layer.Name && textSpan.length === 0) {
       textSpan = textSpan.length === 0 ? (layer.Abstract) : (textSpan + ' - ' + layer.Abstract)
     }
-    return (<span>{ textSpan }</span>)
+    return (<span className={style.spanCheckbox}>{ textSpan }</span>)
   }
 
   const onSelectionChange = currentNode => {

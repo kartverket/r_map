@@ -133,7 +133,7 @@ const SearchBar = props => {
           <button className="btn btn-link" type="button" id="button-addon1" onClick={ () => resetSearch() }>{ searchText ? <FontAwesomeIcon icon={ "times" } /> : '' }</button>
         </div>
       </div>
-      <div className='searchResult col'>
+      <div className={style.searchResult}>
         {
           searchResult && (
             <>
