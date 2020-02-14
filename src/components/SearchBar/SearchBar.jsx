@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import queryString from "query-string"
 import setQuery from "set-query-string"
 
-import pin from '../../../src/assets/img/pin-md-orange.png'
+import pin_orange from '../../../src/assets/img/pin-md-orange.png'
+import pin_blue from '../../../src/assets/img/pin-md-blueish.png'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import style from "./SearchBar.module.scss"
 
@@ -18,30 +19,44 @@ import Point from 'ol/geom/Point'
 import { generateAdresseSokUrl, generateSearchStedsnavnUrl } from "../../Utils/n3api"
 const parser = require('fast-xml-parser')
 
-let vectorSource = new VectorSource({})
+const defaultZoom = 13
+const vectorSource = new VectorSource({})
 
 const SearchResult = (props) => {
   const vectorLayer = new VectorLayer({ source: vectorSource })
   window.olMap.addLayer(vectorLayer)
+  const icon_orange = new Style({
+    image: new Icon({
+      anchor: [0.5, 46],
+      anchorXUnits: 'fraction',
+      anchorYUnits: 'pixels',
+      src: pin_orange
+    })
+  })
+  const icon_blue = new Style({
+    image: new Icon({
+      anchor: [0.5, 46],
+      anchorXUnits: 'fraction',
+      anchorYUnits: 'pixels',
+      src: pin_blue
+    })
+  })
+  let features = []
 
   const showInfoMarker = (coordinate) => {
-    let iconFeature = new Feature({
-      geometry: new Point(coordinate)
-    })
-    const iconStyle = new Style({
-      image: new Icon({
-        anchor: [0.5, 46],
-        anchorXUnits: 'fraction',
-        anchorYUnits: 'pixels',
-        src: pin
-      })
-    })
-    iconFeature.setStyle(iconStyle)
+    let iconFeature = new Feature({ geometry: new Point(coordinate) })
+    iconFeature.setStyle(icon_orange)
     vectorSource.addFeature(iconFeature)
   }
   const centerPosition = (coordinate) => {
+    features.forEach(feature => feature.setStyle(icon_orange))
     window.olMap.getView().setCenter(coordinate)
-    window.olMap.getView().setZoom(14)
+    const activeZoom = window.olMap.getView().getZoom()
+    if (activeZoom < defaultZoom) {
+      window.olMap.getView().setZoom(defaultZoom)
+    }
+    features = vectorSource.getFeaturesAtCoordinate(coordinate)
+    features.forEach(feature => feature.setStyle(icon_blue))
   }
   const constructPoint = (coord, epsgTo = 'EPSG:25833') => transform([Number(coord.lon), Number(coord.lat)], coord.epsg, epsgTo)
 
