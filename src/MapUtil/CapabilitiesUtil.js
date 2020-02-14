@@ -16,7 +16,7 @@ import { bbox as bboxStrategy } from 'ol/loadingstrategy.js'
 import { Fill, Stroke, Style, Text } from 'ol/style'
 import { Icon } from 'ol/style'
 import { Layer } from './Domain'
-import pin from '../../src/assets/img/pin-md-orange.png'
+import pin from '../assets/img/pin-md-orange.png'
 
 import get from 'lodash/get.js'
 import {

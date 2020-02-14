@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import queryString from "query-string"
 import setQuery from "set-query-string"
 
-import pin_orange from '../../../src/assets/img/pin-md-orange.png'
-import pin_blue from '../../../src/assets/img/pin-md-blueish.png'
+import pin_orange from '../../assets/img/pin-md-orange.png'
+import pin_blue from '../../assets/img/pin-md-blueish.png'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import style from "./SearchBar.module.scss"
 

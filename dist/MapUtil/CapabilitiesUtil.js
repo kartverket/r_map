@@ -31,7 +31,7 @@ var _style = require("ol/style");
 
 var _Domain = require("./Domain");
 
-var _pinMdOrange = _interopRequireDefault(require("../../src/assets/img/pin-md-orange.png"));
+var _pinMdOrange = _interopRequireDefault(require("../assets/img/pin-md-orange.png"));
 
 var _get = _interopRequireDefault(require("lodash/get.js"));
 

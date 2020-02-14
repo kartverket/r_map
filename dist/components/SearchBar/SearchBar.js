@@ -15,7 +15,9 @@ var _queryString = _interopRequireDefault(require("query-string"));
 
 var _setQueryString = _interopRequireDefault(require("set-query-string"));
 
-var _pinMdOrange = _interopRequireDefault(require("../../../src/assets/img/pin-md-orange.png"));
+var _pinMdOrange = _interopRequireDefault(require("../../assets/img/pin-md-orange.png"));
+
+var _pinMdBlueish = _interopRequireDefault(require("../../assets/img/pin-md-blueish.png"));
 
 var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
@@ -51,6 +53,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var parser = require('fast-xml-parser');
 
+var defaultZoom = 13;
 var vectorSource = new _source.Vector({});
 
 var SearchResult = function SearchResult(props) {
@@ -58,25 +61,47 @@ var SearchResult = function SearchResult(props) {
     source: vectorSource
   });
   window.olMap.addLayer(vectorLayer);
+  var icon_orange = new _style.Style({
+    image: new _style.Icon({
+      anchor: [0.5, 46],
+      anchorXUnits: 'fraction',
+      anchorYUnits: 'pixels',
+      src: _pinMdOrange.default
+    })
+  });
+  var icon_blue = new _style.Style({
+    image: new _style.Icon({
+      anchor: [0.5, 46],
+      anchorXUnits: 'fraction',
+      anchorYUnits: 'pixels',
+      src: _pinMdBlueish.default
+    })
+  });
+  var features = [];
 
   var showInfoMarker = function showInfoMarker(coordinate) {
     var iconFeature = new _Feature.default({
       geometry: new _Point.default(coordinate)
     });
-    var iconStyle = new _style.Style({
-      image: new _style.Icon({
-        anchor: [0.5, 46],
-        anchorXUnits: 'fraction',
-        anchorYUnits: 'pixels',
-        src: _pinMdOrange.default
-      })
-    });
-    iconFeature.setStyle(iconStyle);
+    iconFeature.setStyle(icon_orange);
     vectorSource.addFeature(iconFeature);
   };
 
   var centerPosition = function centerPosition(coordinate) {
+    features.forEach(function (feature) {
+      return feature.setStyle(icon_orange);
+    });
     window.olMap.getView().setCenter(coordinate);
+    var activeZoom = window.olMap.getView().getZoom();
+
+    if (activeZoom < defaultZoom) {
+      window.olMap.getView().setZoom(defaultZoom);
+    }
+
+    features = vectorSource.getFeaturesAtCoordinate(coordinate);
+    features.forEach(function (feature) {
+      return feature.setStyle(icon_blue);
+    });
   };
 
   var constructPoint = function constructPoint(coord) {
@@ -179,6 +204,7 @@ var SearchBar = function SearchBar(props) {
 
         if (response.sokRes.stedsnavn) {
           response.sokRes.stedsnavn = response.sokRes.stedsnavn[response.sokRes.stedsnavn.length - 1] === "" ? response.sokRes.stedsnavn.slice(0, response.sokRes.stedsnavn.length - 1) : response.sokRes.stedsnavn;
+          response.sokRes.stedsnavn = Array.isArray(response.sokRes.stedsnavn) ? response.sokRes.stedsnavn : new Array(response.sokRes.stedsnavn);
           response.sokRes.stedsnavn ? setSearchResultSSR(response) : setSearchResultSSR('');
         } else {
           setSearchResultSSR(null);
@@ -189,7 +215,8 @@ var SearchBar = function SearchBar(props) {
     } else {
       setSearchResult('');
       setSearchResultSSR('');
-      window.olMap.getOverlays().clear();
+      vectorSource.clear();
+      (0, _setQueryString.default)();
     }
   }, [searchText]);
 
