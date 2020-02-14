@@ -1,9 +1,13 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState } from "react"
+import PropTypes from "prop-types"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import style from './LayerEntry.module.scss'
-import InlineLegend from '../Legend/InlineLegend';
-import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
+import InlineLegend from '../Legend/InlineLegend'
+import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
+
+//import { Messaging } from '../../Utils/communication'
+import { useDispatch } from "react-redux"
+import { setFeature } from '../../actions/FeatureActions'
 
 
 const LayerEntry = props => {
@@ -11,10 +15,9 @@ const LayerEntry = props => {
   const [olLayer, setLayer] = useState()
   const [checked, setChecked] = useState(props.layer.isVisible)
   const [transparency, setTransparency] = useState(50)
-
   const layer = props.layer
-  const info = '' // layer.Abstract  //Prepare for some info text, for example the Abstract info or more.
   layer.Name = (layer.name && typeof layer.name === 'object') ? layer.name.localPart : layer.Name
+  const dispatch = useDispatch()
 
   const abstractTextSpan = () => {
     let textSpan = ''
@@ -27,19 +30,19 @@ const LayerEntry = props => {
     if (layer.Abstract && layer.Abstract.length > 0 && layer.Abstract !== layer.Title && layer.Abstract !== layer.Name && textSpan.length === 0) {
       textSpan = textSpan.length === 0 ? (layer.Abstract) : (textSpan + ' - ' + layer.Abstract)
     }
-    return (<span>{textSpan}</span>)
+    return (<span className={style.spanCheckbox}>{ textSpan }</span>)
   }
 
   const onSelectionChange = currentNode => {
     let isNewLayer = true
     if (layer.Name) {
-      let currentLayer;
+      let currentLayer
       if (props.meta.Type === 'OGC:WMS' || props.meta.Type === 'WMS' || props.meta.Type === 'WMS-tjeneste') {
-        currentLayer = CapabilitiesUtil.getOlLayerFromWmsCapabilities(props.meta, currentNode);
+        currentLayer = CapabilitiesUtil.getOlLayerFromWmsCapabilities(props.meta, currentNode)
       } else if (props.meta.Type === 'GEOJSON') {
-        currentLayer = CapabilitiesUtil.getOlLayerFromGeoJson(props.meta, currentNode);
+        currentLayer = CapabilitiesUtil.getOlLayerFromGeoJson(props.meta, currentNode)
       } else if (props.meta.Type === 'OGC:WFS' || props.meta.Type === 'WFS' || props.meta.Type === 'WFS-tjeneste') {
-        currentLayer = CapabilitiesUtil.getOlLayerFromWFS(props.meta, currentNode);
+        currentLayer = CapabilitiesUtil.getOlLayerFromWFS(props.meta, currentNode)
       }
       setLayer(currentLayer)
 
@@ -56,31 +59,44 @@ const LayerEntry = props => {
 
         if (currentNode.queryable) {
           window.olMap.on('singleclick', function (evt) {
-            const viewResolution = (window.olMap.getView().getResolution());
-            const url = currentLayer.getSource().getGetFeatureInfoUrl(evt.coordinate, viewResolution, window.olMap.getView().getProjection(), { INFO_FORMAT: 'text/plain' })
+            const viewResolution = (window.olMap.getView().getResolution())
+            const formats = currentLayer.getProperties().getFeatureInfoFormats
+            let indexFormat = 0
+            if (formats.indexOf('text/plain') > 0) { indexFormat = formats.indexOf('text/plain') }
+            else if (formats.indexOf('text/xml') > 0) { indexFormat = formats.indexOf('text/xml') }
+            else if (formats.indexOf('application/vnd.ogc.gml') > 0) { indexFormat = formats.indexOf('application/vnd.ogc.gml') }
+            else if (formats.indexOf('application/json') > 0) { indexFormat = formats.indexOf('application/json') }
+            else if (formats.indexOf('text/html') === 0) { indexFormat = 1 }
+
+            const url = currentLayer.getSource().getFeatureInfoUrl(evt.coordinate, viewResolution, window.olMap.getView().getProjection(), { INFO_FORMAT: formats[indexFormat] })
             if (url && currentLayer.getVisible()) {
               fetch(url)
                 .then((response) => response.text())
-                .then((data) => {
-                  console.log(data)
+                .then((data) => dispatch(setFeature(data, formats[indexFormat])))
+                .catch((error) => {
+                  console.error('Error:', error)
                 })
             }
           })
-        } else if (currentNode.type && currentNode.type === 'FeatureCollection') {
-          window.olMap.on('click', function(evt){
-            const feature = window.olMap.forEachFeatureAtPixel(evt.pixel,
-              function(feature, layer) {
-                return feature;
-              });
-            if (feature) {
-                const coord = feature.getGeometry().getCoordinates();
-                var content = feature.get('n');
-
-                console.info(feature.getProperties());
-                console.info(coord);
-                console.info(content);
+        } else {
+          // Assume if not queryable then it could be geojson features
+          window.olMap.on('click', function (evt) {
+            const features = window.olMap.getFeaturesAtPixel(evt.pixel, (feature, layer) => feature)
+            if (features) {
+              features.forEach(feature => {
+                const coord = feature.getGeometry().getCoordinates()
+                let content = feature.get('n')
+                let message = {
+                  cmd: 'featureSelected',
+                  featureId: feature.getId(),
+                  properties: content,
+                  coordinates: coord
+                }
+                console.log(message)
+                //dispatch(setFeature(message))
+              })
             }
-        });
+          })
         }
       }
     }
@@ -89,7 +105,7 @@ const LayerEntry = props => {
   const setOpacity = value => {
     setTransparency(value)
     if (olLayer) {
-      olLayer.setOpacity(Math.min(transparency / 100, 1));
+      olLayer.setOpacity(Math.min(transparency / 100, 1))
     }
   }
 
@@ -106,31 +122,25 @@ const LayerEntry = props => {
 
   return (
     <>
-      {layer.Name ? (
+      { layer.Name ? (
         <>
-          <input className="checkbox" id={layer.Name} type="checkbox" />
-          <label onClick={() => onSelectionChange(layer)} htmlFor={layer.Title}>
-            <FontAwesomeIcon className="svg-checkbox" icon={checked ? ["far", "check-square"] : ["far", "square"]} />
+          <input className="checkbox" id={ layer.Name } type="checkbox" />
+          <label onClick={ () => onSelectionChange(layer) } htmlFor={ layer.Title }>
+            <FontAwesomeIcon className="svg-checkbox" icon={ checked ? ["far", "check-square"] : ["far", "square"] } />
           </label>
         </>
       ) : (
-          <label onClick={() => onSelectionChange(layer)} htmlFor={layer.Title}> </label>
-        )}
-      {abstractTextSpan()}
-      {info ? (
-        <div class={style.info}>
-          <FontAwesomeIcon className={style.infoIcon} icon={["far", "info"]} />
-          <span class={style.infoText}>{info}</span>
-        </div>
-      ) : null}
-      {layer.Name ? (
-        <label onClick={() => toggleOptions(!options)}>
-          <FontAwesomeIcon icon={["far", "sliders-h"]} color={options ? "red" : "black"} />
+          <label onClick={ () => onSelectionChange(layer) } htmlFor={ layer.Title }> </label>
+        ) }
+      { abstractTextSpan() }
+      { layer.Name ? (
+        <label onClick={ () => toggleOptions(!options) }>
+          <FontAwesomeIcon icon={ ["far", "sliders-h"] } color={ options ? "red" : "black" } />
         </label>
-      ) : ('')}
-      <InlineLegend legendUrl={((layer.Style && layer.Style[0].LegendURL) ? layer.Style[0].LegendURL[0].OnlineResource : '')} />
-      {options ? (
-        <div className={style.settings}>
+      ) : ('') }
+      <InlineLegend legendUrl={ ((layer.Style && layer.Style[0].LegendURL) ? layer.Style[0].LegendURL[0].OnlineResource : '') } />
+      { options ? (
+        <div className={ style.settings }>
           {/** Tar ut prio buttone for nå *
           <div>
             <button className={style.movelayerBtn} onClick={() => setLayerIndex(index + 1)}>Flytt fremover<FontAwesomeIcon title="Vis laget over"  icon={['fas', 'arrow-up']} /></button>
@@ -138,30 +148,30 @@ const LayerEntry = props => {
             <span className={style.priority}>Prioritet: {index}</span>
           </div>
            */}
-          {/** TODO: STYLE the slider */}
-          <label className={style.slider}>
+          {/** TODO: STYLE the slider */ }
+          <label className={ style.slider }>
             Gjennomsiktighet:
             <input
               type="range"
-              min={0}
-              max={100}
-              value={transparency}
-              onChange={e => setOpacity(e.target.value)}
+              min={ 0 }
+              max={ 100 }
+              value={ transparency }
+              onChange={ e => setOpacity(e.target.value) }
             />
           </label>
         </div>
       ) : (
           ""
-        )}
-      {props.children}
-      {layer.Layer ? (layer.Layer.map((subLayer, isub) => (<div className={style.facetSub} key={isub}><LayerEntry layer={subLayer} meta={props.meta} key={isub} /></div>))) : ('')}
+        ) }
+      { props.children }
+      { layer.Layer ? (layer.Layer.map((subLayer, isub) => (<div className={ style.facetSub } key={ isub }><LayerEntry layer={ subLayer } meta={ props.meta } key={ isub } /></div>))) : ('') }
     </>
-  );
-};
+  )
+}
 
 LayerEntry.propTypes = {
   layer: PropTypes.object,
   meta: PropTypes.object
-};
+}
 
-export default LayerEntry;
+export default LayerEntry

@@ -42,6 +42,8 @@ var _reactDom = _interopRequireDefault(require("react-dom"));
 
 require("./index.scss");
 
+require("bootstrap/dist/css/bootstrap.min.css");
+
 var _App = _interopRequireDefault(require("./App"));
 
 var serviceWorker = _interopRequireWildcard(require("./serviceWorker"));
@@ -58,12 +60,21 @@ var _MapContainer = _interopRequireDefault(require("./components/MapContainer/Ma
 
 var _Legend = _interopRequireDefault(require("./components/Legend/Legend"));
 
+var _configureStore = _interopRequireDefault(require("./Utils/configureStore"));
+
+var _reactRedux = require("react-redux");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_reactDom.default.render(_react.default.createElement(_App.default, null), document.getElementById('root'));
+var initialState = {};
+var store = (0, _configureStore.default)(initialState);
+
+_reactDom.default.render(_react.default.createElement(_reactRedux.Provider, {
+  store: store
+}, _react.default.createElement(_App.default, null)), document.getElementById('root'));
 
 serviceWorker.unregister();

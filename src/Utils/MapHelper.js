@@ -141,7 +141,7 @@ export const createOlWMSFromCap = (map, getCapLayer, project) => {
 
         map.on('singleclick', function (evt) {
             var viewResolution = (map.getView().getResolution());
-            var url = layer.getSource().getGetFeatureInfoUrl(
+            var url = layer.getSource().getFeatureInfoUrl(
                 evt.coordinate, viewResolution, map.getView().getProjection(), {
                     INFO_FORMAT: 'text/plain'
                 });

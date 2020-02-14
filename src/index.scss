@@ -1,6 +1,8 @@
 @import 'assets/sass/variables/_devVariables';
 @import 'assets/sass/_main';
 
+body, html, #root, .App { height: 100% }
+
 body {
   margin: 0;
   padding: 0;
@@ -15,7 +17,7 @@ code {
 
 .ol-zoom {
   top: 40% !important;
-  left: auto;
+
   right: 16px;
   padding: 0;
 }
@@ -121,4 +123,19 @@ code {
 
 .node-label {
   padding-left: 5px;
+}
+
+#MapComponent{
+  height: 100%;
+}
+button.close {
+  font-size: 2em;
+  color: #e87722;
+}
+.btn.btn-link {
+  font-size: 1em;
+}
+.modal-body {
+  overflow: auto;
+  max-height: calc(100vh - 50px);
 }

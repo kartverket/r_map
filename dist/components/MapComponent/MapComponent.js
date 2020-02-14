@@ -9,13 +9,15 @@ var _react = _interopRequireDefault(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
+var _queryString = _interopRequireDefault(require("query-string"));
+
+var _setQueryString = _interopRequireDefault(require("set-query-string"));
+
 var _CapabilitiesUtil = require("../../MapUtil/CapabilitiesUtil");
 
 var _maplibHelper = require("../../MapUtil/maplibHelper");
 
-var _queryString = _interopRequireDefault(require("query-string"));
-
-var _setQueryString = _interopRequireDefault(require("set-query-string"));
+var _communication = require("../../Utils/communication");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -39,10 +41,6 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-/**
- * @class The Map Component
- * @extends React.Component
- */
 var MapComponent =
 /*#__PURE__*/
 function (_React$Component) {
@@ -114,6 +112,24 @@ function (_React$Component) {
         map: _maplibHelper.map
       });
       this.addWMS();
+      window.olMap.on('click', function (evt) {
+        var feature = window.olMap.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+          return feature;
+        });
+
+        if (feature) {
+          var coord = feature.getGeometry().getCoordinates();
+          var content = feature.get('n');
+          var message = {
+            cmd: 'featureSelected',
+            featureId: feature.getId(),
+            properties: content,
+            coordinates: coord
+          };
+
+          _communication.Messaging.postMessage(JSON.stringify(message));
+        }
+      });
     }
   }, {
     key: "addWMS",
@@ -133,9 +149,20 @@ function (_React$Component) {
               meta.Params = service.customParams || '';
 
               if (service.addLayers.length > 0) {
-                var layersToBeAdded = capa.Capability.Layer.Layer.filter(function (e) {
+                var layersToBeAdded = [];
+                layersToBeAdded = capa.Capability.Layer.Layer.filter(function (e) {
                   return service.addLayers.includes(e.Name);
                 });
+
+                if (layersToBeAdded.length === 0 || layersToBeAdded.length !== service.addLayers.length) {
+                  layersToBeAdded = [];
+                  service.addLayers.forEach(function (layerName) {
+                    layersToBeAdded.push({
+                      Name: layerName
+                    });
+                  });
+                }
+
                 layersToBeAdded.forEach(function (layer) {
                   var laycapaLayerer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmsCapabilities(meta, layer);
 

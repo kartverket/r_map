@@ -31,6 +31,8 @@ var _style = require("ol/style");
 
 var _Domain = require("./Domain");
 
+var _pinMdOrange = _interopRequireDefault(require("../assets/img/pin-md-orange.png"));
+
 var _get = _interopRequireDefault(require("lodash/get.js"));
 
 var _maplibHelper = require("./maplibHelper");
@@ -388,26 +390,51 @@ function () {
       return new _layer.Vector({
         source: vectorSource,
         style: function style(feature, resolution) {
-          return new _style.Style({
-            fill: new _style.Fill({
-              color: 'rgba(255, 255, 255, 0.6)'
-            }),
-            stroke: new _style.Stroke({
-              color: '#319FD3',
-              width: 2
-            }),
-            text: new _style.Text({
-              font: '12px Calibri,sans-serif',
+          var geom_name = feature.getGeometry().getType();
+          console.log(geom_name);
+
+          if (geom_name === 'Point') {
+            return new _style.Style({
+              image: new _style.Icon({
+                anchor: [0.5, 46],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                src: _pinMdOrange.default
+              }),
+              text: new _style.Text({
+                font: '12px Calibri,sans-serif',
+                fill: new _style.Fill({
+                  color: '#000'
+                }),
+                stroke: new _style.Stroke({
+                  color: '#fff',
+                  width: 3
+                }),
+                text: feature.get(meta.ShowPropertyName)
+              })
+            });
+          } else {
+            return new _style.Style({
               fill: new _style.Fill({
-                color: '#000'
+                color: 'rgba(255, 255, 255, 0.6)'
               }),
               stroke: new _style.Stroke({
-                color: '#fff',
-                width: 3
+                color: '#319FD3',
+                width: 2
               }),
-              text: feature.get(meta.ShowPropertyName)
-            })
-          });
+              text: new _style.Text({
+                font: '12px Calibri,sans-serif',
+                fill: new _style.Fill({
+                  color: '#000'
+                }),
+                stroke: new _style.Stroke({
+                  color: '#fff',
+                  width: 3
+                }),
+                text: feature.get(meta.ShowPropertyName)
+              })
+            });
+          }
         }
       });
     }

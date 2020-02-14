@@ -15,6 +15,8 @@ import {
 import {
   Map
 } from './Map'
+import { Messaging } from '../Utils/communication'
+
 
 let groupIds = []
 let notDummyGroup = false
@@ -379,9 +381,14 @@ mapConfig.instance = 'geoportal'
 mapConfig.proxyHost = ''
 
 export const eventHandler = EventHandler()
-export const mapImplementation = OLMap(null, eventHandler)
+export const mapImplementation = OLMap(eventHandler)
 export const map = Map(
   mapImplementation,
   eventHandler,
   null
 )
+if (window.addEventListener) {
+  window.addEventListener("message", Messaging.listener, false)
+} else {
+  window.attachEvent("onmessage", Messaging.listener)
+}

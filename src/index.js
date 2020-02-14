@@ -1,19 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.scss';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.scss'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import App from './App'
+import * as serviceWorker from './serviceWorker'
 
-import './Utils/icons';
+import './Utils/icons'
 
-import ServicePanel from './components/ServicePanel/ServicePanel';
-import BackgroundChooser from './components/BackgroundChooser/BackgroundChooser';
-import MapComponent from './components/MapComponent/MapComponent';
-import MapContainer from './components/MapContainer/MapContainer';
-import Legend from './components/Legend/Legend';
+import ServicePanel from './components/ServicePanel/ServicePanel'
+import BackgroundChooser from './components/BackgroundChooser/BackgroundChooser'
+import MapComponent from './components/MapComponent/MapComponent'
+import MapContainer from './components/MapContainer/MapContainer'
+import Legend from './components/Legend/Legend'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import configureStore from './Utils/configureStore'
+import { Provider } from 'react-redux'
 
-serviceWorker.unregister();
+const initialState = {}
+const store = configureStore(initialState)
 
-export { ServicePanel, BackgroundChooser, MapComponent, MapContainer, Legend };
+ReactDOM.render(
+  <Provider store={ store }>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+)
+
+serviceWorker.unregister()
+
+export { ServicePanel, BackgroundChooser, MapComponent, MapContainer, Legend }

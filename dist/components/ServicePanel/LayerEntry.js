@@ -17,6 +17,10 @@ var _InlineLegend = _interopRequireDefault(require("../Legend/InlineLegend"));
 
 var _CapabilitiesUtil = require("../../MapUtil/CapabilitiesUtil");
 
+var _reactRedux = require("react-redux");
+
+var _FeatureActions = require("../../actions/FeatureActions");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -55,9 +59,8 @@ var LayerEntry = function LayerEntry(props) {
       setTransparency = _useState8[1];
 
   var layer = props.layer;
-  var info = ''; // layer.Abstract  //Prepare for some info text, for example the Abstract info or more.
-
   layer.Name = layer.name && _typeof(layer.name) === 'object' ? layer.name.localPart : layer.Name;
+  var dispatch = (0, _reactRedux.useDispatch)();
 
   var abstractTextSpan = function abstractTextSpan() {
     var textSpan = '';
@@ -74,7 +77,9 @@ var LayerEntry = function LayerEntry(props) {
       textSpan = textSpan.length === 0 ? layer.Abstract : textSpan + ' - ' + layer.Abstract;
     }
 
-    return _react.default.createElement("span", null, textSpan);
+    return _react.default.createElement("span", {
+      className: _LayerEntryModule.default.spanCheckbox
+    }, textSpan);
   };
 
   var onSelectionChange = function onSelectionChange(currentNode) {
@@ -107,30 +112,54 @@ var LayerEntry = function LayerEntry(props) {
         if (currentNode.queryable) {
           window.olMap.on('singleclick', function (evt) {
             var viewResolution = window.olMap.getView().getResolution();
-            var url = currentLayer.getSource().getGetFeatureInfoUrl(evt.coordinate, viewResolution, window.olMap.getView().getProjection(), {
-              INFO_FORMAT: 'text/plain'
+            var formats = currentLayer.getProperties().getFeatureInfoFormats;
+            var indexFormat = 0;
+
+            if (formats.indexOf('text/plain') > 0) {
+              indexFormat = formats.indexOf('text/plain');
+            } else if (formats.indexOf('text/xml') > 0) {
+              indexFormat = formats.indexOf('text/xml');
+            } else if (formats.indexOf('application/vnd.ogc.gml') > 0) {
+              indexFormat = formats.indexOf('application/vnd.ogc.gml');
+            } else if (formats.indexOf('application/json') > 0) {
+              indexFormat = formats.indexOf('application/json');
+            } else if (formats.indexOf('text/html') === 0) {
+              indexFormat = 1;
+            }
+
+            var url = currentLayer.getSource().getFeatureInfoUrl(evt.coordinate, viewResolution, window.olMap.getView().getProjection(), {
+              INFO_FORMAT: formats[indexFormat]
             });
 
             if (url && currentLayer.getVisible()) {
               fetch(url).then(function (response) {
                 return response.text();
               }).then(function (data) {
-                console.log(data);
+                return dispatch((0, _FeatureActions.setFeature)(data, formats[indexFormat]));
+              }).catch(function (error) {
+                console.error('Error:', error);
               });
             }
           });
-        } else if (currentNode.type && currentNode.type === 'FeatureCollection') {
+        } else {
+          // Assume if not queryable then it could be geojson features
           window.olMap.on('click', function (evt) {
-            var feature = window.olMap.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+            var features = window.olMap.getFeaturesAtPixel(evt.pixel, function (feature, layer) {
               return feature;
             });
 
-            if (feature) {
-              var coord = feature.getGeometry().getCoordinates();
-              var content = feature.get('n');
-              console.info(feature.getProperties());
-              console.info(coord);
-              console.info(content);
+            if (features) {
+              features.forEach(function (feature) {
+                var coord = feature.getGeometry().getCoordinates();
+                var content = feature.get('n');
+                var message = {
+                  cmd: 'featureSelected',
+                  featureId: feature.getId(),
+                  properties: content,
+                  coordinates: coord
+                };
+                console.log(message); //dispatch(setFeature(message))
+              });
             }
           });
         }
@@ -174,14 +203,7 @@ var LayerEntry = function LayerEntry(props) {
       return onSelectionChange(layer);
     },
     htmlFor: layer.Title
-  }, " "), abstractTextSpan(), info ? _react.default.createElement("div", {
-    class: _LayerEntryModule.default.info
-  }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-    className: _LayerEntryModule.default.infoIcon,
-    icon: ["far", "info"]
-  }), _react.default.createElement("span", {
-    class: _LayerEntryModule.default.infoText
-  }, info)) : null, layer.Name ? _react.default.createElement("label", {
+  }, " "), abstractTextSpan(), layer.Name ? _react.default.createElement("label", {
     onClick: function onClick() {
       return toggleOptions(!options);
     }

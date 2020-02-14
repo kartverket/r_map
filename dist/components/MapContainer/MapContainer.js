@@ -9,8 +9,6 @@ var _react = _interopRequireDefault(require("react"));
 
 var _maplibHelper = require("../../MapUtil/maplibHelper");
 
-var _CapabilitiesUtil = require("../../MapUtil/CapabilitiesUtil");
-
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _queryString = _interopRequireDefault(require("query-string"));
@@ -21,11 +19,25 @@ var _BackgroundChooser = _interopRequireDefault(require("../BackgroundChooser/Ba
 
 var _ServicePanel = _interopRequireDefault(require("../ServicePanel/ServicePanel"));
 
+var _SearchBar = _interopRequireDefault(require("../SearchBar/SearchBar"));
+
 var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
 var _MapContainerModule = _interopRequireDefault(require("./MapContainer.module.scss"));
 
 var _Position = _interopRequireDefault(require("../Position/Position"));
+
+var _Tabs = _interopRequireDefault(require("react-bootstrap/Tabs"));
+
+var _Tab = _interopRequireDefault(require("react-bootstrap/Tab"));
+
+var _communication = require("../../Utils/communication");
+
+var _FeatureInfoItem = _interopRequireDefault(require("../ServicePanel/FeatureInfoItem"));
+
+var _PrintComponent = _interopRequireDefault(require("../PrintComponent/PrintComponent"));
+
+require("ol/ol.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -137,17 +149,12 @@ function (_React$Component) {
   _createClass(MapContainer, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      if (this.props.wms) {
-        this.addWMS(this.wms, this.layers);
-      }
-
       window.olMap = _maplibHelper.map.Init("map", this.newMapConfig);
 
       _maplibHelper.map.AddZoom();
 
-      _maplibHelper.map.AddScaleLine();
+      _maplibHelper.map.AddScaleLine(); //eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState)
 
-      _maplibHelper.eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState);
 
       this.props = {
         map: _maplibHelper.map
@@ -158,27 +165,24 @@ function (_React$Component) {
      */
 
   }, {
-    key: "addWMS",
-    value: function addWMS() {
-      var _this2 = this;
-
-      _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(this.props.services.GetCapabilitiesUrl).then(_CapabilitiesUtil.CapabilitiesUtil.getLayersFromWmsCapabilties).then(function (layers) {
-        _this2.setState({
-          wmsLayers: layers
-        });
-      }).catch(function () {
-        return alert("Could not parse capabilities document.");
-      });
-    }
-  }, {
     key: "renderServiceList",
     value: function renderServiceList() {
-      var _this3 = this;
+      var _this2 = this;
+
+      if (this.wms) {
+        var addedWms = {
+          'Title': 'Added WMS from url',
+          'DistributionProtocol': 'OGC:WMS',
+          'GetCapabilitiesUrl': this.wms,
+          addLayers: []
+        };
+        this.props.services.push(addedWms);
+      }
 
       return this.props.services.map(function (listItem, i) {
         return _react.default.createElement(ServiceListItem, {
           listItem: listItem,
-          removeMapItem: _this3.props.removeMapItem ? _this3.props.removeMapItem : null,
+          removeMapItem: _this2.props.removeMapItem ? _this2.props.removeMapItem : null,
           key: i,
           map: _maplibHelper.map
         });
@@ -208,36 +212,50 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this4 = this;
+      var _this3 = this;
 
       var map = this.props.map;
       return _react.default.createElement("div", {
-        className: _MapContainerModule.default.mapContainer
-      }, _react.default.createElement(_BackgroundChooser.default, null), _react.default.createElement("div", null, this.renderLayerButton() ? _react.default.createElement("div", {
-        className: "".concat(_MapContainerModule.default.container, " ").concat(this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open)
-      }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-        onClick: function onClick() {
-          return _this4.toogleLayers();
-        },
-        className: _MapContainerModule.default.toggleBtn,
-        icon: this.state.isExpanded ? ["far", "layer-group"] : "times"
-      }), _react.default.createElement("div", null, this.renderServiceList())) : _react.default.createElement("div", {
-        className: _MapContainerModule.default.link,
-        onClick: function onClick() {
-          return _this4.toogleMap();
-        }
-      }, "G\xE5 til kartkatalogen"), _react.default.createElement("div", {
+        id: "MapContainer",
+        className: "".concat(_MapContainerModule.default.mapContainer)
+      }, _react.default.createElement(_BackgroundChooser.default, null), _react.default.createElement("div", null, this.renderLayerButton() ? _react.default.createElement("div", null, _react.default.createElement("div", {
         className: _MapContainerModule.default.closeMap
       }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
         title: "Lukk kartet",
         onClick: function onClick() {
-          return _this4.toogleMap();
+          return _this3.toogleMap();
         },
         className: _MapContainerModule.default.toggleBtn,
         icon: "times"
       }), _react.default.createElement("span", {
         className: _MapContainerModule.default.closeButtonLabel
-      }, "Lukk kartet"))), _react.default.createElement("div", {
+      }, "Lukk kartet")), _react.default.createElement("div", {
+        className: "".concat(_MapContainerModule.default.container, " ").concat(this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open)
+      }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+        onClick: function onClick() {
+          return _this3.toogleLayers();
+        },
+        className: _MapContainerModule.default.toggleBtn,
+        icon: this.state.isExpanded ? ["far", "layer-group"] : "times"
+      }), _react.default.createElement(_Tabs.default, {
+        className: "".concat(_MapContainerModule.default.tabs, " ").concat(this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open),
+        defaultActiveKey: "search",
+        id: "tab"
+      }, _react.default.createElement(_Tab.default, {
+        className: "".concat(_MapContainerModule.default.search, " ").concat(this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open),
+        eventKey: "search",
+        title: "S\xF8k"
+      }, _react.default.createElement(_SearchBar.default, null)), _react.default.createElement(_Tab.default, {
+        eventKey: "layers",
+        title: "Visning"
+      }, _react.default.createElement("div", {
+        id: "ServiceList"
+      }, this.renderServiceList())), "                "))) : _react.default.createElement("div", {
+        className: _MapContainerModule.default.link,
+        onClick: function onClick() {
+          return _this3.toogleMap();
+        }
+      }, "G\xE5 til kartkatalogen")), _react.default.createElement("div", {
         id: "map",
         style: {
           position: "relative",
@@ -248,7 +266,12 @@ function (_React$Component) {
       }), _react.default.createElement(_Position.default, {
         map: map,
         projection: this.props.crs
-      }));
+      }), _react.default.createElement("div", {
+        id: "mapPopover"
+      }, _react.default.createElement(_FeatureInfoItem.default, {
+        info: '',
+        show: false
+      })));
     }
   }]);
 

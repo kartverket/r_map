@@ -365,7 +365,7 @@ export const Vector = (isySubLayer) => {
     case FORMATS.geoJson:
       source = new VectorSource({
         format: new GeoJSONFormat({
-          defaultDataProjection: isySubLayer.coordinate_system
+          dataProjection: isySubLayer.coordinate_system
         }),
         url: isySubLayer.url
       });

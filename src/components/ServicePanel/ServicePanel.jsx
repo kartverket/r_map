@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil";
-import style from './ServicePanel.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import LayerEntry from './LayerEntry';
+import React, { useState, useEffect } from "react"
+import PropTypes from "prop-types"
+import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
+import style from './ServicePanel.module.scss'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import LayerEntry from './LayerEntry'
 
 
 const ServicePanel = props => {
@@ -22,7 +22,7 @@ const ServicePanel = props => {
             setCapabilities(capa)
             newMetaInfo = CapabilitiesUtil.getWMSMetaCapabilities(capa)
             newMetaInfo.Type = 'OGC:WMS'
-            newMetaInfo.Params= props.services.customParams || ''
+            newMetaInfo.Params = props.services.customParams || ''
             setMeta(newMetaInfo)
           })
           .catch(e => console.log(e))
@@ -39,7 +39,7 @@ const ServicePanel = props => {
             setMeta(newMetaInfo)
           })
           .catch(e => console.log(e))
-        break;
+        break
       case 'GEOJSON':
         CapabilitiesUtil.getGeoJson(props.services.url)
           .then(layers => {
@@ -48,19 +48,19 @@ const ServicePanel = props => {
             newMetaInfo.ShowPropertyName = props.services.ShowPropertyName || 'id'
             setMeta(newMetaInfo)
           })
-          .catch(e => console.log(e));
-        break;
+          .catch(e => console.log(e))
+        break
       default:
         console.warn('No service type specified')
         break
     }
-  }, [props.services.DistributionProtocol, props.services.GetCapabilitiesUrl, props.services.url])
+  }, [props.services.DistributionProtocol, props.services.GetCapabilitiesUrl, props.services.url, props.services.ShowPropertyName, props.services.customParams])
 
   const renderRemoveButton = () => {
     if (props.removeMapItem) {
       return (
-        <FontAwesomeIcon className={style.removeInline} onClick={this.props.removeMapItem} icon={['fas', 'times']} />
-      );
+        <FontAwesomeIcon className={ style.removeInline } onClick={ this.props.removeMapItem } icon={ ['fas', 'times'] } />
+      )
     } else {
       return ''
     }
@@ -70,23 +70,23 @@ const ServicePanel = props => {
     if (capabilities && capabilities.Capability) {
       return capabilities.Capability.Layer.Layer.map((capaLayer, i) => {
         return (
-          <div className={style.facet} key={i}>
-            <LayerEntry layer={capaLayer} meta={meta} key={i} />
+          <div className={ style.facet } key={ i }>
+            <LayerEntry layer={ capaLayer } meta={ meta } key={ i } />
           </div>
         )
       })
     } else if (capabilities && capabilities.value) {
       return capabilities.value.featureTypeList.featureType.map((capaLayer, i) => {
         return (
-          <div className={style.facet} key={i}>
-            <LayerEntry layer={capaLayer} meta={meta} key={i} />
+          <div className={ style.facet } key={ i }>
+            <LayerEntry layer={ capaLayer } meta={ meta } key={ i } />
           </div>
         )
       })
     } else if (capabilities && capabilities.features) {
       return (
-        <div className={style.facet}>
-          <LayerEntry layer={capabilities} meta={meta} />
+        <div className={ style.facet }>
+          <LayerEntry layer={ capabilities } meta={ meta } />
         </div>
       )
     } else {
@@ -97,14 +97,14 @@ const ServicePanel = props => {
 
   return (
     <div>
-      <div onClick={() => setState(!expanded)} className={style.expandLayersBtn} >
-        <span className={style.ellipsisToggle}>{props.services.Title}</span>
-        <FontAwesomeIcon icon={expanded ? ['fas', 'angle-up'] : ['fas', 'angle-down']} />
+      <div onClick={ () => setState(!expanded) } className={ style.expandLayersBtn } >
+        <span className={ style.ellipsisToggle }>{ props.services.Title }</span>
+        <FontAwesomeIcon icon={ expanded ? ['fas', 'angle-up'] : ['fas', 'angle-down'] } />
       </div>
-      {renderRemoveButton()}
+      { renderRemoveButton() }
 
-      <div className={expanded ? `${style.selectedlayers} ${style.open}` : style.selectedlayers} >
-        {renderCapabilites()}
+      <div className={ expanded ? `${style.selectedlayers} ${style.open}` : style.selectedlayers } >
+        { renderCapabilites() }
       </div>
     </div>
   )
@@ -118,6 +118,6 @@ ServicePanel.propTypes = {
   services: PropTypes.object.isRequired,
   removeMapItem: PropTypes.object
 
-};
+}
 
 export default ServicePanel

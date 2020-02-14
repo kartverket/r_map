@@ -61,7 +61,7 @@ import { OLStylesJson, OLStylesSLD } from './OLStyles'
 
 import $ from "jquery";
 
-export const OLMap = (repository, eventHandler, httpHelper, measure,
+export const OLMap = (eventHandler, httpHelper, measure,
     featureInfo, mapExport, hoverInfo, measureLine, drawFeature,
     offline, addLayerFeature, modifyFeature, addFeatureGps, printBoxSelect, addLayerUrl) => {
 
@@ -699,7 +699,7 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
                     layer = new VectorLayer({
                         source: new VectorSource({
                             format: new GeoJSONFormat({
-                                defaultDataProjection: isySubLayer.coordinate_system
+                              dataProjection: isySubLayer.coordinate_system
                             }),
                             url: isySubLayer.url
 

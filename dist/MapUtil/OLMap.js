@@ -61,7 +61,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featureInfo, mapExport, hoverInfo, measureLine, drawFeature, offline, addLayerFeature, modifyFeature, addFeatureGps, printBoxSelect, addLayerUrl) {
+var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapExport, hoverInfo, measureLine, drawFeature, offline, addLayerFeature, modifyFeature, addFeatureGps, printBoxSelect, addLayerUrl) {
   var map;
   var layerPool = [];
   var isySubLayerPool = [];
@@ -776,7 +776,7 @@ var OLMap = function OLMap(repository, eventHandler, httpHelper, measure, featur
           layer = new _layer.Vector({
             source: new _source.Vector({
               format: new _format.GeoJSON({
-                defaultDataProjection: isySubLayer.coordinate_system
+                dataProjection: isySubLayer.coordinate_system
               }),
               url: isySubLayer.url
             })
