@@ -17,7 +17,7 @@
     "bootstrap": "^4.4.1",
     "fast-xml-parser": "^3.15.1",
     "jquery": "^3.4.1",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "ol": "^6.2.0",
     "proj4": "^2.6.0",
     "query-string": "^6.8.2",
