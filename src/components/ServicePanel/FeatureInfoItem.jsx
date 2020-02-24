@@ -71,9 +71,9 @@ const FeatureInfoItem = props => {
           featureRow.push(<li><i>{ key } </i> = <strong>{ prepareItemFormat(value) }</strong> </li>)
         }
       }
-      layers.push(<div><h3>{ key }</h3>{ featureRow }</div>)
+      layers.push(<React.Fragment><h3>{ key }</h3><ul>{ featureRow }</ul></React.Fragment>)
     }
-    return (<ul className={ style.ulContainer }>{ layers }</ul>)
+    return (<div className={ style.ulContainer }>{ layers }</div>)
   }
 
   return (
@@ -82,7 +82,7 @@ const FeatureInfoItem = props => {
       info: featureState.info
     }) }>
       <Modal.Header closeButton>
-        <Modal.Title>Feature Info</Modal.Title>
+        <Modal.Title>Egenskaper <span> ( {featureState.info.length} )</span> </Modal.Title>
       </Modal.Header>
       <Modal.Body>{ featureState.info.map((info) => prepareFeature(info)) }</Modal.Body>
     </Modal>
