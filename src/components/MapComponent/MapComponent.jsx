@@ -141,6 +141,7 @@ export class MapComponent extends React.Component {
             .then(layers => {
               meta.Type = 'GEOJSON'
               meta.ShowPropertyName = service.ShowPropertyName || 'id'
+              meta.EPSG = service.EPSG || 'EPSG:4326'
               if (service.addLayers.length > 0) {
                 if (layers.name === service.addLayers['0']) {
                   let currentLayer = CapabilitiesUtil.getOlLayerFromGeoJson(meta, layers)

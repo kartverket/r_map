@@ -46,6 +46,7 @@ const ServicePanel = props => {
             setCapabilities(layers)
             newMetaInfo.Type = 'GEOJSON'
             newMetaInfo.ShowPropertyName = props.services.ShowPropertyName || 'id'
+            newMetaInfo.EPSG = props.services.EPSG || 'EPSG:4326'
             setMeta(newMetaInfo)
           })
           .catch(e => console.log(e))
@@ -54,7 +55,7 @@ const ServicePanel = props => {
         console.warn('No service type specified')
         break
     }
-  }, [props.services.DistributionProtocol, props.services.GetCapabilitiesUrl, props.services.url, props.services.ShowPropertyName, props.services.customParams])
+  }, [props.services.DistributionProtocol, props.services.GetCapabilitiesUrl, props.services.url, props.services.ShowPropertyName, props.services.customParams, props.services.EPSG])
 
   const renderRemoveButton = () => {
     if (props.removeMapItem) {
