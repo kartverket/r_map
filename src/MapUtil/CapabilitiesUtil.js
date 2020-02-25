@@ -374,7 +374,8 @@ export class CapabilitiesUtil {
             })
           })
         }
-      }
+      },
+      name: layerCapabilities.name
     })
   }
   static getWMSMetaCapabilities(capabilities) {
