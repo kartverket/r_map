@@ -8,7 +8,7 @@ import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 //import { Messaging } from '../../Utils/communication'
 import { useDispatch } from "react-redux"
 import { setFeature } from '../../actions/FeatureActions'
-
+import { Fill, Stroke, Style, Text } from 'ol/style'
 
 const LayerEntry = props => {
   const [options, toggleOptions] = useState(false)
@@ -30,7 +30,7 @@ const LayerEntry = props => {
     if (layer.Abstract && layer.Abstract.length > 0 && layer.Abstract !== layer.Title && layer.Abstract !== layer.Name && textSpan.length === 0) {
       textSpan = textSpan.length === 0 ? (layer.Abstract) : (textSpan + ' - ' + layer.Abstract)
     }
-    return (<span className={style.spanCheckbox}>{ textSpan }</span>)
+    return (<span className={ style.spanCheckbox }>{ textSpan }</span>)
   }
 
   const onSelectionChange = currentNode => {
@@ -85,7 +85,17 @@ const LayerEntry = props => {
             if (features) {
               features.forEach(feature => {
                 const coord = feature.getGeometry().getCoordinates()
-                let content = feature.get('n')
+                feature.setStyle(new Style({
+                  fill: new Fill({ color: 'rgba(255, 255, 255, 0.5)' }),
+                  stroke: new Stroke({ color: '#310FD3', width: 3 }),
+                  text: new Text({
+                    font: '14px Calibri,sans-serif',
+                    fill: new Fill({ color: '#000' }),
+                    stroke: new Stroke({ color: '#fff', width: 5 }),
+                    text: feature.get(props.meta.ShowPropertyName)
+                  })
+                }))
+                let content = feature.get(props.meta.ShowPropertyName)
                 let message = {
                   cmd: 'featureSelected',
                   featureId: feature.getId(),
