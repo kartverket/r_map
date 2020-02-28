@@ -140,10 +140,10 @@ var FeatureInfoItem = function FeatureInfoItem(props) {
         }
       }
 
-      layers.push(_react.default.createElement("div", null, _react.default.createElement("h3", null, key), featureRow));
+      layers.push(_react.default.createElement(_react.default.Fragment, null, _react.default.createElement("h3", null, key), _react.default.createElement("ul", null, featureRow)));
     }
 
-    return _react.default.createElement("ul", {
+    return _react.default.createElement("div", {
       className: _FeatureInfoItemModule.default.ulContainer
     }, layers);
   };
@@ -158,7 +158,7 @@ var FeatureInfoItem = function FeatureInfoItem(props) {
     }
   }, _react.default.createElement(_Modal.default.Header, {
     closeButton: true
-  }, _react.default.createElement(_Modal.default.Title, null, "Feature Info")), _react.default.createElement(_Modal.default.Body, null, featureState.info.map(function (info) {
+  }, _react.default.createElement(_Modal.default.Title, null, "Egenskaper ", _react.default.createElement("span", null, " ( ", featureState.info.length, " )"), " ")), _react.default.createElement(_Modal.default.Body, null, featureState.info.map(function (info) {
     return prepareFeature(info);
   })));
 };
