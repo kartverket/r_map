@@ -183,6 +183,7 @@ function (_React$Component) {
             _CapabilitiesUtil.CapabilitiesUtil.getGeoJson(service.url).then(function (layers) {
               meta.Type = 'GEOJSON';
               meta.ShowPropertyName = service.ShowPropertyName || 'id';
+              meta.EPSG = service.EPSG || 'EPSG:4326';
 
               if (service.addLayers.length > 0) {
                 if (layers.name === service.addLayers['0']) {

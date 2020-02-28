@@ -323,7 +323,7 @@ export class CapabilitiesUtil {
   static getOlLayerFromGeoJson(meta, layerCapabilities) {
     const vectorSource = new VectorSource({
       features: (new GeoJSON()).readFeatures(layerCapabilities, {
-        dataProjection: 'EPSG:4326',
+        dataProjection: meta.EPSG,
         featureProjection: 'EPSG:25833'
       })
     })
@@ -374,7 +374,8 @@ export class CapabilitiesUtil {
             })
           })
         }
-      }
+      },
+      name: layerCapabilities.name
     })
   }
   static getWMSMetaCapabilities(capabilities) {
