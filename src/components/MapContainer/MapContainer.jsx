@@ -11,9 +11,7 @@ import style from "./MapContainer.module.scss"
 import Position from '../Position/Position'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
-import { Messaging } from '../../Utils/communication'
 import FeatureInfoItem from '../ServicePanel/FeatureInfoItem'
-import Print from '../PrintComponent/PrintComponent'
 import 'ol/ol.css'
 
 const ServiceListItem = props => (
@@ -113,8 +111,6 @@ export default class MapContainer extends React.Component {
     window.olMap = map.Init("map", this.newMapConfig)
     map.AddZoom()
     map.AddScaleLine()
-    //eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState)
-    this.props = { map: map }
   }
 
   /**
@@ -123,7 +119,6 @@ export default class MapContainer extends React.Component {
   updateMapInfoState = () => {
     let center = map.GetCenter()
     const queryValues = queryString.parse(window.location.search)
-    this.props = { lon: center.lon, lat: center.lat, zoom: center.zoom }
     queryValues.lon = center.lon
     queryValues.lat = center.lat
     queryValues.zoom = center.zoom

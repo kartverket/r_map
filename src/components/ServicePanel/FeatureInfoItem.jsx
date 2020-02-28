@@ -2,7 +2,7 @@ import React from "react"
 import Modal from 'react-bootstrap/Modal'
 import { useSelector, useDispatch } from "react-redux"
 import style from './FeatureInfoItem.module.scss'
-
+import uniqid from 'uniqid'
 
 const FeatureInfoItem = props => {
   const dispatch = useDispatch()
@@ -61,19 +61,19 @@ const FeatureInfoItem = props => {
             for (const key in feature) {
               const items = feature[key]
               for (let [key, value] of Object.entries(items)) {
-                featureRow.push(<li><i>{ key } </i> = <strong>{ prepareItemFormat(value) }</strong> </li>)
+                featureRow.push(<li key={ uniqid(key) }><i>{ key } </i> = <strong>{ prepareItemFormat(value) }</strong> </li>)
               }
             }
           }
         }
       } else {
         for (let [key, value] of Object.entries(layer)) {
-          featureRow.push(<li><i>{ key } </i> = <strong>{ prepareItemFormat(value) }</strong> </li>)
+          featureRow.push(<li key={ uniqid(key) }><i>{ key } </i> = <strong>{ prepareItemFormat(value) }</strong> </li>)
         }
       }
-      layers.push(<React.Fragment><h3>{ key }</h3><ul>{ featureRow }</ul></React.Fragment>)
+      layers.push(<React.Fragment key={ uniqid(key) }><h3>{ key }</h3><ul>{ featureRow }</ul></React.Fragment>)
     }
-    return (<div className={ style.ulContainer }>{ layers }</div>)
+    return (<div className={ style.ulContainer } key={ uniqid() }>{ layers }</div>)
   }
 
   return (
@@ -82,7 +82,7 @@ const FeatureInfoItem = props => {
       info: featureState.info
     }) }>
       <Modal.Header closeButton>
-        <Modal.Title>Egenskaper <span> ( {featureState.info.length} )</span> </Modal.Title>
+        <Modal.Title>Egenskaper <span> ( { featureState.info.length } )</span> </Modal.Title>
       </Modal.Header>
       <Modal.Body>{ featureState.info.map((info) => prepareFeature(info)) }</Modal.Body>
     </Modal>
