@@ -383,7 +383,7 @@ function () {
     value: function getOlLayerFromGeoJson(meta, layerCapabilities) {
       var vectorSource = new _source.Vector({
         features: new _GeoJSON.default().readFeatures(layerCapabilities, {
-          dataProjection: 'EPSG:4326',
+          dataProjection: meta.EPSG,
           featureProjection: 'EPSG:25833'
         })
       });
@@ -435,7 +435,8 @@ function () {
               })
             });
           }
-        }
+        },
+        name: layerCapabilities.name
       });
     }
   }, {

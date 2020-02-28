@@ -21,6 +21,8 @@ var _reactRedux = require("react-redux");
 
 var _FeatureActions = require("../../actions/FeatureActions");
 
+var _style = require("ol/style");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -151,7 +153,27 @@ var LayerEntry = function LayerEntry(props) {
             if (features) {
               features.forEach(function (feature) {
                 var coord = feature.getGeometry().getCoordinates();
-                var content = feature.get('n');
+                feature.setStyle(new _style.Style({
+                  fill: new _style.Fill({
+                    color: 'rgba(255, 255, 255, 0.5)'
+                  }),
+                  stroke: new _style.Stroke({
+                    color: '#310FD3',
+                    width: 3
+                  }),
+                  text: new _style.Text({
+                    font: '14px Calibri,sans-serif',
+                    fill: new _style.Fill({
+                      color: '#000'
+                    }),
+                    stroke: new _style.Stroke({
+                      color: '#fff',
+                      width: 5
+                    }),
+                    text: feature.get(props.meta.ShowPropertyName)
+                  })
+                }));
+                var content = feature.get(props.meta.ShowPropertyName);
                 var message = {
                   cmd: 'featureSelected',
                   featureId: feature.getId(),
