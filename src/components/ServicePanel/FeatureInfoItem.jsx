@@ -1,12 +1,11 @@
 import React from "react"
 import Modal from 'react-bootstrap/Modal'
-import { useSelector, useDispatch } from "react-redux"
 import style from './FeatureInfoItem.module.scss'
 import uniqid from 'uniqid'
+import { useStore, setStore } from 'react-smee'
 
 const FeatureInfoItem = props => {
-  const dispatch = useDispatch()
-  const featureState = useSelector(state => state.FeatureReducer)
+  const featureState = useStore('featureInfo')
 
   const testFormat = (s) => {
     if (typeof s === 'object') return 'isObject'
@@ -77,10 +76,14 @@ const FeatureInfoItem = props => {
   }
 
   return (
-    <Modal show={ featureState.show } onHide={ () => dispatch({
-      type: "HIDE_FEATURES",
-      info: featureState.info
-    }) }>
+    <Modal show={ featureState.show } onHide={ () => setStore('featureInfo', () => {
+      let info = {
+        show: false,
+        info: featureState.info
+      }
+      return info
+    }
+    ) }>
       <Modal.Header closeButton>
         <Modal.Title>Egenskaper <span> ( { featureState.info.length } )</span> </Modal.Title>
       </Modal.Header>

@@ -13,16 +13,8 @@ import MapComponent from './components/MapComponent/MapComponent'
 import MapContainer from './components/MapContainer/MapContainer'
 import Legend from './components/Legend/Legend'
 
-import configureStore from './Utils/configureStore'
-import { Provider } from 'react-redux'
-
-const initialState = {}
-const store = configureStore(initialState)
-
 ReactDOM.render(
-  <Provider store={ store }>
-    <App />
-  </Provider>,
+    <App />,
   document.getElementById('root')
 )
 
