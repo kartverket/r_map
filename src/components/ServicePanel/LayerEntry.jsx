@@ -6,10 +6,16 @@ import InlineLegend from '../Legend/InlineLegend'
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 
 //import { Messaging } from '../../Utils/communication'
-import { useDispatch } from "react-redux"
-import { setFeature } from '../../actions/FeatureActions'
 import { Fill, Stroke, Style, Text } from 'ol/style'
+import { setStore, createStore } from 'react-smee'
+import { parseFeatureInfo } from '../../MapUtil/FeatureUtil'
 
+createStore({
+  featureInfo: {
+    show: false,
+    info: []
+  }
+})
 const LayerEntry = props => {
   const [options, toggleOptions] = useState(false)
   const [olLayer, setLayer] = useState()
@@ -17,7 +23,6 @@ const LayerEntry = props => {
   const [transparency, setTransparency] = useState(50)
   const layer = props.layer
   layer.Name = (layer.name && typeof layer.name === 'object') ? layer.name.localPart : layer.Name
-  const dispatch = useDispatch()
 
   const abstractTextSpan = () => {
     let textSpan = ''
@@ -72,7 +77,12 @@ const LayerEntry = props => {
             if (url && currentLayer.getVisible()) {
               fetch(url)
                 .then((response) => response.text())
-                .then((data) => dispatch(setFeature(data, formats[indexFormat])))
+                .then((data) => setStore('featureInfo', () =>
+                  data = {
+                    show: true,
+                    info: parseFeatureInfo(data, formats[indexFormat]),
+                  }
+                ))
                 .catch((error) => {
                   console.error('Error:', error)
                 })

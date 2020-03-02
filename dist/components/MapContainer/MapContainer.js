@@ -31,17 +31,13 @@ var _Tabs = _interopRequireDefault(require("react-bootstrap/Tabs"));
 
 var _Tab = _interopRequireDefault(require("react-bootstrap/Tab"));
 
-var _communication = require("../../Utils/communication");
-
 var _FeatureInfoItem = _interopRequireDefault(require("../ServicePanel/FeatureInfoItem"));
-
-var _PrintComponent = _interopRequireDefault(require("../PrintComponent/PrintComponent"));
 
 require("ol/ol.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -74,9 +70,7 @@ var ServiceListItem = function ServiceListItem(props) {
  */
 
 
-var MapContainer =
-/*#__PURE__*/
-function (_React$Component) {
+var MapContainer = /*#__PURE__*/function (_React$Component) {
   _inherits(MapContainer, _React$Component);
 
   /**
@@ -104,11 +98,6 @@ function (_React$Component) {
 
       var queryValues = _queryString.default.parse(window.location.search);
 
-      _this.props = {
-        lon: center.lon,
-        lat: center.lat,
-        zoom: center.zoom
-      };
       queryValues.lon = center.lon;
       queryValues.lat = center.lat;
       queryValues.zoom = center.zoom;
@@ -153,12 +142,7 @@ function (_React$Component) {
 
       _maplibHelper.map.AddZoom();
 
-      _maplibHelper.map.AddScaleLine(); //eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState)
-
-
-      this.props = {
-        map: _maplibHelper.map
-      };
+      _maplibHelper.map.AddScaleLine();
     }
     /**
      *

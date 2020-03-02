@@ -9,9 +9,11 @@ var _react = _interopRequireDefault(require("react"));
 
 var _Modal = _interopRequireDefault(require("react-bootstrap/Modal"));
 
-var _reactRedux = require("react-redux");
-
 var _FeatureInfoItemModule = _interopRequireDefault(require("./FeatureInfoItem.module.scss"));
+
+var _uniqid = _interopRequireDefault(require("uniqid"));
+
+var _reactSmee = require("react-smee");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -23,13 +25,10 @@ function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) ||
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var FeatureInfoItem = function FeatureInfoItem(props) {
-  var dispatch = (0, _reactRedux.useDispatch)();
-  var featureState = (0, _reactRedux.useSelector)(function (state) {
-    return state.FeatureReducer;
-  });
+  var featureState = (0, _reactSmee.useStore)('smee');
 
   var testFormat = function testFormat(s) {
     if (_typeof(s) === 'object') return 'isObject';
@@ -125,7 +124,9 @@ var FeatureInfoItem = function FeatureInfoItem(props) {
                     _key3 = _Object$entries$_i[0],
                     value = _Object$entries$_i[1];
 
-                featureRow.push(_react.default.createElement("li", null, _react.default.createElement("i", null, _key3, " "), " = ", _react.default.createElement("strong", null, prepareItemFormat(value)), " "));
+                featureRow.push(_react.default.createElement("li", {
+                  key: (0, _uniqid.default)(_key3)
+                }, _react.default.createElement("i", null, _key3, " "), " = ", _react.default.createElement("strong", null, prepareItemFormat(value)), " "));
               }
             }
           }
@@ -136,24 +137,32 @@ var FeatureInfoItem = function FeatureInfoItem(props) {
               _key4 = _Object$entries2$_i[0],
               _value = _Object$entries2$_i[1];
 
-          featureRow.push(_react.default.createElement("li", null, _react.default.createElement("i", null, _key4, " "), " = ", _react.default.createElement("strong", null, prepareItemFormat(_value)), " "));
+          featureRow.push(_react.default.createElement("li", {
+            key: (0, _uniqid.default)(_key4)
+          }, _react.default.createElement("i", null, _key4, " "), " = ", _react.default.createElement("strong", null, prepareItemFormat(_value)), " "));
         }
       }
 
-      layers.push(_react.default.createElement(_react.default.Fragment, null, _react.default.createElement("h3", null, key), _react.default.createElement("ul", null, featureRow)));
+      layers.push(_react.default.createElement(_react.default.Fragment, {
+        key: (0, _uniqid.default)(key)
+      }, _react.default.createElement("h3", null, key), _react.default.createElement("ul", null, featureRow)));
     }
 
     return _react.default.createElement("div", {
-      className: _FeatureInfoItemModule.default.ulContainer
+      className: _FeatureInfoItemModule.default.ulContainer,
+      key: (0, _uniqid.default)()
     }, layers);
   };
 
   return _react.default.createElement(_Modal.default, {
     show: featureState.show,
     onHide: function onHide() {
-      return dispatch({
-        type: "HIDE_FEATURES",
-        info: featureState.info
+      return (0, _reactSmee.setStore)('smee', function () {
+        var info = {
+          show: false,
+          info: featureState.info
+        };
+        return info;
       });
     }
   }, _react.default.createElement(_Modal.default.Header, {

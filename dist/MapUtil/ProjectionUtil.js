@@ -27,9 +27,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
  *
  * @class ProjectionUtil
  */
-var ProjectionUtil =
-/*#__PURE__*/
-function () {
+var ProjectionUtil = /*#__PURE__*/function () {
   function ProjectionUtil() {
     _classCallCheck(this, ProjectionUtil);
   }
