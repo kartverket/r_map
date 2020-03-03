@@ -28,7 +28,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var FeatureInfoItem = function FeatureInfoItem(props) {
-  var featureState = (0, _reactSmee.useStore)('smee');
+  var featureState = (0, _reactSmee.useStore)('featureInfo');
 
   var testFormat = function testFormat(s) {
     if (_typeof(s) === 'object') return 'isObject';
@@ -157,7 +157,7 @@ var FeatureInfoItem = function FeatureInfoItem(props) {
   return _react.default.createElement(_Modal.default, {
     show: featureState.show,
     onHide: function onHide() {
-      return (0, _reactSmee.setStore)('smee', function () {
+      return (0, _reactSmee.setStore)('featureInfo', function () {
         var info = {
           show: false,
           info: featureState.info

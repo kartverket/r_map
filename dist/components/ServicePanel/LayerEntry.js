@@ -40,7 +40,7 @@ function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) ||
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 (0, _reactSmee.createStore)({
-  smee: {
+  featureInfo: {
     show: false,
     info: []
   }
@@ -143,7 +143,7 @@ var LayerEntry = function LayerEntry(props) {
               fetch(url).then(function (response) {
                 return response.text();
               }).then(function (data) {
-                return (0, _reactSmee.setStore)('smee', function () {
+                return (0, _reactSmee.setStore)('featureInfo', function () {
                   return data = {
                     show: true,
                     info: (0, _FeatureUtil.parseFeatureInfo)(data, formats[indexFormat])
