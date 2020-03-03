@@ -5,8 +5,8 @@
 // Sjøkart .icon_1005
 
 :local(.backgroundChooser) {
-  display: flex;
-  position: absolute;
+  display: flex !important;
+  position: absolute !important;
   bottom: 0;
   right: 20px;
   z-index: 2;
