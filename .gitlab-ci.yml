@@ -1,8 +1,19 @@
-image: node:10.15.0
+image: node:12.16.1 
 
 job1:
   script:
     - echo '@fortawesome:registry=https://npm.fontawesome.com/' > .npmrc
     - echo '//npm.fontawesome.com/:_authToken=${API_TOKEN}' >> .npmrc
     - yarn
-    - yarn run build
+
+pages:
+  stage: deploy
+  script:
+    - CI=true yarn build
+    - rm -rf public
+    - mv build public
+  artifacts:
+    paths:
+      - public # GitLab pages serve from a 'public' directory
+  only:
+    - master # run on master branch
