@@ -1,10 +1,13 @@
-image: node:12.16.1 
+image: node:12.16.1
 
-job1:
-  script:
-    - echo '@fortawesome:registry=https://npm.fontawesome.com/' > .npmrc
-    - echo '//npm.fontawesome.com/:_authToken=${API_TOKEN}' >> .npmrc
-    - yarn
+cache:
+  paths:
+    - node_modules/
+
+before_script:
+  - echo '@fortawesome:registry=https://npm.fontawesome.com/' > .npmrc
+  - echo '//npm.fontawesome.com/:_authToken=${API_TOKEN}' >> .npmrc
+  - yarn
 
 pages:
   stage: deploy
