@@ -11,9 +11,7 @@ var _classCallCheck2 = _interopRequireDefault(require("C:\\code_git\\r_map.githu
 
 var _createClass2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/createClass"));
 
-var Guid =
-/*#__PURE__*/
-function () {
+var Guid = /*#__PURE__*/function () {
   function Guid() {
     (0, _classCallCheck2.default)(this, Guid);
   }

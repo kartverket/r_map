@@ -86,11 +86,11 @@ var SubLayer = function SubLayer(config) {
   }
 
   if (instance.legendGraphicUrl !== '') {
-    var legendGraphic = LegendGraphic({
+    instance.legendGraphicUrl = LegendGraphic({
       url: instance.legendGraphicUrl,
       layer: instance.name
     });
-    instance.legendGraphicUrl = legendGraphic;
+    ;
   }
 
   return instance;
@@ -134,8 +134,7 @@ var Layer = function Layer(config) {
     selectedLayerOpen: false //todo johben temp
 
   };
-  var layerInstance = Object.assign({}, defaults, config); // layerInstance
-
+  var layerInstance = Object.assign({}, defaults, config);
   var subLayers = [];
 
   for (var i = 0; i < config.subLayers.length; i++) {

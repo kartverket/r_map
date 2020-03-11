@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Legend from './Legend';
-import style from './InlineLegend.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import Legend from "./Legend";
+import style from "./InlineLegend.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+/**
+ * Legend to be used in the ServicePanel
+ * @param {*} props
+ */
 const InlineLegend = props => {
   const [expanded, toggleExpand] = useState(false);
 
@@ -17,7 +20,7 @@ const InlineLegend = props => {
             </span>
             <FontAwesomeIcon icon={expanded ? ['fas', 'angle-up'] : ['fas', 'angle-down']} />
           </div>
-          <div className={ expanded ? style.legend : style.legend + ' ' + style.closed }>
+          <div className={expanded ? style.legend : style.legend + " " + style.closed}>
             <Legend legendUrl={props.legendUrl} legendAlternative="Legend" />
           </div>
         </>

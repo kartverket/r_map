@@ -40,10 +40,6 @@ var _loadingstrategy = require("ol/loadingstrategy");
 var _proj = require("ol/proj.js");
 
 //import GML3Format from 'ol/format/GML3'
-
-/**
- *
- */
 var MaplibCustomMessageHandler = function MaplibCustomMessageHandler(eventHandler, _getIsySubLayerFromPool) {
   var olMap;
   var _message = 'Service down: ';
@@ -163,7 +159,7 @@ var MaplibCustomMessageHandler = function MaplibCustomMessageHandler(eventHandle
         })
         .then(res => res.json());*/
         var response = _jquery.default.ajax({
-          type: 'GET',
+          type: "GET",
           url: image.src,
           async: false
         }).responseText;
@@ -238,12 +234,6 @@ var MaplibCustomMessageHandler = function MaplibCustomMessageHandler(eventHandle
     ShowCustomMessage: showCustomMessage
   };
 };
-/**
- *
- * @param {*} isySubLayer
- * @param {*} parameters
- */
-
 
 exports.MaplibCustomMessageHandler = MaplibCustomMessageHandler;
 
@@ -292,7 +282,7 @@ var Wms = function Wms(isySubLayer, parameters) {
     source = new _source.TileWMS({
       params: {
         LAYERS: isySubLayer.name,
-        VERSION: '1.1.1',
+        VERSION: "1.1.1",
         FORMAT: isySubLayer.format,
         STYLES: isySubLayer.styles || ''
       },
@@ -312,7 +302,7 @@ var Wms = function Wms(isySubLayer, parameters) {
     source = new _source.ImageWMS({
       params: {
         LAYERS: isySubLayer.name,
-        VERSION: '1.1.1',
+        VERSION: "1.1.1",
         FORMAT: isySubLayer.format,
         STYLES: isySubLayer.styles || ''
       },
@@ -328,12 +318,6 @@ var Wms = function Wms(isySubLayer, parameters) {
 
   return source;
 };
-/**
- *
- * @param {*} isySubLayer
- * @param {*} parameters
- */
-
 
 exports.Wms = Wms;
 
@@ -368,8 +352,7 @@ var Wmts = function Wmts(isySubLayer, parameters) {
     urls[i] += getUrlParameter();
   }
 
-  var source;
-  var sourceOptions;
+  var source, sourceOptions;
   var projectionExtent = projection.getExtent();
   var wmtsExtent = isySubLayer.wmtsExtent ? isySubLayer.wmtsExtent.split(',') : projectionExtent;
 
@@ -383,7 +366,7 @@ var Wmts = function Wmts(isySubLayer, parameters) {
     .then(res => res.json());*/
 
     var capabilities = _jquery.default.ajax({
-      type: 'GET',
+      type: "GET",
       url: capabilitiesUrl,
       async: false
     }).responseText;
@@ -414,7 +397,7 @@ var Wmts = function Wmts(isySubLayer, parameters) {
 
     for (var z = 0; z < isySubLayer.numZoomLevels; ++z) {
       resolutions[z] = size / Math.pow(2, z);
-      matrixIds[z] = isySubLayer.matrixPrefix ? matrixSet + ':' + z : matrixIds[z] = z;
+      matrixIds[z] = isySubLayer.matrixPrefix ? matrixSet + ":" + z : matrixIds[z] = z;
     }
 
     sourceOptions = {
@@ -439,10 +422,6 @@ var Wmts = function Wmts(isySubLayer, parameters) {
   source.set('type', 'ol.source.WMTS');
   return source;
 };
-/**
- *
- */
-
 
 exports.Wmts = Wmts;
 
@@ -454,7 +433,7 @@ var Vector = function Vector(isySubLayer) {
     case _Domain.FORMATS.geoJson:
       source = new _source.Vector({
         format: new _format.GeoJSON({
-          defaultDataProjection: isySubLayer.coordinate_system
+          dataProjection: isySubLayer.coordinate_system
         }),
         url: isySubLayer.url
       });
@@ -464,15 +443,6 @@ var Vector = function Vector(isySubLayer) {
 
   return source;
 };
-/**
- *
- * @param {*} isySubLayer
- * @param {*} offline
- * @param {*} parameters
- * @param {*} featureObj
- * @param {*} eventHandler
- */
-
 
 exports.Vector = Vector;
 
@@ -501,7 +471,7 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
 
   var parseResponse = function parseResponse(response) {
     var domparser = new DOMParser();
-    response = domparser.parseFromString(response, 'text/xml');
+    response = domparser.parseFromString(response, "text/xml");
     source.dispatchEvent('vectorloadend');
     var featureNamespace;
 
@@ -544,14 +514,14 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
       }
     }
 
-    if (isySubLayer.srs_dimension === '3') {
+    if (isySubLayer.srs_dimension === "3") {
       featureNamespace = response.firstChild.firstElementChild.firstElementChild.namespaceURI;
 
-      if (response.firstChild.nodeName.toLowerCase() === 'gml:featurecollection') {
+      if (response.firstChild.nodeName.toLowerCase() === "gml:featurecollection") {
         for (var i = 0; i < response.firstChild.childNodes.length; i++) {
           var member = response.firstChild.childNodes.item(i);
 
-          if (member.nodeName.toLowerCase() === 'gml:featureMember') {
+          if (member.nodeName.toLowerCase() === "gml:featureMember") {
             for (var j = 0; j < member.childNodes.length; j++) {
               var feature = member.childNodes.item(j);
 
@@ -562,8 +532,8 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
                   for (var l = 0; l < attribute.childNodes.length; l++) {
                     var attributeType = attribute.childNodes.item(l).nodeName;
 
-                    if (attributeType.toLowerCase() === 'gml:linestring' || attributeType.toLowerCase() === 'gml:point') {
-                      var srsAttribute = document.createAttribute('srsDimension');
+                    if (attributeType.toLowerCase() === "gml:linestring" || attributeType.toLowerCase() === "gml:point") {
+                      var srsAttribute = document.createAttribute("srsDimension");
                       srsAttribute.value = isySubLayer.srs_dimension;
                       attribute.firstElementChild.attributes.setNamedItem(srsAttribute);
                     }
@@ -579,8 +549,7 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
     var features = source.format.readFeatures(response);
 
     var featureIsValid = function featureIsValid(feature) {
-      var geometryIsOk = false;
-      console.warn(feature); //  var getZCoordinate = function (c) {
+      var geometryIsOk = false; //  var getZCoordinate = function (c) {
       //      if (Array.isArray(c)) {
       //          return getZCoordinate(c[c.length - 1]);
       //      }
@@ -597,17 +566,15 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
     };
 
     if (features && features.length > 0) {
-      var featureIsOk = true;
-
+      //var featureIsOk = true;
       if (!featureIsValid(features)) {
-        featureIsOk = false;
+        //featureIsOk = false;
         console.log(isySubLayer.name + ' does not have valid coordinates!');
       }
 
       features.forEach(function (featureitem) {
-        featureitem.set('layerguid', isySubLayer.id);
-
-        if (!featureIsOk) {} //    var geometry = featureitem.getGeometry();
+        featureitem.set("layerguid", isySubLayer.id); //if (!featureIsOk){
+        //    var geometry = featureitem.getGeometry();
         //    var coords = geometry.getCoordinates().join(',').split(',');
         //    var newcoords = [];
         //    for (var i = 0; i < coords.length; i+=2){
@@ -616,12 +583,12 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
         //        }
         //    }
         //    geometry.setCoordinates(newcoords);
+        //}
         //if (featureObj) {
         //    if (featureObj.getId() === featureitem.getId()) {
         //        featureObj = featureitem;
         //    }
         //}
-
       });
       source.addFeatures(features);
     }
@@ -647,8 +614,8 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
       url = isySubLayer.url[0];
     }
 
-    if (url.toLowerCase().indexOf('service=wfs') < 0) {
-      url += 'service=WFS&';
+    if (url.toLowerCase().indexOf("service=wfs") < 0) {
+      url += "service=WFS&";
     }
 
     url += 'request=GetFeature&' + 'version=' + isySubLayer.version + '&typename=' + isySubLayer.name + '&' + 'srsname=' + isySubLayer.coordinate_system + '&' + 'bbox=' + extent.join(',') + ',' + isySubLayer.coordinate_system + '&outputFormat=text/xml; subtype=gml/3.2.1';
@@ -669,6 +636,7 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
         }
       } else {
         return parseResponse(response);
+        ;
       }
     });
   };

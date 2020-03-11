@@ -173,7 +173,7 @@ var createOlWMSFromCap = function createOlWMSFromCap(map, getCapLayer) {
     layer.set('errors', errors);
     map.on('singleclick', function (evt) {
       var viewResolution = map.getView().getResolution();
-      var url = layer.getSource().getGetFeatureInfoUrl(evt.coordinate, viewResolution, map.getView().getProjection(), {
+      var url = layer.getSource().getFeatureInfoUrl(evt.coordinate, viewResolution, map.getView().getProjection(), {
         INFO_FORMAT: 'text/plain'
       });
 
@@ -194,6 +194,12 @@ var mergeDefaultParams = function mergeDefaultParams(url, defaultParams) {
   var parsedUrl = _queryString.default.parseUrl(url);
 
   var urlParams = parsedUrl.query;
+  var URLParser = typeof URL === 'undefined' ? require('url').URL : URL;
+  var urlObj = new URLParser(parsedUrl.url); //force https
+
+  if (window.location.protocol === 'https:' && urlObj.protocol === 'http:') {
+    urlObj.protocol = 'https:';
+  }
 
   for (var p in urlParams) {
     defaultParams[p] = urlParams[p];
@@ -203,7 +209,7 @@ var mergeDefaultParams = function mergeDefaultParams(url, defaultParams) {
     }
   }
 
-  return parsedUrl.url + '?' + _queryString.default.stringify(defaultParams);
+  return urlObj.href + "?" + _queryString.default.stringify(defaultParams);
 };
 
 exports.mergeDefaultParams = mergeDefaultParams;
@@ -268,12 +274,8 @@ var parseCapabilities = function parseCapabilities(xml) {
   });
 };
 
-var getWMSCapabilities =
-/*#__PURE__*/
-function () {
-  var _ref = (0, _asyncToGenerator2.default)(
-  /*#__PURE__*/
-  _regenerator.default.mark(function _callee(url) {
+var getWMSCapabilities = /*#__PURE__*/function () {
+  var _ref = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(url) {
     var newUrl;
     return _regenerator.default.wrap(function _callee$(_context) {
       while (1) {

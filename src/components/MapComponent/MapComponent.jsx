@@ -1,13 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react"
+import PropTypes from "prop-types"
+import queryString from "query-string"
+import setQuery from "set-query-string"
 
-import { CapabilitiesUtil } from '../../MapUtil/CapabilitiesUtil';
-import { map, eventHandler, mapConfig } from '../../MapUtil/maplibHelper';
+import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
+import { map, eventHandler, mapConfig } from "../../MapUtil/maplibHelper"
+import { Messaging } from '../../Utils/communication'
 
-import queryString from 'query-string';
-import setQuery from 'set-query-string';
-
-import style from './MapComponent.scss';
 
 /**
  * @class The Map Component
@@ -32,35 +31,18 @@ export class MapComponent extends React.Component {
      */
     zoom: PropTypes.number,
     /**
-     * @type {Function}
-     */
-    onChangeLon: PropTypes.func,
-    /**
-     * @type {Function}
-     */
-    onChangeLat: PropTypes.func,
-    /**
-     * @type {Function}
-     */
-    onChangeZoom: PropTypes.func,
-    /**
-     * @type {Function}
-     */
-    onMapViewChanges: PropTypes.func,
-    /**
      * @type {Array}
      */
     services: PropTypes.arrayOf(PropTypes.object),
+
+    crs: PropTypes.string
   };
 
   static defaultProps = {
-    onMapViewChanges: () => { },
-    onChangeLon: () => { },
-    onChangeLat: () => { },
-    onChangeZoom: () => { },
     lon: 396722,
     lat: 7197860,
-    zoom: 4
+    zoom: 4,
+    crs: 'EPSG:25833'
   };
 
   /**
@@ -68,84 +50,127 @@ export class MapComponent extends React.Component {
    *@constructs Map
    */
   constructor(props) {
-    super(props);
-
-    this.state = {
-      activeKey: '1'
-    };
-
-    const queryValues = queryString.parse(window.location.search);
-
-    let lon = Number(queryValues['lon'] || props.lon);
-    let lat = Number(queryValues['lat'] || props.lat);
-    let zoom = Number(queryValues['zoom'] || props.zoom);
-
+    super(props)
+    const queryValues = queryString.parse(window.location.search)
+    let lon = Number(queryValues["lon"] || props.lon)
+    let lat = Number(queryValues["lat"] || props.lat)
+    let zoom = Number(queryValues["zoom"] || props.zoom)
     /*
     let wmts = Array(queryValues['wmts'] || [])
     let wfs = Array(queryValues['wfs'] || [])
-    let epsg = queryValues['epsg'] || 'EPSG:3857'
 */
     //  this.props = { lon: lon, lat: lat, zoom: zoom };
+    mapConfig.coordinate_system = queryValues['crs'] || props.crs
     this.newMapConfig = Object.assign({}, mapConfig, {
       center: [lon, lat],
       zoom: zoom
-    });
-    this.olMap = null;
+    })
   }
 
   componentDidMount() {
-    this.olMap = map.Init('map', this.newMapConfig);
-    map.AddZoom();
-    map.AddScaleLine();
-    eventHandler.RegisterEvent('MapMoveend', this.updateMapInfoState);
-    this.props = { map: map };
-    this.addWMS();
+    window.olMap = map.Init("map", this.newMapConfig)
+    map.AddZoom()
+    map.AddScaleLine()
+    eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState)
+    this.setState({ map: map })
+    this.addWMS()
+    window.olMap.on('click', function (evt) {
+      const feature = window.olMap.forEachFeatureAtPixel(evt.pixel, (feature, layer) => feature)
+      if (feature) {
+        const coord = feature.getGeometry().getCoordinates()
+        let content = feature.get('n')
+        let message = {
+          cmd: 'featureSelected',
+          featureId: feature.getId(),
+          properties: content,
+          coordinates: coord
+        }
+        Messaging.postMessage(JSON.stringify(message))
+      }
+    })
   }
 
   updateMapInfoState = () => {
-    let center = map.GetCenter();
-    const queryValues = queryString.parse(window.location.search);
-    this.props = { lon: center.lon, lat: center.lat, zoom: center.zoom };
-    queryValues.lon = center.lon;
-    queryValues.lat = center.lat;
-    queryValues.zoom = center.zoom;
-    setQuery(queryValues);
+    let center = map.GetCenter()
+    const queryValues = queryString.parse(window.location.search)
+    this.props = { lon: center.lon, lat: center.lat, zoom: center.zoom }
+    queryValues.lon = center.lon
+    queryValues.lat = center.lat
+    queryValues.zoom = center.zoom
+    setQuery(queryValues)
   };
 
   addWMS() {
     this.props.services.forEach(service => {
-      CapabilitiesUtil.parseWmsCapabilities(service.GetCapabilitiesUrl)
-        .then(CapabilitiesUtil.getLayersFromWmsCapabilties)
-        .then(layers => {
-          if (service.addLayers.length > 0) {
-            let layersToBeAdded = layers.filter(
-              e => service.addLayers.includes(e.name)
-            );
-            layersToBeAdded.forEach(layer => map.AddLayer(layer));
-          }
-          this.setState({
-            wmsLayers: layers
-          });
-        })
-        .catch(e => console.warn(e));
-    });
+      let meta = {}
+      switch (service.DistributionProtocol) {
+        case 'WMS':
+        case 'WMS-tjeneste':
+        case 'OGC:WMS':
+          CapabilitiesUtil.parseWmsCapabilities(service.GetCapabilitiesUrl)
+            .then(capa => {
+              meta = CapabilitiesUtil.getWMSMetaCapabilities(capa)
+              meta.Type = 'OGC:WMS'
+              meta.Params = service.customParams || ''
+              if (service.addLayers.length > 0) {
+                let layersToBeAdded = []
+                layersToBeAdded = capa.Capability.Layer.Layer.filter(
+                  e => service.addLayers.includes(e.Name)
+                )
+                if (layersToBeAdded.length === 0 || layersToBeAdded.length !== service.addLayers.length) {
+                  layersToBeAdded = []
+                  service.addLayers.forEach(layerName => {
+                    layersToBeAdded.push({ Name: layerName })
+                  })
+                }
+                layersToBeAdded.forEach(layer => {
+                  let laycapaLayerer = CapabilitiesUtil.getOlLayerFromWmsCapabilities(meta, layer)
+                  window.olMap.addLayer(laycapaLayerer)
+                })
+              }
+            })
+            .then(layers => {
+              this.setState({
+                wmsLayers: layers
+              })
+            })
+            .catch(e => console.warn(e))
+          break
+        case 'GEOJSON':
+          CapabilitiesUtil.getGeoJson(service.url)
+            .then(layers => {
+              meta.Type = 'GEOJSON'
+              meta.ShowPropertyName = service.ShowPropertyName || 'id'
+              meta.EPSG = service.EPSG || 'EPSG:4326'
+              if (service.addLayers.length > 0) {
+                if (layers.name === service.addLayers['0']) {
+                  let currentLayer = CapabilitiesUtil.getOlLayerFromGeoJson(meta, layers)
+                  window.olMap.addLayer(currentLayer)
+                }
+              }
+            })
+            .catch(e => console.log(e))
+          break
+        default:
+          console.warn('No service type specified')
+          break
+      }
+    })
   }
 
   render() {
     return (
-      <div className={style.mapContainer}>
-        <div
-          id="map"
-          style={{
-            position: 'relative',
-            width: '100%',
-            height: '100%',
-            zIndex: 0
-          }}
-        />
-      </div>
-    );
+      <div
+        id="map"
+        style={ {
+          position: "relative",
+          width: "100%",
+          height: "100%",
+          zIndex: 0
+        } }
+      />
+    )
   }
 }
 
-export default MapComponent;
+export default MapComponent

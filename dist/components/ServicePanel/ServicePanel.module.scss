@@ -1,0 +1,66 @@
+:local(.removeInline) {
+    font-size: 1.5em;
+    position: relative;
+    top: 2px;
+    margin-left: 5px;
+    &:hover {
+        cursor: pointer;
+    }
+}
+:local(.selectedlayers) {
+    max-height: 0;
+    overflow: hidden;
+    transition: .3s all ease-in-out;
+
+    div {
+        padding: 2px 0;
+        > label {padding: 0 4px;}
+    }
+    &:local(.open) {
+        max-height: 80000px;
+    }
+}
+:local(.ellipsisToggle) {
+    width: 90%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+    position: relative;
+    top: 4px;
+    margin-right: 4px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+:local(.expandLayersBtn) {
+    display: inline-block;
+    width: 90%;
+    margin-bottom: 10px;
+
+    &:hover {
+        cursor: pointer;
+    }
+    > svg {
+        font-size: 1.5em;
+        position: relative;
+        top: 4px;
+        left: 6px;
+    }
+}
+:local(.facet) {
+    margin: 2px 0 10px 0;
+    > input[type="checkbox"] {
+        overflow: hidden;
+        visibility: hidden;
+        display: none;
+    }
+    label > svg {
+        margin: 0 5px;
+        font-size: 1.1em;
+    }
+    label > span {
+        display: inline-block;
+        text-overflow: ellipsis;
+        max-width: 75%;
+        overflow: hidden;
+    }
+}

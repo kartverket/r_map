@@ -1,128 +1,129 @@
-import {Map} from 'ol';
-import Projection from 'ol/proj/Projection';
-import View from 'ol/View';
+import Map from 'ol/Map'
+import Projection from 'ol/proj/Projection'
+import View from 'ol/View'
 import {
   defaults as defaultInteractions,
-} from 'ol/interaction';
-import MousePosition from 'ol/control/MousePosition.js';
+} from 'ol/interaction'
+import MousePosition from 'ol/control/MousePosition.js'
 import {
   GeoJSON as GeoJSONFormat,
   GML as GMLFormat,
   WFS as WFSFormat,
   WMSCapabilities
-} from 'ol/format';
-import GML2Format from 'ol/format/GML2';
-import GML3Format from 'ol/format/GML3';
-import style from 'ol/style/Style';
+} from 'ol/format'
+import GML2Format from 'ol/format/GML2'
+import GML3Format from 'ol/format/GML3'
+import style from 'ol/style/Style'
 import {
   Tile as TileLayer,
   Vector as VectorLayer,
   Image as ImageLayer
-} from 'ol/layer';
+} from 'ol/layer'
 import {
   Vector as VectorSource
-} from 'ol/source';
+} from 'ol/source'
 import {
   transform,
   transformExtent,
   get as getProjection
-} from 'ol/proj.js';
+} from 'ol/proj.js'
 import {
   Zoom,
   ZoomSlider,
   ZoomToExtent,
   ScaleLine
-} from 'ol/control';
+} from 'ol/control'
 import {
   Point,
   Circle
-} from 'ol/geom.js';
-import GeometryCollection from 'ol/geom/GeometryCollection';
-import Feature from 'ol/Feature.js';
+} from 'ol/geom.js'
+import GeometryCollection from 'ol/geom/GeometryCollection'
+import Feature from 'ol/Feature.js'
 import {
   getCenter as OLGetCenterFromExtent,
   containsCoordinate
-} from 'ol/extent';
-import OlGeolocation from 'ol/Geolocation';
-import proj4 from 'proj4';
+} from 'ol/extent'
+import OlGeolocation from 'ol/Geolocation'
+import proj4 from 'proj4'
 
-import { EventTypes } from './EventHandler';
+import { EventTypes } from './EventHandler'
 import {
   Vector as MaplibVectorSource,
   Wmts as MaplibWMTSSource,
   Wms as MaplibWMSSource,
   MaplibCustomMessageHandler,
   Wfs as MaplibWfsSource
-} from './Sources';
-import Guid from './Utils';
-import { OLProgressBar } from './OLProgessBar';
-import { FORMATS, SOURCES } from './Domain';
-import { OLStylesJson, OLStylesSLD } from './OLStyles';
+} from './Sources'
+import Guid from './Utils'
+import { OLProgressBar } from './OLProgessBar'
+import { FORMATS, SOURCES } from './Domain'
+import { OLStylesJson, OLStylesSLD } from './OLStyles'
 
-import $ from 'jquery';
+import $ from "jquery"
 
-export const OLMap = (repository, eventHandler, httpHelper, measure,
+export const OLMap = (eventHandler, httpHelper, measure,
   featureInfo, mapExport, hoverInfo, measureLine, drawFeature,
   offline, addLayerFeature, modifyFeature, addFeatureGps, printBoxSelect, addLayerUrl) => {
 
-  var map;
-  var layerPool = [];
-  var isySubLayerPool = [];
-  var sldstyles = [];
-  var mapResolutions;
-  var mapScales;
-  var hoverOptions;
-  var initialGeolocationChange = false;
+  var map
+  var layerPool = []
+  var isySubLayerPool = []
+  var sldstyles = []
+  var mapResolutions
+  var mapScales
+  var hoverOptions
+  var initialGeolocationChange = false
 
-  var proxyHost = '';
-  var tokenHost = '';
-  var ticketHost = '';
-  var gktLifetime = 3000;
-  var ticketLifetime = 3000;
-  var lastGktCheck = 0;
-  var lastTicketCheck = 0;
-  var lastGlobalGktCheck = 0;
-  var lastGlobalTicketCheck = 0;
-  var globalGkt;
-  var globalTicket;
-  var geolocation;
-  var translateOptions;
-  var isyToken;
+  var proxyHost = ""
+  var tokenHost = ""
+  var ticketHost = ""
+  var gktLifetime = 3000
+  var ticketLifetime = 3000
+  var lastGktCheck = 0
+  var lastTicketCheck = 0
+  var lastGlobalGktCheck = 0
+  var lastGlobalTicketCheck = 0
+  var globalGkt
+  var globalTicket
+  var geolocation
+  var translateOptions
+  var isyToken
 
-  var describedSubLayer;
-  var describedSource;
-  var isyLayerGeometryType;
+  var describedSubLayer
+  var describedSource
+  var isyLayerGeometryType
 
-  var customMessageHandler;
+  var customMessageHandler
 
-  /**
-   * Start up functions Start
+  /*
+      Start up functions Start
    */
+
   function initMap(targetId, mapConfig) {
-    proxyHost = mapConfig.proxyHost;
-    tokenHost = mapConfig.tokenHost;
-    ticketHost = mapConfig.ticketHost;
-    hoverOptions = mapConfig.hoverOptions;
-    var numZoomLevels = mapConfig.numZoomLevels;
-    var newMapRes = [];
-    newMapRes[0] = mapConfig.newMaxRes;
-    mapScales = [];
-    mapScales[0] = mapConfig.newMaxScale;
+    proxyHost = mapConfig.proxyHost
+    tokenHost = mapConfig.tokenHost
+    ticketHost = mapConfig.ticketHost
+    hoverOptions = mapConfig.hoverOptions
+    var numZoomLevels = mapConfig.numZoomLevels
+    var newMapRes = []
+    newMapRes[0] = mapConfig.newMaxRes
+    mapScales = []
+    mapScales[0] = mapConfig.newMaxScale
     for (var t = 1; t < numZoomLevels; t++) {
-      newMapRes[t] = newMapRes[t - 1] / 2;
-      mapScales[t] = mapScales[t - 1] / 2;
+      newMapRes[t] = newMapRes[t - 1] / 2
+      mapScales[t] = mapScales[t - 1] / 2
     }
-    mapResolutions = newMapRes;
+    mapResolutions = newMapRes
     var sm = new Projection({
       code: mapConfig.coordinate_system,
       extent: mapConfig.extent,
       units: mapConfig.extentUnits
-    });
+    })
 
     var interactions = defaultInteractions({
       altShiftDragRotate: false,
       pinchRotate: false
-    });
+    })
 
     map = new Map({
       target: targetId,
@@ -143,127 +144,127 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
       controls: [],
       overlays: [],
       interactions: interactions
-    });
+    })
     if (offline) {
-      _initOffline();
+      _initOffline()
     }
-    _registerMapCallbacks();
+    _registerMapCallbacks()
 
     if (mapConfig.showProgressBar) {
-      _registerProgressBar();
+      _registerProgressBar()
     }
     if (mapConfig.showMousePosition) {
-      _registerMousePositionControl(mapConfig.mouseProjectionPrefix);
+      _registerMousePositionControl(mapConfig.mouseProjectionPrefix)
     }
-    _registerMessageHandler();
-    return map;
+    _registerMessageHandler()
+    return map
   }
 
   function _registerMapCallbacks() {
-    var view = map.getView();
+    var view = map.getView()
 
     var changeCenter = function () {
-      var mapViewChangedObj = _getUrlObject();
-      eventHandler.TriggerEvent(EventTypes.ChangeCenter, mapViewChangedObj);
-    };
+      var mapViewChangedObj = _getUrlObject()
+      eventHandler.TriggerEvent(EventTypes.ChangeCenter, mapViewChangedObj)
+    }
 
     var changeResolution = function () {
-      var mapViewChangedObj = _getUrlObject();
-      eventHandler.TriggerEvent(EventTypes.ChangeResolution, mapViewChangedObj);
-    };
+      var mapViewChangedObj = _getUrlObject()
+      eventHandler.TriggerEvent(EventTypes.ChangeResolution, mapViewChangedObj)
+    }
 
     var mapMoveend = function () {
-      _checkGktToken();
-      _checkTicket();
-      var mapViewChangedObj = _getUrlObject();
-      eventHandler.TriggerEvent(EventTypes.MapMoveend, mapViewChangedObj);
-    };
+      _checkGktToken()
+      _checkTicket()
+      var mapViewChangedObj = _getUrlObject()
+      eventHandler.TriggerEvent(EventTypes.MapMoveend, mapViewChangedObj)
+    }
 
-    view.on('change:center', changeCenter);
-    view.on('change:resolution', changeResolution);
-    map.on('moveend', mapMoveend);
+    view.on('change:center', changeCenter)
+    view.on('change:resolution', changeResolution)
+    map.on('moveend', mapMoveend)
   }
 
   function _registerMessageHandler() {
-    var layerMessageHandler =  MaplibCustomMessageHandler(eventHandler, _getIsySubLayerFromPool);
-    layerMessageHandler.Init(map);
+    var layerMessageHandler = MaplibCustomMessageHandler(eventHandler, _getIsySubLayerFromPool)
+    layerMessageHandler.Init(map)
 
-    customMessageHandler = MaplibCustomMessageHandler();
-    customMessageHandler.InitMessage('');
+    customMessageHandler = MaplibCustomMessageHandler()
+    customMessageHandler.InitMessage('')
   }
 
   function _registerProgressBar() {
-    var progressBar = OLProgressBar(eventHandler);
-    progressBar.Init(map);
+    var progressBar = OLProgressBar(eventHandler)
+    progressBar.Init(map)
   }
 
   function _registerMousePositionControl(prefix) {
-    var element = document.getElementById('mouseposition');
+    var element = document.getElementById('mouseposition')
     if (element) {
-      var units = map.getView().getProjection().getUnits();
-      var epsg = getEpsgCode();
+      var units = map.getView().getProjection().getUnits()
+      var epsg = getEpsgCode()
       if (prefix === undefined) {
-        prefix = '';
+        prefix = ''
       }
       var coordinate2string = function (coord) {
-        var mousehtml = '' + prefix;
-        var geographic = false;
+        var mousehtml = '' + prefix
+        var geographic = false
         if (mousehtml.length > 0) {
           switch (units) {
             case 'degrees':
-              mousehtml = '';
-              geographic = true;
-              break;
+              mousehtml = ''
+              geographic = true
+              break
             default:
               switch (epsg) {
                 case 'EPSG:25831':
                 case 'EPSG:32631':
-                  mousehtml += '31 ';
-                  break;
+                  mousehtml += '31 '
+                  break
                 case 'EPSG:25832':
                 case 'EPSG:32632':
-                  mousehtml += '32 ';
-                  break;
+                  mousehtml += '32 '
+                  break
                 case 'EPSG:25833':
                 case 'EPSG:32633':
-                  mousehtml += '33 ';
-                  break;
+                  mousehtml += '33 '
+                  break
                 case 'EPSG:25834':
                 case 'EPSG:32634':
-                  mousehtml += '34 ';
-                  break;
+                  mousehtml += '34 '
+                  break
                 case 'EPSG:25835':
                 case 'EPSG:32635':
-                  mousehtml += '35 ';
-                  break;
+                  mousehtml += '35 '
+                  break
                 case 'EPSG:25836':
                 case 'EPSG:32636':
-                  mousehtml += '36 ';
-                  break;
+                  mousehtml += '36 '
+                  break
                 case 'EPSG:25837':
                 case 'EPSG:32637':
-                  mousehtml += '37 ';
-                  break;
+                  mousehtml += '37 '
+                  break
                 case 'EPSG:25838':
                 case 'EPSG:32638':
-                  mousehtml += '38 ';
-                  break;
+                  mousehtml += '38 '
+                  break
                 default:
-                  mousehtml += '33 ';
-                  break;
+                  mousehtml += '33 '
+                  break
               }
-              break;
+              break
           }
         }
         if (geographic) {
           mousehtml += Math.round(coord[1] * 10000) / 10000 +
-                        translateOptions['north'] + Math.round(coord[0] * 10000) / 10000 +
-                        translateOptions['east'];
+            translateOptions['north'] + Math.round(coord[0] * 10000) / 10000 +
+            translateOptions['east']
         } else {
-          mousehtml += parseInt(coord[1], 10) + translateOptions['north'] + parseInt(coord[0], 10) + translateOptions['east'];
+          mousehtml += parseInt(coord[1], 10) + translateOptions['north'] + parseInt(coord[0], 10) + translateOptions['east']
         }
-        return mousehtml;
-      };
+        return mousehtml
+      }
       var mousePositionControl = new MousePosition({
         coordinateFormat: coordinate2string,
         projection: epsg,
@@ -272,61 +273,61 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         // be placed within the map.
         className: 'mousePosition',
         target: element
-      });
-      map.addControl(mousePositionControl);
+      })
+      map.addControl(mousePositionControl)
     }
   }
 
   function _checkGktToken() {
-    var currentTime = (new Date()).getTime();
+    var currentTime = (new Date()).getTime()
     if (currentTime < (lastGktCheck + 60000)) {
       // check if token has expired each minute
-      return;
+      return
     }
-    lastGktCheck = currentTime;
+    lastGktCheck = currentTime
     if (map.getLayers()) {
       map.getLayers().forEach(function (layer) {
-        var source = layer.getSource();
+        var source = layer.getSource()
         if (source && source.getParams) {
-          var params = source.getParams();
+          var params = source.getParams()
           if (params && params.GKT) {
             //console.log(layer.typename + ' ' + params.GKT);
-            var initTime = source.get('timestamp');
+            var initTime = source.get("timestamp")
             if (initTime) {
-              var elapsedTime = Math.round((currentTime - initTime) / 1000);
+              var elapsedTime = Math.round((currentTime - initTime) / 1000)
               if (elapsedTime > gktLifetime) {
-                _setToken(source);
+                _setToken(source)
               }
             }
           }
         }
-      });
+      })
     }
   }
 
   function _checkTicket() {
-    var currentTime = (new Date()).getTime();
+    var currentTime = (new Date()).getTime()
     if (currentTime < (lastTicketCheck + 60000)) {
       // check if token has expired each minute
-      return;
+      return
     }
-    lastTicketCheck = currentTime;
+    lastTicketCheck = currentTime
     if (map.getLayers()) {
       map.getLayers().forEach(function (layer) {
-        var source = layer.getSource();
+        var source = layer.getSource()
         if (source && source.getParams) {
-          var params = source.getParams();
+          var params = source.getParams()
           if (params && params.ticket) {
-            var initTime = source.get('timestamp');
+            var initTime = source.get("timestamp")
             if (initTime) {
-              var elapsedTime = Math.round((currentTime - initTime) / 1000);
+              var elapsedTime = Math.round((currentTime - initTime) / 1000)
               if (elapsedTime > ticketLifetime) {
-                _setTicket(source);
+                _setTicket(source)
               }
             }
           }
         }
-      });
+      })
     }
   }
   // Adds GKT-token to existing source
@@ -334,59 +335,59 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
     //console.log(layer.typename + ' - ' + source.get("timestamp") + ' - ' + params.GKT);
     source.updateParams({
       GKT: _getToken()
-    });
-    source.set('timestamp', (new Date()).getTime());
+    })
+    source.set("timestamp", (new Date()).getTime())
   }
 
   function _setTicket(source) {
     source.updateParams({
       ticket: _getTicket()
-    });
-    source.set('timestamp', (new Date()).getTime());
+    })
+    source.set("timestamp", (new Date()).getTime())
   }
 
   function changeView(viewPropertyObject) {
     if (map !== undefined) {
-      var view = map.getView();
-      var lon; var lat; var zoom;
+      var view = map.getView()
+      var lon, lat, zoom
       if (viewPropertyObject.lon) {
-        lon = viewPropertyObject.lon;
+        lon = viewPropertyObject.lon
       }
       if (viewPropertyObject.lat) {
-        lat = viewPropertyObject.lat;
+        lat = viewPropertyObject.lat
       }
       if (viewPropertyObject.zoom) {
-        zoom = viewPropertyObject.zoom;
+        zoom = viewPropertyObject.zoom
       }
 
       if (lon !== undefined && lat !== undefined) {
-        var latitude = typeof (lat) === 'number' ? lat : parseFloat(lat.replace(/,/g, '.'));
-        var longitude = typeof (lon) === 'number' ? lon : parseFloat(lon.replace(/,/g, '.'));
+        var latitude = typeof (lat) === 'number' ? lat : parseFloat(lat.replace(/,/g, '.'))
+        var longitude = typeof (lon) === 'number' ? lon : parseFloat(lon.replace(/,/g, '.'))
         if (isFinite(latitude) && isFinite(longitude)) {
-          view.setCenter([longitude, latitude]);
+          view.setCenter([longitude, latitude])
         }
       }
 
       if (zoom !== undefined) {
-        view.setZoom(zoom);
+        view.setZoom(zoom)
       }
     }
   }
   /*
-        Start up functions End
-     */
+      Start up functions End
+   */
 
   /*
-        Layer functions Start
-        Functionality to be moved to ISY.MapImplementation.OL3.Layers
-     */
+      Layer functions Start
+      Functionality to be moved to ISY.MapImplementation.OL3.Layers
+   */
 
   function addDataToLayer(isySubLayer, data) {
-    var layer = _getLayerFromPool(isySubLayer);
+    var layer = _getLayerFromPool(isySubLayer)
     if (isySubLayer.format === FORMATS.geoJson) {
-      var geoJson = JSON.parse(data);
-      var geoJsonParser = new GeoJSONFormat();
-      var features = geoJsonParser.readFeatures(geoJson);
+      var geoJson = JSON.parse(data)
+      var geoJsonParser = new GeoJSONFormat()
+      var features = geoJsonParser.readFeatures(geoJson)
 
       //for (var i = 0; i < features.length; ++i) {
       //    if (features[i].getProperties().Guid) {
@@ -398,27 +399,27 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
           if (features[i].getProperties().Guid === undefined) {
             features[i].setProperties({
               Guid: Guid.newGuid()
-            });
+            })
           }
-          features[i].setId(isySubLayer.name + '.' + features[i].getProperties().Guid);
+          features[i].setId(isySubLayer.name + '.' + features[i].getProperties().Guid)
         }
       }
 
-      layer.getSource().addFeatures(features);
+      layer.getSource().addFeatures(features)
     }
   }
 
   function removeDataFromLayer(isySubLayer, data) {
-    var layer = _getLayerFromPool(isySubLayer);
+    var layer = _getLayerFromPool(isySubLayer)
     if (isySubLayer.format === FORMATS.geoJson) {
-      var geoJson = JSON.parse(data);
-      var geoJsonParser = new GeoJSONFormat();
-      var features = geoJsonParser.readFeatures(geoJson);
+      var geoJson = JSON.parse(data)
+      var geoJsonParser = new GeoJSONFormat()
+      var features = geoJsonParser.readFeatures(geoJson)
       for (var i = 0; i < features.length; ++i) {
         if (features[i].getProperties().Guid) {
-          var feature = layer.getSource().getFeatureById(isySubLayer.name + '.' + features[i].getProperties().Guid);
+          var feature = layer.getSource().getFeatureById(isySubLayer.name + '.' + features[i].getProperties().Guid)
           if (feature) {
-            layer.getSource().removeFeature(feature);
+            layer.getSource().removeFeature(feature)
           }
         }
       }
@@ -426,620 +427,620 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
   }
 
   function clearLayer(isySubLayer) {
-    var layer = _getLayerFromPool(isySubLayer);
+    var layer = _getLayerFromPool(isySubLayer)
     if (layer !== undefined) {
-      layer.getSource().clear();
+      layer.getSource().clear()
     }
   }
 
   function _isLayerVisible(isySubLayer) {
-    var layerexists = false;
+    var layerexists = false
     map.getLayers().forEach(function (maplayer) {
       if (!layerexists && maplayer.guid === isySubLayer.id) {
-        layerexists = true;
+        layerexists = true
       }
-    });
-    return layerexists;
+    })
+    return layerexists
   }
 
   function showLayer(isySubLayer) {
     if (!_isLayerVisible(isySubLayer)) {
-      var layer = _createLayer(isySubLayer);
+      var layer = _createLayer(isySubLayer)
       if (layer) {
-        layer.sortingIndex = isySubLayer.sortingIndex;
-        map.addLayer(layer);
-        _trigLayersChanged();
+        layer.sortingIndex = isySubLayer.sortingIndex
+        map.addLayer(layer)
+        _trigLayersChanged()
       }
     }
   }
 
   function getLegendStyles(isySubLayer) {
-    var layer = _getLayerFromPool(isySubLayer);
+    var layer = _getLayerFromPool(isySubLayer)
     if (layer !== null) {
-      return getLegendStyleFromLayer(layer);
+      return getLegendStyleFromLayer(layer)
     }
-    return undefined;
+    return undefined
   }
 
   function showBaseLayer(isySubLayer) {
     if (!_isLayerVisible(isySubLayer)) {
-      var layer = _createLayer(isySubLayer);
+      var layer = _createLayer(isySubLayer)
       if (layer) {
-        map.getLayers().insertAt(0, layer);
-        _trigLayersChanged();
+        map.getLayers().insertAt(0, layer)
+        _trigLayersChanged()
       }
     }
   }
 
   function hideLayer(isySubLayer) {
     if (_isLayerVisible(isySubLayer)) {
-      var layer = _getLayerByGuid(isySubLayer.id);
+      var layer = _getLayerByGuid(isySubLayer.id)
       if (layer) {
-        map.removeLayer(layer);
-        _trigLayersChanged();
+        map.removeLayer(layer)
+        _trigLayersChanged()
       }
     }
   }
 
   function _getProxyUrl(layerUrl, flattenproxy) {
     if (Array.isArray(layerUrl)) {
-      layerUrl = layerUrl[0];
+      layerUrl = layerUrl[0]
     }
     if (flattenproxy) {
       if (Array.isArray(proxyHost)) {
-        return proxyHost[0] + layerUrl;
+        return proxyHost[0] + layerUrl
       }
-      return proxyHost + layerUrl;
+      return proxyHost + layerUrl
     }
     if (!Array.isArray(proxyHost)) {
-      return proxyHost + layerUrl;
+      return proxyHost + layerUrl
     }
-    var newLayerUrl = [];
+    var newLayerUrl = []
     for (var i = 0; i < proxyHost.length; i++) {
-      newLayerUrl.push(proxyHost[i] + layerUrl);
+      newLayerUrl.push(proxyHost[i] + layerUrl)
     }
-    return newLayerUrl;
+    return newLayerUrl
   }
 
   function _getToken() {
     if (!tokenHost) {
-      return null;
+      return null
     } else if (!globalGkt || _checkGlobalGktTokenExpired()) {
       // TODO: Fix ajax call without jQuery
       /*globalGkt = await fetch(tokenHost, {
-                type: "GET",
-                async: false
-            })
-            .then(res => res.json());*/
+          type: "GET",
+          async: false
+      })
+      .then(res => res.json());*/
 
       globalGkt = $.ajax({
-        type: 'GET',
+        type: "GET",
         url: tokenHost,
         async: false
-      }).responseText.trim().replace(/"/g, '');
+      }).responseText.trim().replace(/"/g, "")
 
-      lastGlobalGktCheck = (new Date()).getTime();
+      lastGlobalGktCheck = (new Date()).getTime()
     }
-    return globalGkt;
+    return globalGkt
   }
 
   function _getTicket() {
     if (!ticketHost) {
-      return null;
+      return null
     } else if (!globalTicket || _checkGlobalTicketExpired()) {
       // TODO: Fix ajax call without jQuery
       /*globalTicket = await fetch(ticketHost, {
-                type: "GET",
-                async: false
-            })
-            .then(res => res.json());*/
+          type: "GET",
+          async: false
+      })
+      .then(res => res.json());*/
 
 
       globalTicket = $.ajax({
-        type: 'GET',
+        type: "GET",
         url: ticketHost,
         async: false
-      }).responseText.trim().replace(/"/g, '');
-      lastGlobalTicketCheck = (new Date()).getTime();
+      }).responseText.trim().replace(/"/g, "")
+      lastGlobalTicketCheck = (new Date()).getTime()
     }
-    return globalTicket;
+    return globalTicket
   }
 
 
   function _checkGlobalGktTokenExpired() {
-    var currentTime = (new Date()).getTime();
+    var currentTime = (new Date()).getTime()
     if (currentTime < (lastGlobalGktCheck + (gktLifetime * 1000))) {
-      lastGlobalGktCheck = currentTime;
-      return false;
+      lastGlobalGktCheck = currentTime
+      return false
     }
-    return true;
+    return true
   }
 
   function _checkGlobalTicketExpired() {
-    var currentTime = (new Date()).getTime();
+    var currentTime = (new Date()).getTime()
     if (currentTime < (lastGlobalTicketCheck + (ticketLifetime * 1000))) {
-      lastGlobalTicketCheck = currentTime;
-      return false;
+      lastGlobalTicketCheck = currentTime
+      return false
     }
-    return true;
+    return true
   }
 
   function _setLayerProperties(layer, isySubLayer) {
     // For caching, remember layer config
-    layer.set('config', isySubLayer);
+    layer.set('config', isySubLayer)
     layer.on('change', function () {
-      layer.set('loading', true);
-    }, layer);
+      layer.set('loading', true)
+    }, layer)
     layer.on('render', function () {
       // usikker på om render er riktig funksjon...
       if (layer.get('loading')) {
-        layer.set('loading', undefined);
-        eventHandler.TriggerEvent(EventTypes.LoadingLayerEnd, layer);
+        layer.set('loading', undefined)
+        eventHandler.TriggerEvent(EventTypes.LoadingLayerEnd, layer)
       }
-    }, layer);
+    }, layer)
   }
 
   function _createLayer(isySubLayer) {
-    var layer;
-    var source;
-    var layerFromPool = _getLayerFromPool(isySubLayer);
-    var returnlayer = true;
-    var parameters;
+    var layer
+    var source
+    var layerFromPool = _getLayerFromPool(isySubLayer)
+    var returnlayer = true
+    var parameters
     if (isyToken && isyToken.length > 0) {
       parameters = {
         isyToken: isyToken
-      };
+      }
     }
 
     var styleCallback = function (response) {
       // For caching, remember layer config
-      layer.set('config', isySubLayer);
-      var scales = sldstyles[isySubLayer.id].ParseSld(response, parseInt(isySubLayer.id, 10));
+      layer.set('config', isySubLayer)
+      var scales = sldstyles[isySubLayer.id].ParseSld(response, parseInt(isySubLayer.id, 10))
       if (scales.maxScaleDenominator) {
-        _setLayerMaxresolution(layer, _getResolutionByScale(scales.maxScaleDenominator), 'styleCallback');
+        _setLayerMaxresolution(layer, _getResolutionByScale(scales.maxScaleDenominator), 'styleCallback')
       }
       if (scales.minScaleDenominator) {
-        _setLayerMinresolution(layer, _getResolutionByScale(scales.minScaleDenominator), 'styleCallback');
+        _setLayerMinresolution(layer, _getResolutionByScale(scales.minScaleDenominator), 'styleCallback')
       }
-      _addIsySubLayer(isySubLayer);
-      layerPool.push(layer);
-      layer.sortingIndex = isySubLayer.sortingIndex;
-      map.addLayer(layer);
-      eventHandler.TriggerEvent(EventTypes.LayerCreated, layerPool);
-      sortLayerBySortIndex();
-      _trigLayersChanged();
-    };
+      _addIsySubLayer(isySubLayer)
+      layerPool.push(layer)
+      layer.sortingIndex = isySubLayer.sortingIndex
+      map.addLayer(layer)
+      eventHandler.TriggerEvent(EventTypes.LayerCreated, layerPool)
+      sortLayerBySortIndex()
+      _trigLayersChanged()
+    }
 
     if (layerFromPool !== null) {
-      layer = layerFromPool;
+      layer = layerFromPool
       // For caching, remember layer config
-      layer.set('config', isySubLayer);
+      layer.set('config', isySubLayer)
     } else {
       switch (isySubLayer.source) {
         case SOURCES.wmts:
           if (isySubLayer.gatekeeper && isySubLayer.tiled && ((offline === undefined) ? true : !offline.IsActive())) {
             if (parameters) {
-              parameters['gkt'] = _getToken();
+              parameters['gkt'] = _getToken()
             } else {
               parameters = {
                 gkt: _getToken()
-              };
+              }
             }
           }
-          source = MaplibWMTSSource(isySubLayer, parameters);
-          break;
+          source = MaplibWMTSSource(isySubLayer, parameters)
+          break
         case SOURCES.proxyWmts:
-          isySubLayer.url = _getProxyUrl(isySubLayer.url);
-          source = MaplibWMTSSource(isySubLayer, parameters);
-          break;
+          isySubLayer.url = _getProxyUrl(isySubLayer.url)
+          source = MaplibWMTSSource(isySubLayer, parameters)
+          break
         case SOURCES.wms:
-          source = MaplibWMSSource(isySubLayer, parameters);
+          source = MaplibWMSSource(isySubLayer, parameters)
           if (isySubLayer.gatekeeper && isySubLayer.tiled && ((offline === undefined) ? true : !offline.IsActive())) {
-            _setToken(source);
+            _setToken(source)
           }
           if (isySubLayer.ticket && ((offline === undefined) ? true : !offline.IsActive())) {
-            _setTicket(source);
+            _setTicket(source)
           }
-          break;
+          break
         case SOURCES.proxyWms:
-          isySubLayer.url = _getProxyUrl(isySubLayer.url);
-          source = MaplibWMSSource(isySubLayer, parameters);
-          break;
+          isySubLayer.url = _getProxyUrl(isySubLayer.url)
+          source = MaplibWMSSource(isySubLayer, parameters)
+          break
         case SOURCES.vector:
-          source = MaplibVectorSource(isySubLayer);
-          if (isySubLayer.url !== '') {
+          source = MaplibVectorSource(isySubLayer)
+          if (isySubLayer.url !== "") {
             if (!isySubLayer.noProxy) {
-              isySubLayer.url = _getProxyUrl(isySubLayer.url);
+              isySubLayer.url = _getProxyUrl(isySubLayer.url)
             }
             // _loadVectorLayer(isySubLayer, source);
 
           }
-          break;
+          break
         case SOURCES.wfs:
           if (!isySubLayer.noProxy) {
             // TODO: Fix proxy
             // isySubLayer.url = _getProxyUrl(isySubLayer.url, true);
           }
-          source = MaplibWfsSource(isySubLayer, offline, parameters);
-          break;
+          source = MaplibWfsSource(isySubLayer, offline, parameters)
+          break
 
         default:
-          throw new Error('Unsupported source: SOURCES.\'' +
-                        isySubLayer.source +
-                        '\'. For SubLayer with url ' + isySubLayer.url +
-                        ' and name ' + isySubLayer.name + '.');
+          throw new Error("Unsupported source: SOURCES.'" +
+            isySubLayer.source +
+            "'. For SubLayer with url " + isySubLayer.url +
+            " and name " + isySubLayer.name + ".")
       }
 
       if (isySubLayer.source === SOURCES.vector) {
         if (isySubLayer.style) {
-          if (typeof isySubLayer.style === 'object' || isySubLayer.style.indexOf('http') < 0) {
-            sldstyles[isySubLayer.id] = OLStylesJson(isySubLayer.style);
+          if (typeof isySubLayer.style === "object" || isySubLayer.style.indexOf("http") < 0) {
+            sldstyles[isySubLayer.id] = OLStylesJson(isySubLayer.style)
             layer = new VectorLayer({
               source: source,
               style: function (feature, resolution) {
-                return sldstyles[isySubLayer.id].GetStyle(feature, _getScaleByResolution(resolution));
+                return sldstyles[isySubLayer.id].GetStyle(feature, _getScaleByResolution(resolution))
               }
-            });
+            })
           } else {
-            sldstyles[isySubLayer.id] = new OLStylesSLD();
+            sldstyles[isySubLayer.id] = new OLStylesSLD()
             layer = new VectorLayer({
               source: source,
               style: function (feature, resolution) {
-                return sldstyles[isySubLayer.id].GetStyle(feature, _getScaleByResolution(resolution));
+                return sldstyles[isySubLayer.id].GetStyle(feature, _getScaleByResolution(resolution))
               }
-            });
+            })
             if (isySubLayer.style) {
-              returnlayer = false;
-              getConfigResource(isySubLayer.style, 'application/xml', styleCallback);
+              returnlayer = false
+              getConfigResource(isySubLayer.style, 'application/xml', styleCallback)
             }
-            _setLayerProperties(layer, isySubLayer);
+            _setLayerProperties(layer, isySubLayer)
           }
         } else {
           layer = new VectorLayer({
             source: new VectorSource({
               format: new GeoJSONFormat({
-                defaultDataProjection: isySubLayer.coordinate_system
+                dataProjection: isySubLayer.coordinate_system
               }),
               url: isySubLayer.url
 
             })
-          });
+          })
         }
       } else if (isySubLayer.source === SOURCES.wfs) {
-        sldstyles[isySubLayer.id] = new OLStylesSLD();
+        sldstyles[isySubLayer.id] = new OLStylesSLD()
         layer = new VectorLayer({
           source: source,
           style: function (feature, resolution) {
-            return sldstyles[isySubLayer.id].GetStyle(feature, _getScaleByResolution(resolution));
+            return sldstyles[isySubLayer.id].GetStyle(feature, _getScaleByResolution(resolution))
           }
-        });
+        })
         if (isySubLayer.style) {
-          returnlayer = false;
-          getConfigResource(isySubLayer.style, 'application/xml', styleCallback);
+          returnlayer = false
+          getConfigResource(isySubLayer.style, 'application/xml', styleCallback)
         }
-        _setLayerProperties(layer, isySubLayer);
+        _setLayerProperties(layer, isySubLayer)
       } else if (isySubLayer.tiled) {
         layer = new TileLayer({
           extent: isySubLayer.extent,
           opacity: isySubLayer.opacity,
           source: source
-        });
+        })
       } else {
         layer = new ImageLayer({
           extent: isySubLayer.extent,
           opacity: isySubLayer.opacity,
           source: source
-        });
+        })
       }
 
       // For caching, remember layer config
-      layer.set('config', isySubLayer);
-      layer.layerIndex = isySubLayer.layerIndex;
-      layer.guid = isySubLayer.id;
-      layer.typename = isySubLayer.name;
-      layer.tooltipTemplate = isySubLayer.tooltipTemplate;
+      layer.set('config', isySubLayer)
+      layer.layerIndex = isySubLayer.layerIndex
+      layer.guid = isySubLayer.id
+      layer.typename = isySubLayer.name
+      layer.tooltipTemplate = isySubLayer.tooltipTemplate
       if (isySubLayer.minResolution !== undefined) {
-        layer.setMinResolution(isySubLayer.minResolution);
+        layer.setMinResolution(isySubLayer.minResolution)
       }
       if (isySubLayer.maxResolution !== undefined) {
-        layer.setMaxResolution(isySubLayer.maxResolution);
+        layer.setMaxResolution(isySubLayer.maxResolution)
       }
       if (isySubLayer.maxScale) {
-        isySubLayer.maxScale = _setLayerMaxresolution(layer, _getResolutionByScale(isySubLayer.maxScale), 'layer');
+        isySubLayer.maxScale = _setLayerMaxresolution(layer, _getResolutionByScale(isySubLayer.maxScale), 'layer')
       }
       if (isySubLayer.minScale) {
-        isySubLayer.minScale = _setLayerMinresolution(layer, _getResolutionByScale(isySubLayer.minScale), 'layer');
+        isySubLayer.minScale = _setLayerMinresolution(layer, _getResolutionByScale(isySubLayer.minScale), 'layer')
       }
       if (returnlayer) {
-        _addIsySubLayer(isySubLayer);
-        layerPool.push(layer);
+        _addIsySubLayer(isySubLayer)
+        layerPool.push(layer)
       }
     }
 
     if (returnlayer) {
-      return layer;
+      return layer
     }
   }
 
   function _setLayerMinresolution(layer, scale) { //}, debuginfo) {
     if (layer && scale) {
-      var minRes = layer.getMinResolution();
+      var minRes = layer.getMinResolution()
       if (minRes && minRes >= scale) {
         //console.log(minRes + ' > ' + scale);
-        return;
+        return
       }
       //console.log(debuginfo + ' setLayerMinresolution() ' + layer.get('config').name + ': ' + scale);
-      layer.setMinResolution(scale);
-      return scale;
+      layer.setMinResolution(scale)
+      return scale
     }
   }
 
   function _setLayerMaxresolution(layer, scale) { //, debuginfo) {
     if (layer && scale) {
-      var maxRes = layer.getMaxResolution();
+      var maxRes = layer.getMaxResolution()
       if (maxRes && maxRes <= scale) {
         //console.log(maxRes + ' < ' + scale);
-        return;
+        return
       }
       //console.log(debuginfo + ' setLayerMaxresolution() ' + layer.get('config').name + ': ' + scale);
-      layer.setMaxResolution(scale);
-      return scale;
+      layer.setMaxResolution(scale)
+      return scale
     }
   }
 
   function _loadVectorLayer(isySubLayer, source) {
     var callback = function (data) {
-      data = typeof data === 'object' ? data : JSON.parse(data);
-      var format = new GeoJSONFormat();
+      data = typeof data === 'object' ? data : JSON.parse(data)
+      var format = new GeoJSONFormat()
       for (var i = 0; i < data.features.length; i++) {
-        var feature = data.features[i];
+        var feature = data.features[i]
         if (feature.type) {
-          source.addFeature(format.readFeature(feature));
+          source.addFeature(format.readFeature(feature))
         }
       }
-    };
+    }
     // TODO: Fix ajax call without jQuery
     /*await fetch(isySubLayer.url, {
-            type: "GET",
-            async: false
-        })
-        .then(res => callback(res.json()));*/
+        type: "GET",
+        async: false
+    })
+    .then(res => callback(res.json()));*/
     $.ajax({
       url: isySubLayer.url,
       async: false
     }).done(function (response) {
-      callback(response);
-    });
+      callback(response)
+    })
   }
 
   function _getLayerFromPool(isySubLayer) {
     for (var i = 0; i < layerPool.length; i++) {
-      var layerInPool = layerPool[i];
+      var layerInPool = layerPool[i]
       if (layerInPool.guid === isySubLayer.id) {
-        return layerInPool;
+        return layerInPool
       }
     }
-    return null;
+    return null
   }
 
   function _getLayerFromPoolByGuid(guid) {
     for (var i = 0; i < layerPool.length; i++) {
-      var layerInPool = layerPool[i];
+      var layerInPool = layerPool[i]
       if (layerInPool.guid === guid) {
-        return layerInPool;
+        return layerInPool
       }
     }
-    return null;
+    return null
   }
 
   function _addIsySubLayer(isySubLayer) {
-    var itemExists = false;
+    var itemExists = false
     for (var i = 0; i < isySubLayerPool.length; i++) {
       if (isySubLayer.id === isySubLayerPool[i].id) {
-        itemExists = true;
-        break;
+        itemExists = true
+        break
       }
     }
     if (!itemExists) {
-      isySubLayerPool.push(isySubLayer);
+      isySubLayerPool.push(isySubLayer)
     }
   }
 
   function _getIsySubLayerFromPool(layer) {
-    var isySubLayer;
+    var isySubLayer
     for (var i = 0; i < isySubLayerPool.length; i++) {
       if (isySubLayerPool[i].id === layer.guid) {
-        isySubLayer = isySubLayerPool[i];
-        break;
+        isySubLayer = isySubLayerPool[i]
+        break
       }
     }
-    return isySubLayer;
+    return isySubLayer
   }
 
   function _getLayerFromPoolByFeature(feature) {
-    var featureId = feature.get('layerguid');
+    var featureId = feature.get("layerguid")
     if (featureId === undefined) {
-      featureId = feature.getId();
+      featureId = feature.getId()
 
       if (featureId === undefined) {
-        return null;
+        return null
       }
 
       if (featureId.indexOf('.') > 0) {
-        featureId = featureId.slice(0, featureId.indexOf('.'));
+        featureId = featureId.slice(0, featureId.indexOf('.'))
       } else {
-        var tempFeatureId = featureId.substr(0, featureId.indexOf('_')) + ':' + featureId.substr(featureId.indexOf('_') + 1);
-        featureId = tempFeatureId.slice(0, tempFeatureId.indexOf('_'));
+        var tempFeatureId = featureId.substr(0, featureId.indexOf('_')) + ':' + featureId.substr(featureId.indexOf('_') + 1)
+        featureId = tempFeatureId.slice(0, tempFeatureId.indexOf('_'))
       }
       for (var i = 0; i < layerPool.length; i++) {
-        var layerInPool = layerPool[i];
-        var typename = layerInPool.typename;
+        var layerInPool = layerPool[i]
+        var typename = layerInPool.typename
         if (typename.indexOf(':') > 0) {
-          typename = typename.slice(typename.indexOf(':') + 1);
+          typename = typename.slice(typename.indexOf(':') + 1)
         }
         if (typename === featureId) {
-          return layerInPool;
+          return layerInPool
         }
       }
     } else {
       for (var j = 0; j < layerPool.length; j++) {
         if (featureId === layerPool[j].guid) {
-          return layerPool[j];
+          return layerPool[j]
         }
       }
     }
-    return null;
+    return null
   }
 
   var _getScaleByResolution = function (resolution) {
     if (resolution === undefined) {
-      return;
+      return
     }
-    var scale;
+    var scale
     for (var i = 0; i < mapResolutions.length; i++) {
       if (mapResolutions[i] === resolution) {
-        scale = mapScales[i];
-        break;
+        scale = mapScales[i]
+        break
       }
     }
-    return scale;
-  };
+    return scale
+  }
 
   var _getResolutionByScale = function (scale) {
     if (scale === undefined) {
-      scale = getScale();
+      scale = getScale()
     }
     if (scale === 1) {
-      return mapResolutions[mapResolutions.length - 1];
+      return mapResolutions[mapResolutions.length - 1]
     }
     if (scale === Infinity) {
-      return undefined;
+      return undefined
     }
-    var zoomlevel = -1;
+    var zoomlevel = -1
     for (var i = 0; i < mapScales.length; i++) {
       if (mapScales[i] < scale) {
-        zoomlevel = i - 1;
-        break;
+        zoomlevel = i - 1
+        break
       }
     }
     if (zoomlevel < 0) {
-      return mapResolutions[mapResolutions.length - 1];
+      return mapResolutions[mapResolutions.length - 1]
     }
-    return mapResolutions[zoomlevel];
-  };
+    return mapResolutions[zoomlevel]
+  }
 
   function setLayerBrightness(isySubLayer, value) {
     // Require WebGL-rendering of map
-    var layer = _getLayerByGuid(isySubLayer.id);
+    var layer = _getLayerByGuid(isySubLayer.id)
     if (layer && !isNaN(value)) {
-      layer.setBrightness(Math.min(value, 1));
+      layer.setBrightness(Math.min(value, 1))
     }
   }
 
   function setLayerContrast(isySubLayer, value) {
     // Require WebGL-rendering of map
-    var layer = _getLayerByGuid(isySubLayer.id);
+    var layer = _getLayerByGuid(isySubLayer.id)
     if (layer && !isNaN(value)) {
-      layer.setContrast(Math.min(value, 1));
+      layer.setContrast(Math.min(value, 1))
     }
   }
 
   function setLayerOpacity(isySubLayer, value) {
-    var layer = _getLayerByGuid(isySubLayer.id);
+    var layer = _getLayerByGuid(isySubLayer.id)
     if (layer && !isNaN(value)) {
-      layer.setOpacity(Math.min(value, 1));
+      layer.setOpacity(Math.min(value, 1))
     }
   }
 
   function setLayerSaturation(isySubLayer, value) {
     // Require WebGL-rendering of map
-    var layer = _getLayerByGuid(isySubLayer.id);
+    var layer = _getLayerByGuid(isySubLayer.id)
     if (layer && !isNaN(value)) {
-      layer.setSaturation(Math.min(value, 1));
+      layer.setSaturation(Math.min(value, 1))
     }
   }
 
   function setLayerHue(isySubLayer, value) {
     // Require WebGL-rendering of map
-    var layer = _getLayerByGuid(isySubLayer.id);
+    var layer = _getLayerByGuid(isySubLayer.id)
     if (layer && !isNaN(value)) {
-      layer.setHue(Math.min(value, 1));
+      layer.setHue(Math.min(value, 1))
     }
   }
 
   function _getLayersWithGuid() {
-    return map.getLayers().getArray().filter( (elem) => elem.guid !== undefined);
+    return map.getLayers().getArray().filter((elem) => elem.guid !== undefined)
   }
 
   function _getLayerByGuid(guid) {
-    var layers = _getLayersWithGuid();
+    var layers = _getLayersWithGuid()
     for (var i = 0; i < layers.length; i++) {
-      var layer = layers[i];
+      var layer = layers[i]
       if (layer.guid === guid) {
-        return layer;
+        return layer
       }
     }
-    return null;
+    return null
   }
 
   function getLayerIndex(isySubLayer) {
-    var layers = _getLayersWithGuid();
+    var layers = _getLayersWithGuid()
     for (var i = 0; i < layers.length; i++) {
-      var layer = layers[i];
+      var layer = layers[i]
       if (layer.guid === isySubLayer.id) {
-        return i;
+        return i
       }
     }
-    return null;
+    return null
   }
 
   function getLayerByName(layerTitle) {
-    var layers = _getLayersWithGuid();
+    var layers = _getLayersWithGuid()
     for (var i = 0; i < layers.length; i++) {
       if (layers[i].get('title') === layerTitle) {
-        return layers[i];
+        return layers[i]
       }
     }
-    return null;
+    return null
   }
 
   function moveLayerToIndex(isySubLayer, index) {
-    var subLayerIndex = getLayerIndex(isySubLayer);
-    var layersArray = map.getLayers().getArray();
+    var subLayerIndex = getLayerIndex(isySubLayer)
+    var layersArray = map.getLayers().getArray()
 
     for (var i = 0; i < layersArray.length; i++) {
       if (layersArray[i].guid === undefined) {
-        layersArray.splice(i, 1);
-        break;
+        layersArray.splice(i, 1)
+        break
       }
     }
-    layersArray.splice(index, 0, layersArray.splice(subLayerIndex, 1)[0]);
+    layersArray.splice(index, 0, layersArray.splice(subLayerIndex, 1)[0])
 
-    _trigLayersChanged();
+    _trigLayersChanged()
   }
 
   function sortLayerBySortIndex() {
-    var layersArray = map.getLayers().getArray();
-    _sortByKey(layersArray, 'sortingIndex');
-    _trigLayersChanged();
+    var layersArray = map.getLayers().getArray()
+    _sortByKey(layersArray, 'sortingIndex')
+    _trigLayersChanged()
   }
 
   function _sortByKey(array, key) {
     return array.sort(function (a, b) {
-      var x = a[key];
-      var y = b[key];
-      return ((x > y) ? -1 : ((x < y) ? 1 : 0));
-    });
+      var x = a[key]
+      var y = b[key]
+      return ((x > y) ? -1 : ((x < y) ? 1 : 0))
+    })
   }
 
   function _getLayerById(layerId) {
-    var layers = map.getLayers().getArray();
+    var layers = map.getLayers().getArray()
     for (var i = 0; i < layers.length; i++) {
       if (layers[i].guid === layerId) {
-        return layers[i];
+        return layers[i]
       }
     }
-    return undefined;
+    return undefined
   }
 
   function updateLayerSortIndex(groups) {
@@ -1047,437 +1048,437 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
       if (groups[i].isyLayers !== undefined) {
         for (var j = 0; j < groups[i].isyLayers.length; j++) {
           for (var k = 0; k < groups[i].isyLayers[j].subLayers.length; k++) {
-            var layer = _getLayerById(groups[i].isyLayers[j].subLayers[k].id);
+            var layer = _getLayerById(groups[i].isyLayers[j].subLayers[k].id)
             if (layer !== undefined) {
-              layer.sortingIndex = groups[i].isyLayers[j].subLayers[k].sortingIndex;
+              layer.sortingIndex = groups[i].isyLayers[j].subLayers[k].sortingIndex
             }
           }
         }
       } else {
-        break;
+        break
       }
     }
   }
 
   function _trigLayersChanged() {
-    var eventObject = _getUrlObject();
-    eventHandler.TriggerEvent(EventTypes.ChangeLayers, eventObject);
+    var eventObject = _getUrlObject()
+    eventHandler.TriggerEvent(EventTypes.ChangeLayers, eventObject)
   }
 
   function _getGuidsForVisibleLayers() {
-    var visibleLayers = [];
-    var layers = _getLayersWithGuid();
+    var visibleLayers = []
+    var layers = _getLayersWithGuid()
     for (var i = 0; i < layers.length; i++) {
-      var layer = layers[i];
+      var layer = layers[i]
       if (layer.getVisible() === true) {
-        visibleLayers.push(layers[i]);
+        visibleLayers.push(layers[i])
       }
     }
 
-    visibleLayers.sort(_compareMapLayerIndex);
-    var result = [];
+    visibleLayers.sort(_compareMapLayerIndex)
+    var result = []
     for (var j = 0; j < visibleLayers.length; j++) {
-      result.push(visibleLayers[j].guid);
+      result.push(visibleLayers[j].guid)
     }
-    return result.join(',');
+    return result.join(",")
   }
 
   function _compareMapLayerIndex(a, b) {
     if (a.mapLayerIndex < b.mapLayerIndex) {
-      return -1;
+      return -1
     }
     if (a.mapLayerIndex > b.mapLayerIndex) {
-      return 1;
+      return 1
     }
-    return 0;
+    return 0
   }
 
   /*
-        Layer functions End
-     */
+      Layer functions End
+   */
 
   /*
-        Map Export Start
-        Functionality in ISY.;ap.OL3.Export
-     */
+      Map Export Start
+      Functionality in ISY.;ap.OL3.Export
+   */
 
   var _resizeEvent = function () {
-    mapExport.WindowResized(map);
-  };
+    mapExport.WindowResized(map)
+  }
 
   function activateExport(options) {
-    mapExport.Activate(options, map, redrawMap);
-    window.addEventListener('resize', _resizeEvent, false);
+    mapExport.Activate(options, map, redrawMap)
+    window.addEventListener('resize', _resizeEvent, false)
   }
 
   function deactivateExport() {
-    window.removeEventListener('resize', _resizeEvent, false);
-    mapExport.Deactivate(redrawMap);
+    window.removeEventListener('resize', _resizeEvent, false)
+    mapExport.Deactivate(redrawMap)
   }
 
   function exportMap(callback) {
-    mapExport.ExportMap(callback, map);
+    mapExport.ExportMap(callback, map)
   }
 
   function redrawMap() {
     if (map) {
-      map.updateSize();
+      map.updateSize()
     }
   }
 
   function refreshMap() {
     map.getLayers().forEach(function (layer) {
-      refreshLayer(layer);
-    });
+      refreshLayer(layer)
+    })
   }
 
   function refreshLayerByGuid(guid, featureObj) {
     if (guid) {
-      refreshLayer(_getLayerFromPoolByGuid(guid), undefined, featureObj);
+      refreshLayer(_getLayerFromPoolByGuid(guid), undefined, featureObj)
     }
   }
 
   function refreshIsyLayer(isySubLayer, featureObj) {
-    refreshLayer(_getLayerFromPool(isySubLayer), isySubLayer, featureObj);
+    refreshLayer(_getLayerFromPool(isySubLayer), isySubLayer, featureObj)
   }
 
   function refreshLayer(layer, isySubLayer, featureObj) {
     if (layer === undefined) {
-      return;
+      return
     }
     if (isySubLayer === undefined) {
-      isySubLayer = _getIsySubLayerFromPool(layer);
+      isySubLayer = _getIsySubLayerFromPool(layer)
     }
     if (isySubLayer === undefined) {
-      return;
+      return
     }
-    var parameters;
+    var parameters
     if (isyToken && isyToken.length > 0) {
       parameters = {
         isyToken: isyToken
-      };
+      }
     }
-    var source;
+    var source
     switch (isySubLayer.source) {
       case SOURCES.wmts:
-        source = new MaplibWMTSSource(isySubLayer, parameters);
+        source = new MaplibWMTSSource(isySubLayer, parameters)
         if (isySubLayer.gatekeeper && ((offline === undefined) ? true : !offline.IsActive())) {
-          _setToken(source);
+          _setToken(source)
         }
-        break;
+        break
       case SOURCES.proxyWmts:
-        source = new MaplibWMTSSource(isySubLayer, parameters);
-        break;
+        source = new MaplibWMTSSource(isySubLayer, parameters)
+        break
       case SOURCES.wms:
-        source = new MaplibWMSSource(isySubLayer, parameters);
+        source = new MaplibWMSSource(isySubLayer, parameters)
         if (isySubLayer.gatekeeper && isySubLayer.tiled && ((offline === undefined) ? true : !offline.IsActive())) {
-          _setToken(source);
+          _setToken(source)
         }
-        break;
+        break
       case SOURCES.proxyWms:
-        source = new MaplibWMSSource(isySubLayer, parameters);
-        break;
+        source = new MaplibWMSSource(isySubLayer, parameters)
+        break
       case SOURCES.vector:
-        source = new MaplibVectorSource(isySubLayer);
-        if (isySubLayer.url !== '') {
-          _loadVectorLayer(isySubLayer, source);
+        source = new MaplibVectorSource(isySubLayer)
+        if (isySubLayer.url !== "") {
+          _loadVectorLayer(isySubLayer, source)
         }
-        break;
+        break
       case SOURCES.wfs:
-        parameters._olSalt = Math.random();
-        source = new MaplibWfsSource(isySubLayer, offline, parameters, featureObj, eventHandler);
-        break;
+        parameters._olSalt = Math.random()
+        source = new MaplibWfsSource(isySubLayer, offline, parameters, featureObj, eventHandler)
+        break
       default:
-        break;
+        break
     }
     if (source) {
-      layer.setSource(source);
+      layer.setSource(source)
     }
   }
 
   var setIsyToken = function (token) {
     if (token.length === 0) {
-      return;
+      return
     }
     if (isyToken && isyToken === token) {
-      return;
+      return
     }
-    isyToken = token;
+    isyToken = token
     var parameters = {
       isyToken: isyToken
-    };
+    }
     for (var i = 0; i < isySubLayerPool.length; i++) {
-      isySubLayerPool[i].isyToken = isyToken;
-      var isySubLayer = isySubLayerPool[i];
-      var source;
-      var layer = _getLayerFromPool(isySubLayer);
-      var isVector = false;
+      isySubLayerPool[i].isyToken = isyToken
+      var isySubLayer = isySubLayerPool[i]
+      var source
+      var layer = _getLayerFromPool(isySubLayer)
+      var isVector = false
       switch (isySubLayer.source) {
         case SOURCES.wms:
         case SOURCES.wmts:
         case SOURCES.proxyWms:
         case SOURCES.proxyWmts:
-          source = layer.getSource();
-          break;
+          source = layer.getSource()
+          break
         case SOURCES.vector:
-          isVector = true;
-          source = new MaplibVectorSource(isySubLayer);
-          if (isySubLayer.url !== '') {
-            _loadVectorLayer(isySubLayer, source);
+          isVector = true
+          source = new MaplibVectorSource(isySubLayer)
+          if (isySubLayer.url !== "") {
+            _loadVectorLayer(isySubLayer, source)
           }
-          break;
+          break
         case SOURCES.wfs:
-          isVector = true;
-          source = new MaplibWfsSource(isySubLayer, offline, parameters);
-          break;
+          isVector = true
+          source = new MaplibWfsSource(isySubLayer, offline, parameters)
+          break
         default:
-          break;
+          break
       }
       if (source) {
         if (isVector) {
-          layer.setSource(source);
+          layer.setSource(source)
         } else {
-          source.updateParams(parameters);
+          source.updateParams(parameters)
         }
       }
     }
-  };
+  }
   var removeIsyToken = function () {
-    isyToken = undefined;
+    isyToken = undefined
     var parameters = {
       isyToken: ''
-    };
+    }
     for (var i = 0; i < isySubLayerPool.length; i++) {
-      isySubLayerPool[i].isyToken = isyToken;
-      var isySubLayer = isySubLayerPool[i];
-      var source;
-      var layer = _getLayerFromPool(isySubLayer);
-      var isVector = false;
+      isySubLayerPool[i].isyToken = isyToken
+      var isySubLayer = isySubLayerPool[i]
+      var source
+      var layer = _getLayerFromPool(isySubLayer)
+      var isVector = false
       switch (isySubLayer.source) {
         case SOURCES.wms:
         case SOURCES.wmts:
         case SOURCES.proxyWms:
         case SOURCES.proxyWmts:
-          source = layer.getSource();
-          break;
+          source = layer.getSource()
+          break
         case SOURCES.vector:
-          isVector = true;
-          source = new MaplibVectorSource(isySubLayer);
-          if (isySubLayer.url !== '') {
-            _loadVectorLayer(isySubLayer, source);
+          isVector = true
+          source = new MaplibVectorSource(isySubLayer)
+          if (isySubLayer.url !== "") {
+            _loadVectorLayer(isySubLayer, source)
           }
-          break;
+          break
         case SOURCES.wfs:
-          isVector = true;
-          source = new MaplibWfsSource(isySubLayer, offline);
-          break;
+          isVector = true
+          source = new MaplibWfsSource(isySubLayer, offline)
+          break
         default:
-          break;
+          break
       }
       if (source) {
         if (isVector) {
-          layer.setSource(source);
+          layer.setSource(source)
         } else {
-          source.updateParams(parameters);
+          source.updateParams(parameters)
         }
       }
     }
-  };
+  }
 
   function showCustomMessage(message) {
-    customMessageHandler.ShowCustomMessage(message);
+    customMessageHandler.ShowCustomMessage(message)
   }
 
   function renderSync() {
-    map.renderSync();
+    map.renderSync()
   }
 
   /*
-        Map Export End
-     */
+      Map Export End
+   */
 
   /*
-        Feature Info Start
-        Functionality in ISY.MapImplementation.OL3.FeatureInfo
-     */
+      Feature Info Start
+      Functionality in ISY.MapImplementation.OL3.FeatureInfo
+   */
 
   function activateInfoClick(callback) {
-    featureInfo.ActivateInfoClick(callback, map);
+    featureInfo.ActivateInfoClick(callback, map)
   }
 
   function deactivateInfoClick() {
-    featureInfo.DeactivateInfoClick(map);
+    featureInfo.DeactivateInfoClick(map)
   }
 
   function getFeatureInfoUrl(isySubLayer, coordinate) {
-    return proxyHost + featureInfo.GetFeatureInfoUrl(isySubLayer, _getLayerFromPool(isySubLayer), coordinate, map.getView());
+    return proxyHost + featureInfo.GetFeatureInfoUrl(isySubLayer, _getLayerFromPool(isySubLayer), coordinate, map.getView())
   }
 
   function showHighlightedFeatures(layerguid, features) {
-    featureInfo.ShowHighlightedFeatures(_getFeaturesAndAddHoverStyle(layerguid, features), map);
+    featureInfo.ShowHighlightedFeatures(_getFeaturesAndAddHoverStyle(layerguid, features), map)
   }
 
   function clearHighlightedFeatures() {
-    featureInfo.ClearHighlightedFeatures();
+    featureInfo.ClearHighlightedFeatures()
   }
 
   function showInfoMarker(coordinate, element) {
-    featureInfo.ShowInfoMarker(coordinate, element, map);
+    featureInfo.ShowInfoMarker(coordinate, element, map)
   }
 
   function showInfoMarkers(coordinates, element) {
-    featureInfo.ShowInfoMarkers(coordinates, element, map);
+    featureInfo.ShowInfoMarkers(coordinates, element, map)
   }
 
   function removeInfoMarker(element) {
-    featureInfo.RemoveInfoMarker(element, map);
+    featureInfo.RemoveInfoMarker(element, map)
   }
 
   function removeInfoMarkers(element) {
-    featureInfo.RemoveInfoMarkers(element, map);
+    featureInfo.RemoveInfoMarkers(element, map)
   }
 
   function setHighlightStyle(style) {
-    featureInfo.SetHighlightStyle(style);
+    featureInfo.SetHighlightStyle(style)
   }
 
   function activateBoxSelect(callback) {
-    featureInfo.ActivateBoxSelect(callback, map);
+    featureInfo.ActivateBoxSelect(callback, map)
   }
 
   function deactivateBoxSelect() {
-    featureInfo.DeactivateBoxSelect(map);
+    featureInfo.DeactivateBoxSelect(map)
   }
 
 
   // eslint-disable-next-line no-extend-native
   Array.prototype.where = function (matcher) {
-    var result = [];
+    var result = []
     for (var i = 0; i < this.length; i++) {
       if (matcher(this[i])) {
-        result.push(this[i]);
+        result.push(this[i])
       }
     }
-    return result;
-  };
+    return result
+  }
 
   function _getElementsByAttribute(tag, attr, attrValue, response, exactName) {
     //Get elements and convert to array
-    var elems = Array.prototype.slice.call(response.getElementsByTagName(tag), 0);
+    var elems = Array.prototype.slice.call(response.getElementsByTagName(tag), 0)
 
     var matcher = function (el) {
       if (exactName) {
-        return el.getAttribute(attr).toLowerCase() === attrValue.toLowerCase();
+        return el.getAttribute(attr).toLowerCase() === attrValue.toLowerCase()
       } else {
-        return el.getAttribute(attr).indexOf(attrValue) > -1 || attrValue.indexOf(el.getAttribute(attr)) > -1;
+        return el.getAttribute(attr).indexOf(attrValue) > -1 || attrValue.indexOf(el.getAttribute(attr)) > -1
       }
-    };
+    }
 
-    return elems.where(matcher);
+    return elems.where(matcher)
   }
 
 
   function _parseResponse(response) {
 
-    var subLayerName = describedSubLayer.name.split(':');
+    var subLayerName = describedSubLayer.name.split(":")
     if (subLayerName.length > 0) {
-      subLayerName = subLayerName[subLayerName.length - 1];
+      subLayerName = subLayerName[subLayerName.length - 1]
     } else {
-      return;
+      return
     }
 
-    var elementNodeByName = _getElementsByAttribute('element', 'name', subLayerName, response, true)[0];
+    var elementNodeByName = _getElementsByAttribute("element", "name", subLayerName, response, true)[0]
 
-    var elementGeometryName = _getElementsByAttribute('element', 'type', isyLayerGeometryType, elementNodeByName, false)[0];
+    var elementGeometryName = _getElementsByAttribute("element", "type", isyLayerGeometryType, elementNodeByName, false)[0]
 
     if (elementGeometryName === undefined) {
-      return;
+      return
     } else {
-      elementGeometryName = elementGeometryName.getAttribute('name');
+      elementGeometryName = elementGeometryName.getAttribute("name")
     }
 
-    var featureNamespace = response.firstChild.getAttribute('targetNamespace');
+    var featureNamespace = response.firstChild.getAttribute("targetNamespace")
 
     if (typeof describedSource.format === 'undefined') {
-      var gmlFormat;
+      var gmlFormat
       switch (describedSubLayer.version) {
         case '1.0.0':
-          gmlFormat = new GML2Format();
-          break;
+          gmlFormat = new GML2Format()
+          break
         case '1.1.0':
-          gmlFormat = new GML3Format();
-          break;
+          gmlFormat = new GML3Format()
+          break
         case '2.0.0':
-          gmlFormat = new GML3Format();
-          break;
+          gmlFormat = new GML3Format()
+          break
         default:
-          gmlFormat = new GMLFormat();
-          break;
+          gmlFormat = new GMLFormat()
+          break
       }
 
       describedSource.format = new WFSFormat({
         featureType: describedSubLayer.providerName,
         featureNS: featureNamespace,
         gmlFormat: gmlFormat
-      });
+      })
     }
 
-    describedSubLayer.featureNS = featureNamespace;
-    describedSubLayer.geometryName = elementGeometryName;
+    describedSubLayer.featureNS = featureNamespace
+    describedSubLayer.geometryName = elementGeometryName
 
-    eventHandler.TriggerEvent(EventTypes.FeatureHasBeenDescribed, [describedSubLayer, describedSource]);
+    eventHandler.TriggerEvent(EventTypes.FeatureHasBeenDescribed, [describedSubLayer, describedSource])
   }
 
   function describeFeature(isySubLayer, geometryType) {
-    describedSubLayer = isySubLayer;
-    isyLayerGeometryType = geometryType;
-    var projection = getProjection(isySubLayer.coordinate_system);
+    describedSubLayer = isySubLayer
+    isyLayerGeometryType = geometryType
+    var projection = getProjection(isySubLayer.coordinate_system)
     describedSource = new VectorSource({
       projection: projection
-    });
-    describedSource.set('type', 'ol.source.Vector');
-    var url = isySubLayer.url;
+    })
+    describedSource.set('type', 'ol.source.Vector')
+    var url = isySubLayer.url
     if (Array.isArray(isySubLayer.url)) {
-      url = isySubLayer.url[0];
+      url = isySubLayer.url[0]
     }
-    if (url.toLowerCase().indexOf('service=wfs') < 0) {
-      url += 'service=WFS&';
+    if (url.toLowerCase().indexOf("service=wfs") < 0) {
+      url += "service=WFS&"
     }
     url += 'request=DescribeFeatureType&' +
-            'version=' + isySubLayer.version + '&typename=' + isySubLayer.name;
+      'version=' + isySubLayer.version + '&typename=' + isySubLayer.name
     // TODO: Fix ajax call without jQuery
     /*          await fetch(url, {
-                type: "GET",
-                async: false
-            })
-            .then(res => _parseResponse(res.json()));
-*/
+                  type: "GET",
+                  async: false
+              })
+              .then(res => _parseResponse(res.json()));
+  */
     $.ajax({
       url: url
     }).done(function (response) {
-      _parseResponse(response);
-    });
+      _parseResponse(response)
+    })
 
   }
 
   function getExtentForCoordinate(coordinate, pixelTolerance) {
-    return featureInfo.GetExtentForCoordinate(coordinate, pixelTolerance, map.getView().getResolution());
+    return featureInfo.GetExtentForCoordinate(coordinate, pixelTolerance, map.getView().getResolution())
   }
 
   function getFeaturesInExtent(isySubLayer, extent) {
-    return featureInfo.GetFeaturesInExtent(extent, _getLayerFromPool(isySubLayer), map.getView().getResolution());
+    return featureInfo.GetFeaturesInExtent(extent, _getLayerFromPool(isySubLayer), map.getView().getResolution())
   }
 
   function getFeatureCollection(isySubLayer) {
-    return featureInfo.GetFeatureCollection(_getLayerFromPool(isySubLayer));
+    return featureInfo.GetFeatureCollection(_getLayerFromPool(isySubLayer))
   }
 
   function getFeaturesInMap(isySubLayer) {
-    return featureInfo.GetFeaturesInMap(_getLayerFromPool(isySubLayer));
+    return featureInfo.GetFeaturesInMap(_getLayerFromPool(isySubLayer))
   }
 
   function getLayerByFeature(feature) {
-    return _getLayerFromPoolByFeature(feature);
+    return _getLayerFromPoolByFeature(feature)
   }
 
   function getHoverStyle(feature, resolution) {
@@ -1489,217 +1490,217 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
     //    var tempFeatureId = featureId.substr(0,featureId.indexOf('_')) + ':' + featureId.substr(featureId.indexOf('_') + 1);
     //    featureId = tempFeatureId.slice(0, tempFeatureId.indexOf('_'));
     //}
-    var layer = this.GetLayerByFeature(feature);
+    var layer = this.GetLayerByFeature(feature)
     if (layer) {
       if (sldstyles[layer.guid]) {
-        return sldstyles[layer.guid].GetHoverStyle(feature, _getScaleByResolution(resolution));
+        return sldstyles[layer.guid].GetHoverStyle(feature, _getScaleByResolution(resolution))
       } else {
-        return layer.getStyle ? layer.getStyle() : undefined;
+        return layer.getStyle ? layer.getStyle() : undefined
       }
     }
   }
 
   function _getFeaturesAndAddHoverStyle(layerguid, features) {
     if (layerguid === undefined) {
-      return features;
+      return features
     }
-    var scale = _getScaleByResolution(map.getView().getResolution());
-    var feature;
+    var scale = _getScaleByResolution(map.getView().getResolution())
+    var feature
     var featureAttribute = function (attr) {
       for (var j = 0; j < feature.attributes.length; j++) {
         if (attr === feature.attributes[j][0]) {
-          return feature.attributes[j][1];
+          return feature.attributes[j][1]
         }
       }
-    };
+    }
     for (var i = 0; i < features.length; i++) {
-      feature = features[i];
+      feature = features[i]
       if (features[i].get === undefined) {
-        features[i].get = featureAttribute;
+        features[i].get = featureAttribute
       }
-      var hoverstyle = sldstyles[layerguid].GetHoverStyle(features[i], scale);
+      var hoverstyle = sldstyles[layerguid].GetHoverStyle(features[i], scale)
       if (hoverstyle) {
-        features[i].hoverstyle = hoverstyle;
+        features[i].hoverstyle = hoverstyle
       }
     }
-    return features;
+    return features
   }
 
   function getFeatureExtent(feature) {
-    return featureInfo.GetFeatureExtent(feature);
+    return featureInfo.GetFeatureExtent(feature)
   }
   /*
-        Feature Info End
-     */
+      Feature Info End
+   */
 
   /*
-     HoverInfo Start
-     */
+   HoverInfo Start
+   */
 
   function activateHoverInfo(callback) {
-    hoverInfo.ActivateHoverInfo(map, callback, this, hoverOptions);
+    hoverInfo.ActivateHoverInfo(map, callback, this, hoverOptions)
   }
 
   function deactivateHoverInfo() {
-    hoverInfo.DeactivateHoverInfo(map);
+    hoverInfo.DeactivateHoverInfo(map)
   }
 
   /*
-     HoverInfo End
-     */
+   HoverInfo End
+   */
 
   /*
-     Measure Start
-     Functionality in ISY.MapImplementation.OL3.Measure
-     */
+   Measure Start
+   Functionality in ISY.MapImplementation.OL3.Measure
+   */
   function activateMeasure(callback, options) {
-    measure.Activate(map, callback, options);
+    measure.Activate(map, callback, options)
   }
 
   function deactivateMeasure() {
-    measure.Deactivate(map);
+    measure.Deactivate(map)
   }
 
   function activateMeasureLine(callback, options) {
-    measureLine.Activate(map, callback, options);
+    measureLine.Activate(map, callback, options)
     //var vector = measure.Activate(map, callback);
 
   }
 
   function deactivateMeasureLine() {
-    measureLine.Deactivate(map);
+    measureLine.Deactivate(map)
   }
 
   /*
-     Measure End
-     */
+   Measure End
+   */
 
   /*
-     AddLayerFeature Start
-     Functionality in ISY.MapImplementation.OL3.AddLayerFeature
-     */
+   AddLayerFeature Start
+   Functionality in ISY.MapImplementation.OL3.AddLayerFeature
+   */
   function activateAddLayerFeature(options) {
-    addLayerFeature.Activate(map, options);
+    addLayerFeature.Activate(map, options)
   }
 
   function deactivateAddLayerFeature() {
-    addLayerFeature.Deactivate(map);
+    addLayerFeature.Deactivate(map)
   }
 
   /*
-     AddLayerFeature End
-     */
+   AddLayerFeature End
+   */
 
   /*
-     AddFeatureGps Start
-     Functionality in ISY.MapImplementation.OL3.AddFeatureGps
-     */
+   AddFeatureGps Start
+   Functionality in ISY.MapImplementation.OL3.AddFeatureGps
+   */
   function activateAddFeatureGps(options) {
-    addFeatureGps.Activate(map, options);
+    addFeatureGps.Activate(map, options)
   }
 
   function addCoordinatesGps(coordinates) {
-    addFeatureGps.AddCoordinates(coordinates);
+    addFeatureGps.AddCoordinates(coordinates)
   }
 
   function deactivateAddFeatureGps() {
-    addFeatureGps.Deactivate(map);
+    addFeatureGps.Deactivate(map)
   }
 
   /*
-     AddLayerFeature End
-     */
+   AddLayerFeature End
+   */
 
 
   /*
-     Modify Feature Start
-     */
+   Modify Feature Start
+   */
 
   function activateModifyFeature(options) {
-    modifyFeature.Activate(map, options);
+    modifyFeature.Activate(map, options)
   }
 
   function deactivateModifyFeature() {
-    modifyFeature.Deactivate(map);
+    modifyFeature.Deactivate(map)
   }
 
   /*
-     Modify Feature End
-     */
+   Modify Feature End
+   */
 
 
   /*
-     DrawFeature Start
-     */
+   DrawFeature Start
+   */
 
   function activateDrawFeature(callback, options) {
-    drawFeature.Activate(map, callback, options);
+    drawFeature.Activate(map, callback, options)
   }
 
   function deactivateDrawFeature() {
-    drawFeature.Deactivate(map);
+    drawFeature.Deactivate(map)
   }
 
   /*
-     DrawFeature End
-     */
+   DrawFeature End
+   */
 
   /*
-     Offline Start
-     Functionality in ISY.MapImplementation.OL3.Offline
-     */
+   Offline Start
+   Functionality in ISY.MapImplementation.OL3.Offline
+   */
 
   function _initOffline() {
     if (offline) {
-      offline.Init(map, eventHandler);
+      offline.Init(map, eventHandler)
     }
   }
 
   function activateOffline() {
     if (offline) {
-      offline.Activate();
+      offline.Activate()
     }
   }
 
   function startCaching(zoomLevelMin, zoomLevelMax, extentView) {
     if (offline) {
-      offline.StartCaching(zoomLevelMin, zoomLevelMax, extentView, eventHandler);
+      offline.StartCaching(zoomLevelMin, zoomLevelMax, extentView, eventHandler)
     }
   }
 
   function stopCaching() {
-    offline.StopCaching();
+    offline.StopCaching()
   }
 
   function deleteDatabase(callback, zoomlevels, eventhandler) {
-    offline.DeleteDatabase(callback, zoomlevels, eventhandler);
+    offline.DeleteDatabase(callback, zoomlevels, eventhandler)
   }
 
   function cacheDatabaseExist() {
-    return offline.CacheDatabaseExist();
+    return offline.CacheDatabaseExist()
   }
 
   function calculateTileCount(zoomLevelMin, zoomLevelMax, extentView) {
     if (offline) {
-      return offline.CalculateTileCount(zoomLevelMin, zoomLevelMax, extentView);
+      return offline.CalculateTileCount(zoomLevelMin, zoomLevelMax, extentView)
     }
   }
 
   function getResource(url, contentType, callback) {
     if (offline) {
-      offline.GetResource(url, contentType, callback);
+      offline.GetResource(url, contentType, callback)
     }
   }
 
   function getConfigResource(url, contentType, callback) {
     if (offline) {
-      offline.GetConfigResource(url, contentType, callback);
+      offline.GetConfigResource(url, contentType, callback)
     }
   }
 
   function getResourceFromJson(url, contentType, callback) {
     if (offline) {
-      offline.GetResourceFromJson(url, contentType, callback);
+      offline.GetResourceFromJson(url, contentType, callback)
     }
   }
 
@@ -1707,318 +1708,318 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
 
   function getLayerResource(key, name, url) {
     if (offline) {
-      offline.GetLayerResource(key, name, url);
+      offline.GetLayerResource(key, name, url)
     }
   }
 
   function deactivateOffline() {
     if (offline) {
-      offline.Deactivate();
+      offline.Deactivate()
     }
   }
 
   /*
-     Offline End
-     */
+   Offline End
+   */
 
 
   /*
-      PrintBoxSelect Start
-     */
+    PrintBoxSelect Start
+   */
   var activatePrintBoxSelect = function (options) {
-    printBoxSelect.Activate(map, options);
-  };
+    printBoxSelect.Activate(map, options)
+  }
 
   var deactivatePrintBoxSelect = function () {
-    printBoxSelect.Deactivate(map);
-  };
+    printBoxSelect.Deactivate(map)
+  }
 
   /*
-     PrintBoxSelect End
-     */
+   PrintBoxSelect End
+   */
 
 
   /*
-     AddLayerUrl Start
-     */
+   AddLayerUrl Start
+   */
   var activateAddLayerUrl = function (options) {
-    addLayerUrl.Activate(map, options);
-  };
+    addLayerUrl.Activate(map, options)
+  }
 
   var deactivateAddLayerUrl = function () {
-    addLayerUrl.Deactivate(map);
-  };
+    addLayerUrl.Deactivate(map)
+  }
 
   /*
-     AddLayerUrl End
-     */
+   AddLayerUrl End
+   */
 
 
 
   /*
-        Utility functions start
-     */
+      Utility functions start
+   */
 
   var _getUrlObject = function () {
     if (map !== undefined) {
       var retVal = {
         layers: _getGuidsForVisibleLayers()
-      };
+      }
 
-      var view = map.getView();
-      var center = view.getCenter();
-      var zoom = view.getZoom();
+      var view = map.getView()
+      var center = view.getCenter()
+      var zoom = view.getZoom()
       if (zoom) {
-        retVal.zoom = zoom.toString();
+        retVal.zoom = zoom.toString()
       }
       if (center) {
-        retVal.lat = center[1].toFixed(2);
-        retVal.lon = center[0].toFixed(2);
+        retVal.lat = center[1].toFixed(2)
+        retVal.lon = center[0].toFixed(2)
       }
-      return retVal;
+      return retVal
     }
-  };
+  }
 
   var zoomToLayer = function (isySubLayer) {
-    var layer = _getLayerFromPool(isySubLayer);
+    var layer = _getLayerFromPool(isySubLayer)
     if (layer) {
-      var extent;
-      if (typeof layer.getSource().getExtent !== 'undefined') {
-        extent = layer.getSource().getExtent();
+      var extent
+      if (typeof layer.getSource().getExtent !== "undefined") {
+        extent = layer.getSource().getExtent()
       } else {
-        extent = layer.getSource().getTileGrid().getExtent();
+        extent = layer.getSource().getTileGrid().getExtent()
       }
       if (Array.isArray(extent) && extent[0] !== Infinity) {
         if (!containsCoordinate(extent, map.getView().getCenter())) {
-          map.getView().fit(extent, map.getSize());
+          map.getView().fit(extent, map.getSize())
         }
       }
     }
-  };
+  }
 
   var zoomToLayers = function (isySubLayers) {
-    var layersExtent = [Infinity, Infinity, -Infinity, -Infinity];
+    var layersExtent = [Infinity, Infinity, -Infinity, -Infinity]
     var setNewExtent = function (newExtent) {
       if (layersExtent[0] > newExtent[0]) {
-        layersExtent[0] = newExtent[0];
+        layersExtent[0] = newExtent[0]
       }
       if (layersExtent[1] > newExtent[1]) {
-        layersExtent[1] = newExtent[1];
+        layersExtent[1] = newExtent[1]
       }
       if (layersExtent[2] < newExtent[2]) {
-        layersExtent[2] = newExtent[2];
+        layersExtent[2] = newExtent[2]
       }
       if (layersExtent[3] < newExtent[3]) {
-        layersExtent[3] = newExtent[3];
+        layersExtent[3] = newExtent[3]
       }
-    };
+    }
     isySubLayers.forEach(function (isySubLayer) {
-      var layer = _getLayerFromPool(isySubLayer);
+      var layer = _getLayerFromPool(isySubLayer)
       if (layer) {
-        var extent = layer.getSource().getExtent();
+        var extent = layer.getSource().getExtent()
         if (Array.isArray(extent) && extent[0] !== Infinity) {
-          setNewExtent(extent);
+          setNewExtent(extent)
         }
       }
-    });
+    })
     if (Array.isArray(layersExtent) && layersExtent[0] !== Infinity) {
-      map.getView().fit(layersExtent, map.getSize());
+      map.getView().fit(layersExtent, map.getSize())
     }
-  };
+  }
 
   var fitExtent = function (extent) {
-    map.getView().fit(extent, map.getSize());
-  };
+    map.getView().fit(extent, map.getSize())
+  }
 
   var getCenter = function () {
-    var retVal;
-    var view = map.getView();
-    var center = view.getCenter();
-    var zoom = view.getZoom();
+    var retVal
+    var view = map.getView()
+    var center = view.getCenter()
+    var zoom = view.getZoom()
     retVal = {
       lon: center[0],
       lat: center[1],
       zoom: zoom
-    };
-    return retVal;
-  };
+    }
+    return retVal
+  }
 
   var setCenter = function (center) {
-    var view = map.getView();
+    var view = map.getView()
     if (center.epsg) {
-      center = transformEpsgCoordinate(center, getEpsgCode());
+      center = transformEpsgCoordinate(center, getEpsgCode())
     }
-    view.setCenter([center.lon, center.lat]);
+    view.setCenter([center.lon, center.lat])
     if (center.zoom) {
-      view.setZoom(center.zoom);
+      view.setZoom(center.zoom)
     }
-  };
+  }
 
   var getZoom = function () {
-    var view = map.getView();
-    return view.getZoom();
-  };
+    var view = map.getView()
+    return view.getZoom()
+  }
 
   var setZoom = function (zoom) {
-    var view = map.getView();
-    return view.setZoom(zoom);
-  };
+    var view = map.getView()
+    return view.setZoom(zoom)
+  }
 
   var getRotation = function () {
-    var view = map.getView();
-    return view.getRotation();
-  };
+    var view = map.getView()
+    return view.getRotation()
+  }
 
   var setRotation = function (angle, anchor) {
-    var view = map.getView();
+    var view = map.getView()
     if (anchor) {
-      view.rotate(angle, anchor);
+      view.rotate(angle, anchor)
     } else {
-      view.setRotation(angle);
+      view.setRotation(angle)
     }
-  };
+  }
 
   var getEpsgCode = function () {
-    var view = map.getView();
-    var projection = view.getProjection();
-    return projection.getCode();
-  };
+    var view = map.getView()
+    var projection = view.getProjection()
+    return projection.getCode()
+  }
 
   function transformEpsgCoordinate(coord, toCrs) {
-    if (coord.epsg !== '' && toCrs !== '' && coord.epsg !== toCrs) {
+    if (coord.epsg !== "" && toCrs !== "" && coord.epsg !== toCrs) {
       //var fromProj = getProjection(coord.epsg);
       //var toProj = getProjection(toCrs);
-      var transformedCoord = transform([coord.lon, coord.lat], coord.epsg, toCrs);
+      var transformedCoord = transform([coord.lon, coord.lat], coord.epsg, toCrs)
 
-      if (toCrs === 'EPSG:4326') {
-        transformedCoord = [transformedCoord[1], transformedCoord[0]];
+      if (toCrs === "EPSG:4326") {
+        transformedCoord = [transformedCoord[1], transformedCoord[0]]
       }
-      coord.lon = transformedCoord[0];
-      coord.lat = transformedCoord[1];
-      coord.epsg = toCrs;
+      coord.lon = transformedCoord[0]
+      coord.lat = transformedCoord[1]
+      coord.epsg = toCrs
     }
 
-    return coord;
+    return coord
   }
 
   function transformBox(fromCrs, toCrs, boxExtent) {
-    var returnExtent = boxExtent;
-    if (fromCrs !== '' && toCrs !== '' && fromCrs !== toCrs) {
+    var returnExtent = boxExtent
+    if (fromCrs !== "" && toCrs !== "" && fromCrs !== toCrs) {
       //var fromProj = getProjection(fromCrs);
       //var toProj = getProjection(toCrs);
       //var transformedExtent = transformExtent(boxExtent, fromProj, toProj);
-      var transformedExtent = transformExtent(boxExtent, fromCrs, toCrs);
+      var transformedExtent = transformExtent(boxExtent, fromCrs, toCrs)
 
-      returnExtent = transformedExtent;
-      if (toCrs === 'EPSG:4326') {
-        returnExtent = transformedExtent[1] + ',' + transformedExtent[0] + ',' + transformedExtent[3] + ',' + transformedExtent[2];
+      returnExtent = transformedExtent
+      if (toCrs === "EPSG:4326") {
+        returnExtent = transformedExtent[1] + "," + transformedExtent[0] + "," + transformedExtent[3] + "," + transformedExtent[2]
       }
     }
 
-    return returnExtent;
+    return returnExtent
   }
 
   function convertGmlToGeoJson(gml) {
-    var xmlParser = new WMSCapabilities();
-    var xmlFeatures = xmlParser.read(gml);
-    var gmlParser = new GMLFormat();
-    var features = gmlParser.readFeatures(xmlFeatures);
-    var jsonParser = new GeoJSONFormat();
-    return jsonParser.writeFeatures(features);
+    var xmlParser = new WMSCapabilities()
+    var xmlFeatures = xmlParser.read(gml)
+    var gmlParser = new GMLFormat()
+    var features = gmlParser.readFeatures(xmlFeatures)
+    var jsonParser = new GeoJSONFormat()
+    return jsonParser.writeFeatures(features)
   }
 
   function extentToGeoJson(x, y) {
-    var point = new Point([x, y]);
-    var feature = new Feature();
-    feature.setGeometry(point);
-    var geoJson = new GeoJSONFormat();
-    return geoJson.writeFeature(feature);
+    var point = new Point([x, y])
+    var feature = new Feature()
+    feature.setGeometry(point)
+    var geoJson = new GeoJSONFormat()
+    return geoJson.writeFeature(feature)
   }
 
   function addZoom() {
-    var zoom = new Zoom();
-    map.addControl(zoom);
+    var zoom = new Zoom()
+    map.addControl(zoom)
   }
 
   function addZoomSlider() {
-    var zoomslider = new ZoomSlider();
-    map.addControl(zoomslider);
+    var zoomslider = new ZoomSlider()
+    map.addControl(zoomslider)
   }
 
   function addZoomToExtent(extent) {
     var zoomToExtent = new ZoomToExtent({
       extent: extent
-    });
-    map.addControl(zoomToExtent);
+    })
+    map.addControl(zoomToExtent)
   }
 
   function addScaleLine() {
-    var scaleLine = new ScaleLine();
-    map.addControl(scaleLine);
+    var scaleLine = new ScaleLine()
+    map.addControl(scaleLine)
   }
 
   var getVectorLayers = function (isySubLayer, data) {
-    var vectors = [];
-    var source = MaplibVectorSource(isySubLayer.subLayers[0], map.getView().getProjection());
+    var vectors = []
+    var source = MaplibVectorSource(isySubLayer.subLayers[0], map.getView().getProjection())
 
-    var fromProj = getProjection(isySubLayer.subLayers[0].coordinate_system);
-    var toProj = getProjection(source.getProjection().getCode());
-    var features = source.parser.readFeatures(data);
+    var fromProj = getProjection(isySubLayer.subLayers[0].coordinate_system)
+    var toProj = getProjection(source.getProjection().getCode())
+    var features = source.parser.readFeatures(data)
     for (var i = 0; i < features.length; i++) {
-      var feature = features[i];
-      feature.getGeometry().transform(fromProj, toProj);
-      vectors.push(feature);
+      var feature = features[i]
+      feature.getGeometry().transform(fromProj, toProj)
+      vectors.push(feature)
     }
 
-    return vectors;
-  };
+    return vectors
+  }
 
   var getLayerCount = function () {
     if (map) {
-      return map.getLayers().getArray().length;
+      return map.getLayers().getArray().length
     }
-    return 0;
-  };
+    return 0
+  }
 
   var getCenterFromExtent = function (extent) {
-    return OLGetCenterFromExtent(extent);
-  };
+    return OLGetCenterFromExtent(extent)
+  }
 
   var getScale = function () {
-    return mapScales[map.getView().getZoom()];
-  };
+    return mapScales[map.getView().getZoom()]
+  }
 
   var getLegendStyleFromLayer = function (layer) {
     if (sldstyles[layer.guid] !== undefined) {
-      return sldstyles[layer.guid].GetStyleForLegend();
+      return sldstyles[layer.guid].GetStyleForLegend()
     } else {
-      return undefined;
+      return undefined
     }
-  };
+  }
 
   var getExtent = function () {
-    return map.getView().calculateExtent(map.getSize());
-  };
+    return map.getView().calculateExtent(map.getSize())
+  }
 
   var getUrlObject = function () {
-    return _getUrlObject();
-  };
+    return _getUrlObject()
+  }
 
   function _addGeolocationLayer(guid) {
     var geolocationLayer = new VectorLayer({
       source: new VectorSource(),
       projection: map.getView().getProjection()
-    });
-    geolocationLayer.guid = guid;
-    map.addLayer(geolocationLayer);
-    _trigLayersChanged();
+    })
+    geolocationLayer.guid = guid
+    map.addLayer(geolocationLayer)
+    _trigLayersChanged()
   }
 
   function _drawGeolocation(center, radius) {
-    var geolocationLayer = _getLayerByGuid(99999);
+    var geolocationLayer = _getLayerByGuid(99999)
     if (geolocationLayer !== null) {
-      var geolocationSource = geolocationLayer.getSource();
-      geolocationSource.clear();
+      var geolocationSource = geolocationLayer.getSource()
+      geolocationSource.clear()
       var geolocationStyle = new style.Style({
         image: new style.Circle({
           radius: 6,
@@ -2034,36 +2035,36 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
           color: 'rgba(0,102,204,0.15)'
         }),
         zIndex: Infinity
-      });
+      })
       var geolocationFeature = new Feature({
         geometry: new GeometryCollection([
           new Point(center),
           new Circle(center, parseInt(radius, 10))
         ]),
         name: 'geolocation_center'
-      });
-      geolocationFeature.setStyle(geolocationStyle);
-      geolocationSource.addFeature(geolocationFeature);
+      })
+      geolocationFeature.setStyle(geolocationStyle)
+      geolocationSource.addFeature(geolocationFeature)
       if (initialGeolocationChange) {
-        initialGeolocationChange = false;
-        var geolocextent = geolocationFeature.getGeometry().getExtent();
-        geolocextent[0] -= 5 * radius;
-        geolocextent[1] -= 5 * radius;
-        geolocextent[2] += 5 * radius;
-        geolocextent[3] += 5 * radius;
-        map.getView().fit(geolocextent, map.getSize());
+        initialGeolocationChange = false
+        var geolocextent = geolocationFeature.getGeometry().getExtent()
+        geolocextent[0] -= 5 * radius
+        geolocextent[1] -= 5 * radius
+        geolocextent[2] += 5 * radius
+        geolocextent[3] += 5 * radius
+        map.getView().fit(geolocextent, map.getSize())
       }
     }
   }
 
   function _geolocationChange() {
-    var view = map.getView();
-    var center = geolocation.getPosition();
+    var view = map.getView()
+    var center = geolocation.getPosition()
     if (center === undefined) {
-      return;
+      return
     }
-    view.setCenter(center);
-    _drawGeolocation(center, geolocation.getAccuracy());
+    view.setCenter(center)
+    _drawGeolocation(center, geolocation.getAccuracy())
     var geolocationObject = {
       center: center,
       accuracy: Math.round(geolocation.getAccuracy() * 10) / 10,
@@ -2071,13 +2072,13 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
       altitudeAccuracy: geolocation.getAltitudeAccuracy(),
       heading: geolocation.getHeading(),
       speed: geolocation.getSpeed()
-    };
-    eventHandler.TriggerEvent(EventTypes.GeolocationUpdated, geolocationObject);
+    }
+    eventHandler.TriggerEvent(EventTypes.GeolocationUpdated, geolocationObject)
   }
 
   var getGeolocation = function () {
-    var view = map.getView();
-    var mapProjection = view.getProjection();
+    var view = map.getView()
+    var mapProjection = view.getProjection()
     geolocation = new OlGeolocation({
       projection: mapProjection,
       tracking: true,
@@ -2086,87 +2087,87 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
         //timeout: 5000,
         maximumAge: 0
       }
-    });
+    })
 
-    _addGeolocationLayer(99999);
+    _addGeolocationLayer(99999)
 
-    initialGeolocationChange = true;
+    initialGeolocationChange = true
 
-    geolocation.on('change:position', _geolocationChange);
-    geolocation.on('change:accuracy', _geolocationChange);
-  };
+    geolocation.on('change:position', _geolocationChange)
+    geolocation.on('change:accuracy', _geolocationChange)
+  }
 
   var removeGeolocation = function () {
-    var geolocationLayer = _getLayerByGuid(99999);
+    var geolocationLayer = _getLayerByGuid(99999)
     if (geolocationLayer !== null) {
-      map.removeLayer(geolocationLayer);
-      _trigLayersChanged();
+      map.removeLayer(geolocationLayer)
+      _trigLayersChanged()
     }
 
     if (geolocation !== undefined) {
-      geolocation.un('change:position', _geolocationChange);
-      geolocation.un('change:accuracy', _geolocationChange);
-      geolocation = undefined;
+      geolocation.un('change:position', _geolocationChange)
+      geolocation.un('change:accuracy', _geolocationChange)
+      geolocation = undefined
     }
-  };
+  }
 
   var getProxyHost = function () {
-    return proxyHost;
-  };
+    return proxyHost
+  }
 
   var setTranslateOptions = function (translate) {
-    translateOptions = translate;
-  };
+    translateOptions = translate
+  }
 
   var transformCoordinates = function (fromEpsg, toEpsg, coordinates) {
     if (proj4.defs(fromEpsg) && proj4.defs(toEpsg)) {
-      var transformObject = proj4(fromEpsg, toEpsg);
-      return transformObject.forward(coordinates);
+      var transformObject = proj4(fromEpsg, toEpsg)
+      return transformObject.forward(coordinates)
     }
-  };
+  }
 
   var transformFromGeographic = function (coordinates) {
     // If no coordinates are given an object with two methods is returned,
     // its methods are forward which projects from the first projection to
     // the second and inverse which projects from the second to the first.
-    var fromEpsg = getEpsgCode();
+    var fromEpsg = getEpsgCode()
     if (proj4.defs(fromEpsg)) {
-      var transformObject = proj4(fromEpsg);
-      return transformObject.forward(coordinates);
+      var transformObject = proj4(fromEpsg)
+      return transformObject.forward(coordinates)
     }
-  };
+  }
 
   var transformToGeographic = function (coordinates) {
     // If no coordinates are given an object with two methods is returned,
     // its methods are forward which projects from the first projection to
     // the second and inverse which projects from the second to the first.
-    var fromEpsg = getEpsgCode();
+    var fromEpsg = getEpsgCode()
     if (proj4.defs(fromEpsg)) {
-      var transformObject = proj4(fromEpsg);
-      return transformObject.inverse(coordinates);
+      var transformObject = proj4(fromEpsg)
+      return transformObject.inverse(coordinates)
     }
-  };
+  }
 
-  function setZIndex(isySubLayer, index ) {
-    var layer = _getLayerByGuid(isySubLayer.id);
+  function setZIndex(isySubLayer, index) {
+    var layer = _getLayerByGuid(isySubLayer.id)
     if (layer && !isNaN(index)) {
-      layer.setZIndex(index);
+      layer.setZIndex(index)
     }
   }
 
   function getZIndex(isySubLayer) {
-    var layer = _getLayerByGuid(isySubLayer.id);
+    var layer = _getLayerByGuid(isySubLayer.id)
     if (layer) {
-      return layer.getZIndex();
+      return layer.getZIndex()
     } else {
-      return '';
+      return ''
     }
   }
 
 
   /*
-        Utility functions End
-     */
+      Utility functions End
+   */
 
   return {
     // Start up start
@@ -2356,10 +2357,10 @@ export const OLMap = (repository, eventHandler, httpHelper, measure,
     SetZIndex: setZIndex,
     GetZIndex: getZIndex
     // Utility end
-  };
-};
+  }
+}
 
 export const MapRENDERERS = {
   canvas: 'canvas',
   webgl: 'webgl'
-};
+}

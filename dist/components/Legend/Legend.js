@@ -9,6 +9,10 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+/**
+ * Legend to be used in MapComponent
+ * @param {*} props
+ */
 var Legend = function Legend(props) {
   return _react.default.createElement("img", {
     src: props.legendUrl,

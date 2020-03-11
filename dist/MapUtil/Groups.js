@@ -14,9 +14,7 @@ var _createClass2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\
 /**
  *
  */
-var Groups =
-/*#__PURE__*/
-function () {
+var Groups = /*#__PURE__*/function () {
   function Groups(mapConfig) {
     (0, _classCallCheck2.default)(this, Groups);
     this.groups = mapConfig.groups;

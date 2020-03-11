@@ -17,15 +17,15 @@ var _proj2 = require("ol/proj");
 
 var _proj3 = require("ol/proj/proj4.js");
 
+var _Units = require("ol/proj/Units");
+
 /**
  * Helper class for projection handling. Makes use of
  * [Proj4js](http://proj4js.org/).
  *
  * @class ProjectionUtil
  */
-var ProjectionUtil =
-/*#__PURE__*/
-function () {
+var ProjectionUtil = /*#__PURE__*/function () {
   function ProjectionUtil() {
     (0, _classCallCheck2.default)(this, ProjectionUtil);
   }
@@ -106,8 +106,53 @@ function () {
       });
       (0, _proj2.addProjection)(proj);
     }
+  }, {
+    key: "toDms",
+    value: function toDms(value) {
+      var deg = parseInt(value, 10);
+      var min = parseInt((value - deg) * 60, 10);
+      var sec = (value - deg - min / 60) * 3600;
+      return "".concat(deg, "\xB0 ").concat(ProjectionUtil.zerofill(min), "' ").concat(ProjectionUtil.zerofill(sec.toFixed(2)), "''");
+    }
+  }, {
+    key: "zerofill",
+    value: function zerofill(value) {
+      return value < 10 ? "0".concat(value) : value;
+    }
+  }, {
+    key: "getResolutionForScale",
+    value: function getResolutionForScale(scale, units) {
+      var dpi = 25.4 / 0.28;
+      var mpu = _Units.METERS_PER_UNIT[units];
+      var inchesPerMeter = 39.37;
+      return parseFloat(scale) / (mpu * inchesPerMeter * dpi);
+    }
+  }, {
+    key: "roundScale",
+    value: function roundScale(scale) {
+      var roundScale;
+
+      if (scale < 100) {
+        roundScale = Math.round(scale, 10);
+      }
+
+      if (scale >= 100 && scale < 10000) {
+        roundScale = Math.round(scale / 10) * 10;
+      }
+
+      if (scale >= 10000 && scale < 1000000) {
+        roundScale = Math.round(scale / 100) * 100;
+      }
+
+      if (scale >= 1000000) {
+        roundScale = Math.round(scale / 1000) * 1000;
+      }
+
+      return roundScale;
+    }
   }]);
   return ProjectionUtil;
 }();
 
 exports.default = ProjectionUtil;
+;

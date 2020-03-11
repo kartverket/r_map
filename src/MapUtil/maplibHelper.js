@@ -14,7 +14,9 @@ import {
 } from './OLMap';
 import {
   Map
-} from './Map';
+} from './Map'
+import { Messaging } from '../Utils/communication'
+
 
 let groupIds = [];
 let notDummyGroup = false;
@@ -371,17 +373,22 @@ const updateMapConfigWithImageLayers = (mapConfig) => {
       addLayerToConfig(addLayer('VECTOR', mapConfig.vector), mapConfig.vector);
     }
   }
-};
-updateMapConfigWithGroups(mapConfig);
-updateMapConfigWithImageLayers(mapConfig);
-mapConfig = MapConfig(mapConfig);
-mapConfig.instance = 'geoportal';
-mapConfig.proxyHost = '/?';
+}
+updateMapConfigWithGroups(mapConfig)
+updateMapConfigWithImageLayers(mapConfig)
+mapConfig = MapConfig(mapConfig)
+mapConfig.instance = 'geoportal'
+mapConfig.proxyHost = ''
 
-export const eventHandler = EventHandler();
-export const mapImplementation = OLMap(null, eventHandler);
+export const eventHandler = EventHandler()
+export const mapImplementation = OLMap(eventHandler)
 export const map = Map(
   mapImplementation,
   eventHandler,
   null
-);
+)
+if (window.addEventListener) {
+  window.addEventListener("message", Messaging.listener, false)
+} else {
+  window.attachEvent("onmessage", Messaging.listener)
+}

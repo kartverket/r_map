@@ -7,10 +7,10 @@ var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-Object.defineProperty(exports, "AddServicePanel", {
+Object.defineProperty(exports, "ServicePanel", {
   enumerable: true,
   get: function get() {
-    return _AddServicePanel.default;
+    return _ServicePanel.default;
   }
 });
 Object.defineProperty(exports, "BackgroundChooser", {
@@ -42,7 +42,9 @@ var _react = _interopRequireDefault(require("react"));
 
 var _reactDom = _interopRequireDefault(require("react-dom"));
 
-require("./index.css");
+require("./index.scss");
+
+require("bootstrap/dist/css/bootstrap.min.css");
 
 var _App = _interopRequireDefault(require("./App"));
 
@@ -50,7 +52,7 @@ var serviceWorker = _interopRequireWildcard(require("./serviceWorker"));
 
 require("./Utils/icons");
 
-var _AddServicePanel = _interopRequireDefault(require("./components/AddServicePanel/AddServicePanel"));
+var _ServicePanel = _interopRequireDefault(require("./components/ServicePanel/ServicePanel"));
 
 var _BackgroundChooser = _interopRequireDefault(require("./components/BackgroundChooser/BackgroundChooser"));
 

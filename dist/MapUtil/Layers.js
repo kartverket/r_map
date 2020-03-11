@@ -11,12 +11,7 @@ var _classCallCheck2 = _interopRequireDefault(require("C:\\code_git\\r_map.githu
 
 var _createClass2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/createClass"));
 
-/**
- *
- */
-var Layers =
-/*#__PURE__*/
-function () {
+var Layers = /*#__PURE__*/function () {
   function Layers(mapConfig, mapImplementation) {
     (0, _classCallCheck2.default)(this, Layers);
     this.mapImplementation = mapImplementation;
@@ -326,10 +321,6 @@ function () {
     value: function shouldBeVisible()
     /*isySubLayer*/
     {
-      // todo johben: Logic could include zoom levels in case of a layer with both wms and wfs.
-      // I.E.
-      // var currentZoomLevel = this.mapImplementation.getCurrentZoomLevel();
-      // return subLayer.StartZoomLevel < currentZoomLevel && subLayer.EndZoomLevel > currentZoomLevel
       return true;
     }
   }, {
@@ -354,3 +345,4 @@ function () {
 }();
 
 exports.default = Layers;
+;

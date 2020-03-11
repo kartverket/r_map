@@ -14,9 +14,7 @@ var _createClass2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\
 /**
  * 
  */
-var Categories =
-/*#__PURE__*/
-function () {
+var Categories = /*#__PURE__*/function () {
   function Categories(mapConfig) {
     (0, _classCallCheck2.default)(this, Categories);
     this.categories = mapConfig.categories;
