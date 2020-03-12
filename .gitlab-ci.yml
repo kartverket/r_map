@@ -12,9 +12,9 @@ before_script:
 pages:
   stage: deploy
   script:
-    - CI=true yarn build
+    - CI=true yarn build-demo
     - rm -rf public
-    - mv dist public
+    - mv build public
   artifacts:
     paths:
       - public # GitLab pages serve from a 'public' directory
