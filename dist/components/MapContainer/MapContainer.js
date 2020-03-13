@@ -1,25 +1,25 @@
 "use strict";
 
-var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _classCallCheck2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/classCallCheck"));
+var _classCallCheck2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/classCallCheck"));
 
-var _createClass2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/createClass"));
+var _createClass2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/createClass"));
 
-var _possibleConstructorReturn2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/possibleConstructorReturn"));
+var _possibleConstructorReturn2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn"));
 
-var _getPrototypeOf2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/getPrototypeOf"));
+var _getPrototypeOf2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/getPrototypeOf"));
 
-var _assertThisInitialized2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/assertThisInitialized"));
+var _assertThisInitialized2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/assertThisInitialized"));
 
-var _inherits2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/inherits"));
+var _inherits2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/inherits"));
 
-var _defineProperty2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/defineProperty"));
+var _defineProperty2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/defineProperty"));
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -35,7 +35,7 @@ var _ServicePanel = _interopRequireDefault(require("../ServicePanel/ServicePanel
 
 var _SearchBar = _interopRequireDefault(require("../SearchBar/SearchBar"));
 
-var _reactFontawesome = require("@fortawesome/react-fontawesome");
+var _icons = require("@ant-design/icons");
 
 var _MapContainerModule = _interopRequireDefault(require("./MapContainer.module.scss"));
 
@@ -186,24 +186,17 @@ var MapContainer = /*#__PURE__*/function (_React$Component) {
         id: "MapContainer",
         className: "".concat(_MapContainerModule.default.mapContainer)
       }, _react.default.createElement(_BackgroundChooser.default, null), _react.default.createElement("div", null, this.renderLayerButton() ? _react.default.createElement("div", null, _react.default.createElement("div", {
-        className: _MapContainerModule.default.closeMap
-      }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-        title: "Lukk kartet",
-        onClick: function onClick() {
-          return _this3.toogleMap();
-        },
-        className: _MapContainerModule.default.toggleBtn,
-        icon: "times"
-      }), _react.default.createElement("span", {
-        className: _MapContainerModule.default.closeButtonLabel
-      }, "Lukk kartet")), _react.default.createElement("div", {
         className: "".concat(_MapContainerModule.default.container, " ").concat(this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open)
-      }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+      }, this.state.isExpanded ? _react.default.createElement(_icons.UpOutlined, {
         onClick: function onClick() {
           return _this3.toogleLayers();
         },
-        className: _MapContainerModule.default.toggleBtn,
-        icon: this.state.isExpanded ? ["far", "layer-group"] : "times"
+        className: _MapContainerModule.default.toggleBtn
+      }) : _react.default.createElement(_icons.DownOutlined, {
+        onClick: function onClick() {
+          return _this3.toogleLayers();
+        },
+        className: _MapContainerModule.default.toggleBtn
       }), _react.default.createElement(_Tabs.default, {
         className: "".concat(_MapContainerModule.default.tabs, " ").concat(this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open),
         defaultActiveKey: "search",
@@ -217,7 +210,7 @@ var MapContainer = /*#__PURE__*/function (_React$Component) {
         title: "Visning"
       }, _react.default.createElement("div", {
         id: "ServiceList"
-      }, this.renderServiceList())), "                "))) : _react.default.createElement("div", {
+      }, this.renderServiceList()))))) : _react.default.createElement("div", {
         className: _MapContainerModule.default.link,
         onClick: function onClick() {
           return _this3.toogleMap();

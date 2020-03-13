@@ -1,15 +1,15 @@
 "use strict";
 
-var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
-var _interopRequireWildcard = require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _slicedToArray2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/slicedToArray"));
+var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -17,7 +17,7 @@ var _CapabilitiesUtil = require("../../MapUtil/CapabilitiesUtil");
 
 var _ServicePanelModule = _interopRequireDefault(require("./ServicePanel.module.scss"));
 
-var _reactFontawesome = require("@fortawesome/react-fontawesome");
+var _icons = require("@ant-design/icons");
 
 var _LayerEntry = _interopRequireDefault(require("./LayerEntry"));
 
@@ -94,10 +94,9 @@ var ServicePanel = function ServicePanel(props) {
 
   var renderRemoveButton = function renderRemoveButton() {
     if (props.removeMapItem) {
-      return _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+      return _react.default.createElement(_icons.CloseOutlined, {
         className: _ServicePanelModule.default.removeInline,
-        onClick: _this.props.removeMapItem,
-        icon: ['fas', 'times']
+        onClick: _this.props.removeMapItem
       });
     } else {
       return '';
@@ -147,9 +146,7 @@ var ServicePanel = function ServicePanel(props) {
     className: _ServicePanelModule.default.expandLayersBtn
   }, _react.default.createElement("span", {
     className: _ServicePanelModule.default.ellipsisToggle
-  }, props.services.Title), _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-    icon: expanded ? ['fas', 'angle-up'] : ['fas', 'angle-down']
-  })), renderRemoveButton(), _react.default.createElement("div", {
+  }, props.services.Title), expanded ? _react.default.createElement(_icons.UpOutlined, null) : _react.default.createElement(_icons.DownOutlined, null)), renderRemoveButton(), _react.default.createElement("div", {
     className: expanded ? "".concat(_ServicePanelModule.default.selectedlayers, " ").concat(_ServicePanelModule.default.open) : _ServicePanelModule.default.selectedlayers
   }, renderCapabilites()));
 };

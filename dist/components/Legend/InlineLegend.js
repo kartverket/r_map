@@ -1,23 +1,23 @@
 "use strict";
 
-var _interopRequireWildcard = require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _slicedToArray2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/slicedToArray"));
+var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
 
 var _react = _interopRequireWildcard(require("react"));
 
 var _Legend = _interopRequireDefault(require("./Legend"));
 
-var _InlineLegendModule = _interopRequireDefault(require("./InlineLegend.module.scss"));
+var _icons = require("@ant-design/icons");
 
-var _reactFontawesome = require("@fortawesome/react-fontawesome");
+var _InlineLegendModule = _interopRequireDefault(require("./InlineLegend.module.scss"));
 
 /**
  * Legend to be used in the ServicePanel
@@ -38,16 +38,14 @@ var InlineLegend = function InlineLegend(props) {
         }
       }, _react.default.createElement("span", {
         className: _InlineLegendModule.default.label
-      }, expanded ? 'Skjul tegnforklaring' : 'Vis tegnforklaring', ' '), _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-        icon: expanded ? ['fas', 'angle-up'] : ['fas', 'angle-down']
-      })), _react.default.createElement("div", {
+      }, expanded ? "Skjul tegnforklaring" : "Vis tegnforklaring", " "), expanded ? _react.default.createElement(_icons.UpOutlined, null) : _react.default.createElement(_icons.DownOutlined, null)), _react.default.createElement("div", {
         className: expanded ? _InlineLegendModule.default.legend : _InlineLegendModule.default.legend + " " + _InlineLegendModule.default.closed
       }, _react.default.createElement(_Legend.default, {
         legendUrl: props.legendUrl,
         legendAlternative: "Legend"
       })));
     } else {
-      return '';
+      return "";
     }
   };
 

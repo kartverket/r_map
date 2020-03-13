@@ -1,21 +1,21 @@
 "use strict";
 
-var _interopRequireWildcard = require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _typeof2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/typeof"));
+var _typeof2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/typeof"));
 
-var _slicedToArray2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/slicedToArray"));
+var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _reactFontawesome = require("@fortawesome/react-fontawesome");
+var _icons = require("@ant-design/icons");
 
 var _LayerEntryModule = _interopRequireDefault(require("./LayerEntry.module.scss"));
 
@@ -219,10 +219,7 @@ var LayerEntry = function LayerEntry(props) {
       return onSelectionChange(layer);
     },
     htmlFor: layer.Title
-  }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-    className: "svg-checkbox",
-    icon: checked ? ["far", "check-square"] : ["far", "square"]
-  }))) : _react.default.createElement("label", {
+  }, checked ? _react.default.createElement(_icons.CheckSquareOutlined, null) : _react.default.createElement(_icons.BorderOutlined, null))) : _react.default.createElement("label", {
     onClick: function onClick() {
       return onSelectionChange(layer);
     },
@@ -231,10 +228,7 @@ var LayerEntry = function LayerEntry(props) {
     onClick: function onClick() {
       return toggleOptions(!options);
     }
-  }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-    icon: ["far", "sliders-h"],
-    color: options ? "red" : "black"
-  })) : '', _react.default.createElement(_InlineLegend.default, {
+  }, options ? _react.default.createElement(_icons.UpOutlined, null) : _react.default.createElement(_icons.DownOutlined, null)) : '', _react.default.createElement(_InlineLegend.default, {
     legendUrl: layer.Style && layer.Style[0].LegendURL ? layer.Style[0].LegendURL[0].OnlineResource : ''
   }), options ? _react.default.createElement("div", {
     className: _LayerEntryModule.default.settings

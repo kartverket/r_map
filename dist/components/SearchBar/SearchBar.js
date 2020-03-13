@@ -1,15 +1,15 @@
 "use strict";
 
-var _interopRequireWildcard = require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _slicedToArray2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\@babel\\runtime/helpers/esm/slicedToArray"));
+var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -21,7 +21,7 @@ var _pinMdOrange = _interopRequireDefault(require("../../assets/img/pin-md-orang
 
 var _pinMdBlueish = _interopRequireDefault(require("../../assets/img/pin-md-blueish.png"));
 
-var _reactFontawesome = require("@fortawesome/react-fontawesome");
+var _icons = require("@ant-design/icons");
 
 var _SearchBarModule = _interopRequireDefault(require("./SearchBar.module.scss"));
 
@@ -168,8 +168,9 @@ var SearchBar = function SearchBar(props) {
   (0, _react.useEffect)(function () {
     if (searchText) {
       vectorSource.clear();
-      queryValues.search = searchText;
-      (0, _setQueryString.default)(queryValues);
+      (0, _setQueryString.default)({
+        search: searchText
+      });
       fetch((0, _n3api.generateAdresseSokUrl)(searchText)).then(function (response) {
         if (!response.ok) {
           throw Error(response.statusText);
@@ -235,9 +236,7 @@ var SearchBar = function SearchBar(props) {
     onClick: function onClick() {
       return resetSearch();
     }
-  }, searchText ? _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-    icon: "times"
-  }) : ''))), _react.default.createElement("div", {
+  }, searchText ? _react.default.createElement(_icons.CloseOutlined, null) : ''))), _react.default.createElement("div", {
     className: _SearchBarModule.default.searchResult
   }, searchResult && _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", null, _react.default.createElement("div", {
     onClick: function onClick() {
@@ -246,9 +245,7 @@ var SearchBar = function SearchBar(props) {
     className: _SearchBarModule.default.expandBtn
   }, _react.default.createElement("span", {
     className: _SearchBarModule.default.ellipsisToggle
-  }, "ADRESSER"), _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-    icon: expandedAdress ? ['fas', 'angle-up'] : ['fas', 'angle-down']
-  })), _react.default.createElement("div", {
+  }, "ADRESSER"), expandedAdress ? _react.default.createElement(_icons.UpOutlined, null) : _react.default.createElement(_icons.DownOutlined, null)), _react.default.createElement("div", {
     className: expandedAdress ? "".concat(_SearchBarModule.default.selected, " ").concat(_SearchBarModule.default.open) : _SearchBarModule.default.selected
   }, _react.default.createElement(SearchResult, {
     searchResult: {
@@ -261,9 +258,7 @@ var SearchBar = function SearchBar(props) {
     className: _SearchBarModule.default.expandBtn
   }, _react.default.createElement("span", {
     className: _SearchBarModule.default.ellipsisToggle
-  }, "STEDSNAVN"), _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-    icon: expandedSsr ? ['fas', 'angle-up'] : ['fas', 'angle-down']
-  })), _react.default.createElement("div", {
+  }, "STEDSNAVN"), expandedSsr ? _react.default.createElement(_icons.UpOutlined, null) : _react.default.createElement(_icons.DownOutlined, null)), _react.default.createElement("div", {
     className: expandedSsr ? "".concat(_SearchBarModule.default.selected, " ").concat(_SearchBarModule.default.open) : _SearchBarModule.default.selected
   }, _react.default.createElement(SearchResult, {
     searchResult: {
