@@ -5,7 +5,7 @@ cache:
     - node_modules/
 
 before_script:
-  - npm
+  - npm i
 
 pages:
   stage: deploy
