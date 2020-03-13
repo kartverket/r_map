@@ -144,11 +144,10 @@ const LayerEntry = props => {
   return (
     <>
       { layer.Name ? (
-        <Checkbox id={ layer.Name } onChange={ () => onSelectionChange(layer) } checked={ checked }>{ layer.Title }</Checkbox>
+        <Checkbox id={ layer.Name } onChange={ () => onSelectionChange(layer) } checked={ checked }>{ abstractTextSpan() }</Checkbox>
       ) : (
-          <label onClick={ () => onSelectionChange(layer) } htmlFor={ layer.Title }> </label>
+          <label onClick={ () => onSelectionChange(layer) } htmlFor={ abstractTextSpan() }> </label>
         ) }
-      {/* { abstractTextSpan() } */}
       { layer.Name ? (
         <label onClick={ () => toggleOptions(!options) }>
           { options ? <UpOutlined /> : <DownOutlined /> }
