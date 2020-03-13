@@ -12,7 +12,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/pro-regular-svg-icons": "^5.12.1",
     "@fortawesome/pro-solid-svg-icons": "^5.12.1",
-    "@fortawesome/react-fontawesome": "^0.1.8",
+    "@fortawesome/react-fontawesome": "^0.1.9",
     "@reduxjs/toolkit": "^1.2.5",
     "bootstrap": "^4.4.1",
     "fast-xml-parser": "^3.16.0",
@@ -50,7 +50,7 @@
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "babel-polyfill": "^6.26.0",
     "eslint-plugin-react-hooks": "^2.5.0",
-    "react-styleguidist": "^10.6.2",
+    "react-styleguidist": "^11.0.1",
     "rimraf": "^3.0.2"
   }
 }
