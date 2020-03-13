@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import PropTypes from "prop-types"
-import { UpOutlined, DownOutlined, BorderOutlined, CheckSquareOutlined } from "@ant-design/icons"
+import { UpOutlined, DownOutlined } from "@ant-design/icons"
+import { Checkbox } from 'antd'
 import style from './LayerEntry.module.scss'
 import InlineLegend from '../Legend/InlineLegend'
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
@@ -143,16 +144,11 @@ const LayerEntry = props => {
   return (
     <>
       { layer.Name ? (
-        <>
-          <input className="checkbox" id={ layer.Name } type="checkbox" />
-          <label onClick={ () => onSelectionChange(layer) } htmlFor={ layer.Title }>
-            { checked ? <CheckSquareOutlined /> : <BorderOutlined /> }
-          </label>
-        </>
+        <Checkbox id={ layer.Name } onChange={ () => onSelectionChange(layer) } checked={ checked }>{ layer.Title }</Checkbox>
       ) : (
           <label onClick={ () => onSelectionChange(layer) } htmlFor={ layer.Title }> </label>
         ) }
-      { abstractTextSpan() }
+      {/* { abstractTextSpan() } */}
       { layer.Name ? (
         <label onClick={ () => toggleOptions(!options) }>
           { options ? <UpOutlined /> : <DownOutlined /> }
