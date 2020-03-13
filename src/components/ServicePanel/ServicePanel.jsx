@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 import style from './ServicePanel.module.scss'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { UpOutlined, DownOutlined, CloseOutlined } from "@ant-design/icons"
 import LayerEntry from './LayerEntry'
 
 
@@ -60,7 +60,7 @@ const ServicePanel = props => {
   const renderRemoveButton = () => {
     if (props.removeMapItem) {
       return (
-        <FontAwesomeIcon className={ style.removeInline } onClick={ this.props.removeMapItem } icon={ ['fas', 'times'] } />
+        <CloseOutlined className={ style.removeInline } onClick={ this.props.removeMapItem }/>
       )
     } else {
       return ''
@@ -100,7 +100,7 @@ const ServicePanel = props => {
     <div>
       <div onClick={ () => setState(!expanded) } className={ style.expandLayersBtn } >
         <span className={ style.ellipsisToggle }>{ props.services.Title }</span>
-        <FontAwesomeIcon icon={ expanded ? ['fas', 'angle-up'] : ['fas', 'angle-down'] } />
+        { expanded ? <UpOutlined /> : <DownOutlined /> }
       </div>
       { renderRemoveButton() }
 

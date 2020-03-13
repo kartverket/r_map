@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import PropTypes from "prop-types"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { UpOutlined, DownOutlined, BorderOutlined, CheckSquareOutlined } from "@ant-design/icons"
 import style from './LayerEntry.module.scss'
 import InlineLegend from '../Legend/InlineLegend'
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
@@ -146,7 +146,7 @@ const LayerEntry = props => {
         <>
           <input className="checkbox" id={ layer.Name } type="checkbox" />
           <label onClick={ () => onSelectionChange(layer) } htmlFor={ layer.Title }>
-            <FontAwesomeIcon className="svg-checkbox" icon={ checked ? ["far", "check-square"] : ["far", "square"] } />
+            { checked ? <CheckSquareOutlined /> : <BorderOutlined /> }
           </label>
         </>
       ) : (
@@ -155,20 +155,12 @@ const LayerEntry = props => {
       { abstractTextSpan() }
       { layer.Name ? (
         <label onClick={ () => toggleOptions(!options) }>
-          <FontAwesomeIcon icon={ ["far", "sliders-h"] } color={ options ? "red" : "black" } />
+          { options ? <UpOutlined /> : <DownOutlined /> }
         </label>
       ) : ('') }
       <InlineLegend legendUrl={ ((layer.Style && layer.Style[0].LegendURL) ? layer.Style[0].LegendURL[0].OnlineResource : '') } />
       { options ? (
         <div className={ style.settings }>
-          {/** Tar ut prio buttone for nå *
-          <div>
-            <button className={style.movelayerBtn} onClick={() => setLayerIndex(index + 1)}>Flytt fremover<FontAwesomeIcon title="Vis laget over"  icon={['fas', 'arrow-up']} /></button>
-            <button className={style.movelayerBtn} onClick={() => setLayerIndex(index - 1)}>Flytt bakover <FontAwesomeIcon  title="Vis laget under" icon={['fas','arrow-down']} /></button>
-            <span className={style.priority}>Prioritet: {index}</span>
-          </div>
-           */}
-          {/** TODO: STYLE the slider */ }
           <label className={ style.slider }>
             Gjennomsiktighet:
             <input

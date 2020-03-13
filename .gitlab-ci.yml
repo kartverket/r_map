@@ -5,9 +5,7 @@ cache:
     - node_modules/
 
 before_script:
-  - echo '@fortawesome:registry=https://npm.fontawesome.com/' > .npmrc
-  - echo '//npm.fontawesome.com/:_authToken=${API_TOKEN}' >> .npmrc
-  - yarn
+  - npm
 
 pages:
   stage: deploy

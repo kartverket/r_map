@@ -5,15 +5,14 @@ import setQuery from "set-query-string"
 
 import pin_orange from '../../assets/img/pin-md-orange.png'
 import pin_blue from '../../assets/img/pin-md-blueish.png'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { UpOutlined, DownOutlined, CloseOutlined } from "@ant-design/icons"
 import style from "./SearchBar.module.scss"
 
 import { transform } from 'ol/proj'
 import { Vector as VectorLayer } from 'ol/layer.js'
 import { Vector as VectorSource } from 'ol/source.js'
 import Feature from 'ol/Feature.js'
-import { Style } from 'ol/style'
-import { Icon } from 'ol/style'
+import { Style, Icon } from 'ol/style'
 import Point from 'ol/geom/Point'
 
 import { generateAdresseSokUrl, generateSearchStedsnavnUrl } from "../../Utils/n3api"
@@ -101,7 +100,7 @@ const SearchBar = props => {
   useEffect(() => {
     if (searchText) {
       vectorSource.clear()
-      setQuery({search: searchText})
+      setQuery({ search: searchText })
       fetch(generateAdresseSokUrl(searchText))
         .then(response => {
           if (!response.ok) {
@@ -151,7 +150,7 @@ const SearchBar = props => {
       <div className='input-group col'>
         <input className={ style.searchInput } onChange={ onChangeBound } placeholder={ placeholder } type="text" value={ searchText } aria-describedby="button-addon1" />
         <div className='input-group-append'>
-          <button className="btn btn-link" type="button" id="button-addon1" onClick={ () => resetSearch() }>{ searchText ? <FontAwesomeIcon icon={ "times" } /> : '' }</button>
+          <button className="btn btn-link" type="button" id="button-addon1" onClick={ () => resetSearch() }>{ searchText ? <CloseOutlined /> : '' }</button>
         </div>
       </div>
       <div className={ style.searchResult }>
@@ -161,7 +160,7 @@ const SearchBar = props => {
               <div>
                 <div onClick={ () => setStateAdress(!expandedAdress) } className={ style.expandBtn } >
                   <span className={ style.ellipsisToggle }>ADRESSER</span>
-                  <FontAwesomeIcon icon={ expandedAdress ? ['fas', 'angle-up'] : ['fas', 'angle-down'] } />
+                  { expandedAdress ? <UpOutlined /> : <DownOutlined /> }
                 </div>
                 <div className={ expandedAdress ? `${style.selected} ${style.open}` : style.selected } >
                   <SearchResult searchResult={ { searchResult } }></SearchResult>
@@ -170,7 +169,7 @@ const SearchBar = props => {
               <div>
                 <div onClick={ () => setStateSsr(!expandedSsr) } className={ style.expandBtn } >
                   <span className={ style.ellipsisToggle }>STEDSNAVN</span>
-                  <FontAwesomeIcon icon={ expandedSsr ? ['fas', 'angle-up'] : ['fas', 'angle-down'] } />
+                  { expandedSsr ? <UpOutlined /> : <DownOutlined /> }
                 </div>
                 <div className={ expandedSsr ? `${style.selected} ${style.open}` : style.selected } >
                   <SearchResult searchResult={ { searchResultSSR } }></SearchResult>

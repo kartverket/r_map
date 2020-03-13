@@ -5,8 +5,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 
-import './Utils/icons'
-
 import ServicePanel from './components/ServicePanel/ServicePanel'
 import BackgroundChooser from './components/BackgroundChooser/BackgroundChooser'
 import MapComponent from './components/MapComponent/MapComponent'

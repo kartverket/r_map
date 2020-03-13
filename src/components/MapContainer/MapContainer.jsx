@@ -6,7 +6,7 @@ import setQuery from "set-query-string"
 import BackgroundChooser from "../BackgroundChooser/BackgroundChooser"
 import ServicePanel from "../ServicePanel/ServicePanel"
 import SearchBar from "../SearchBar/SearchBar"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { UpOutlined, DownOutlined, CloseOutlined } from "@ant-design/icons"
 import style from "./MapContainer.module.scss"
 import Position from '../Position/Position'
 import Tabs from 'react-bootstrap/Tabs'
@@ -166,12 +166,8 @@ export default class MapContainer extends React.Component {
         <div>
           { this.renderLayerButton() ? (
             <div>
-              <div className={ style.closeMap }>
-                <FontAwesomeIcon title="Lukk kartet" onClick={ () => this.toogleMap() } className={ style.toggleBtn } icon={ "times" } />
-                <span className={ style.closeButtonLabel }>Lukk kartet</span>
-              </div>
               <div className={ `${style.container} ${this.state.isExpanded ? style.closed : style.open}` }>
-                <FontAwesomeIcon onClick={ () => this.toogleLayers() } className={ style.toggleBtn } icon={ this.state.isExpanded ? ["far", "layer-group"] : "times" } />
+                { this.state.isExpanded ? <UpOutlined onClick={ () => this.toogleLayers() } className={ style.toggleBtn } /> : <DownOutlined onClick={ () => this.toogleLayers() } className={ style.toggleBtn } /> }
                 <Tabs className={ `${style.tabs} ${this.state.isExpanded ? style.closed : style.open}` } defaultActiveKey="search" id="tab">
                   <Tab className={ `${style.search} ${this.state.isExpanded ? style.closed : style.open}` } eventKey="search" title="Søk" >
                     <SearchBar />
@@ -179,10 +175,7 @@ export default class MapContainer extends React.Component {
                   <Tab eventKey="layers" title="Visning">
                     <div id="ServiceList">{ this.renderServiceList() }</div>
                   </Tab>
-{/*                   <Tab eventKey="tools" title="Tools">
-                    <Print />
-                  </Tab>
- */}                </Tabs>
+                </Tabs>
               </div>
             </div>
           ) : (
