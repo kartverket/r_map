@@ -5,7 +5,8 @@ import setQuery from "set-query-string"
 
 import pin_orange from '../../assets/img/pin-md-orange.png'
 import pin_blue from '../../assets/img/pin-md-blueish.png'
-import { UpOutlined, DownOutlined, CloseOutlined } from "@ant-design/icons"
+import { UpOutlined, DownOutlined } from "@ant-design/icons"
+import { Input } from 'antd';
 import style from "./SearchBar.module.scss"
 
 import { transform } from 'ol/proj'
@@ -140,19 +141,10 @@ const SearchBar = props => {
   const onChangeBound = (event) => {
     setSearchText(event.target.value)
   }
-  //const updateQuery = search_query => dispatch({ type: 'UPDATE_SEARCH_STRING', payload: search_query })
-  const resetSearch = () => {
-    setSearchText("")
-  }
 
   return (
     <>
-      <div className='input-group col'>
-        <input className={ style.searchInput } onChange={ onChangeBound } placeholder={ placeholder } type="text" value={ searchText } aria-describedby="button-addon1" />
-        <div className='input-group-append'>
-          <button className="btn btn-link" type="button" id="button-addon1" onClick={ () => resetSearch() }>{ searchText ? <CloseOutlined /> : '' }</button>
-        </div>
-      </div>
+      <Input placeholder={ placeholder } allowClear onChange={ onChangeBound } />
       <div className={ style.searchResult }>
         {
           searchResult && (

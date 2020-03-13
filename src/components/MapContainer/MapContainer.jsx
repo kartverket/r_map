@@ -6,7 +6,7 @@ import setQuery from "set-query-string"
 import BackgroundChooser from "../BackgroundChooser/BackgroundChooser"
 import ServicePanel from "../ServicePanel/ServicePanel"
 import SearchBar from "../SearchBar/SearchBar"
-import { UpOutlined, DownOutlined, CloseOutlined } from "@ant-design/icons"
+import { UpOutlined, DownOutlined } from "@ant-design/icons"
 import style from "./MapContainer.module.scss"
 import Position from '../Position/Position'
 import Tabs from 'react-bootstrap/Tabs'
