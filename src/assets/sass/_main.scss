@@ -1307,12 +1307,12 @@ input::-ms-clear {
 
 
 .tab-content {
-  min-height: 50px;    
+  min-height: 50px;
   padding: 0;
 }
 
 .nav-tabs {
-  border-bottom: 1px solid $color-toggle-on;
+  border-bottom: 1px solid;
 }
 
 .navTabsTransparent {
