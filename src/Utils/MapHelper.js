@@ -249,7 +249,7 @@ export const getWMSCapabilities = async (url) => {
           return resultText;
         });
     } else {
-      console.log("No wms parameter given");
+      console.warn("No wms parameter given");
     }
 };
 /*

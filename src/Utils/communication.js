@@ -124,7 +124,6 @@ export class Messaging {
             } else {
               let vectorLayers = window.olMap.getLayersByClass("OpenLayers.Layer.Vector").slice()
               let layers = []
-              console.log(vectorLayers.length)
               for (let i = 0, j = vectorLayers.length; i < j; i += 1) {
                 let layer = vectorLayers[i]
                 layers.push({
@@ -251,7 +250,7 @@ export class Messaging {
         this.addWFSLayer(url)
         break
       case 'wcs':
-        console.log("Cannot display WCS directly. Use a Portrayal Service WMS with WCS as data layer.<br/>Syntax: /l/wms/[URL to portrayal]/d/wcs/[URL to data]")
+        console.warn("Cannot display WCS directly. Use a Portrayal Service WMS with WCS as data layer.<br/>Syntax: /l/wms/[URL to portrayal]/d/wcs/[URL to data]")
         break
       default:
         break
@@ -266,7 +265,6 @@ export class Messaging {
       feature['attributes'] = layer.features[i]['attributes']
       features.push(feature)
     }
-    console.log({ getFeaturesInLayer: features })
     return features
   }
   static getVisibleFeaturesInLayer = (layer) => {
@@ -280,7 +278,6 @@ export class Messaging {
         features.push(feature)
       }
     }
-    console.log({ getVisibleFeaturesInLayer: features })
     return features
   }
 }

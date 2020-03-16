@@ -291,7 +291,6 @@ export const OLMap = (eventHandler, httpHelper, measure,
                 if (source && source.getParams) {
                     var params = source.getParams();
                     if (params && params.GKT) {
-                        //console.log(layer.typename + ' ' + params.GKT);
                         var initTime = source.get("timestamp");
                         if (initTime) {
                             var elapsedTime = Math.round((currentTime - initTime) / 1000);
@@ -332,7 +331,6 @@ export const OLMap = (eventHandler, httpHelper, measure,
     }
     // Adds GKT-token to existing source
     function _setToken(source) {
-        //console.log(layer.typename + ' - ' + source.get("timestamp") + ' - ' + params.GKT);
         source.updateParams({
             GKT: _getToken()
         });
@@ -766,10 +764,8 @@ export const OLMap = (eventHandler, httpHelper, measure,
         if (layer && scale) {
             var minRes = layer.getMinResolution();
             if (minRes && minRes >= scale) {
-                //console.log(minRes + ' > ' + scale);
                 return;
             }
-            //console.log(debuginfo + ' setLayerMinresolution() ' + layer.get('config').name + ': ' + scale);
             layer.setMinResolution(scale);
             return scale;
         }
@@ -779,10 +775,8 @@ export const OLMap = (eventHandler, httpHelper, measure,
         if (layer && scale) {
             var maxRes = layer.getMaxResolution();
             if (maxRes && maxRes <= scale) {
-                //console.log(maxRes + ' < ' + scale);
                 return;
             }
-            //console.log(debuginfo + ' setLayerMaxresolution() ' + layer.get('config').name + ': ' + scale);
             layer.setMaxResolution(scale);
             return scale;
         }

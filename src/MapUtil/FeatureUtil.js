@@ -48,7 +48,7 @@ export const parseCSV = (data) => {
     lines.push(line)
   }
   layer[layername] = mergeArrayToObject(lines[0], lines[1])
-  return layer
+  return [layer]
 }
 
 export const parseGmlFeatureInfo = (data) => {

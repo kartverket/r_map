@@ -112,7 +112,6 @@ const LayerEntry = props => {
                   properties: content,
                   coordinates: coord
                 }
-                console.log(message)
                 //dispatch(setFeature(message))
               })
             }

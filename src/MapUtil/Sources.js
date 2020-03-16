@@ -81,10 +81,7 @@ export const MaplibCustomMessageHandler = (eventHandler, _getIsySubLayerFromPool
                 _messageHandler.showMessage(isySubLayer.title, event);
               });
               break;
-              //case undefined:
-              //    break;
             default:
-              //    console.log(source.get('type'));
               break;
           }
         }
@@ -486,7 +483,7 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
       //var featureIsOk = true;
       if (!featureIsValid(features)) {
         //featureIsOk = false;
-        console.log(isySubLayer.name + ' does not have valid coordinates!');
+        console.warn(isySubLayer.name + ' does not have valid coordinates!');
       }
       features.forEach(function (featureitem) {
         featureitem.set("layerguid", isySubLayer.id);

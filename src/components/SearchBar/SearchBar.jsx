@@ -101,8 +101,7 @@ const SearchBar = props => {
   useEffect(() => {
     if (searchText) {
       vectorSource.clear()
-      queryValues.search = searchText
-      setQuery(queryValues)
+      setQuery({ search: searchText })
       fetch(generateAdresseSokUrl(searchText))
         .then(response => {
           if (!response.ok) {

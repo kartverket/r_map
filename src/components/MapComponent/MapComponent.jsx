@@ -149,7 +149,7 @@ export class MapComponent extends React.Component {
                 }
               }
             })
-            .catch(e => console.log(e))
+            .catch(e => console.warn(e))
           break
         default:
           console.warn('No service type specified')

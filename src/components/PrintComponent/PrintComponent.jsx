@@ -71,7 +71,6 @@ const Print = props => {
     }
   }
   const makePrint = () => {
-    console.log('generate Print')
     let center = window.olMap.getView().getCenter()
     let layers = window.olMap.getLayers().getArray()
 
