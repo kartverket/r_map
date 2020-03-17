@@ -119,14 +119,20 @@ var FeatureInfoItem = function FeatureInfoItem(props) {
             for (var _key2 in feature) {
               var items = feature[_key2];
 
-              for (var _i = 0, _Object$entries = Object.entries(items); _i < _Object$entries.length; _i++) {
-                var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
-                    _key3 = _Object$entries$_i[0],
-                    value = _Object$entries$_i[1];
+              if (typeof items !== "string") {
+                for (var _i = 0, _Object$entries = Object.entries(items); _i < _Object$entries.length; _i++) {
+                  var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+                      _key3 = _Object$entries$_i[0],
+                      value = _Object$entries$_i[1];
 
+                  featureRow.push(_react.default.createElement("li", {
+                    key: (0, _uniqid.default)(_key3)
+                  }, _react.default.createElement("i", null, _key3, " "), " = ", _react.default.createElement("strong", null, prepareItemFormat(value)), " "));
+                }
+              } else {
                 featureRow.push(_react.default.createElement("li", {
-                  key: (0, _uniqid.default)(_key3)
-                }, _react.default.createElement("i", null, _key3, " "), " = ", _react.default.createElement("strong", null, prepareItemFormat(value)), " "));
+                  key: (0, _uniqid.default)(_key2)
+                }, _react.default.createElement("i", null, 'FeatureID', " "), " = ", _react.default.createElement("strong", null, prepareItemFormat(items)), " "));
               }
             }
           }
@@ -154,6 +160,16 @@ var FeatureInfoItem = function FeatureInfoItem(props) {
     }, layers);
   };
 
+  var featureContent = function featureContent() {
+    if (Array.isArray(featureState.info)) {
+      return featureState.info.map(function (info) {
+        return prepareFeature(info);
+      });
+    } else {
+      return _react.default.createElement("div", null, "No info");
+    }
+  };
+
   return _react.default.createElement(_Modal.default, {
     show: featureState.show,
     onHide: function onHide() {
@@ -167,9 +183,7 @@ var FeatureInfoItem = function FeatureInfoItem(props) {
     }
   }, _react.default.createElement(_Modal.default.Header, {
     closeButton: true
-  }, _react.default.createElement(_Modal.default.Title, null, "Egenskaper ", _react.default.createElement("span", null, " ( ", featureState.info.length, " )"), " ")), _react.default.createElement(_Modal.default.Body, null, featureState.info.map(function (info) {
-    return prepareFeature(info);
-  })));
+  }, _react.default.createElement(_Modal.default.Title, null, "Egenskaper ", _react.default.createElement("span", null, " ( ", featureState.info.length, " )"), " ")), _react.default.createElement(_Modal.default.Body, null, featureContent()));
 };
 
 var _default = FeatureInfoItem;
