@@ -4,6 +4,7 @@ import style from './FeatureInfoItem.module.scss'
 import uniqid from 'uniqid'
 import { useStore, setStore } from 'react-smee'
 
+
 const FeatureInfoItem = props => {
   const featureState = useStore('featureInfo')
 
@@ -59,8 +60,12 @@ const FeatureInfoItem = props => {
             const feature = layer[key]
             for (const key in feature) {
               const items = feature[key]
-              for (let [key, value] of Object.entries(items)) {
-                featureRow.push(<li key={ uniqid(key) }><i>{ key } </i> = <strong>{ prepareItemFormat(value) }</strong> </li>)
+              if (typeof items !== "string") {
+                for (let [key, value] of Object.entries(items)) {
+                  featureRow.push(<li key={ uniqid(key) }><i>{ key } </i> = <strong>{ prepareItemFormat(value) }</strong> </li>)
+                }
+              } else {
+                featureRow.push(<li key={ uniqid(key) }><i>{ 'FeatureID' } </i> = <strong>{ prepareItemFormat(items) }</strong> </li>)
               }
             }
           }
@@ -75,6 +80,14 @@ const FeatureInfoItem = props => {
     return (<div className={ style.ulContainer } key={ uniqid() }>{ layers }</div>)
   }
 
+  const featureContent = () => {
+    if (Array.isArray(featureState.info)) {
+      return featureState.info.map((info) => prepareFeature(info))
+    } else {
+      return <div>No info</div>
+    }
+  }
+  
   return (
     <Modal show={ featureState.show } onHide={ () => setStore('featureInfo', () => {
       let info = {
@@ -87,7 +100,7 @@ const FeatureInfoItem = props => {
       <Modal.Header closeButton>
         <Modal.Title>Egenskaper <span> ( { featureState.info.length } )</span> </Modal.Title>
       </Modal.Header>
-      <Modal.Body>{ featureState.info.map((info) => prepareFeature(info)) }</Modal.Body>
+      <Modal.Body>{ featureContent() }</Modal.Body>
     </Modal>
   )
 }
