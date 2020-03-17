@@ -389,7 +389,6 @@ var CapabilitiesUtil = /*#__PURE__*/function () {
         source: vectorSource,
         style: function style(feature, resolution) {
           var geom_name = feature.getGeometry().getType();
-          console.log(geom_name);
 
           if (geom_name === 'Point') {
             return new _style.Style({

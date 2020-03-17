@@ -314,7 +314,6 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
           var params = source.getParams();
 
           if (params && params.GKT) {
-            //console.log(layer.typename + ' ' + params.GKT);
             var initTime = source.get("timestamp");
 
             if (initTime) {
@@ -365,7 +364,6 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
 
 
   function _setToken(source) {
-    //console.log(layer.typename + ' - ' + source.get("timestamp") + ' - ' + params.GKT);
     source.updateParams({
       GKT: _getToken()
     });
@@ -852,10 +850,8 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
       var minRes = layer.getMinResolution();
 
       if (minRes && minRes >= scale) {
-        //console.log(minRes + ' > ' + scale);
         return;
-      } //console.log(debuginfo + ' setLayerMinresolution() ' + layer.get('config').name + ': ' + scale);
-
+      }
 
       layer.setMinResolution(scale);
       return scale;
@@ -868,10 +864,8 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
       var maxRes = layer.getMaxResolution();
 
       if (maxRes && maxRes <= scale) {
-        //console.log(maxRes + ' < ' + scale);
         return;
-      } //console.log(debuginfo + ' setLayerMaxresolution() ' + layer.get('config').name + ': ' + scale);
-
+      }
 
       layer.setMaxResolution(scale);
       return scale;

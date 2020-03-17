@@ -85,7 +85,7 @@ var parseCSV = function parseCSV(data) {
   }
 
   layer[layername] = mergeArrayToObject(lines[0], lines[1]);
-  return layer;
+  return [layer];
 };
 
 exports.parseCSV = parseCSV;

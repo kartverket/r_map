@@ -190,8 +190,7 @@ var LayerEntry = function LayerEntry(props) {
                   featureId: feature.getId(),
                   properties: content,
                   coordinates: coord
-                };
-                console.log(message); //dispatch(setFeature(message))
+                }; //dispatch(setFeature(message))
               });
             }
           });

@@ -155,7 +155,6 @@ _defineProperty(Messaging, "listener", function (event) {
             var _vectorLayers2 = window.olMap.getLayersByClass("OpenLayers.Layer.Vector").slice();
 
             var _layers3 = [];
-            console.log(_vectorLayers2.length);
 
             for (var _i2 = 0, _j2 = _vectorLayers2.length; _i2 < _j2; _i2 += 1) {
               var _layer4 = _vectorLayers2[_i2];
@@ -293,7 +292,7 @@ _defineProperty(Messaging, "parseParamsAndAddDataLayerFromUrl", function (params
       break;
 
     case 'wcs':
-      console.log("Cannot display WCS directly. Use a Portrayal Service WMS with WCS as data layer.<br/>Syntax: /l/wms/[URL to portrayal]/d/wcs/[URL to data]");
+      console.warn("Cannot display WCS directly. Use a Portrayal Service WMS with WCS as data layer.<br/>Syntax: /l/wms/[URL to portrayal]/d/wcs/[URL to data]");
       break;
 
     default:
@@ -312,9 +311,6 @@ _defineProperty(Messaging, "getFeaturesInLayer", function (layer) {
     features.push(feature);
   }
 
-  console.log({
-    getFeaturesInLayer: features
-  });
   return features;
 });
 
@@ -331,8 +327,5 @@ _defineProperty(Messaging, "getVisibleFeaturesInLayer", function (layer) {
     }
   }
 
-  console.log({
-    getVisibleFeaturesInLayer: features
-  });
   return features;
 });

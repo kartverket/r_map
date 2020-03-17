@@ -195,7 +195,7 @@ var MapComponent = /*#__PURE__*/function (_React$Component) {
                 }
               }
             }).catch(function (e) {
-              return console.log(e);
+              return console.warn(e);
             });
 
             break;

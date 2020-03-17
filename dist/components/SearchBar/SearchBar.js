@@ -180,8 +180,9 @@ var SearchBar = function SearchBar(props) {
   (0, _react.useEffect)(function () {
     if (searchText) {
       vectorSource.clear();
-      queryValues.search = searchText;
-      (0, _setQueryString.default)(queryValues);
+      (0, _setQueryString.default)({
+        search: searchText
+      });
       fetch((0, _n3api.generateAdresseSokUrl)(searchText)).then(function (response) {
         if (!response.ok) {
           throw Error(response.statusText);
