@@ -140,11 +140,11 @@ export default class MapContainer extends React.Component {
       <ServiceListItem listItem={ listItem } removeMapItem={ this.props.removeMapItem ? this.props.removeMapItem : null } key={ i } map={ map } />
     ))
   }
-
+/*
   renderLayerButton() {
     return this.props.services && this.props.services.length > 0
   }
-
+*/
   toogleLayers() {
     this.setState({
       isExpanded: !this.state.isExpanded
@@ -153,6 +153,12 @@ export default class MapContainer extends React.Component {
   toogleMap() {
     window.history.back()
     // TODO: get paramtere to check for url til goto for closing map
+  }
+  showDefaultTab() {
+    if(this.props.services.length) {
+      return 'layers'
+    }
+    else return 'search'
   }
 
   /**
@@ -163,8 +169,7 @@ export default class MapContainer extends React.Component {
     return (
       <div id="MapContainer" className={ `${style.mapContainer}` }>
         <BackgroundChooser />
-        <div>
-          { this.renderLayerButton() ? (
+        <div>         
             <div>
               <div className={ style.closeMap }>
                 <FontAwesomeIcon title="Lukk kartet" onClick={ () => this.toogleMap() } className={ style.toggleBtn } icon={ "times" } />
@@ -172,11 +177,12 @@ export default class MapContainer extends React.Component {
               </div>
               <div className={ `${style.container} ${this.state.isExpanded ? style.closed : style.open}` }>
                 <FontAwesomeIcon onClick={ () => this.toogleLayers() } className={ style.toggleBtn } icon={ this.state.isExpanded ? ["far", "layer-group"] : "times" } />
-                <Tabs className={ `${style.tabs} ${this.state.isExpanded ? style.closed : style.open}` } defaultActiveKey="search" id="tab">
+                <Tabs className={ `${style.tabs} ${this.state.isExpanded ? style.closed : style.open}` } defaultActiveKey={this.showDefaultTab()} id="tab">
                   <Tab className={ `${style.search} ${this.state.isExpanded ? style.closed : style.open}` } eventKey="search" title="Søk" >
                     <SearchBar />
                   </Tab>
-                  <Tab eventKey="layers" title="Visning">
+                  <Tab eventKey="layers" title="Visning">    
+                                
                     <div id="ServiceList">{ this.renderServiceList() }</div>
                   </Tab>
 {/*                   <Tab eventKey="tools" title="Tools">
@@ -184,11 +190,7 @@ export default class MapContainer extends React.Component {
                   </Tab>
  */}                </Tabs>
               </div>
-            </div>
-          ) : (
-              <div className={ style.link } onClick={ () => this.toogleMap() }>Gå til kartkatalogen</div>
-            ) }
-
+            </div>         
         </div>
         <div
           id="map"
