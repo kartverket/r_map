@@ -27,24 +27,7 @@ const TEST_DATA = [
     'DistributionProtocol': 'OGC:WMS',
     'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.adm_enheter2?request=GetCapabilities&service=WMS',
     addLayers: ['fylker_gjel', 'kommuner_gjel']
-  },
-  {
-    'Title': 'Kulturminner',
-    'DistributionProtocol': 'OGC:WMS',
-    'GetCapabilitiesUrl': 'https://kart.ra.no/arcgis/services/Distribusjon/Kulturminner20180301/MapServer/WMSServer?request=GetCapabilities&service=WMS',
-    addLayers: []
-  },
-  {
-    'Title': 'ssr2',
-    'DistributionProtocol': 'OGC:WMS',
-    'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.ssr2?request=GetCapabilities&service=WMS'
-  }, {
-    'Uuid': '8045628b-230a-4ba4-a6e0-xxxxx',
-    'Title': 'fisk',
-    'DistributionProtocol': 'OGC:WMS',
-    'GetCapabilitiesUrl': 'https://wms.geonorge.no/skwms1/wms.nib-prosjekter?request=GetCapabilities&service=WMS',
-    addLayers: []
-  },
+  }
   /*
     {
       'Title': 'Dybdedata_dekning_dtm50_5',
