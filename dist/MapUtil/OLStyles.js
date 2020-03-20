@@ -245,8 +245,6 @@ var OLStylesSLD = function OLStylesSLD() {
    $(rulenode.childNodes).each(function(index, childnode) {
    if (childnode.nodeName.indexOf('Symbolizer') > 0) {
    var symbolizer = parseSymbolizer(childnode, ruleindex);
-   //console.log(ruleindex + ':');
-   console.log(symbolizer);
    }
    });
    });
@@ -1041,17 +1039,15 @@ var OLStylesSLD = function OLStylesSLD() {
     sld = {
       namedLayers: []
     };
-    this.readChildNodes(response, sld); //console.log(sld);
-
+    this.readChildNodes(response, sld);
     /*
      var userStyles = response.getElementsByTagName('UserStyle');
-       var thisstyle = [];
+      var thisstyle = [];
      $(userStyles).each(function(index, userstyle){
      if (index === 0) {
      thisstyle.push(parseStyle(userstyle));
      }
      });
-     console.log(thisstyle.length);
      */
 
     styles = []; //styles.push(sld.namedLayers[0].userStyles[1]);
@@ -1379,7 +1375,6 @@ var OLStylesSLD = function OLStylesSLD() {
   //        case 'LineString':
   //            break;
   //        default:
-  //            console.log(geometrytype);
   //            break;
   //    }
   //    return validstyle;

@@ -285,7 +285,7 @@ var getWMSCapabilities = /*#__PURE__*/function () {
                 return resultText;
               });
             } else {
-              console.log("No wms parameter given");
+              console.warn("No wms parameter given");
             }
 
           case 1:

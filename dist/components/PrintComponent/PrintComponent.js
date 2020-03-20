@@ -110,7 +110,6 @@ var Print = function Print(props) {
   };
 
   var makePrint = function makePrint() {
-    console.log('generate Print');
     var center = window.olMap.getView().getCenter();
     var layers = window.olMap.getLayers().getArray();
     layers = layers.filter(function (layer) {

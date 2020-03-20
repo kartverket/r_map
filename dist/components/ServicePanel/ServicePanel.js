@@ -65,7 +65,7 @@ var ServicePanel = function ServicePanel(props) {
           newMetaInfo.Params = props.services.customParams || '';
           setMeta(newMetaInfo);
         }).catch(function (e) {
-          return console.log(e);
+          return console.warn(e);
         });
 
         break;
@@ -80,7 +80,7 @@ var ServicePanel = function ServicePanel(props) {
           newMetaInfo.Params = props.services.customParams || '';
           setMeta(newMetaInfo);
         }).catch(function (e) {
-          return console.log(e);
+          return console.warn(e);
         });
 
         break;
@@ -93,7 +93,7 @@ var ServicePanel = function ServicePanel(props) {
           newMetaInfo.EPSG = props.services.EPSG || 'EPSG:4326';
           setMeta(newMetaInfo);
         }).catch(function (e) {
-          return console.log(e);
+          return console.warn(e);
         });
 
         break;

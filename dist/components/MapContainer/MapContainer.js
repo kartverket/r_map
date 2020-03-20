@@ -172,11 +172,12 @@ var MapContainer = /*#__PURE__*/function (_React$Component) {
         });
       });
     }
-  }, {
-    key: "renderLayerButton",
-    value: function renderLayerButton() {
-      return this.props.services && this.props.services.length > 0;
-    }
+    /*
+      renderLayerButton() {
+        return this.props.services && this.props.services.length > 0
+      }
+    */
+
   }, {
     key: "toogleLayers",
     value: function toogleLayers() {
@@ -188,6 +189,13 @@ var MapContainer = /*#__PURE__*/function (_React$Component) {
     key: "toogleMap",
     value: function toogleMap() {
       window.history.back(); // TODO: get paramtere to check for url til goto for closing map
+    }
+  }, {
+    key: "showDefaultTab",
+    value: function showDefaultTab() {
+      if (this.props.services.length) {
+        return 'layers';
+      } else return 'search';
     }
     /**
      *
@@ -202,7 +210,7 @@ var MapContainer = /*#__PURE__*/function (_React$Component) {
       return _react.default.createElement("div", {
         id: "MapContainer",
         className: "".concat(_MapContainerModule.default.mapContainer)
-      }, _react.default.createElement(_BackgroundChooser.default, null), _react.default.createElement("div", null, this.renderLayerButton() ? _react.default.createElement("div", null, _react.default.createElement("div", {
+      }, _react.default.createElement(_BackgroundChooser.default, null), _react.default.createElement("div", null, _react.default.createElement("div", null, _react.default.createElement("div", {
         className: _MapContainerModule.default.closeMap
       }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
         title: "Lukk kartet",
@@ -223,7 +231,7 @@ var MapContainer = /*#__PURE__*/function (_React$Component) {
         icon: this.state.isExpanded ? ["far", "layer-group"] : "times"
       }), _react.default.createElement(_Tabs.default, {
         className: "".concat(_MapContainerModule.default.tabs, " ").concat(this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open),
-        defaultActiveKey: "search",
+        defaultActiveKey: this.showDefaultTab(),
         id: "tab"
       }, _react.default.createElement(_Tab.default, {
         className: "".concat(_MapContainerModule.default.search, " ").concat(this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open),
@@ -234,12 +242,7 @@ var MapContainer = /*#__PURE__*/function (_React$Component) {
         title: "Visning"
       }, _react.default.createElement("div", {
         id: "ServiceList"
-      }, this.renderServiceList())), "                "))) : _react.default.createElement("div", {
-        className: _MapContainerModule.default.link,
-        onClick: function onClick() {
-          return _this3.toogleMap();
-        }
-      }, "G\xE5 til kartkatalogen")), _react.default.createElement("div", {
+      }, this.renderServiceList())), "                ")))), _react.default.createElement("div", {
         id: "map",
         style: {
           position: "relative",
