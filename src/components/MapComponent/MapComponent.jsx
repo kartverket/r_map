@@ -1,5 +1,4 @@
-import React from "react"
-import PropTypes from "prop-types"
+import React, { useState, useLayoutEffect } from "react"
 import queryString from "query-string"
 import setQuery from "set-query-string"
 
@@ -8,72 +7,27 @@ import { map, eventHandler, mapConfig } from "../../MapUtil/maplibHelper"
 import { Messaging } from '../../Utils/communication'
 
 
-/**
- * @class The Map Component
- * @extends React.Component
- */
-export class MapComponent extends React.Component {
-  /**
-   * The prop types.
-   * @type {Object}
-   */
-  static propTypes = {
-    /**
-     * @type {Number}
-     */
-    lon: PropTypes.number,
-    /**
-     * @type {Number}
-     */
-    lat: PropTypes.number,
-    /**
-     * @type {Number}
-     */
-    zoom: PropTypes.number,
-    /**
-     * @type {Array}
-     */
-    services: PropTypes.arrayOf(PropTypes.object),
+const MapComponent = (props) => {
+  const [wms, setWMS] = useState()
+  const queryValues = queryString.parse(window.location.search)
+  let internMap = map
+  mapConfig.coordinate_system = queryValues['crs'] || props.crs
 
-    crs: PropTypes.string
-  };
+  let lon = Number(queryValues["lon"] || props.lon)
+  let lat = Number(queryValues["lat"] || props.lat)
+  let zoom = Number(queryValues["zoom"] || props.zoom)
+  let newMapConfig = Object.assign({}, mapConfig, {
+    center: [lon, lat],
+    zoom: zoom
+  })
 
-  static defaultProps = {
-    lon: 396722,
-    lat: 7197860,
-    zoom: 4,
-    crs: 'EPSG:25833'
-  };
-
-  /**
-   *
-   *@constructs Map
-   */
-  constructor(props) {
-    super(props)
-    const queryValues = queryString.parse(window.location.search)
-    let lon = Number(queryValues["lon"] || props.lon)
-    let lat = Number(queryValues["lat"] || props.lat)
-    let zoom = Number(queryValues["zoom"] || props.zoom)
-    /*
-    let wmts = Array(queryValues['wmts'] || [])
-    let wfs = Array(queryValues['wfs'] || [])
-*/
-    //  this.props = { lon: lon, lat: lat, zoom: zoom };
-    mapConfig.coordinate_system = queryValues['crs'] || props.crs
-    this.newMapConfig = Object.assign({}, mapConfig, {
-      center: [lon, lat],
-      zoom: zoom
-    })
-  }
-
-  componentDidMount() {
-    window.olMap = map.Init("map", this.newMapConfig)
-    map.AddZoom()
-    map.AddScaleLine()
-    eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState)
+  useLayoutEffect(() => {
+    window.olMap = internMap.Init("map", newMapConfig)
+    internMap.AddZoom()
+    internMap.AddScaleLine()
+    eventHandler.RegisterEvent("MapMoveend", updateMapInfoState)
     this.setState({ map: map })
-    this.addWMS()
+    addWMS()
     window.olMap.on('click', function (evt) {
       const feature = window.olMap.forEachFeatureAtPixel(evt.pixel, (feature, layer) => feature)
       if (feature) {
@@ -88,20 +42,20 @@ export class MapComponent extends React.Component {
         Messaging.postMessage(JSON.stringify(message))
       }
     })
-  }
+  }, [internMap])
 
-  updateMapInfoState = () => {
+  const updateMapInfoState = () => {
     let center = map.GetCenter()
     const queryValues = queryString.parse(window.location.search)
-    this.props = { lon: center.lon, lat: center.lat, zoom: center.zoom }
+    //this.props = { lon: center.lon, lat: center.lat, zoom: center.zoom }
     queryValues.lon = center.lon
     queryValues.lat = center.lat
     queryValues.zoom = center.zoom
     setQuery(queryValues)
-  };
+  }
 
-  addWMS() {
-    this.props.services.forEach(service => {
+  const addWMS = () => {
+    props.services.forEach(service => {
       let meta = {}
       switch (service.DistributionProtocol) {
         case 'WMS':
@@ -158,19 +112,23 @@ export class MapComponent extends React.Component {
     })
   }
 
-  render() {
-    return (
-      <div
-        id="map"
-        style={ {
-          position: "relative",
-          width: "100%",
-          height: "100%",
-          zIndex: 0
-        } }
-      />
-    )
-  }
+  return (
+    <div
+      id="map"
+      style={ {
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        zIndex: 0
+      } }
+    />
+  )
 }
 
+MapComponent.defaultProps = {
+  lon: 396722,
+  lat: 7197860,
+  zoom: 4,
+  crs: 'EPSG:25833'
+}
 export default MapComponent

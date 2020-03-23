@@ -5,7 +5,7 @@ import uniqid from 'uniqid'
 import { useStore, setStore } from 'react-smee'
 
 
-const FeatureInfoItem = props => {
+const FeatureInfoItem = () => {
   const featureState = useStore('featureInfo')
 
   const testFormat = (s) => {
@@ -87,7 +87,7 @@ const FeatureInfoItem = props => {
       return <div>No info</div>
     }
   }
-  
+
   return (
     <Modal show={ featureState.show } onHide={ () => setStore('featureInfo', () => {
       let info = {
