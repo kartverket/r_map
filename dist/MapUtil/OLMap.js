@@ -59,9 +59,7 @@ var _jquery = _interopRequireDefault(require("jquery"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapExport, hoverInfo, measureLine, drawFeature, offline, addLayerFeature, modifyFeature, addFeatureGps, printBoxSelect, addLayerUrl) {
+const OLMap = (eventHandler, httpHelper, measure, featureInfo, mapExport, hoverInfo, measureLine, drawFeature, offline, addLayerFeature, modifyFeature, addFeatureGps, printBoxSelect, addLayerUrl) => {
   var map;
   var layerPool = [];
   var isySubLayerPool = [];
@@ -746,7 +744,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
 
       if (isySubLayer.source === _Domain.SOURCES.vector) {
         if (isySubLayer.style) {
-          if (_typeof(isySubLayer.style) === "object" || isySubLayer.style.indexOf("http") < 0) {
+          if (typeof isySubLayer.style === "object" || isySubLayer.style.indexOf("http") < 0) {
             sldstyles[isySubLayer.id] = (0, _OLStyles.OLStylesJson)(isySubLayer.style);
             layer = new _layer.Vector({
               source: source,
@@ -874,7 +872,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
 
   function _loadVectorLayer(isySubLayer, source) {
     var callback = function callback(data) {
-      data = _typeof(data) === 'object' ? data : JSON.parse(data);
+      data = typeof data === 'object' ? data : JSON.parse(data);
       var format = new _format.GeoJSON();
 
       for (var i = 0; i < data.features.length; i++) {
@@ -1084,9 +1082,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
   }
 
   function _getLayersWithGuid() {
-    return map.getLayers().getArray().filter(function (elem) {
-      return elem.guid !== undefined;
-    });
+    return map.getLayers().getArray().filter(elem => elem.guid !== undefined);
   }
 
   function _getLayerByGuid(guid) {
@@ -2565,7 +2561,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
 };
 
 exports.OLMap = OLMap;
-var MapRENDERERS = {
+const MapRENDERERS = {
   canvas: 'canvas',
   webgl: 'webgl'
 };

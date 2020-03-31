@@ -1,12 +1,12 @@
-import React from "react"
+import React, { useContext } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import style from './FeatureInfoItem.module.scss'
 import uniqid from 'uniqid'
-import { useStore, setStore } from 'react-smee'
+import { store } from '../../Utils/store.js'
 
-
-const FeatureInfoItem = props => {
-  const featureState = useStore('featureInfo')
+const FeatureInfoItem = () => {
+  const featureContext = useContext(store)
+  const { dispatch } = featureContext
 
   const testFormat = (s) => {
     if (typeof s === 'object') return 'isObject'
@@ -81,24 +81,20 @@ const FeatureInfoItem = props => {
   }
 
   const featureContent = () => {
-    if (Array.isArray(featureState.info)) {
-      return featureState.info.map((info) => prepareFeature(info))
+    if (Array.isArray(featureContext.state.info)) {
+      return featureContext.state.info.map((info) => prepareFeature(info))
     } else {
       return <div>No info</div>
     }
   }
-  
+
   return (
-    <Modal show={ featureState.show } onHide={ () => setStore('featureInfo', () => {
-      let info = {
-        show: false,
-        info: featureState.info
-      }
-      return info
-    }
-    ) }>
+    <Modal show={ featureContext.state.show } onHide={ () => dispatch({
+      type: "HIDE_FEATURES",
+      info: featureContext.state.info
+    }) }>
       <Modal.Header closeButton>
-        <Modal.Title>Egenskaper <span> ( { featureState.info.length } )</span> </Modal.Title>
+        <Modal.Title>Egenskaper <span> ( { featureContext.state.info ? featureContext.state.info.length : 0} )</span> </Modal.Title>
       </Modal.Header>
       <Modal.Body>{ featureContent() }</Modal.Body>
     </Modal>

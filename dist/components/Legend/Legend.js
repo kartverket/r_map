@@ -15,8 +15,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Legend to be used in MapComponent
  * @param {*} props
  */
-var Legend = function Legend(props) {
-  return _react.default.createElement("img", {
+const Legend = props => {
+  return /*#__PURE__*/_react.default.createElement("img", {
     src: props.legendUrl,
     alt: props.legendAlternative
   });

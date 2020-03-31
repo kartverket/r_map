@@ -37,9 +37,8 @@ var _proj = require("ol/proj.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-var MaplibCustomMessageHandler = function MaplibCustomMessageHandler(eventHandler, _getIsySubLayerFromPool) {
+//import GML3Format from 'ol/format/GML3'
+const MaplibCustomMessageHandler = (eventHandler, _getIsySubLayerFromPool) => {
   var olMap;
   var _message = 'Service down: ';
 
@@ -233,7 +232,7 @@ var MaplibCustomMessageHandler = function MaplibCustomMessageHandler(eventHandle
 
 exports.MaplibCustomMessageHandler = MaplibCustomMessageHandler;
 
-var Wms = function Wms(isySubLayer, parameters) {
+const Wms = (isySubLayer, parameters) => {
   var url;
   var urls;
 
@@ -317,7 +316,7 @@ var Wms = function Wms(isySubLayer, parameters) {
 
 exports.Wms = Wms;
 
-var Wmts = function Wmts(isySubLayer, parameters) {
+const Wmts = (isySubLayer, parameters) => {
   var projection = new _Projection.default({
     code: isySubLayer.coordinate_system,
     extent: isySubLayer.extent,
@@ -421,7 +420,7 @@ var Wmts = function Wmts(isySubLayer, parameters) {
 
 exports.Wmts = Wmts;
 
-var Vector = function Vector(isySubLayer) {
+const Vector = isySubLayer => {
   var source;
 
   switch (isySubLayer.format) {
@@ -442,7 +441,7 @@ var Vector = function Vector(isySubLayer) {
 
 exports.Vector = Vector;
 
-var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandler) {
+const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) => {
   var strategy;
 
   if (isySubLayer.tiled) {
@@ -466,7 +465,7 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
   var projection = (0, _proj.get)(isySubLayer.coordinate_system);
 
   var parseResponse = function parseResponse(response) {
-    var domparser = new DOMParser();
+    const domparser = new DOMParser();
     response = domparser.parseFromString(response, "text/xml");
     source.dispatchEvent('vectorloadend');
     var featureNamespace;
@@ -623,10 +622,8 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
       }
     }
 
-    return fetch(url).then(function (response) {
-      return response.text();
-    }).then(function (response) {
-      if (_typeof(response) === 'object') {
+    return fetch(url).then(response => response.text()).then(response => {
+      if (typeof response === 'object') {
         if (response.firstChild.childElementCount === 0) {
           return;
         }

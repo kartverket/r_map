@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import MapContainer from './components/MapContainer/MapContainer'
 
 const TEST_DATA = [
@@ -112,16 +112,13 @@ const TEST_DATA = [
    }*/
 ]
 
-/**
- *
- */
-export default class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <MapContainer services={ TEST_DATA } />
-      </div>
-    )
-  }
+const App = () => {
+  return (
+    <div className="App">
+      <MapContainer services={ TEST_DATA } />
+    </div>
+  )
 }
+
+export default App
 
