@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _Modal = _interopRequireDefault(require("react-bootstrap/Modal"));
 
@@ -13,27 +13,34 @@ var _FeatureInfoItemModule = _interopRequireDefault(require("./FeatureInfoItem.m
 
 var _uniqid = _interopRequireDefault(require("uniqid"));
 
-var _reactSmee = require("react-smee");
+var _store = require("../../Utils/store.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+const FeatureInfoItem = () => {
+  const featureContext = (0, _react.useContext)(_store.store);
+  const dispatch = featureContext.dispatch;
 
-var FeatureInfoItem = function FeatureInfoItem(props) {
-  var featureState = (0, _reactSmee.useStore)('featureInfo');
-
-  var testFormat = function testFormat(s) {
-    if (_typeof(s) === 'object') return 'isObject';
-    var rX = /^((\d+)|(true|false)|(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\+\d{2})|([\w\W]+))$/i;
-    var M = rX.exec(s);
+  const testFormat = s => {
+    if (typeof s === 'object') return 'isObject';
+    const rX = /^((\d+)|(true|false)|(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\+\d{2})|([\w\W]+))$/i;
+    const M = rX.exec(s);
     if (!M) return '';
 
     switch (M[1]) {
@@ -66,124 +73,117 @@ var FeatureInfoItem = function FeatureInfoItem(props) {
     }
   };
 
-  var prepareItemFormat = function prepareItemFormat(v) {
-    var test = testFormat(v);
+  const prepareItemFormat = v => {
+    const test = testFormat(v);
 
     switch (test) {
       case 'isNumeric':
-        return _react.default.createElement(_react.default.Fragment, null, v);
+        return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, v);
 
       case 'isBoolean':
-        return _react.default.createElement(_react.default.Fragment, null, v);
+        return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, v);
 
       case 'isDate':
-        return _react.default.createElement(_react.default.Fragment, null, v);
+        return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, v);
       // TODO: formatt?
 
       case 'isBboxInternal':
-        return _react.default.createElement(_react.default.Fragment, null, "BBOX db internal");
+        return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, "BBOX db internal");
       // TODO: klikke for å vise?
 
       case 'isBboxJsonPoint':
-        return _react.default.createElement(_react.default.Fragment, null, "BBOX point");
+        return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, "BBOX point");
       // TODO: klikke for å vise?
 
       case 'isBboxJsonPolygon':
-        return _react.default.createElement(_react.default.Fragment, null, "BBOX polygon");
+        return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, "BBOX polygon");
       // TODO: klikke for å vise?
 
       case 'isBboxSimple':
-        return _react.default.createElement(_react.default.Fragment, null, v);
+        return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, v);
       // TODO: klikke for å vise?
 
       case 'isString':
-        return _react.default.createElement(_react.default.Fragment, null, v);
+        return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, v);
 
       default:
-        return _react.default.createElement(_react.default.Fragment, null);
+        return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null);
     }
   };
 
-  var prepareFeature = function prepareFeature(info) {
-    var layers = [];
+  const prepareFeature = info => {
+    let layers = [];
 
-    for (var key in info) {
-      var layer = info[key];
-      var featureRow = [];
+    for (const key in info) {
+      let layer = info[key];
+      let featureRow = [];
 
       if (Array.isArray(layer)) {
-        for (var _key in layer) {
-          if (_key !== 'name') {
-            var feature = layer[_key];
+        for (const key in layer) {
+          if (key !== 'name') {
+            const feature = layer[key];
 
-            for (var _key2 in feature) {
-              var items = feature[_key2];
+            for (const key in feature) {
+              const items = feature[key];
 
               if (typeof items !== "string") {
                 for (var _i = 0, _Object$entries = Object.entries(items); _i < _Object$entries.length; _i++) {
-                  var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
-                      _key3 = _Object$entries$_i[0],
+                  let _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+                      key = _Object$entries$_i[0],
                       value = _Object$entries$_i[1];
 
-                  featureRow.push(_react.default.createElement("li", {
-                    key: (0, _uniqid.default)(_key3)
-                  }, _react.default.createElement("i", null, _key3, " "), " = ", _react.default.createElement("strong", null, prepareItemFormat(value)), " "));
+                  featureRow.push( /*#__PURE__*/_react.default.createElement("li", {
+                    key: (0, _uniqid.default)(key)
+                  }, /*#__PURE__*/_react.default.createElement("i", null, key, " "), " = ", /*#__PURE__*/_react.default.createElement("strong", null, prepareItemFormat(value)), " "));
                 }
               } else {
-                featureRow.push(_react.default.createElement("li", {
-                  key: (0, _uniqid.default)(_key2)
-                }, _react.default.createElement("i", null, 'FeatureID', " "), " = ", _react.default.createElement("strong", null, prepareItemFormat(items)), " "));
+                featureRow.push( /*#__PURE__*/_react.default.createElement("li", {
+                  key: (0, _uniqid.default)(key)
+                }, /*#__PURE__*/_react.default.createElement("i", null, 'FeatureID', " "), " = ", /*#__PURE__*/_react.default.createElement("strong", null, prepareItemFormat(items)), " "));
               }
             }
           }
         }
       } else {
         for (var _i2 = 0, _Object$entries2 = Object.entries(layer); _i2 < _Object$entries2.length; _i2++) {
-          var _Object$entries2$_i = _slicedToArray(_Object$entries2[_i2], 2),
-              _key4 = _Object$entries2$_i[0],
-              _value = _Object$entries2$_i[1];
+          let _Object$entries2$_i = _slicedToArray(_Object$entries2[_i2], 2),
+              key = _Object$entries2$_i[0],
+              value = _Object$entries2$_i[1];
 
-          featureRow.push(_react.default.createElement("li", {
-            key: (0, _uniqid.default)(_key4)
-          }, _react.default.createElement("i", null, _key4, " "), " = ", _react.default.createElement("strong", null, prepareItemFormat(_value)), " "));
+          featureRow.push( /*#__PURE__*/_react.default.createElement("li", {
+            key: (0, _uniqid.default)(key)
+          }, /*#__PURE__*/_react.default.createElement("i", null, key, " "), " = ", /*#__PURE__*/_react.default.createElement("strong", null, prepareItemFormat(value)), " "));
         }
       }
 
-      layers.push(_react.default.createElement(_react.default.Fragment, {
+      layers.push( /*#__PURE__*/_react.default.createElement(_react.default.Fragment, {
         key: (0, _uniqid.default)(key)
-      }, _react.default.createElement("h3", null, key), _react.default.createElement("ul", null, featureRow)));
+      }, /*#__PURE__*/_react.default.createElement("h3", null, key), /*#__PURE__*/_react.default.createElement("ul", null, featureRow)));
     }
 
-    return _react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement("div", {
       className: _FeatureInfoItemModule.default.ulContainer,
       key: (0, _uniqid.default)()
     }, layers);
   };
 
-  var featureContent = function featureContent() {
-    if (Array.isArray(featureState.info)) {
-      return featureState.info.map(function (info) {
-        return prepareFeature(info);
-      });
+  const featureContent = () => {
+    if (Array.isArray(featureContext.state.info)) {
+      return featureContext.state.info.map(info => prepareFeature(info));
     } else {
-      return _react.default.createElement("div", null, "No info");
+      return /*#__PURE__*/_react.default.createElement("div", null, "No info");
     }
   };
 
-  return _react.default.createElement(_Modal.default, {
-    show: featureState.show,
-    onHide: function onHide() {
-      return (0, _reactSmee.setStore)('featureInfo', function () {
-        var info = {
-          show: false,
-          info: featureState.info
-        };
-        return info;
-      });
-    }
-  }, _react.default.createElement(_Modal.default.Header, {
+  return /*#__PURE__*/_react.default.createElement(_Modal.default, {
+    show: featureContext.state.show,
+    onHide: () => dispatch({
+      type: "HIDE_FEATURES",
+      info: featureContext.state.info
+    })
+  }, /*#__PURE__*/_react.default.createElement(_Modal.default.Header, {
     closeButton: true
-  }, _react.default.createElement(_Modal.default.Title, null, "Egenskaper ", _react.default.createElement("span", null, " ( ", featureState.info.length, " )"), " ")), _react.default.createElement(_Modal.default.Body, null, featureContent()));
+  }, /*#__PURE__*/_react.default.createElement(_Modal.default.Title, null, "Egenskaper ", /*#__PURE__*/_react.default.createElement("span", null, " ( ", featureContext.state.info ? featureContext.state.info.length : 0, " )"), " ")), /*#__PURE__*/_react.default.createElement(_Modal.default.Body, null, featureContent()));
 };
 
 var _default = FeatureInfoItem;

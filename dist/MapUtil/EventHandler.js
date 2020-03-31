@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.EventTypes = exports.EventHandler = void 0;
 
-var EventHandler = function EventHandler() {
+const EventHandler = () => {
   var callBacks = [];
 
   function registerEvent(eventType, callBack) {
@@ -42,7 +42,7 @@ var EventHandler = function EventHandler() {
 };
 
 exports.EventHandler = EventHandler;
-var EventTypes = {
+const EventTypes = {
   ChangeCenter: "ChangeCenter",
   ChangeResolution: "ChangeResolution",
   ChangeLayers: "ChangeLayers",

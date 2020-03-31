@@ -12,6 +12,8 @@ import Tab from 'react-bootstrap/Tab'
 import FeatureInfoItem from '../ServicePanel/FeatureInfoItem'
 import 'ol/ol.css'
 
+import { StateProvider } from '../../Utils/store.js'
+
 const ServiceListItem = (props) => <ServicePanel services={ props.listItem } removeMapItem={ props.removeMapItem } draggable />
 
 const MapContainer = (props) => {
@@ -63,7 +65,8 @@ const MapContainer = (props) => {
   }
 
   return (
-    <div id="MapContainer" className={ `${style.mapContainer}` }>
+    <StateProvider>
+      <div id="MapContainer" className={ `${style.mapContainer}` }>
       <BackgroundChooser />
       <div>
         <div>
@@ -98,6 +101,7 @@ const MapContainer = (props) => {
         <FeatureInfoItem info={ '' } show={ false }></FeatureInfoItem>
       </div>
     </div>
+    </StateProvider>
   )
 }
 MapContainer.defaultProps = {

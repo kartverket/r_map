@@ -9,9 +9,7 @@ var _style = require("ol/style");
 
 var _xml = require("ol/xml");
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-var OLStylesDefault = function OLStylesDefault() {
+const OLStylesDefault = () => {
   var styles = function styles() {
     var fill = new _style.Fill({
       color: 'rgba(255,0,0,0.8)'
@@ -38,11 +36,11 @@ var OLStylesDefault = function OLStylesDefault() {
 
 exports.OLStylesDefault = OLStylesDefault;
 
-var OLStylesJson = function OLStylesJson(style) {
+const OLStylesJson = style => {
   var _zIndex = 0;
 
   function _createStyle(feature, jsonstyle, hover) {
-    var jsonobject = _typeof(jsonstyle) === "object" ? jsonstyle : JSON.parse(jsonstyle);
+    var jsonobject = typeof jsonstyle === "object" ? jsonstyle : JSON.parse(jsonstyle);
     var currentstyle = [];
     _zIndex++;
     currentstyle.push(new _style.Style({
@@ -195,7 +193,7 @@ var OLStylesJson = function OLStylesJson(style) {
 
 exports.OLStylesJson = OLStylesJson;
 
-var OLStylesSLD = function OLStylesSLD() {
+const OLStylesSLD = () => {
   var styles = [new _style.Style({
     fill: new _style.Fill({
       color: 'rgba(255, 255, 255, 0.6)'
@@ -1104,7 +1102,7 @@ var OLStylesSLD = function OLStylesSLD() {
     if (featurevalue) {
       switch (filter.operator) {
         case '==':
-          switch (_typeof(featurevalue)) {
+          switch (typeof featurevalue) {
             case 'string':
               value = filter.value;
               condition = featurevalue === value;
@@ -1142,7 +1140,7 @@ var OLStylesSLD = function OLStylesSLD() {
           break;
 
         case '!=':
-          switch (_typeof(featurevalue)) {
+          switch (typeof featurevalue) {
             case 'string':
               value = filter.value;
               condition = featurevalue !== value;
@@ -1160,7 +1158,7 @@ var OLStylesSLD = function OLStylesSLD() {
           break;
 
         case 'NULL':
-          switch (_typeof(featurevalue)) {
+          switch (typeof featurevalue) {
             case 'string':
               condition = featurevalue.length === 0;
               break;
@@ -1670,7 +1668,7 @@ var OLStylesSLD = function OLStylesSLD() {
 
 exports.OLStylesSLD = OLStylesSLD;
 
-var OLStylesMeasure = function OLStylesMeasure() {
+const OLStylesMeasure = () => {
   var styles = function styles() {
     return new _style.Style({
       fill: new _style.Fill({
