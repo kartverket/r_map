@@ -59,9 +59,6 @@ const MapComponent = props => {
 
     _maplibHelper.eventHandler.RegisterEvent("MapMoveend", updateMapInfoState);
 
-    (void 0).setState({
-      map: _maplibHelper.map
-    });
     addWMS();
     window.olMap.on('click', function (evt) {
       const feature = window.olMap.forEachFeatureAtPixel(evt.pixel, (feature, layer) => feature);
@@ -126,9 +123,7 @@ const MapComponent = props => {
               });
             }
           }).then(layers => {
-            (void 0).setState({
-              wmsLayers: layers
-            });
+            console.log('Added wms layers ready');
           }).catch(e => console.warn(e));
 
           break;
