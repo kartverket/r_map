@@ -26,7 +26,6 @@ const MapComponent = (props) => {
     internMap.AddZoom()
     internMap.AddScaleLine()
     eventHandler.RegisterEvent("MapMoveend", updateMapInfoState)
-    this.setState({ map: map })
     addWMS()
     window.olMap.on('click', function (evt) {
       const feature = window.olMap.forEachFeatureAtPixel(evt.pixel, (feature, layer) => feature)
@@ -84,9 +83,7 @@ const MapComponent = (props) => {
               }
             })
             .then(layers => {
-              this.setState({
-                wmsLayers: layers
-              })
+              console.log('Added wms layers ready')
             })
             .catch(e => console.warn(e))
           break
