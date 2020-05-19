@@ -7,7 +7,7 @@ exports.OLProgressBar = void 0;
 
 var _EventHandler = require("./EventHandler");
 
-const OLProgressBar = eventHandler => {
+var OLProgressBar = function OLProgressBar(eventHandler) {
   var olMap;
 
   var _progress;

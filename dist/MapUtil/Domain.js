@@ -11,7 +11,7 @@ var _MapHelper = require("../Utils/MapHelper");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const FeatureInfo = config => {
+var FeatureInfo = function FeatureInfo(config) {
   var defaults = {
     // single select via WMS GetFeatureInfo
     supportsGetFeatureInfo: true,
@@ -28,12 +28,12 @@ const FeatureInfo = config => {
 
 exports.FeatureInfo = FeatureInfo;
 
-const LegendGraphic = config => {
+var LegendGraphic = function LegendGraphic(config) {
   if (config.url === '' || config.url === '?') {
     return null;
   }
 
-  const defaults = {
+  var defaults = {
     width: '20',
     height: '20',
     format: 'image/png',
@@ -47,10 +47,10 @@ const LegendGraphic = config => {
 
 exports.LegendGraphic = LegendGraphic;
 
-const SubLayer = config => {
-  const id = _Utils.default.newGuid();
+var SubLayer = function SubLayer(config) {
+  var id = _Utils.default.newGuid();
 
-  const defaults = {
+  var defaults = {
     name: '',
     providerName: '',
     //f.eks Fiskeridirektoratet
@@ -79,7 +79,7 @@ const SubLayer = config => {
     featureNS: '',
     geometryName: 'geometry'
   };
-  let instance = Object.assign({}, defaults, config); // subLayerInstance
+  var instance = Object.assign({}, defaults, config); // subLayerInstance
 
   if (instance.legendGraphicUrl.indexOf('?') === -1) {
     instance.legendGraphicUrl += '?';
@@ -97,7 +97,7 @@ const SubLayer = config => {
 };
 
 exports.SubLayer = SubLayer;
-const SOURCES = {
+var SOURCES = {
   wmts: 'WMTS',
   wms: 'WMS',
   vector: 'VECTOR',
@@ -107,15 +107,15 @@ const SOURCES = {
   wfs: 'WFS'
 };
 exports.SOURCES = SOURCES;
-const FORMATS = {
+var FORMATS = {
   imagepng: 'image/png',
   imagejpeg: 'image/jpeg',
   geoJson: 'application/json'
 };
 exports.FORMATS = FORMATS;
 
-const Layer = config => {
-  const defaults = {
+var Layer = function Layer(config) {
+  var defaults = {
     guid: '',
     subLayers: [],
     name: '',
@@ -134,10 +134,10 @@ const Layer = config => {
     selectedLayerOpen: false //todo johben temp
 
   };
-  let layerInstance = Object.assign({}, defaults, config);
-  let subLayers = [];
+  var layerInstance = Object.assign({}, defaults, config);
+  var subLayers = [];
 
-  for (let i = 0; i < config.subLayers.length; i++) {
+  for (var i = 0; i < config.subLayers.length; i++) {
     subLayers.push(SubLayer(config.subLayers[i]));
   }
 

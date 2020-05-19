@@ -27,7 +27,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
  * @param {Object} getCapLayer object to convert
  * @param {string} style of the style to use
  */
-const addWmsToMapFromCap = (map, getCapLayer, style = null) => {
+var addWmsToMapFromCap = function addWmsToMapFromCap(map, getCapLayer) {
+  var style = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
   var isNewLayer = true;
   var returnLayer;
   map.getLayers().forEach(function (layer) {
@@ -55,7 +56,7 @@ const addWmsToMapFromCap = (map, getCapLayer, style = null) => {
 
 exports.addWmsToMapFromCap = addWmsToMapFromCap;
 
-const addWmsToMapFromConfig = (map, wmslayer, project) => {
+var addWmsToMapFromConfig = function addWmsToMapFromConfig(map, wmslayer, project) {
   var isNewLayer = true;
   var returnLayer;
   map.getLayers().forEach(function (layer) {
@@ -97,7 +98,7 @@ const addWmsToMapFromConfig = (map, wmslayer, project) => {
 
 exports.addWmsToMapFromConfig = addWmsToMapFromConfig;
 
-const createOlWMSFromCap = (map, getCapLayer, project) => {
+var createOlWMSFromCap = function createOlWMSFromCap(map, getCapLayer, project) {
   var layer,
       errors = [];
 
@@ -124,7 +125,7 @@ const createOlWMSFromCap = (map, getCapLayer, project) => {
     if (Array.isArray(getCapLayer.MetadataURL)) {
         metadata = getCapLayer.MetadataURL[0].OnlineResource;
     }
-          layer = createOlWMS(map, layerParam, {
+        layer = createOlWMS(map, layerParam, {
           url: getCapLayer.url,
           label: getCapLayer.title,
           attribution: attribution,
@@ -180,13 +181,13 @@ const createOlWMSFromCap = (map, getCapLayer, project) => {
 
 exports.createOlWMSFromCap = createOlWMSFromCap;
 
-const mergeDefaultParams = (url, defaultParams) => {
+var mergeDefaultParams = function mergeDefaultParams(url, defaultParams) {
   //merge URL parameters with default ones
-  const parsedUrl = _queryString.default.parseUrl(url);
+  var parsedUrl = _queryString.default.parseUrl(url);
 
-  const urlParams = parsedUrl.query;
-  const URLParser = typeof URL === 'undefined' ? require('url').URL : URL;
-  const urlObj = new URLParser(parsedUrl.url); //force https
+  var urlParams = parsedUrl.query;
+  var URLParser = typeof URL === 'undefined' ? require('url').URL : URL;
+  var urlObj = new URLParser(parsedUrl.url); //force https
 
   if (window.location.protocol === 'https:' && urlObj.protocol === 'http:') {
     urlObj.protocol = 'https:';
@@ -200,19 +201,23 @@ const mergeDefaultParams = (url, defaultParams) => {
     }
   }
 
-  return urlObj.href + "?" + _queryString.default.stringify(defaultParams);
+  if (urlObj.href === 'https://norgeskart.no/ws/px.py') {
+    return url;
+  } else {
+    return urlObj.href + "?" + _queryString.default.stringify(defaultParams);
+  }
 };
 
 exports.mergeDefaultParams = mergeDefaultParams;
 
-const parseWmsCapabilities = data => {
+var parseWmsCapabilities = function parseWmsCapabilities(data) {
   if (data && _fastXmlParser.default.validate(data) === true) {
     //optional
     var parsed = parseCapabilities(data);
     var layers = [];
 
     if (parsed.WMS_Capabilities) {
-      let url = parsed.WMS_Capabilities.Capability.Request.GetMap.DCPType.HTTP.Get.OnlineResource["xlink:href"]; // Push all leaves into a flat array of Layers.
+      var url = parsed.WMS_Capabilities.Capability.Request.GetMap.DCPType.HTTP.Get.OnlineResource["xlink:href"]; // Push all leaves into a flat array of Layers.
 
       var getFlatLayers = function getFlatLayers(layer) {
         if (Array.isArray(layer)) {
@@ -257,7 +262,7 @@ const parseWmsCapabilities = data => {
 
 exports.parseWmsCapabilities = parseWmsCapabilities;
 
-const parseCapabilities = xml => {
+var parseCapabilities = function parseCapabilities(xml) {
   return _fastXmlParser.default.parse(xml, {
     ignoreAttributes: false,
     attributeNamePrefix: "",
@@ -265,30 +270,32 @@ const parseCapabilities = xml => {
   });
 };
 
-const getWMSCapabilities = /*#__PURE__*/function () {
+var getWMSCapabilities = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(url) {
     var newUrl;
     return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) switch (_context.prev = _context.next) {
-        case 0:
-          if (url) {
-            newUrl = mergeDefaultParams(url, {
-              service: "WMS",
-              request: "GetCapabilities"
-            });
-            fetch(newUrl).then(function (response) {
-              return Promise.resolve(response.text());
-            }).then(function (text) {
-              let resultText = parseWmsCapabilities(text);
-              return resultText;
-            });
-          } else {
-            console.warn("No wms parameter given");
-          }
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            if (url) {
+              newUrl = mergeDefaultParams(url, {
+                service: "WMS",
+                request: "GetCapabilities"
+              });
+              fetch(newUrl).then(function (response) {
+                return Promise.resolve(response.text());
+              }).then(function (text) {
+                var resultText = parseWmsCapabilities(text);
+                return resultText;
+              });
+            } else {
+              console.warn("No wms parameter given");
+            }
 
-        case 1:
-        case "end":
-          return _context.stop();
+          case 1:
+          case "end":
+            return _context.stop();
+        }
       }
     }, _callee);
   }));
@@ -361,13 +368,13 @@ export const getLayerExtentFromGetCap = (map, getCapLayer) => {
 
 exports.getWMSCapabilities = getWMSCapabilities;
 
-const getResolutionFromScale = (projection, scale) => {
+var getResolutionFromScale = function getResolutionFromScale(projection, scale) {
   return scale && scale * 0.00028 / projection.getMetersPerUnit();
 };
 
 exports.getResolutionFromScale = getResolutionFromScale;
 
-const getImageSourceRatio = (map, maxWidth) => {
+var getImageSourceRatio = function getImageSourceRatio(map, maxWidth) {
   var width = map.getSize() && map.getSize()[0];
   var ratio = maxWidth / width;
   ratio = Math.floor(ratio * 100) / 100;

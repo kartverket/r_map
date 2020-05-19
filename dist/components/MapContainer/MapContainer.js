@@ -43,49 +43,51 @@ function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArra
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-const ServiceListItem = props => /*#__PURE__*/_react.default.createElement(_ServicePanel.default, {
-  services: props.listItem,
-  removeMapItem: props.removeMapItem,
-  draggable: true
-});
+var ServiceListItem = function ServiceListItem(props) {
+  return /*#__PURE__*/_react.default.createElement(_ServicePanel.default, {
+    services: props.listItem,
+    removeMapItem: props.removeMapItem,
+    draggable: true
+  });
+};
 
-const MapContainer = props => {
-  const _useState = (0, _react.useState)(false),
-        _useState2 = _slicedToArray(_useState, 2),
-        expanded = _useState2[0],
-        toggleExpand = _useState2[1];
+var MapContainer = function MapContainer(props) {
+  var _useState = (0, _react.useState)(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      expanded = _useState2[0],
+      toggleExpand = _useState2[1];
 
-  const _useState3 = (0, _react.useState)(),
-        _useState4 = _slicedToArray(_useState3, 2),
-        wms = _useState4[0],
-        setWMS = _useState4[1];
+  var _useState3 = (0, _react.useState)(),
+      _useState4 = _slicedToArray(_useState3, 2),
+      wms = _useState4[0],
+      setWMS = _useState4[1];
 
-  const queryValues = _queryString.default.parse(window.location.search);
+  var queryValues = _queryString.default.parse(window.location.search);
 
-  let internMap = _maplibHelper.map;
+  var internMap = _maplibHelper.map;
   _maplibHelper.mapConfig.coordinate_system = queryValues['crs'] || props.crs;
-  let defaultConfig = JSON.parse(JSON.stringify(_maplibHelper.mapConfig));
-  let newMapConfig = Object.assign({}, defaultConfig, {
+  var defaultConfig = JSON.parse(JSON.stringify(_maplibHelper.mapConfig));
+  var newMapConfig = Object.assign({}, defaultConfig, {
     center: [props.lon, props.lat],
     zoom: props.zoom
   });
-  (0, _react.useLayoutEffect)(() => {
+  (0, _react.useLayoutEffect)(function () {
     window.olMap = internMap.Init("map", newMapConfig);
     internMap.AddZoom();
     internMap.AddScaleLine();
   }, [internMap]);
 
-  const renderServiceList = () => {
+  var renderServiceList = function renderServiceList() {
     if (wms) {
-      const addedWms = {
+      var addedWms = {
         'Title': 'Added WMS from url',
         'DistributionProtocol': 'OGC:WMS',
         'GetCapabilitiesUrl': wms,
@@ -94,21 +96,23 @@ const MapContainer = props => {
       props.services.push(addedWms);
     }
 
-    return props.services.map((listItem, i) => /*#__PURE__*/_react.default.createElement(ServiceListItem, {
-      listItem: listItem,
-      removeMapItem: props.removeMapItem ? props.removeMapItem : null,
-      key: i,
-      map: _maplibHelper.map
-    }));
+    return props.services.map(function (listItem, i) {
+      return /*#__PURE__*/_react.default.createElement(ServiceListItem, {
+        listItem: listItem,
+        removeMapItem: props.removeMapItem ? props.removeMapItem : null,
+        key: i,
+        map: _maplibHelper.map
+      });
+    });
   };
 
-  const showDefaultTab = () => {
+  var showDefaultTab = function showDefaultTab() {
     if (props.services.length) {
       return 'layers';
     } else return 'search';
   };
 
-  const toogleMap = () => {
+  var toogleMap = function toogleMap() {
     window.history.back(); // TODO: get paramtere to check for url til goto for closing map
   };
 
@@ -119,7 +123,9 @@ const MapContainer = props => {
     className: _MapContainerModule.default.closeMap
   }, /*#__PURE__*/_react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     title: "Lukk kartet",
-    onClick: () => toogleMap(),
+    onClick: function onClick() {
+      return toogleMap();
+    },
     className: _MapContainerModule.default.toggleBtn,
     icon: "times"
   }), /*#__PURE__*/_react.default.createElement("span", {
@@ -127,7 +133,9 @@ const MapContainer = props => {
   }, "Lukk kartet")), /*#__PURE__*/_react.default.createElement("div", {
     className: "".concat(_MapContainerModule.default.container, " ").concat(expanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open)
   }, /*#__PURE__*/_react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-    onClick: () => toggleExpand(!expanded),
+    onClick: function onClick() {
+      return toggleExpand(!expanded);
+    },
     className: _MapContainerModule.default.toggleBtn,
     icon: expanded ? ["far", "layer-group"] : "times"
   }), /*#__PURE__*/_react.default.createElement(_Tabs.default, {

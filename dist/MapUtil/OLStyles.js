@@ -9,7 +9,7 @@ var _style = require("ol/style");
 
 var _xml = require("ol/xml");
 
-const OLStylesDefault = () => {
+var OLStylesDefault = function OLStylesDefault() {
   var styles = function styles() {
     var fill = new _style.Fill({
       color: 'rgba(255,0,0,0.8)'
@@ -36,7 +36,7 @@ const OLStylesDefault = () => {
 
 exports.OLStylesDefault = OLStylesDefault;
 
-const OLStylesJson = style => {
+var OLStylesJson = function OLStylesJson(style) {
   var _zIndex = 0;
 
   function _createStyle(feature, jsonstyle, hover) {
@@ -193,7 +193,7 @@ const OLStylesJson = style => {
 
 exports.OLStylesJson = OLStylesJson;
 
-const OLStylesSLD = () => {
+var OLStylesSLD = function OLStylesSLD() {
   var styles = [new _style.Style({
     fill: new _style.Fill({
       color: 'rgba(255, 255, 255, 0.6)'
@@ -1668,7 +1668,7 @@ const OLStylesSLD = () => {
 
 exports.OLStylesSLD = OLStylesSLD;
 
-const OLStylesMeasure = () => {
+var OLStylesMeasure = function OLStylesMeasure() {
   var styles = function styles() {
     return new _style.Style({
       fill: new _style.Fill({

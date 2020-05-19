@@ -17,9 +17,9 @@ var _Map = require("./Map");
 
 var _communication = require("../Utils/communication");
 
-let groupIds = [];
-let notDummyGroup = false;
-let mapConfig = {
+var groupIds = [];
+var notDummyGroup = false;
+var mapConfig = {
   groups: [],
   coordinate_system: 'EPSG:25833',
   center: [396722, 7197860],
@@ -219,7 +219,7 @@ let mapConfig = {
 };
 exports.mapConfig = mapConfig;
 
-const createGroup = (groupId, groupNameLng1, groupNameLng2, visibleOnLoad) => {
+var createGroup = function createGroup(groupId, groupNameLng1, groupNameLng2, visibleOnLoad) {
   var newGroup = (0, _Repository.Category)({
     groupId: groupId,
     name: groupNameLng1,
@@ -235,7 +235,7 @@ const createGroup = (groupId, groupNameLng1, groupNameLng2, visibleOnLoad) => {
 
 exports.createGroup = createGroup;
 
-const updateMapConfigWithGroups = mapConfig => {
+var updateMapConfigWithGroups = function updateMapConfigWithGroups(mapConfig) {
   if (mapConfig.maplayer !== undefined) {
     if (mapConfig.maplayer.length !== undefined) {
       mapConfig.maplayer.forEach(function (group) {
@@ -247,9 +247,9 @@ const updateMapConfigWithGroups = mapConfig => {
   }
 };
 
-const findGroupExistance = grpIds => {
-  let notExistGroups = [];
-  grpIds.forEach(grpId => {
+var findGroupExistance = function findGroupExistance(grpIds) {
+  var notExistGroups = [];
+  grpIds.forEach(function (grpId) {
     if (groupIds.indexOf(grpId) === -1) {
       notExistGroups.push(grpId);
     }
@@ -257,16 +257,16 @@ const findGroupExistance = grpIds => {
   return notExistGroups;
 };
 
-const createNotExistGroup = (grpIds, groupNameLng1, groupNameLng2) => {
-  let notExistGroups = findGroupExistance(grpIds);
-  notExistGroups.forEach(grpId => {
+var createNotExistGroup = function createNotExistGroup(grpIds, groupNameLng1, groupNameLng2) {
+  var notExistGroups = findGroupExistance(grpIds);
+  notExistGroups.forEach(function (grpId) {
     createGroup(grpId, groupNameLng1, groupNameLng2);
   });
 };
 
 exports.createNotExistGroup = createNotExistGroup;
 
-const createDummyGroup = () => {
+var createDummyGroup = function createDummyGroup() {
   // dummy category for layers without group id
   if (notDummyGroup === false) {
     createGroup(999, 'Other layers', 'Andre lag');
@@ -276,7 +276,7 @@ const createDummyGroup = () => {
 
 exports.createDummyGroup = createDummyGroup;
 
-const getWmsUrl = url => {
+var getWmsUrl = function getWmsUrl(url) {
   if (url.indexOf('|') >= 0) {
     return url.split('|');
   } else {
@@ -286,11 +286,11 @@ const getWmsUrl = url => {
 
 exports.getWmsUrl = getWmsUrl;
 
-const addLayer = (sourceType, source) => {
-  let catIds = [999];
+var addLayer = function addLayer(sourceType, source) {
+  var catIds = [999];
 
   if (source.groupid !== undefined) {
-    catIds = source.groupid.toString().split(',').map(item => {
+    catIds = source.groupid.toString().split(',').map(function (item) {
       return parseInt(item, 10);
     });
     createNotExistGroup(catIds, source.name, source.namelng);
@@ -300,7 +300,7 @@ const addLayer = (sourceType, source) => {
     }
   }
 
-  const newIsyLayer = (0, _Domain.Layer)({
+  var newIsyLayer = (0, _Domain.Layer)({
     subLayers: [{
       title: source.name,
       name: source.params.layers || source.name,
@@ -359,16 +359,16 @@ const addLayer = (sourceType, source) => {
 
 exports.addLayer = addLayer;
 
-const addLayerToConfig = (newIsyLayer, source) => {
+var addLayerToConfig = function addLayerToConfig(newIsyLayer, source) {
   mapConfig.layers.push(newIsyLayer);
   mapConfig.languages.en[newIsyLayer.id] = source.name;
   mapConfig.languages.no[newIsyLayer.id] = source.namelng;
 };
 
-const updateMapConfigWithImageLayers = mapConfig => {
+var updateMapConfigWithImageLayers = function updateMapConfigWithImageLayers(mapConfig) {
   if (mapConfig.wmts !== undefined) {
     if (mapConfig.wmts.length !== undefined) {
-      mapConfig.wmts.forEach(wmts => {
+      mapConfig.wmts.forEach(function (wmts) {
         addLayerToConfig(addLayer('WMTS', wmts), wmts);
       });
     } else {
@@ -378,7 +378,7 @@ const updateMapConfigWithImageLayers = mapConfig => {
 
   if (mapConfig.wms !== undefined) {
     if (mapConfig.wms.length !== undefined) {
-      mapConfig.wms.forEach(wms => {
+      mapConfig.wms.forEach(function (wms) {
         addLayerToConfig(addLayer('WMS', wms), wms);
       });
     } else {
@@ -402,11 +402,11 @@ updateMapConfigWithImageLayers(mapConfig);
 exports.mapConfig = mapConfig = (0, _Repository.MapConfig)(mapConfig);
 mapConfig.instance = 'geoportal';
 mapConfig.proxyHost = '';
-const eventHandler = (0, _EventHandler.EventHandler)();
+var eventHandler = (0, _EventHandler.EventHandler)();
 exports.eventHandler = eventHandler;
-const mapImplementation = (0, _OLMap.OLMap)(eventHandler);
+var mapImplementation = (0, _OLMap.OLMap)(eventHandler);
 exports.mapImplementation = mapImplementation;
-const map = (0, _Map.Map)(mapImplementation, eventHandler, null);
+var map = (0, _Map.Map)(mapImplementation, eventHandler, null);
 exports.map = map;
 
 if (window.addEventListener) {

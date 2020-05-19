@@ -11,7 +11,7 @@ var _MapContainer = _interopRequireDefault(require("./components/MapContainer/Ma
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const TEST_DATA = [
+var TEST_DATA = [
 /*
    {
     'Title': 'kv_adminomr_kommune',
@@ -125,7 +125,7 @@ const TEST_DATA = [
  }*/
 ];
 
-const App = () => {
+var App = function App() {
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "App"
   }, /*#__PURE__*/_react.default.createElement(_MapContainer.default, {

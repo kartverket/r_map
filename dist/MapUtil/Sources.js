@@ -38,7 +38,7 @@ var _proj = require("ol/proj.js");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //import GML3Format from 'ol/format/GML3'
-const MaplibCustomMessageHandler = (eventHandler, _getIsySubLayerFromPool) => {
+var MaplibCustomMessageHandler = function MaplibCustomMessageHandler(eventHandler, _getIsySubLayerFromPool) {
   var olMap;
   var _message = 'Service down: ';
 
@@ -232,7 +232,7 @@ const MaplibCustomMessageHandler = (eventHandler, _getIsySubLayerFromPool) => {
 
 exports.MaplibCustomMessageHandler = MaplibCustomMessageHandler;
 
-const Wms = (isySubLayer, parameters) => {
+var Wms = function Wms(isySubLayer, parameters) {
   var url;
   var urls;
 
@@ -316,7 +316,7 @@ const Wms = (isySubLayer, parameters) => {
 
 exports.Wms = Wms;
 
-const Wmts = (isySubLayer, parameters) => {
+var Wmts = function Wmts(isySubLayer, parameters) {
   var projection = new _Projection.default({
     code: isySubLayer.coordinate_system,
     extent: isySubLayer.extent,
@@ -420,7 +420,7 @@ const Wmts = (isySubLayer, parameters) => {
 
 exports.Wmts = Wmts;
 
-const Vector = isySubLayer => {
+var Vector = function Vector(isySubLayer) {
   var source;
 
   switch (isySubLayer.format) {
@@ -441,7 +441,7 @@ const Vector = isySubLayer => {
 
 exports.Vector = Vector;
 
-const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) => {
+var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandler) {
   var strategy;
 
   if (isySubLayer.tiled) {
@@ -465,7 +465,7 @@ const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) => {
   var projection = (0, _proj.get)(isySubLayer.coordinate_system);
 
   var parseResponse = function parseResponse(response) {
-    const domparser = new DOMParser();
+    var domparser = new DOMParser();
     response = domparser.parseFromString(response, "text/xml");
     source.dispatchEvent('vectorloadend');
     var featureNamespace;
@@ -622,7 +622,9 @@ const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) => {
       }
     }
 
-    return fetch(url).then(response => response.text()).then(response => {
+    return fetch(url).then(function (response) {
+      return response.text();
+    }).then(function (response) {
       if (typeof response === 'object') {
         if (response.firstChild.childElementCount === 0) {
           return;

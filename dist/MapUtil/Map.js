@@ -17,7 +17,7 @@ var _Layers = _interopRequireDefault(require("./Layers"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Map = (mapImplementation, eventHandler, featureInfo) => {
+var Map = function Map(mapImplementation, eventHandler, featureInfo) {
   /*
       Start up functions Start
    */

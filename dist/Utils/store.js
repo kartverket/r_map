@@ -21,39 +21,42 @@ function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArra
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-const initialState = {};
-const store = (0, _react.createContext)(initialState);
+var initialState = {};
+var store = (0, _react.createContext)(initialState);
 exports.store = store;
-const Provider = store.Provider;
+var Provider = store.Provider;
 
-const StateProvider = ({
-  children
-}) => {
-  const _useReducer = (0, _react.useReducer)((state = {}, action) => {
+var StateProvider = function StateProvider(_ref) {
+  var children = _ref.children;
+
+  var _useReducer = (0, _react.useReducer)(function () {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments.length > 1 ? arguments[1] : undefined;
+
     switch (action.type) {
       case 'SET_FEATURES':
-        const appendedAInfo = state.info ? state.info.concat(action.info) : action.info;
-        return _objectSpread({}, state, {
+        var appendedAInfo = state.info ? state.info.concat(action.info) : action.info;
+        return _objectSpread(_objectSpread({}, state), {}, {
           info: appendedAInfo,
           show: true
         });
 
       case 'SHOW_FEATURES':
-        return _objectSpread({}, state, {
+        return _objectSpread(_objectSpread({}, state), {}, {
           info: action.info,
           show: true
         });
 
       case 'HIDE_FEATURES':
-        return _objectSpread({}, state, {
+        return _objectSpread(_objectSpread({}, state), {}, {
           info: [],
           show: false
         });
@@ -64,9 +67,9 @@ const StateProvider = ({
 
     ;
   }, initialState),
-        _useReducer2 = _slicedToArray(_useReducer, 2),
-        state = _useReducer2[0],
-        dispatch = _useReducer2[1];
+      _useReducer2 = _slicedToArray(_useReducer, 2),
+      state = _useReducer2[0],
+      dispatch = _useReducer2[1];
 
   return /*#__PURE__*/_react.default.createElement(Provider, {
     value: {
