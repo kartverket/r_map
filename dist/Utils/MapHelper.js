@@ -133,7 +133,7 @@ var createOlWMSFromCap = function createOlWMSFromCap(map, getCapLayer) {
       if (Array.isArray(getCapLayer.MetadataURL)) {
           metadata = getCapLayer.MetadataURL[0].OnlineResource;
       }
-            layer = createOlWMS(map, layerParam, {
+          layer = createOlWMS(map, layerParam, {
             url: getCapLayer.url,
             label: getCapLayer.title,
             attribution: attribution,
@@ -207,9 +207,21 @@ var mergeDefaultParams = function mergeDefaultParams(url, defaultParams) {
     if (defaultParams.hasOwnProperty(p.toLowerCase()) && p !== p.toLowerCase()) {
       delete defaultParams[p.toLowerCase()];
     }
+
+    for (var p in urlParams) {
+      defaultParams[p] = urlParams[p];
+
+      if (defaultParams.hasOwnProperty(p.toLowerCase()) && p !== p.toLowerCase()) {
+        delete defaultParams[p.toLowerCase()];
+      }
+    }
   }
 
-  return urlObj.href + "?" + _queryString.default.stringify(defaultParams);
+  if (urlObj.href === 'https://norgeskart.no/ws/px.py') {
+    return url;
+  } else {
+    return urlObj.href + "?" + _queryString.default.stringify(defaultParams);
+  }
 };
 
 exports.mergeDefaultParams = mergeDefaultParams;

@@ -178,9 +178,19 @@ export const mergeDefaultParams = (url, defaultParams) => {
     if (defaultParams.hasOwnProperty(p.toLowerCase()) && p !== p.toLowerCase()) {
       delete defaultParams[p.toLowerCase()]
     }
+    for (var p in urlParams) {
+      defaultParams[p] = urlParams[p]
+      if (defaultParams.hasOwnProperty(p.toLowerCase()) && p !== p.toLowerCase()) {
+        delete defaultParams[p.toLowerCase()]
+      }
+    }
   }
-  return urlObj.href + "?" + queryString.stringify(defaultParams)
-}
+  if (urlObj.href === 'https://norgeskart.no/ws/px.py') {
+    return url;
+  } else {
+    return urlObj.href + "?" + queryString.stringify(defaultParams);
+  }
+};
 export const parseWmsCapabilities = (data) => {
   if (data && parser.validate(data) === true) { //optional
     var parsed = parseCapabilities(data)
