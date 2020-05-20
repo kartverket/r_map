@@ -25,7 +25,7 @@ const ServicePanel = props => {
             newMetaInfo.Params = props.services.customParams || ''
             setMeta(newMetaInfo)
           })
-          .catch(e => console.log(e))
+          .catch(e => console.warn(e))
         break
       case 'WFS':
       case 'WFS-tjeneste':
@@ -38,7 +38,7 @@ const ServicePanel = props => {
             newMetaInfo.Params = props.services.customParams || ''
             setMeta(newMetaInfo)
           })
-          .catch(e => console.log(e))
+          .catch(e => console.warn(e))
         break
       case 'GEOJSON':
         CapabilitiesUtil.getGeoJson(props.services.url)
@@ -49,7 +49,7 @@ const ServicePanel = props => {
             newMetaInfo.EPSG = props.services.EPSG || 'EPSG:4326'
             setMeta(newMetaInfo)
           })
-          .catch(e => console.log(e))
+          .catch(e => console.warn(e))
         break
       default:
         console.warn('No service type specified')

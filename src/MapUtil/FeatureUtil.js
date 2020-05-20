@@ -25,7 +25,8 @@ export const parseFeatureInfo = (data, format) => {
     case 'application/json': {
       return data
     }
-    default: return parsePlainFeatureInfo(data)
+    default:
+      return parsePlainFeatureInfo(data)
   }
 
 }
@@ -48,7 +49,7 @@ export const parseCSV = (data) => {
     lines.push(line)
   }
   layer[layername] = mergeArrayToObject(lines[0], lines[1])
-  return layer
+  return [layer]
 }
 
 export const parseGmlFeatureInfo = (data) => {
@@ -64,7 +65,7 @@ export const parseGmlFeatureInfo = (data) => {
   } else if (parsedGml.FeatureCollection) {
     returnValue = parsedGml.FeatureCollection.featureMember
   }
-  return returnValue
+  return [returnValue]
 }
 const mergeArrayToObject = (array_1, array_2) => {
   let obj = {}
@@ -75,13 +76,17 @@ const mergeArrayToObject = (array_1, array_2) => {
 }
 const arrayToObject = (array) =>
   array.reduce((obj, item) => {
-    if (typeof item === 'string') {
+    if (typeof item === 'string' && item.length > 0) {
       let [key, value] = item.trim().split(' :')
       obj[key] = value.replace(/'/g, '').trim()
     } else {
-      if (item.objid) { obj[item.objid] = item }
-      else if (item.fid) { obj[item.fid] = item }
-      else { obj[0] = item }
+      if (item.objid) {
+        obj[item.objid] = item
+      } else if (item.fid) {
+        obj[item.fid] = item
+      } else {
+        obj[0] = item
+      }
     }
     return obj
   }, {})
@@ -100,19 +105,25 @@ export const parsePlainFeatureInfo = (data) => {
       r_layer[layerName] = subf.map((f) => {
         let feature = f.split(/(Feature[^\r\n]*)/)
         feature.shift()
-        feature.splice(0, 1)[0].split('Feature ')[1].replace(/:/g, '').trim()
-        feature = feature.map((item) => {
-          item = item.trim().replace(/=/g, ':').split('\n')
-          return arrayToObject(item)
-        })
-        return arrayToObject(feature)
+        let feature1 = feature.splice(0, 1)[0].split('Feature ')[1].replace(/:/g, '').trim()
+        if (Array.isArray(feature) && (feature[0].length > 1)) {
+          feature = feature.map((item) => {
+            item = item.trim().replace(/=/g, ':').split('\n')
+            return arrayToObject(item)
+          })
+          return arrayToObject(feature)
+        } else {
+          return {
+            feature: feature1
+          }
+        }
       })
       return r_layer
     })
   } else if (parseCSV(data).length !== 0) {
     parsedFeatureInfo = parseCSV(data)
   } else {
-    parsedFeatureInfo = data
+    parsedFeatureInfo = [data]
   }
   return parsedFeatureInfo
 }

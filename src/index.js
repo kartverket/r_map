@@ -13,7 +13,7 @@ import Legend from './components/Legend/Legend'
 
 ReactDOM.render(
     <App />,
-  document.getElementById('root')
+   document.getElementById('root')
 )
 
 serviceWorker.unregister()

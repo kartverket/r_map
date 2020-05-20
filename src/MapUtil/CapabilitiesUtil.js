@@ -331,7 +331,6 @@ export class CapabilitiesUtil {
       source: vectorSource,
       style: function (feature, resolution) {
         var geom_name = feature.getGeometry().getType()
-        console.log(geom_name)
         if (geom_name === 'Point') {
           return new Style({
             image: new Icon({

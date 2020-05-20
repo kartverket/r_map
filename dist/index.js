@@ -1,8 +1,8 @@
 "use strict";
 
-var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -60,6 +60,6 @@ var _MapContainer = _interopRequireDefault(require("./components/MapContainer/Ma
 
 var _Legend = _interopRequireDefault(require("./components/Legend/Legend"));
 
-_reactDom.default.render(_react.default.createElement(_App.default, null), document.getElementById('root'));
+_reactDom.default.render( /*#__PURE__*/_react.default.createElement(_App.default, null), document.getElementById('root'));
 
 serviceWorker.unregister();

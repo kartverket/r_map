@@ -79,9 +79,6 @@ label {
   }
 
   label > span {
-    display: inline-block;
-    text-overflow: ellipsis;
-    max-width: 75%;
     overflow: hidden;
   }
 }

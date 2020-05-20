@@ -1,13 +1,11 @@
 "use strict";
 
-var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.MapRENDERERS = exports.OLMap = void 0;
-
-var _typeof2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/typeof"));
 
 var _Map = _interopRequireDefault(require("ol/Map"));
 
@@ -748,7 +746,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
 
       if (isySubLayer.source === _Domain.SOURCES.vector) {
         if (isySubLayer.style) {
-          if ((0, _typeof2.default)(isySubLayer.style) === "object" || isySubLayer.style.indexOf("http") < 0) {
+          if (typeof isySubLayer.style === "object" || isySubLayer.style.indexOf("http") < 0) {
             sldstyles[isySubLayer.id] = (0, _OLStyles.OLStylesJson)(isySubLayer.style);
             layer = new _layer.Vector({
               source: source,
@@ -880,7 +878,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
 
   function _loadVectorLayer(isySubLayer, source) {
     var callback = function callback(data) {
-      data = (0, _typeof2.default)(data) === 'object' ? data : JSON.parse(data);
+      data = typeof data === 'object' ? data : JSON.parse(data);
       var format = new _format.GeoJSON();
 
       for (var i = 0; i < data.features.length; i++) {

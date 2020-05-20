@@ -42,7 +42,6 @@
 :local(.mapContainer) {
   background: transparent;
   position: fixed;
-  margin-top: 62px;
   top: 0;
   left: 0;
   bottom: 0;
@@ -98,18 +97,17 @@
   position: absolute;
   left: 0;
   top: 0;
-  color: $color-toggle-on;
 
   &:hover {
     cursor: pointer;
   }
 }
-:local(.tabs) { 
+:local(.tabs) {
   > a {
     width: 50%;
     text-align: center;
     font-weight: 600;
-    border: none;    
+    border: none;
   }
   &.closed {
     display: none;

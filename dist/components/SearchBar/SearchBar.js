@@ -1,15 +1,15 @@
 "use strict";
 
-var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
+var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -22,6 +22,8 @@ var _pinMdOrange = _interopRequireDefault(require("../../assets/img/pin-md-orang
 var _pinMdBlueish = _interopRequireDefault(require("../../assets/img/pin-md-blueish.png"));
 
 var _icons = require("@ant-design/icons");
+
+var _antd = require("antd");
 
 var _SearchBarModule = _interopRequireDefault(require("./SearchBar.module.scss"));
 
@@ -97,11 +99,11 @@ var SearchResult = function SearchResult(props) {
     return (0, _proj.transform)([Number(coord.lon), Number(coord.lat)], coord.epsg, epsgTo);
   };
 
-  return _react.default.createElement("div", {
+  return /*#__PURE__*/_react.default.createElement("div", {
     className: "list-group"
   }, props.searchResult.searchResult && props.searchResult.searchResult.adresser.map(function (data, idx) {
     showInfoMarker(constructPoint(data.representasjonspunkt));
-    return _react.default.createElement("button", {
+    return /*#__PURE__*/_react.default.createElement("button", {
       type: "button",
       key: idx,
       className: "list-group-item list-group-item-action",
@@ -115,7 +117,7 @@ var SearchResult = function SearchResult(props) {
       lat: data.nord,
       epsg: 'EPSG:25833'
     }));
-    return _react.default.createElement("button", {
+    return /*#__PURE__*/_react.default.createElement("button", {
       type: "button",
       key: idx,
       className: "list-group-item list-group-item-action",
@@ -211,58 +213,39 @@ var SearchBar = function SearchBar(props) {
 
   var onChangeBound = function onChangeBound(event) {
     setSearchText(event.target.value);
-  }; //const updateQuery = search_query => dispatch({ type: 'UPDATE_SEARCH_STRING', payload: search_query })
-
-
-  var resetSearch = function resetSearch() {
-    setSearchText("");
   };
 
-  return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
-    className: "input-group col"
-  }, _react.default.createElement("input", {
-    className: _SearchBarModule.default.searchInput,
-    onChange: onChangeBound,
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_antd.Input, {
     placeholder: placeholder,
-    type: "text",
-    value: searchText,
-    "aria-describedby": "button-addon1"
-  }), _react.default.createElement("div", {
-    className: "input-group-append"
-  }, _react.default.createElement("button", {
-    className: "btn btn-link",
-    type: "button",
-    id: "button-addon1",
-    onClick: function onClick() {
-      return resetSearch();
-    }
-  }, searchText ? _react.default.createElement(_icons.CloseOutlined, null) : ''))), _react.default.createElement("div", {
+    allowClear: true,
+    onChange: onChangeBound
+  }), /*#__PURE__*/_react.default.createElement("div", {
     className: _SearchBarModule.default.searchResult
-  }, searchResult && _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", null, _react.default.createElement("div", {
+  }, searchResult && /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
     onClick: function onClick() {
       return setStateAdress(!expandedAdress);
     },
     className: _SearchBarModule.default.expandBtn
-  }, _react.default.createElement("span", {
+  }, /*#__PURE__*/_react.default.createElement("span", {
     className: _SearchBarModule.default.ellipsisToggle
-  }, "ADRESSER"), expandedAdress ? _react.default.createElement(_icons.UpOutlined, null) : _react.default.createElement(_icons.DownOutlined, null)), _react.default.createElement("div", {
+  }, "ADRESSER"), expandedAdress ? /*#__PURE__*/_react.default.createElement(_icons.UpOutlined, null) : /*#__PURE__*/_react.default.createElement(_icons.DownOutlined, null)), /*#__PURE__*/_react.default.createElement("div", {
     className: expandedAdress ? "".concat(_SearchBarModule.default.selected, " ").concat(_SearchBarModule.default.open) : _SearchBarModule.default.selected
-  }, _react.default.createElement(SearchResult, {
+  }, /*#__PURE__*/_react.default.createElement(SearchResult, {
     searchResult: {
-      searchResult: searchResult
+      searchResult
     }
-  }))), _react.default.createElement("div", null, _react.default.createElement("div", {
+  }))), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
     onClick: function onClick() {
       return setStateSsr(!expandedSsr);
     },
     className: _SearchBarModule.default.expandBtn
-  }, _react.default.createElement("span", {
+  }, /*#__PURE__*/_react.default.createElement("span", {
     className: _SearchBarModule.default.ellipsisToggle
-  }, "STEDSNAVN"), expandedSsr ? _react.default.createElement(_icons.UpOutlined, null) : _react.default.createElement(_icons.DownOutlined, null)), _react.default.createElement("div", {
+  }, "STEDSNAVN"), expandedSsr ? /*#__PURE__*/_react.default.createElement(_icons.UpOutlined, null) : /*#__PURE__*/_react.default.createElement(_icons.DownOutlined, null)), /*#__PURE__*/_react.default.createElement("div", {
     className: expandedSsr ? "".concat(_SearchBarModule.default.selected, " ").concat(_SearchBarModule.default.open) : _SearchBarModule.default.selected
-  }, _react.default.createElement(SearchResult, {
+  }, /*#__PURE__*/_react.default.createElement(SearchResult, {
     searchResult: {
-      searchResultSSR: searchResultSSR
+      searchResultSSR
     }
   }))))));
 };

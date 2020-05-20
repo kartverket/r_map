@@ -1,21 +1,21 @@
 "use strict";
 
-var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _typeof2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/typeof"));
-
-var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
+var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
 
 var _react = _interopRequireWildcard(require("react"));
 
 var _icons = require("@ant-design/icons");
+
+var _antd = require("antd");
 
 var _LayerEntryModule = _interopRequireDefault(require("./LayerEntry.module.scss"));
 
@@ -25,19 +25,15 @@ var _CapabilitiesUtil = require("../../MapUtil/CapabilitiesUtil");
 
 var _style = require("ol/style");
 
-var _reactSmee = require("react-smee");
+var _store = require("../../Utils/store.js");
 
 var _FeatureUtil = require("../../MapUtil/FeatureUtil");
 
 //import { Messaging } from '../../Utils/communication'
-(0, _reactSmee.createStore)({
-  featureInfo: {
-    show: false,
-    info: []
-  }
-});
-
 var LayerEntry = function LayerEntry(props) {
+  var featureState = (0, _react.useContext)(_store.store);
+  var dispatch = featureState.dispatch;
+
   var _useState = (0, _react.useState)(false),
       _useState2 = (0, _slicedToArray2.default)(_useState, 2),
       options = _useState2[0],
@@ -59,7 +55,7 @@ var LayerEntry = function LayerEntry(props) {
       setTransparency = _useState8[1];
 
   var layer = props.layer;
-  layer.Name = layer.name && (0, _typeof2.default)(layer.name) === 'object' ? layer.name.localPart : layer.Name;
+  layer.Name = layer.name && typeof layer.name === 'object' ? layer.name.localPart : layer.Name;
 
   var abstractTextSpan = function abstractTextSpan() {
     var textSpan = '';
@@ -76,7 +72,7 @@ var LayerEntry = function LayerEntry(props) {
       textSpan = textSpan.length === 0 ? layer.Abstract : textSpan + ' - ' + layer.Abstract;
     }
 
-    return _react.default.createElement("span", {
+    return /*#__PURE__*/_react.default.createElement("span", {
       className: _LayerEntryModule.default.spanCheckbox
     }, textSpan);
   };
@@ -134,11 +130,10 @@ var LayerEntry = function LayerEntry(props) {
               fetch(url).then(function (response) {
                 return response.text();
               }).then(function (data) {
-                return (0, _reactSmee.setStore)('featureInfo', function () {
-                  return data = {
-                    show: true,
-                    info: (0, _FeatureUtil.parseFeatureInfo)(data, formats[indexFormat])
-                  };
+                return dispatch({
+                  type: 'SET_FEATURES',
+                  show: true,
+                  info: (0, _FeatureUtil.parseFeatureInfo)(data, formats[indexFormat])
                 });
               }).catch(function (error) {
                 console.error('Error:', error);
@@ -181,8 +176,7 @@ var LayerEntry = function LayerEntry(props) {
                   featureId: feature.getId(),
                   properties: content,
                   coordinates: coord
-                };
-                console.log(message); //dispatch(setFeature(message))
+                }; //dispatch(setFeature(message))
               });
             }
           });
@@ -210,31 +204,28 @@ var LayerEntry = function LayerEntry(props) {
   window.olMap.getView().on('change:resolution', function (e) {
     checkResolution();
   });
-  return _react.default.createElement(_react.default.Fragment, null, layer.Name ? _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("input", {
-    className: "checkbox",
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, layer.Name ? /*#__PURE__*/_react.default.createElement(_antd.Checkbox, {
     id: layer.Name,
-    type: "checkbox"
-  }), _react.default.createElement("label", {
+    onChange: function onChange() {
+      return onSelectionChange(layer);
+    },
+    checked: checked
+  }, abstractTextSpan()) : /*#__PURE__*/_react.default.createElement("label", {
     onClick: function onClick() {
       return onSelectionChange(layer);
     },
-    htmlFor: layer.Title
-  }, checked ? _react.default.createElement(_icons.CheckSquareOutlined, null) : _react.default.createElement(_icons.BorderOutlined, null))) : _react.default.createElement("label", {
-    onClick: function onClick() {
-      return onSelectionChange(layer);
-    },
-    htmlFor: layer.Title
-  }, " "), abstractTextSpan(), layer.Name ? _react.default.createElement("label", {
+    htmlFor: abstractTextSpan()
+  }, " "), layer.Name ? /*#__PURE__*/_react.default.createElement("label", {
     onClick: function onClick() {
       return toggleOptions(!options);
     }
-  }, options ? _react.default.createElement(_icons.UpOutlined, null) : _react.default.createElement(_icons.DownOutlined, null)) : '', _react.default.createElement(_InlineLegend.default, {
+  }, options ? /*#__PURE__*/_react.default.createElement(_icons.UpOutlined, null) : /*#__PURE__*/_react.default.createElement(_icons.DownOutlined, null)) : '', /*#__PURE__*/_react.default.createElement(_InlineLegend.default, {
     legendUrl: layer.Style && layer.Style[0].LegendURL ? layer.Style[0].LegendURL[0].OnlineResource : ''
-  }), options ? _react.default.createElement("div", {
+  }), options ? /*#__PURE__*/_react.default.createElement("div", {
     className: _LayerEntryModule.default.settings
-  }, _react.default.createElement("label", {
+  }, /*#__PURE__*/_react.default.createElement("label", {
     className: _LayerEntryModule.default.slider
-  }, "Gjennomsiktighet:", _react.default.createElement("input", {
+  }, "Gjennomsiktighet:", /*#__PURE__*/_react.default.createElement("input", {
     type: "range",
     min: 0,
     max: 100,
@@ -243,10 +234,10 @@ var LayerEntry = function LayerEntry(props) {
       return setOpacity(e.target.value);
     }
   }))) : "", props.children, layer.Layer ? layer.Layer.map(function (subLayer, isub) {
-    return _react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement("div", {
       className: _LayerEntryModule.default.facetSub,
       key: isub
-    }, _react.default.createElement(LayerEntry, {
+    }, /*#__PURE__*/_react.default.createElement(LayerEntry, {
       layer: subLayer,
       meta: props.meta,
       key: isub

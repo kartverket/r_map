@@ -1,6 +1,6 @@
 {
   "name": "r_map",
-  "version": "2.3.7",
+  "version": "2.3.12",
   "private": true,
   "main": "dist/main.js",
   "files": [
@@ -8,20 +8,18 @@
     "README.md"
   ],
   "dependencies": {
-    "@reduxjs/toolkit": "^1.2.5",
-    "antd": "^4.0.2",
-    "bootstrap": "^4.4.1",
-    "fast-xml-parser": "^3.16.0",
-    "jquery": "^3.4.1",
-    "node-sass": "^4.13.1",
-    "ol": "^6.2.1",
-    "proj4": "^2.6.0",
-    "query-string": "^6.11.1",
-    "react": "^16.13.0",
-    "react-bootstrap": "^1.0.0-beta.17",
-    "react-dom": "^16.13.0",
-    "react-scripts": "^3.4.0",
-    "react-smee": "^1.0.3",
+    "antd": "^4.2.4",
+    "bootstrap": "^4.5.0",
+    "fast-xml-parser": "^3.17.1",
+    "jquery": "^3.5.1",
+    "node-sass": "^4.14.1",
+    "ol": "^6.3.1",
+    "proj4": "^2.6.2",
+    "query-string": "^6.12.1",
+    "react": "^16.13.1",
+    "react-bootstrap": "^1.0.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "^3.4.1",
     "set-query-string": "^2.2.0",
     "uniqid": "^5.2.0"
   },
@@ -45,8 +43,8 @@
     "@babel/cli": "^7.8.4",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "babel-polyfill": "^6.26.0",
-    "eslint-plugin-react-hooks": "^2.5.0",
-    "react-styleguidist": "^11.0.1",
+    "eslint-plugin-react-hooks": "^4.0.2",
+    "react-styleguidist": "^11.0.6",
     "rimraf": "^3.0.2"
   }
 }

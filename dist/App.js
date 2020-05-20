@@ -1,25 +1,13 @@
 "use strict";
 
-var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireWildcard");
-
-var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _classCallCheck2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/getPrototypeOf"));
-
-var _inherits2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/inherits"));
-
-var _react = _interopRequireWildcard(require("react"));
+var _react = _interopRequireDefault(require("react"));
 
 var _MapContainer = _interopRequireDefault(require("./components/MapContainer/MapContainer"));
 
@@ -136,29 +124,14 @@ var TEST_DATA = [
    "GetCapabilitiesUrl":"https://wfs.geonorge.no/skwms1/wfs.brannstasjoner?service=wfs&request=getcapabilities"
  }*/
 ];
-/**
- *
- */
 
-var App = /*#__PURE__*/function (_Component) {
-  (0, _inherits2.default)(App, _Component);
+var App = function App() {
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "App"
+  }, /*#__PURE__*/_react.default.createElement(_MapContainer.default, {
+    services: TEST_DATA
+  }));
+};
 
-  function App() {
-    (0, _classCallCheck2.default)(this, App);
-    return (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(App).apply(this, arguments));
-  }
-
-  (0, _createClass2.default)(App, [{
-    key: "render",
-    value: function render() {
-      return _react.default.createElement("div", {
-        className: "App"
-      }, _react.default.createElement(_MapContainer.default, {
-        services: TEST_DATA
-      }));
-    }
-  }]);
-  return App;
-}(_react.Component);
-
-exports.default = App;
+var _default = App;
+exports.default = _default;

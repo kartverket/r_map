@@ -1,15 +1,15 @@
 "use strict";
 
-var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
+var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -31,16 +31,16 @@ var InlineLegend = function InlineLegend(props) {
 
   var legend = function legend() {
     if (props.legendUrl) {
-      return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
+      return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
         className: _InlineLegendModule.default.toggle,
         onClick: function onClick() {
           return toggleExpand(!expanded);
         }
-      }, _react.default.createElement("span", {
+      }, /*#__PURE__*/_react.default.createElement("span", {
         className: _InlineLegendModule.default.label
-      }, expanded ? "Skjul tegnforklaring" : "Vis tegnforklaring", " "), expanded ? _react.default.createElement(_icons.UpOutlined, null) : _react.default.createElement(_icons.DownOutlined, null)), _react.default.createElement("div", {
+      }, expanded ? "Skjul tegnforklaring" : "Vis tegnforklaring", " "), expanded ? /*#__PURE__*/_react.default.createElement(_icons.UpOutlined, null) : /*#__PURE__*/_react.default.createElement(_icons.DownOutlined, null)), /*#__PURE__*/_react.default.createElement("div", {
         className: expanded ? _InlineLegendModule.default.legend : _InlineLegendModule.default.legend + " " + _InlineLegendModule.default.closed
-      }, _react.default.createElement(_Legend.default, {
+      }, /*#__PURE__*/_react.default.createElement(_Legend.default, {
         legendUrl: props.legendUrl,
         legendAlternative: "Legend"
       })));
@@ -49,7 +49,7 @@ var InlineLegend = function InlineLegend(props) {
     }
   };
 
-  return _react.default.createElement("div", null, legend());
+  return /*#__PURE__*/_react.default.createElement("div", null, legend());
 };
 
 var _default = InlineLegend;

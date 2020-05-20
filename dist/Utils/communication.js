@@ -1,15 +1,15 @@
 "use strict";
 
-var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.Messaging = void 0;
 
-var _classCallCheck2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/classCallCheck"));
+var _classCallCheck2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/classCallCheck"));
 
-var _defineProperty2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/defineProperty"));
+var _defineProperty2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/defineProperty"));
 
 var _geom = require("ol/geom");
 
@@ -153,7 +153,6 @@ exports.Messaging = Messaging;
             var _vectorLayers2 = window.olMap.getLayersByClass("OpenLayers.Layer.Vector").slice();
 
             var _layers3 = [];
-            console.log(_vectorLayers2.length);
 
             for (var _i2 = 0, _j2 = _vectorLayers2.length; _i2 < _j2; _i2 += 1) {
               var _layer4 = _vectorLayers2[_i2];
@@ -290,7 +289,7 @@ exports.Messaging = Messaging;
       break;
 
     case 'wcs':
-      console.log("Cannot display WCS directly. Use a Portrayal Service WMS with WCS as data layer.<br/>Syntax: /l/wms/[URL to portrayal]/d/wcs/[URL to data]");
+      console.warn("Cannot display WCS directly. Use a Portrayal Service WMS with WCS as data layer.<br/>Syntax: /l/wms/[URL to portrayal]/d/wcs/[URL to data]");
       break;
 
     default:
@@ -308,9 +307,6 @@ exports.Messaging = Messaging;
     features.push(feature);
   }
 
-  console.log({
-    getFeaturesInLayer: features
-  });
   return features;
 });
 (0, _defineProperty2.default)(Messaging, "getVisibleFeaturesInLayer", function (layer) {
@@ -326,8 +322,5 @@ exports.Messaging = Messaging;
     }
   }
 
-  console.log({
-    getVisibleFeaturesInLayer: features
-  });
   return features;
 });

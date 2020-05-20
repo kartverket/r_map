@@ -1,13 +1,13 @@
 "use strict";
 
-var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.parsePlainFeatureInfo = exports.parseGmlFeatureInfo = exports.parseCSV = exports.parseFeatureInfo = void 0;
 
-var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
+var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
 
 var _fastXmlParser = _interopRequireDefault(require("fast-xml-parser"));
 
@@ -79,7 +79,7 @@ var parseCSV = function parseCSV(data) {
   }
 
   layer[layername] = mergeArrayToObject(lines[0], lines[1]);
-  return layer;
+  return [layer];
 };
 
 exports.parseCSV = parseCSV;
@@ -100,7 +100,7 @@ var parseGmlFeatureInfo = function parseGmlFeatureInfo(data) {
     returnValue = parsedGml.FeatureCollection.featureMember;
   }
 
-  return returnValue;
+  return [returnValue];
 };
 
 exports.parseGmlFeatureInfo = parseGmlFeatureInfo;
@@ -117,7 +117,7 @@ var mergeArrayToObject = function mergeArrayToObject(array_1, array_2) {
 
 var arrayToObject = function arrayToObject(array) {
   return array.reduce(function (obj, item) {
-    if (typeof item === 'string') {
+    if (typeof item === 'string' && item.length > 0) {
       var _item$trim$split = item.trim().split(' :'),
           _item$trim$split2 = (0, _slicedToArray2.default)(_item$trim$split, 2),
           key = _item$trim$split2[0],
@@ -153,19 +153,26 @@ var parsePlainFeatureInfo = function parsePlainFeatureInfo(data) {
       r_layer[layerName] = subf.map(function (f) {
         var feature = f.split(/(Feature[^\r\n]*)/);
         feature.shift();
-        feature.splice(0, 1)[0].split('Feature ')[1].replace(/:/g, '').trim();
-        feature = feature.map(function (item) {
-          item = item.trim().replace(/=/g, ':').split('\n');
-          return arrayToObject(item);
-        });
-        return arrayToObject(feature);
+        var feature1 = feature.splice(0, 1)[0].split('Feature ')[1].replace(/:/g, '').trim();
+
+        if (Array.isArray(feature) && feature[0].length > 1) {
+          feature = feature.map(function (item) {
+            item = item.trim().replace(/=/g, ':').split('\n');
+            return arrayToObject(item);
+          });
+          return arrayToObject(feature);
+        } else {
+          return {
+            feature: feature1
+          };
+        }
       });
       return r_layer;
     });
   } else if (parseCSV(data).length !== 0) {
     parsedFeatureInfo = parseCSV(data);
   } else {
-    parsedFeatureInfo = data;
+    parsedFeatureInfo = [data];
   }
 
   return parsedFeatureInfo;

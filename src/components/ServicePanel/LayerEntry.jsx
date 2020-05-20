@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import PropTypes from "prop-types"
 import { UpOutlined, DownOutlined } from "@ant-design/icons"
 import { Checkbox } from 'antd'
@@ -8,16 +8,13 @@ import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 
 //import { Messaging } from '../../Utils/communication'
 import { Fill, Stroke, Style, Text } from 'ol/style'
-import { setStore, createStore } from 'react-smee'
+import { store } from '../../Utils/store.js'
 import { parseFeatureInfo } from '../../MapUtil/FeatureUtil'
 
-createStore({
-  featureInfo: {
-    show: false,
-    info: []
-  }
-})
 const LayerEntry = props => {
+  const featureState = useContext(store)
+  const { dispatch } = featureState;
+
   const [options, toggleOptions] = useState(false)
   const [olLayer, setLayer] = useState()
   const [checked, setChecked] = useState(props.layer.isVisible)
@@ -78,12 +75,7 @@ const LayerEntry = props => {
             if (url && currentLayer.getVisible()) {
               fetch(url)
                 .then((response) => response.text())
-                .then((data) => setStore('featureInfo', () =>
-                  data = {
-                    show: true,
-                    info: parseFeatureInfo(data, formats[indexFormat]),
-                  }
-                ))
+                .then((data) => dispatch({ type: 'SET_FEATURES', show: true, info: parseFeatureInfo(data, formats[indexFormat]) }))
                 .catch((error) => {
                   console.error('Error:', error)
                 })
@@ -113,7 +105,6 @@ const LayerEntry = props => {
                   properties: content,
                   coordinates: coord
                 }
-                console.log(message)
                 //dispatch(setFeature(message))
               })
             }

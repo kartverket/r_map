@@ -4,7 +4,6 @@
   overflow: visible;
   overflow-x: hidden;
   overflow-y: auto;
-  height: 98%;
 }
 :local(.selected) {
   max-height: 0;
@@ -22,7 +21,6 @@
   }
 }
 :local(.ellipsisToggle) {
-  width: 90%;
   text-overflow: ellipsis;
   overflow: hidden;
   display: inline-block;
@@ -34,8 +32,6 @@
 }
 :local(.expandBtn) {
   display: inline-block;
-  width: 90%;
-  margin-bottom: 10px;
 
   &:hover {
     cursor: pointer;
@@ -48,8 +44,5 @@
   }
 }
 :local(.searchInput) {
-  width: 90%;
-  margin-top: 15px;
-  margin-bottom: 15px;
   border-radius: 2px;
 }

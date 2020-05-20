@@ -1,33 +1,21 @@
 "use strict";
 
-var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
+
+var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _classCallCheck2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/classCallCheck"));
+var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
 
-var _createClass2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/getPrototypeOf"));
-
-var _assertThisInitialized2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/assertThisInitialized"));
-
-var _inherits2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/inherits"));
-
-var _defineProperty2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/defineProperty"));
-
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _maplibHelper = require("../../MapUtil/maplibHelper");
 
 var _queryString = _interopRequireDefault(require("query-string"));
-
-var _setQueryString = _interopRequireDefault(require("set-query-string"));
 
 var _BackgroundChooser = _interopRequireDefault(require("../BackgroundChooser/BackgroundChooser"));
 
@@ -49,200 +37,132 @@ var _FeatureInfoItem = _interopRequireDefault(require("../ServicePanel/FeatureIn
 
 require("ol/ol.css");
 
+var _store = require("../../Utils/store.js");
+
+var _this = void 0;
+
 var ServiceListItem = function ServiceListItem(props) {
-  return _react.default.createElement(_ServicePanel.default, {
+  return /*#__PURE__*/_react.default.createElement(_ServicePanel.default, {
     services: props.listItem,
     removeMapItem: props.removeMapItem,
     draggable: true
   });
 };
-/**
- * @class The Map Component
- * @extends React.Component
- */
 
+var MapContainer = function MapContainer(props) {
+  var _useState = (0, _react.useState)(false),
+      _useState2 = (0, _slicedToArray2.default)(_useState, 2),
+      expanded = _useState2[0],
+      toggleExpand = _useState2[1];
 
-var MapContainer = /*#__PURE__*/function (_React$Component) {
-  (0, _inherits2.default)(MapContainer, _React$Component);
+  var _useState3 = (0, _react.useState)(),
+      _useState4 = (0, _slicedToArray2.default)(_useState3, 2),
+      wms = _useState4[0],
+      setWMS = _useState4[1];
 
-  /**
-   *
-   *@constructs Map
-   */
-  function MapContainer(props) {
-    var _this;
+  var queryValues = _queryString.default.parse(window.location.search);
 
-    (0, _classCallCheck2.default)(this, MapContainer);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(MapContainer).call(this, props));
-    (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "state", {
-      layers: []
-    });
-    (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "updateMapInfoState", function () {
-      var center = _maplibHelper.map.GetCenter();
+  var internMap = _maplibHelper.map;
+  _maplibHelper.mapConfig.coordinate_system = queryValues['crs'] || props.crs;
+  var defaultConfig = JSON.parse(JSON.stringify(_maplibHelper.mapConfig));
+  var newMapConfig = Object.assign({}, defaultConfig, {
+    center: [props.lon, props.lat],
+    zoom: props.zoom
+  });
+  (0, _react.useLayoutEffect)(function () {
+    window.olMap = internMap.Init("map", newMapConfig);
+    internMap.AddZoom();
+    internMap.AddScaleLine();
+  }, [internMap]);
 
-      var queryValues = _queryString.default.parse(window.location.search);
-
-      queryValues.lon = center.lon;
-      queryValues.lat = center.lat;
-      queryValues.zoom = center.zoom;
-      (0, _setQueryString.default)(queryValues);
-    });
-    _this.state = {
-      open: false,
-      menu: _this.props.menu
-    };
-
-    var _queryValues = _queryString.default.parse(window.location.search);
-
-    var lon = Number(_queryValues["lon"] || props.lon);
-    var lat = Number(_queryValues["lat"] || props.lat);
-    var zoom = Number(_queryValues["zoom"] || props.zoom);
-    _this.wms = _queryValues["wms"] || "";
-    _this.layers = Array(_queryValues["layers"] || []);
-    /*
-    let wmts = Array(queryValues['wmts'] || [])
-    let wfs = Array(queryValues['wfs'] || [])
-    let projectName = queryValues['project'] || 'norgeskart'
-    */
-
-    _maplibHelper.mapConfig.coordinate_system = _queryValues['crs'] || props.crs;
-    var defaultConfig = JSON.parse(JSON.stringify(_maplibHelper.mapConfig));
-    _this.newMapConfig = Object.assign({}, defaultConfig, {
-      center: [lon, lat],
-      zoom: zoom
-    });
-    return _this;
-  }
-  /**
-   *
-   */
-
-
-  (0, _createClass2.default)(MapContainer, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      window.olMap = _maplibHelper.map.Init("map", this.newMapConfig);
-
-      _maplibHelper.map.AddZoom();
-
-      _maplibHelper.map.AddScaleLine();
+  var renderServiceList = function renderServiceList() {
+    if (wms) {
+      var addedWms = {
+        'Title': 'Added WMS from url',
+        'DistributionProtocol': 'OGC:WMS',
+        'GetCapabilitiesUrl': wms,
+        addLayers: []
+      };
+      props.services.push(addedWms);
     }
-    /**
-     *
-     */
 
-  }, {
-    key: "renderServiceList",
-    value: function renderServiceList() {
-      var _this2 = this;
-
-      if (this.wms) {
-        var addedWms = {
-          'Title': 'Added WMS from url',
-          'DistributionProtocol': 'OGC:WMS',
-          'GetCapabilitiesUrl': this.wms,
-          addLayers: []
-        };
-        this.props.services.push(addedWms);
-      }
-
-      return this.props.services.map(function (listItem, i) {
-        return _react.default.createElement(ServiceListItem, {
-          listItem: listItem,
-          removeMapItem: _this2.props.removeMapItem ? _this2.props.removeMapItem : null,
-          key: i,
-          map: _maplibHelper.map
-        });
+    return props.services.map(function (listItem, i) {
+      return /*#__PURE__*/_react.default.createElement(ServiceListItem, {
+        listItem: listItem,
+        removeMapItem: props.removeMapItem ? props.removeMapItem : null,
+        key: i,
+        map: _maplibHelper.map
       });
-    }
-  }, {
-    key: "renderLayerButton",
-    value: function renderLayerButton() {
-      return this.props.services && this.props.services.length > 0;
-    }
-  }, {
-    key: "toogleLayers",
-    value: function toogleLayers() {
-      this.setState({
-        isExpanded: !this.state.isExpanded
-      });
-    }
-  }, {
-    key: "toogleMap",
-    value: function toogleMap() {
-      window.history.back(); // TODO: get paramtere to check for url til goto for closing map
-    }
-    /**
-     *
-     */
+    });
+  };
 
-  }, {
-    key: "render",
-    value: function render() {
-      var _this3 = this;
+  var showDefaultTab = function showDefaultTab() {
+    if (props.services.length) {
+      return 'layers';
+    } else return 'search';
+  };
 
-      var map = this.props.map;
-      return _react.default.createElement("div", {
-        id: "MapContainer",
-        className: "".concat(_MapContainerModule.default.mapContainer)
-      }, _react.default.createElement(_BackgroundChooser.default, null), _react.default.createElement("div", null, this.renderLayerButton() ? _react.default.createElement("div", null, _react.default.createElement("div", {
-        className: "".concat(_MapContainerModule.default.container, " ").concat(this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open)
-      }, this.state.isExpanded ? _react.default.createElement(_icons.UpOutlined, {
-        onClick: function onClick() {
-          return _this3.toogleLayers();
-        },
-        className: _MapContainerModule.default.toggleBtn
-      }) : _react.default.createElement(_icons.DownOutlined, {
-        onClick: function onClick() {
-          return _this3.toogleLayers();
-        },
-        className: _MapContainerModule.default.toggleBtn
-      }), _react.default.createElement(_Tabs.default, {
-        className: "".concat(_MapContainerModule.default.tabs, " ").concat(this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open),
-        defaultActiveKey: "search",
-        id: "tab"
-      }, _react.default.createElement(_Tab.default, {
-        className: "".concat(_MapContainerModule.default.search, " ").concat(this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open),
-        eventKey: "search",
-        title: "S\xF8k"
-      }, _react.default.createElement(_SearchBar.default, null)), _react.default.createElement(_Tab.default, {
-        eventKey: "layers",
-        title: "Visning"
-      }, _react.default.createElement("div", {
-        id: "ServiceList"
-      }, this.renderServiceList()))))) : _react.default.createElement("div", {
-        className: _MapContainerModule.default.link,
-        onClick: function onClick() {
-          return _this3.toogleMap();
-        }
-      }, "G\xE5 til kartkatalogen")), _react.default.createElement("div", {
-        id: "map",
-        style: {
-          position: "relative",
-          width: "100%",
-          height: "100%",
-          zIndex: 0
-        }
-      }), _react.default.createElement(_Position.default, {
-        map: map,
-        projection: this.props.crs
-      }), _react.default.createElement("div", {
-        id: "mapPopover"
-      }, _react.default.createElement(_FeatureInfoItem.default, {
-        info: '',
-        show: false
-      })));
+  var toogleMap = function toogleMap() {
+    window.history.back(); // TODO: get paramtere to check for url til goto for closing map
+  };
+
+  return /*#__PURE__*/_react.default.createElement(_store.StateProvider, null, /*#__PURE__*/_react.default.createElement("div", {
+    id: "MapContainer",
+    className: "".concat(_MapContainerModule.default.mapContainer)
+  }, /*#__PURE__*/_react.default.createElement(_BackgroundChooser.default, null), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", null, _this.renderLayerButton() ? /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
+    className: "".concat(_MapContainerModule.default.container, " ").concat(_this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open)
+  }, _this.state.isExpanded ? /*#__PURE__*/_react.default.createElement(_icons.UpOutlined, {
+    onClick: function onClick() {
+      return _this.toogleLayers();
+    },
+    className: _MapContainerModule.default.toggleBtn
+  }) : /*#__PURE__*/_react.default.createElement(_icons.DownOutlined, {
+    onClick: function onClick() {
+      return _this.toogleLayers();
+    },
+    className: _MapContainerModule.default.toggleBtn
+  }), /*#__PURE__*/_react.default.createElement(_Tabs.default, {
+    className: "".concat(_MapContainerModule.default.tabs, " ").concat(_this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open),
+    defaultActiveKey: "search",
+    id: "tab"
+  }, /*#__PURE__*/_react.default.createElement(_Tab.default, {
+    className: "".concat(_MapContainerModule.default.search, " ").concat(_this.state.isExpanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open),
+    eventKey: "search",
+    title: "S\xF8k"
+  }, /*#__PURE__*/_react.default.createElement(_SearchBar.default, null)), /*#__PURE__*/_react.default.createElement(_Tab.default, {
+    eventKey: "layers",
+    title: "Visning"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    id: "ServiceList"
+  }, _this.renderServiceList()))))) : /*#__PURE__*/_react.default.createElement("div", {
+    className: _MapContainerModule.default.link,
+    onClick: function onClick() {
+      return _this.toogleMap();
     }
-  }]);
-  return MapContainer;
-}(_react.default.Component);
+  }, "G\xE5 til kartkatalogen"))), /*#__PURE__*/_react.default.createElement("div", {
+    id: "map",
+    style: {
+      position: "relative",
+      width: "100%",
+      height: "100%",
+      zIndex: 0
+    }
+  }), internMap ? /*#__PURE__*/_react.default.createElement(_Position.default, {
+    map: internMap,
+    projection: props.crs
+  }) : null, /*#__PURE__*/_react.default.createElement("div", {
+    id: "mapPopover"
+  }, /*#__PURE__*/_react.default.createElement(_FeatureInfoItem.default, {
+    info: '',
+    show: false
+  }))));
+};
 
-exports.default = MapContainer;
-(0, _defineProperty2.default)(MapContainer, "defaultProps", {
+MapContainer.defaultProps = {
   lon: 396722,
   lat: 7197860,
   zoom: 4,
-  wms: "",
-  menu: true,
   crs: 'EPSG:25833'
-});
+};
+var _default = MapContainer;
+exports.default = _default;

@@ -1,17 +1,17 @@
 "use strict";
 
-var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
+var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireWildcard");
+
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
+var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
 
-var _typeof2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/typeof"));
-
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _Modal = _interopRequireDefault(require("react-bootstrap/Modal"));
 
@@ -19,13 +19,14 @@ var _FeatureInfoItemModule = _interopRequireDefault(require("./FeatureInfoItem.m
 
 var _uniqid = _interopRequireDefault(require("uniqid"));
 
-var _reactSmee = require("react-smee");
+var _store = require("../../Utils/store.js");
 
-var FeatureInfoItem = function FeatureInfoItem(props) {
-  var featureState = (0, _reactSmee.useStore)('featureInfo');
+var FeatureInfoItem = function FeatureInfoItem() {
+  var featureContext = (0, _react.useContext)(_store.store);
+  var dispatch = featureContext.dispatch;
 
   var testFormat = function testFormat(s) {
-    if ((0, _typeof2.default)(s) === 'object') return 'isObject';
+    if (typeof s === 'object') return 'isObject';
     var rX = /^((\d+)|(true|false)|(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\+\d{2})|([\w\W]+))$/i;
     var M = rX.exec(s);
     if (!M) return '';
@@ -65,36 +66,36 @@ var FeatureInfoItem = function FeatureInfoItem(props) {
 
     switch (test) {
       case 'isNumeric':
-        return _react.default.createElement(_react.default.Fragment, null, v);
+        return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, v);
 
       case 'isBoolean':
-        return _react.default.createElement(_react.default.Fragment, null, v);
+        return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, v);
 
       case 'isDate':
-        return _react.default.createElement(_react.default.Fragment, null, v);
+        return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, v);
       // TODO: formatt?
 
       case 'isBboxInternal':
-        return _react.default.createElement(_react.default.Fragment, null, "BBOX db internal");
+        return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, "BBOX db internal");
       // TODO: klikke for å vise?
 
       case 'isBboxJsonPoint':
-        return _react.default.createElement(_react.default.Fragment, null, "BBOX point");
+        return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, "BBOX point");
       // TODO: klikke for å vise?
 
       case 'isBboxJsonPolygon':
-        return _react.default.createElement(_react.default.Fragment, null, "BBOX polygon");
+        return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, "BBOX polygon");
       // TODO: klikke for å vise?
 
       case 'isBboxSimple':
-        return _react.default.createElement(_react.default.Fragment, null, v);
+        return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, v);
       // TODO: klikke for å vise?
 
       case 'isString':
-        return _react.default.createElement(_react.default.Fragment, null, v);
+        return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, v);
 
       default:
-        return _react.default.createElement(_react.default.Fragment, null);
+        return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null);
     }
   };
 
@@ -113,14 +114,20 @@ var FeatureInfoItem = function FeatureInfoItem(props) {
             for (var _key2 in feature) {
               var items = feature[_key2];
 
-              for (var _i = 0, _Object$entries = Object.entries(items); _i < _Object$entries.length; _i++) {
-                var _Object$entries$_i = (0, _slicedToArray2.default)(_Object$entries[_i], 2),
-                    _key3 = _Object$entries$_i[0],
-                    value = _Object$entries$_i[1];
+              if (typeof items !== "string") {
+                for (var _i = 0, _Object$entries = Object.entries(items); _i < _Object$entries.length; _i++) {
+                  var _Object$entries$_i = (0, _slicedToArray2.default)(_Object$entries[_i], 2),
+                      _key3 = _Object$entries$_i[0],
+                      value = _Object$entries$_i[1];
 
-                featureRow.push(_react.default.createElement("li", {
-                  key: (0, _uniqid.default)(_key3)
-                }, _react.default.createElement("i", null, _key3, " "), " = ", _react.default.createElement("strong", null, prepareItemFormat(value)), " "));
+                  featureRow.push( /*#__PURE__*/_react.default.createElement("li", {
+                    key: (0, _uniqid.default)(_key3)
+                  }, /*#__PURE__*/_react.default.createElement("i", null, _key3, " "), " = ", /*#__PURE__*/_react.default.createElement("strong", null, prepareItemFormat(value)), " "));
+                }
+              } else {
+                featureRow.push( /*#__PURE__*/_react.default.createElement("li", {
+                  key: (0, _uniqid.default)(_key2)
+                }, /*#__PURE__*/_react.default.createElement("i", null, 'FeatureID', " "), " = ", /*#__PURE__*/_react.default.createElement("strong", null, prepareItemFormat(items)), " "));
               }
             }
           }
@@ -131,39 +138,44 @@ var FeatureInfoItem = function FeatureInfoItem(props) {
               _key4 = _Object$entries2$_i[0],
               _value = _Object$entries2$_i[1];
 
-          featureRow.push(_react.default.createElement("li", {
+          featureRow.push( /*#__PURE__*/_react.default.createElement("li", {
             key: (0, _uniqid.default)(_key4)
-          }, _react.default.createElement("i", null, _key4, " "), " = ", _react.default.createElement("strong", null, prepareItemFormat(_value)), " "));
+          }, /*#__PURE__*/_react.default.createElement("i", null, _key4, " "), " = ", /*#__PURE__*/_react.default.createElement("strong", null, prepareItemFormat(_value)), " "));
         }
       }
 
-      layers.push(_react.default.createElement(_react.default.Fragment, {
+      layers.push( /*#__PURE__*/_react.default.createElement(_react.default.Fragment, {
         key: (0, _uniqid.default)(key)
-      }, _react.default.createElement("h3", null, key), _react.default.createElement("ul", null, featureRow)));
+      }, /*#__PURE__*/_react.default.createElement("h3", null, key), /*#__PURE__*/_react.default.createElement("ul", null, featureRow)));
     }
 
-    return _react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement("div", {
       className: _FeatureInfoItemModule.default.ulContainer,
       key: (0, _uniqid.default)()
     }, layers);
   };
 
-  return _react.default.createElement(_Modal.default, {
-    show: featureState.show,
+  var featureContent = function featureContent() {
+    if (Array.isArray(featureContext.state.info)) {
+      return featureContext.state.info.map(function (info) {
+        return prepareFeature(info);
+      });
+    } else {
+      return /*#__PURE__*/_react.default.createElement("div", null, "No info");
+    }
+  };
+
+  return /*#__PURE__*/_react.default.createElement(_Modal.default, {
+    show: featureContext.state.show,
     onHide: function onHide() {
-      return (0, _reactSmee.setStore)('featureInfo', function () {
-        var info = {
-          show: false,
-          info: featureState.info
-        };
-        return info;
+      return dispatch({
+        type: "HIDE_FEATURES",
+        info: featureContext.state.info
       });
     }
-  }, _react.default.createElement(_Modal.default.Header, {
+  }, /*#__PURE__*/_react.default.createElement(_Modal.default.Header, {
     closeButton: true
-  }, _react.default.createElement(_Modal.default.Title, null, "Egenskaper ", _react.default.createElement("span", null, " ( ", featureState.info.length, " )"), " ")), _react.default.createElement(_Modal.default.Body, null, featureState.info.map(function (info) {
-    return prepareFeature(info);
-  })));
+  }, /*#__PURE__*/_react.default.createElement(_Modal.default.Title, null, "Egenskaper ", /*#__PURE__*/_react.default.createElement("span", null, " ( ", featureContext.state.info ? featureContext.state.info.length : 0, " )"), " ")), /*#__PURE__*/_react.default.createElement(_Modal.default.Body, null, featureContent()));
 };
 
 var _default = FeatureInfoItem;

@@ -222,8 +222,6 @@ export const OLStylesSLD = () => {
      $(rulenode.childNodes).each(function(index, childnode) {
      if (childnode.nodeName.indexOf('Symbolizer') > 0) {
      var symbolizer = parseSymbolizer(childnode, ruleindex);
-     //console.log(ruleindex + ':');
-     console.log(symbolizer);
      }
      });
      });
@@ -505,10 +503,10 @@ export const OLStylesSLD = () => {
         delete config.rotation;
         var labelAlign;
 
-                    
+
         var x = symbolizer.labelAnchorPointX;
 
-                    
+
         var y = symbolizer.labelAnchorPointY;
         if (x <= 1 / 3) {
           labelAlign = 'l';
@@ -989,7 +987,6 @@ export const OLStylesSLD = () => {
          thisstyle.push(parseStyle(userstyle));
          }
          });
-         console.log(thisstyle.length);
          */
     styles = [];
     //styles.push(sld.namedLayers[0].userStyles[1]);

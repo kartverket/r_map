@@ -1,17 +1,15 @@
 "use strict";
 
-var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = exports.CapabilitiesUtil = exports.newMaplibLayer = void 0;
 
-var _typeof2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/typeof"));
+var _classCallCheck2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/classCallCheck"));
 
-var _classCallCheck2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/createClass"));
+var _createClass2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createClass"));
 
 var _WMSCapabilities = _interopRequireDefault(require("ol/format/WMSCapabilities"));
 
@@ -322,7 +320,7 @@ var CapabilitiesUtil = /*#__PURE__*/function () {
         return fetch(url).then(function (response) {
           return response.text();
         }).then(function (response) {
-          if ((0, _typeof2.default)(response) === 'object') {
+          if (typeof response === 'object') {
             if (response.firstChild.childElementCount === 0) {
               return;
             }
@@ -388,7 +386,6 @@ var CapabilitiesUtil = /*#__PURE__*/function () {
         source: vectorSource,
         style: function style(feature, resolution) {
           var geom_name = feature.getGeometry().getType();
-          console.log(geom_name);
 
           if (geom_name === 'Point') {
             return new _style.Style({

@@ -58,9 +58,7 @@
         font-size: 1.1em;
     }
     label > span {
-        display: inline-block;
         text-overflow: ellipsis;
-        max-width: 75%;
         overflow: hidden;
     }
 }

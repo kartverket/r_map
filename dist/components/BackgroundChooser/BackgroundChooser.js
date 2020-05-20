@@ -1,15 +1,15 @@
 "use strict";
 
-var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
+var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -50,15 +50,15 @@ var BackgroundChooser = function BackgroundChooser() {
       var iconClass = _BackgroundChooserModule.default["icon_".concat(baseLayer.id)];
 
       var activeClass = baseLayer.id === selectedBaseLayer.id ? _BackgroundChooserModule.default.active : '';
-      return _react.default.createElement(_reactBootstrap.ToggleButton, {
+      return /*#__PURE__*/_react.default.createElement(_reactBootstrap.ToggleButton, {
         key: index,
         className: "".concat(iconClass, " ").concat(activeClass),
         value: baseLayer
-      }, _react.default.createElement("span", null, " ", baseLayer.name, " "));
+      }, /*#__PURE__*/_react.default.createElement("span", null, " ", baseLayer.name, " "));
     });
   };
 
-  return _react.default.createElement(_reactBootstrap.ToggleButtonGroup, {
+  return /*#__PURE__*/_react.default.createElement(_reactBootstrap.ToggleButtonGroup, {
     type: "radio",
     name: "Backgound",
     className: _BackgroundChooserModule.default.backgroundChooser,

@@ -1,17 +1,15 @@
 "use strict";
 
-var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _typeof2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/typeof"));
-
-var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
+var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -75,7 +73,7 @@ var Print = function Print(props) {
 
     for (var prop in obj) {
       if (obj.hasOwnProperty(prop)) {
-        switch ((0, _typeof2.default)(obj[prop])) {
+        switch (typeof obj[prop]) {
           case "string":
             index = keys.indexOf(prop);
 
@@ -104,7 +102,6 @@ var Print = function Print(props) {
   };
 
   var makePrint = function makePrint() {
-    console.log('generate Print');
     var center = window.olMap.getView().getCenter();
     var layers = window.olMap.getLayers().getArray();
     layers = layers.filter(function (layer) {
@@ -552,37 +549,37 @@ var Print = function Print(props) {
     });
   };
 
-  return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("label", {
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("label", {
     htmlFor: "inputGroupSelect02"
-  }, "Maltype"), _react.default.createElement("div", {
+  }, "Maltype"), /*#__PURE__*/_react.default.createElement("div", {
     className: "input-group mb-3"
-  }, _react.default.createElement("select", {
+  }, /*#__PURE__*/_react.default.createElement("select", {
     className: "custom-select",
     id: "inputGroupSelect02",
     value: maltype,
     onChange: function onChange(e) {
       return setLayoutType(e.target.value);
     }
-  }, _react.default.createElement("option", null, "Velg..."), printCapabilities ? printCapabilities.layouts.map(function (layout, i) {
-    return _react.default.createElement("option", {
+  }, /*#__PURE__*/_react.default.createElement("option", null, "Velg..."), printCapabilities ? printCapabilities.layouts.map(function (layout, i) {
+    return /*#__PURE__*/_react.default.createElement("option", {
       value: layout.name
     }, layout.name);
-  }) : '')), _react.default.createElement("label", {
+  }) : '')), /*#__PURE__*/_react.default.createElement("label", {
     htmlFor: "inputGroupSelect02"
-  }, "M\xE5lestokk"), _react.default.createElement("div", {
+  }, "M\xE5lestokk"), /*#__PURE__*/_react.default.createElement("div", {
     className: "input-group mb-3"
-  }, _react.default.createElement("select", {
+  }, /*#__PURE__*/_react.default.createElement("select", {
     className: "custom-select",
     id: "inputGroupSelect02",
     value: selectedPrintScale,
     onChange: function onChange(e) {
       return setPrintScale(e.target.value);
     }
-  }, _react.default.createElement("option", null, "Velg..."), printScales.map(function (scale, i) {
-    return _react.default.createElement("option", {
+  }, /*#__PURE__*/_react.default.createElement("option", null, "Velg..."), printScales.map(function (scale, i) {
+    return /*#__PURE__*/_react.default.createElement("option", {
       value: scale
     }, "1:", scale);
-  }))), _react.default.createElement(_reactBootstrap.Button, {
+  }))), /*#__PURE__*/_react.default.createElement(_reactBootstrap.Button, {
     onClick: function onClick() {
       return makePrint();
     }

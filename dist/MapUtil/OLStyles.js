@@ -1,13 +1,9 @@
 "use strict";
 
-var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.OLStylesMeasure = exports.OLStylesSLD = exports.OLStylesJson = exports.OLStylesDefault = void 0;
-
-var _typeof2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/typeof"));
 
 var _style = require("ol/style");
 
@@ -44,7 +40,7 @@ var OLStylesJson = function OLStylesJson(style) {
   var _zIndex = 0;
 
   function _createStyle(feature, jsonstyle, hover) {
-    var jsonobject = (0, _typeof2.default)(jsonstyle) === 'object' ? jsonstyle : JSON.parse(jsonstyle);
+    var jsonobject = typeof jsonstyle === 'object' ? jsonstyle : JSON.parse(jsonstyle);
     var currentstyle = [];
     _zIndex++;
     currentstyle.push(new _style.Style({
@@ -247,8 +243,6 @@ var OLStylesSLD = function OLStylesSLD() {
      $(rulenode.childNodes).each(function(index, childnode) {
      if (childnode.nodeName.indexOf('Symbolizer') > 0) {
      var symbolizer = parseSymbolizer(childnode, ruleindex);
-     //console.log(ruleindex + ':');
-     console.log(symbolizer);
      }
      });
      });
@@ -1056,7 +1050,6 @@ var OLStylesSLD = function OLStylesSLD() {
          thisstyle.push(parseStyle(userstyle));
          }
          });
-         console.log(thisstyle.length);
          */
 
     styles = []; //styles.push(sld.namedLayers[0].userStyles[1]);
@@ -1114,7 +1107,7 @@ var OLStylesSLD = function OLStylesSLD() {
     if (featurevalue) {
       switch (filter.operator) {
         case '==':
-          switch ((0, _typeof2.default)(featurevalue)) {
+          switch (typeof featurevalue) {
             case 'string':
               value = filter.value;
               condition = featurevalue === value;
@@ -1152,7 +1145,7 @@ var OLStylesSLD = function OLStylesSLD() {
           break;
 
         case '!=':
-          switch ((0, _typeof2.default)(featurevalue)) {
+          switch (typeof featurevalue) {
             case 'string':
               value = filter.value;
               condition = featurevalue !== value;
@@ -1170,7 +1163,7 @@ var OLStylesSLD = function OLStylesSLD() {
           break;
 
         case 'NULL':
-          switch ((0, _typeof2.default)(featurevalue)) {
+          switch (typeof featurevalue) {
             case 'string':
               condition = featurevalue.length === 0;
               break;

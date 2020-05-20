@@ -1,15 +1,15 @@
 "use strict";
 
-var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
-var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
+var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -53,7 +53,7 @@ var ServicePanel = function ServicePanel(props) {
           newMetaInfo.Params = props.services.customParams || '';
           setMeta(newMetaInfo);
         }).catch(function (e) {
-          return console.log(e);
+          return console.warn(e);
         });
 
         break;
@@ -68,7 +68,7 @@ var ServicePanel = function ServicePanel(props) {
           newMetaInfo.Params = props.services.customParams || '';
           setMeta(newMetaInfo);
         }).catch(function (e) {
-          return console.log(e);
+          return console.warn(e);
         });
 
         break;
@@ -81,7 +81,7 @@ var ServicePanel = function ServicePanel(props) {
           newMetaInfo.EPSG = props.services.EPSG || 'EPSG:4326';
           setMeta(newMetaInfo);
         }).catch(function (e) {
-          return console.log(e);
+          return console.warn(e);
         });
 
         break;
@@ -94,7 +94,7 @@ var ServicePanel = function ServicePanel(props) {
 
   var renderRemoveButton = function renderRemoveButton() {
     if (props.removeMapItem) {
-      return _react.default.createElement(_icons.CloseOutlined, {
+      return /*#__PURE__*/_react.default.createElement(_icons.CloseOutlined, {
         className: _ServicePanelModule.default.removeInline,
         onClick: _this.props.removeMapItem
       });
@@ -106,10 +106,10 @@ var ServicePanel = function ServicePanel(props) {
   var renderCapabilites = function renderCapabilites() {
     if (capabilities && capabilities.Capability) {
       return capabilities.Capability.Layer.Layer.map(function (capaLayer, i) {
-        return _react.default.createElement("div", {
+        return /*#__PURE__*/_react.default.createElement("div", {
           className: _ServicePanelModule.default.facet,
           key: i
-        }, _react.default.createElement(_LayerEntry.default, {
+        }, /*#__PURE__*/_react.default.createElement(_LayerEntry.default, {
           layer: capaLayer,
           meta: meta,
           key: i
@@ -117,19 +117,19 @@ var ServicePanel = function ServicePanel(props) {
       });
     } else if (capabilities && capabilities.value) {
       return capabilities.value.featureTypeList.featureType.map(function (capaLayer, i) {
-        return _react.default.createElement("div", {
+        return /*#__PURE__*/_react.default.createElement("div", {
           className: _ServicePanelModule.default.facet,
           key: i
-        }, _react.default.createElement(_LayerEntry.default, {
+        }, /*#__PURE__*/_react.default.createElement(_LayerEntry.default, {
           layer: capaLayer,
           meta: meta,
           key: i
         }));
       });
     } else if (capabilities && capabilities.features) {
-      return _react.default.createElement("div", {
+      return /*#__PURE__*/_react.default.createElement("div", {
         className: _ServicePanelModule.default.facet
-      }, _react.default.createElement(_LayerEntry.default, {
+      }, /*#__PURE__*/_react.default.createElement(_LayerEntry.default, {
         layer: capabilities,
         meta: meta
       }));
@@ -139,14 +139,14 @@ var ServicePanel = function ServicePanel(props) {
     }
   };
 
-  return _react.default.createElement("div", null, _react.default.createElement("div", {
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
     onClick: function onClick() {
       return setState(!expanded);
     },
     className: _ServicePanelModule.default.expandLayersBtn
-  }, _react.default.createElement("span", {
+  }, /*#__PURE__*/_react.default.createElement("span", {
     className: _ServicePanelModule.default.ellipsisToggle
-  }, props.services.Title), expanded ? _react.default.createElement(_icons.UpOutlined, null) : _react.default.createElement(_icons.DownOutlined, null)), renderRemoveButton(), _react.default.createElement("div", {
+  }, props.services.Title), expanded ? /*#__PURE__*/_react.default.createElement(_icons.UpOutlined, null) : /*#__PURE__*/_react.default.createElement(_icons.DownOutlined, null)), renderRemoveButton(), /*#__PURE__*/_react.default.createElement("div", {
     className: expanded ? "".concat(_ServicePanelModule.default.selectedlayers, " ").concat(_ServicePanelModule.default.open) : _ServicePanelModule.default.selectedlayers
   }, renderCapabilites()));
 };

@@ -1,27 +1,17 @@
 "use strict";
 
-var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/interopRequireDefault");
+var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireWildcard");
+
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = exports.MapComponent = void 0;
+exports.default = void 0;
 
-var _classCallCheck2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/classCallCheck"));
+var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
 
-var _createClass2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/getPrototypeOf"));
-
-var _assertThisInitialized2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/assertThisInitialized"));
-
-var _inherits2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/inherits"));
-
-var _defineProperty2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/@babel/runtime/helpers/esm/defineProperty"));
-
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _queryString = _interopRequireDefault(require("query-string"));
 
@@ -33,192 +23,147 @@ var _maplibHelper = require("../../MapUtil/maplibHelper");
 
 var _communication = require("../../Utils/communication");
 
-/**
- * @class The Map Component
- * @extends React.Component
- */
-var MapComponent = /*#__PURE__*/function (_React$Component) {
-  (0, _inherits2.default)(MapComponent, _React$Component);
+var MapComponent = function MapComponent(props) {
+  var _useState = (0, _react.useState)(),
+      _useState2 = (0, _slicedToArray2.default)(_useState, 2),
+      wms = _useState2[0],
+      setWMS = _useState2[1];
 
-  /**
-   * The prop types.
-   * @type {Object}
-   */
+  var queryValues = _queryString.default.parse(window.location.search);
 
-  /**
-   *
-   *@constructs Map
-   */
-  function MapComponent(props) {
-    var _this;
+  var internMap = _maplibHelper.map;
+  _maplibHelper.mapConfig.coordinate_system = queryValues['crs'] || props.crs;
+  var lon = Number(queryValues["lon"] || props.lon);
+  var lat = Number(queryValues["lat"] || props.lat);
+  var zoom = Number(queryValues["zoom"] || props.zoom);
+  var newMapConfig = Object.assign({}, _maplibHelper.mapConfig, {
+    center: [lon, lat],
+    zoom: zoom
+  });
+  (0, _react.useLayoutEffect)(function () {
+    window.olMap = internMap.Init("map", newMapConfig);
+    internMap.AddZoom();
+    internMap.AddScaleLine();
 
-    (0, _classCallCheck2.default)(this, MapComponent);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(MapComponent).call(this, props));
-    (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "updateMapInfoState", function () {
-      var center = _maplibHelper.map.GetCenter();
+    _maplibHelper.eventHandler.RegisterEvent("MapMoveend", updateMapInfoState);
 
-      var queryValues = _queryString.default.parse(window.location.search);
-
-      _this.props = {
-        lon: center.lon,
-        lat: center.lat,
-        zoom: center.zoom
-      };
-      queryValues.lon = center.lon;
-      queryValues.lat = center.lat;
-      queryValues.zoom = center.zoom;
-      (0, _setQueryString.default)(queryValues);
-    });
-
-    var _queryValues = _queryString.default.parse(window.location.search);
-
-    var lon = Number(_queryValues["lon"] || props.lon);
-    var lat = Number(_queryValues["lat"] || props.lat);
-    var zoom = Number(_queryValues["zoom"] || props.zoom);
-    /*
-    let wmts = Array(queryValues['wmts'] || [])
-    let wfs = Array(queryValues['wfs'] || [])
-    */
-    //  this.props = { lon: lon, lat: lat, zoom: zoom };
-
-    _maplibHelper.mapConfig.coordinate_system = _queryValues['crs'] || props.crs;
-    _this.newMapConfig = Object.assign({}, _maplibHelper.mapConfig, {
-      center: [lon, lat],
-      zoom: zoom
-    });
-    return _this;
-  }
-
-  (0, _createClass2.default)(MapComponent, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      window.olMap = _maplibHelper.map.Init("map", this.newMapConfig);
-
-      _maplibHelper.map.AddZoom();
-
-      _maplibHelper.map.AddScaleLine();
-
-      _maplibHelper.eventHandler.RegisterEvent("MapMoveend", this.updateMapInfoState);
-
-      this.setState({
-        map: _maplibHelper.map
+    addWMS();
+    window.olMap.on('click', function (evt) {
+      var feature = window.olMap.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+        return feature;
       });
-      this.addWMS();
-      window.olMap.on('click', function (evt) {
-        var feature = window.olMap.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
-          return feature;
-        });
 
-        if (feature) {
-          var coord = feature.getGeometry().getCoordinates();
-          var content = feature.get('n');
-          var message = {
-            cmd: 'featureSelected',
-            featureId: feature.getId(),
-            properties: content,
-            coordinates: coord
-          };
+      if (feature) {
+        var coord = feature.getGeometry().getCoordinates();
+        var content = feature.get('n');
+        var message = {
+          cmd: 'featureSelected',
+          featureId: feature.getId(),
+          properties: content,
+          coordinates: coord
+        };
 
-          _communication.Messaging.postMessage(JSON.stringify(message));
-        }
-      });
-    }
-  }, {
-    key: "addWMS",
-    value: function addWMS() {
-      var _this2 = this;
+        _communication.Messaging.postMessage(JSON.stringify(message));
+      }
+    });
+  }, [internMap]);
 
-      this.props.services.forEach(function (service) {
-        var meta = {};
+  var updateMapInfoState = function updateMapInfoState() {
+    var center = _maplibHelper.map.GetCenter();
 
-        switch (service.DistributionProtocol) {
-          case 'WMS':
-          case 'WMS-tjeneste':
-          case 'OGC:WMS':
-            _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(service.GetCapabilitiesUrl).then(function (capa) {
-              meta = _CapabilitiesUtil.CapabilitiesUtil.getWMSMetaCapabilities(capa);
-              meta.Type = 'OGC:WMS';
-              meta.Params = service.customParams || '';
+    var queryValues = _queryString.default.parse(window.location.search); //this.props = { lon: center.lon, lat: center.lat, zoom: center.zoom }
 
-              if (service.addLayers.length > 0) {
-                var layersToBeAdded = [];
-                layersToBeAdded = capa.Capability.Layer.Layer.filter(function (e) {
-                  return service.addLayers.includes(e.Name);
-                });
 
-                if (layersToBeAdded.length === 0 || layersToBeAdded.length !== service.addLayers.length) {
-                  layersToBeAdded = [];
-                  service.addLayers.forEach(function (layerName) {
-                    layersToBeAdded.push({
-                      Name: layerName
-                    });
-                  });
-                }
+    queryValues.lon = center.lon;
+    queryValues.lat = center.lat;
+    queryValues.zoom = center.zoom;
+    (0, _setQueryString.default)(queryValues);
+  };
 
-                layersToBeAdded.forEach(function (layer) {
-                  var laycapaLayerer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmsCapabilities(meta, layer);
+  var addWMS = function addWMS() {
+    props.services.forEach(function (service) {
+      var meta = {};
 
-                  window.olMap.addLayer(laycapaLayerer);
-                });
-              }
-            }).then(function (layers) {
-              _this2.setState({
-                wmsLayers: layers
+      switch (service.DistributionProtocol) {
+        case 'WMS':
+        case 'WMS-tjeneste':
+        case 'OGC:WMS':
+          _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(service.GetCapabilitiesUrl).then(function (capa) {
+            meta = _CapabilitiesUtil.CapabilitiesUtil.getWMSMetaCapabilities(capa);
+            meta.Type = 'OGC:WMS';
+            meta.Params = service.customParams || '';
+
+            if (service.addLayers.length > 0) {
+              var layersToBeAdded = [];
+              layersToBeAdded = capa.Capability.Layer.Layer.filter(function (e) {
+                return service.addLayers.includes(e.Name);
               });
-            }).catch(function (e) {
-              return console.warn(e);
-            });
 
-            break;
-
-          case 'GEOJSON':
-            _CapabilitiesUtil.CapabilitiesUtil.getGeoJson(service.url).then(function (layers) {
-              meta.Type = 'GEOJSON';
-              meta.ShowPropertyName = service.ShowPropertyName || 'id';
-              meta.EPSG = service.EPSG || 'EPSG:4326';
-
-              if (service.addLayers.length > 0) {
-                if (layers.name === service.addLayers['0']) {
-                  var currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromGeoJson(meta, layers);
-
-                  window.olMap.addLayer(currentLayer);
-                }
+              if (layersToBeAdded.length === 0 || layersToBeAdded.length !== service.addLayers.length) {
+                layersToBeAdded = [];
+                service.addLayers.forEach(function (layerName) {
+                  layersToBeAdded.push({
+                    Name: layerName
+                  });
+                });
               }
-            }).catch(function (e) {
-              return console.log(e);
-            });
 
-            break;
+              layersToBeAdded.forEach(function (layer) {
+                var laycapaLayerer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmsCapabilities(meta, layer);
 
-          default:
-            console.warn('No service type specified');
-            break;
-        }
-      });
+                window.olMap.addLayer(laycapaLayerer);
+              });
+            }
+          }).then(function (layers) {
+            console.log('Added wms layers ready');
+          }).catch(function (e) {
+            return console.warn(e);
+          });
+
+          break;
+
+        case 'GEOJSON':
+          _CapabilitiesUtil.CapabilitiesUtil.getGeoJson(service.url).then(function (layers) {
+            meta.Type = 'GEOJSON';
+            meta.ShowPropertyName = service.ShowPropertyName || 'id';
+            meta.EPSG = service.EPSG || 'EPSG:4326';
+
+            if (service.addLayers.length > 0) {
+              if (layers.name === service.addLayers['0']) {
+                var currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromGeoJson(meta, layers);
+
+                window.olMap.addLayer(currentLayer);
+              }
+            }
+          }).catch(function (e) {
+            return console.warn(e);
+          });
+
+          break;
+
+        default:
+          console.warn('No service type specified');
+          break;
+      }
+    });
+  };
+
+  return /*#__PURE__*/_react.default.createElement("div", {
+    id: "map",
+    style: {
+      position: "relative",
+      width: "100%",
+      height: "100%",
+      zIndex: 0
     }
-  }, {
-    key: "render",
-    value: function render() {
-      return _react.default.createElement("div", {
-        id: "map",
-        style: {
-          position: "relative",
-          width: "100%",
-          height: "100%",
-          zIndex: 0
-        }
-      });
-    }
-  }]);
-  return MapComponent;
-}(_react.default.Component);
+  });
+};
 
-exports.MapComponent = MapComponent;
-(0, _defineProperty2.default)(MapComponent, "defaultProps", {
+MapComponent.defaultProps = {
   lon: 396722,
   lat: 7197860,
   zoom: 4,
   crs: 'EPSG:25833'
-});
+};
 var _default = MapComponent;
 exports.default = _default;
