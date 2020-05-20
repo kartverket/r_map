@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 import style from './ServicePanel.module.scss'
-import { UpOutlined, DownOutlined, CloseOutlined } from "@ant-design/icons"
+import { ExpandLess, ExpandMore, Close} from "@material-ui/icons"
+import IconButton from '@material-ui/core/IconButton'
+import List from '@material-ui/core/List'
 import LayerEntry from './LayerEntry'
 
 
@@ -60,7 +62,9 @@ const ServicePanel = props => {
   const renderRemoveButton = () => {
     if (props.removeMapItem) {
       return (
-        <CloseOutlined className={ style.removeInline } onClick={ this.props.removeMapItem }/>
+        <IconButton aria-label="close" className={ style.removeInline } onClick={ props.removeMapItem }>
+          <Close />
+        </IconButton>
       )
     } else {
       return ''
@@ -100,13 +104,13 @@ const ServicePanel = props => {
     <div>
       <div onClick={ () => setState(!expanded) } className={ style.expandLayersBtn } >
         <span className={ style.ellipsisToggle }>{ props.services.Title }</span>
-        { expanded ? <UpOutlined /> : <DownOutlined /> }
+        { expanded ? <ExpandLess /> : <ExpandMore /> }
       </div>
       { renderRemoveButton() }
 
-      <div className={ expanded ? `${style.selectedlayers} ${style.open}` : style.selectedlayers } >
+      <List className={ expanded ? `${style.selectedlayers} ${style.open}` : style.selectedlayers } >
         { renderCapabilites() }
-      </div>
+      </List>
     </div>
   )
 }

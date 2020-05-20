@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react"
 import PropTypes from "prop-types"
-import { UpOutlined, DownOutlined } from "@ant-design/icons"
-import { Checkbox } from 'antd'
+import { ExpandLess, ExpandMore } from "@material-ui/icons"
+import { Checkbox } from '@material-ui/core'
 import style from './LayerEntry.module.scss'
 import InlineLegend from '../Legend/InlineLegend'
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
@@ -10,10 +10,19 @@ import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 import { Fill, Stroke, Style, Text } from 'ol/style'
 import { store } from '../../Utils/store.js'
 import { parseFeatureInfo } from '../../MapUtil/FeatureUtil'
+import { makeStyles } from '@material-ui/core/styles'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
+import ListItemText from '@material-ui/core/ListItemText'
+import IconButton from '@material-ui/core/IconButton'
+import TuneOutlinedIcon from '@material-ui/icons/TuneOutlined'
+import Slider from '@material-ui/core/Slider'
+import Typography from '@material-ui/core/Typography'
 
 const LayerEntry = props => {
   const featureState = useContext(store)
-  const { dispatch } = featureState;
+  const { dispatch } = featureState
 
   const [options, toggleOptions] = useState(false)
   const [olLayer, setLayer] = useState()
@@ -113,8 +122,7 @@ const LayerEntry = props => {
       }
     }
   }
-
-  const setOpacity = value => {
+  const setOpacity = (event, value) => {
     setTransparency(value)
     if (olLayer) {
       olLayer.setOpacity(Math.min(transparency / 100, 1))
@@ -134,33 +142,34 @@ const LayerEntry = props => {
 
   return (
     <>
-      { layer.Name ? (
-        <Checkbox id={ layer.Name } onChange={ () => onSelectionChange(layer) } checked={ checked }>{ abstractTextSpan() }</Checkbox>
-      ) : (
-          <label onClick={ () => onSelectionChange(layer) } htmlFor={ abstractTextSpan() }> </label>
-        ) }
-      { layer.Name ? (
-        <label onClick={ () => toggleOptions(!options) }>
-          { options ? <UpOutlined /> : <DownOutlined /> }
-        </label>
-      ) : ('') }
-      <InlineLegend legendUrl={ ((layer.Style && layer.Style[0].LegendURL) ? layer.Style[0].LegendURL[0].OnlineResource : '') } />
+      <ListItem key={ layer.Name } role={ undefined } button onClick={ () => onSelectionChange(layer) }>
+        <ListItemIcon>
+          <Checkbox
+            edge="start"
+            checked={ checked }
+            tabIndex={ -1 }
+            color="primary"
+            inputProps={ { 'aria-labelledby': layer.Name } }
+          />
+        </ListItemIcon>
+        <ListItemText id={ layer.Name } primary={ abstractTextSpan() } />
+        <ListItemSecondaryAction>
+          <IconButton edge="end" aria-label="options" onClick={ () => toggleOptions(!options) }>
+            <TuneOutlinedIcon />
+          </IconButton>
+        </ListItemSecondaryAction>
+      </ListItem>
       { options ? (
-        <div className={ style.settings }>
-          <label className={ style.slider }>
+        <div>
+          <Typography id="slider" gutterBottom>
             Gjennomsiktighet:
-            <input
-              type="range"
-              min={ 0 }
-              max={ 100 }
-              value={ transparency }
-              onChange={ e => setOpacity(e.target.value) }
-            />
-          </label>
+          </Typography>
+          <Slider defaultValue={ 50 } aria-labelledby="transparenz" value={ transparency } onChange={ setOpacity } />
         </div>
       ) : (
           ""
         ) }
+      <InlineLegend legendUrl={ ((layer.Style && layer.Style[0].LegendURL) ? layer.Style[0].LegendURL[0].OnlineResource : '') } />
       { props.children }
       { layer.Layer ? (layer.Layer.map((subLayer, isub) => (<div className={ style.facetSub } key={ isub }><LayerEntry layer={ subLayer } meta={ props.meta } key={ isub } /></div>))) : ('') }
     </>

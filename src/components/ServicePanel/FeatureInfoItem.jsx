@@ -1,10 +1,57 @@
 import React, { useContext } from 'react'
-import Modal from 'react-bootstrap/Modal'
 import style from './FeatureInfoItem.module.scss'
 import uniqid from 'uniqid'
 import { store } from '../../Utils/store.js'
+import { withStyles } from '@material-ui/core/styles'
+import Dialog from '@material-ui/core/Dialog'
+import MuiDialogTitle from '@material-ui/core/DialogTitle'
+import MuiDialogContent from '@material-ui/core/DialogContent'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
+import Typography from '@material-ui/core/Typography'
+
+const styles = (theme) => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(2),
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+  },
+})
+const DialogTitle = withStyles(styles)((props) => {
+  const { children, classes, onClose, ...other } = props
+  return (
+    <MuiDialogTitle disableTypography className={ classes.root } { ...other }>
+      <Typography variant="h6">{ children }</Typography>
+      { onClose ? (
+        <IconButton aria-label="close" className={ classes.closeButton } onClick={ onClose }>
+          <CloseIcon />
+        </IconButton>
+      ) : null }
+    </MuiDialogTitle>
+  )
+})
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent)
 
 const FeatureInfoItem = () => {
+  const [open, setOpen] = React.useState(false)
+
+  const handleClose = () => {
+    setOpen(false)
+    dispatch({
+      type: "HIDE_FEATURES",
+      info: featureContext.state.info
+    })
+  }
+
   const featureContext = useContext(store)
   const { dispatch } = featureContext
 
@@ -89,15 +136,16 @@ const FeatureInfoItem = () => {
   }
 
   return (
-    <Modal show={ featureContext.state.show } onHide={ () => dispatch({
-      type: "HIDE_FEATURES",
-      info: featureContext.state.info
-    }) }>
-      <Modal.Header closeButton>
-        <Modal.Title>Egenskaper <span> ( { featureContext.state.info ? featureContext.state.info.length : 0} )</span> </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>{ featureContent() }</Modal.Body>
-    </Modal>
+    <Dialog onClose={ handleClose } aria-labelledby="customized-dialog-title" open={ open }>
+      <DialogTitle id="customized-dialog-title" onClose={ handleClose }>
+        Egenskaper <span> ( { featureContext.state.info ? featureContext.state.info.length : 0 } )</span>
+      </DialogTitle>
+      <DialogContent dividers>
+        <Typography gutterBottom>
+          { featureContent() }
+        </Typography>
+      </DialogContent>
+    </Dialog>
   )
 }
 

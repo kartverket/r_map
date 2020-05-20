@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button } from 'react-bootstrap'
+import Button from '@material-ui/core/Button';
 
 const printCapabilitiesUrl = 'http://localhost:5000/capabilities' //'https://ws.geonorge.no/print/kv/capabilities.json'
 const printUrl = 'http://localhost:5000/create' //'https://ws.geonorge.no/print/kv/report.pdf'

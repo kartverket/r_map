@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { map, eventHandler } from "../../MapUtil/maplibHelper"
-import { ToggleButton, ToggleButtonGroup } from "react-bootstrap"
+import { ToggleButton, ToggleButtonGroup} from '@material-ui/lab'
 import style from "./BackgroundChooser.module.scss"
 /**
  * Panel containing a list of backgroundLayers. To be used in MapContainer
@@ -11,7 +11,7 @@ const BackgroundChooser = () => {
 
   eventHandler.RegisterEvent("MapLoaded", () => setBaseLayers(map.GetBaseLayers()))
 
-  const setAsBaseLayer = baseLayer => {
+  const setAsBaseLayer = (event, baseLayer) => {
     map.SetBaseLayer(baseLayer)
     map.ZoomToLayer(baseLayer)
     setBaseLayer(baseLayer)
@@ -30,8 +30,8 @@ const BackgroundChooser = () => {
   }
   return (
     <ToggleButtonGroup
-      type="radio"
       name="Backgound"
+      exclusive
       className={ style.backgroundChooser }
       onChange={ setAsBaseLayer }
       value={ baseLayer }

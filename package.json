@@ -8,8 +8,9 @@
     "README.md"
   ],
   "dependencies": {
-    "antd": "^4.2.4",
-    "bootstrap": "^4.5.0",
+    "@material-ui/core": "^4.9.14",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.53",
     "fast-xml-parser": "^3.17.1",
     "jquery": "^3.5.1",
     "node-sass": "^4.14.1",
@@ -17,7 +18,6 @@
     "proj4": "^2.6.2",
     "query-string": "^6.12.1",
     "react": "^16.13.1",
-    "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
     "react-scripts": "^3.4.1",
     "set-query-string": "^2.2.0",

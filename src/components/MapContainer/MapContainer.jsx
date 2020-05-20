@@ -4,19 +4,43 @@ import queryString from "query-string"
 import BackgroundChooser from "../BackgroundChooser/BackgroundChooser"
 import ServicePanel from "../ServicePanel/ServicePanel"
 import SearchBar from "../SearchBar/SearchBar"
-import { UpOutlined, DownOutlined } from "@ant-design/icons"
-import style from "./MapContainer.module.scss"
+import { ExpandLess, ExpandMore } from "@material-ui/icons"
+import Typography from "@material-ui/core/Typography"
+import Box from "@material-ui/core/Box"
+import PropTypes from "prop-types"
+import { IconButton, Tabs, Tab } from '@material-ui/core'
 import Position from '../Position/Position'
-import Tabs from 'react-bootstrap/Tabs'
-import Tab from 'react-bootstrap/Tab'
 import FeatureInfoItem from '../ServicePanel/FeatureInfoItem'
-import 'ol/ol.css'
-
 import { StateProvider } from '../../Utils/store.js'
+import style from "./MapContainer.module.scss"
+import 'ol/ol.css'
 
 const ServiceListItem = (props) => <ServicePanel services={ props.listItem } removeMapItem={ props.removeMapItem } draggable />
 
+function TabPanel(props) {
+  const { children, value, index, ...other } = props
+
+  return (
+    <Typography
+      component="div"
+      role="tabpanel"
+      hidden={ value !== index }
+      id={ `simple-tabpanel-${index}` }
+      aria-labelledby={ `simple-tab-${index}` }
+      { ...other }
+    >
+      <Box p={ 1 }>{ children }</Box>
+    </Typography>
+  )
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired
+}
 const MapContainer = (props) => {
+  const [value, setValue] = React.useState(1)
   const [expanded, toggleExpand] = useState(false)
   const [wms, setWMS] = useState()
   const queryValues = queryString.parse(window.location.search)
@@ -52,18 +76,9 @@ const MapContainer = (props) => {
     ))
   }
 
-  const showDefaultTab = () => {
-    if (props.services.length) {
-      return 'layers'
-    }
-    else return 'search'
+  const handleChange = (event, newValue) => {
+    setValue(newValue)
   }
-
-  const toogleMap = () => {
-    window.history.back()
-    // TODO: get paramtere to check for url til goto for closing map
-  }
-
   return (
     <StateProvider>
       <div id="MapContainer" className={ `${style.mapContainer}` }>
@@ -71,15 +86,15 @@ const MapContainer = (props) => {
         <div>
           <div>
             <div className={ `${style.container} ${expanded ? style.closed : style.open}` }>
-              { expanded ? <UpOutlined onClick={ () => toggleExpand(!expanded) } className={ style.toggleBtn } /> : <DownOutlined onClick={ () => toggleExpand(!expanded) } className={ style.toggleBtn } /> }
-              <Tabs className={ `${style.tabs} ${expanded ? style.closed : style.open}` } defaultActiveKey="search" id="tab">
-                <Tab className={ `${style.search} ${expanded ? style.closed : style.open}` } eventKey="search" title="Søk" >
-                  <SearchBar />
-                </Tab>
-                <Tab eventKey="layers" title="Visning">
-                  <div id="ServiceList">{ renderServiceList() }</div>
-                </Tab>
+              <IconButton aria-label="expand" onClick={ () => toggleExpand(!expanded) }>
+                { expanded ? <ExpandLess /> : <ExpandMore /> }
+              </IconButton>
+              <Tabs value={ value } variant="fullWidth" onChange={ handleChange } indicatorColor="primary" textColor="primary">
+                <Tab label="Søk" value={ 0 } />
+                <Tab label="Visning" value={ 1 } />
               </Tabs>
+              <TabPanel value={ value } index={ 0 }><SearchBar /></TabPanel>
+              <TabPanel value={ value } index={ 1 }>{ renderServiceList() }</TabPanel>
             </div>
           </div>
 

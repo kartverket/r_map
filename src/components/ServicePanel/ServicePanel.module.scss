@@ -1,5 +1,4 @@
 :local(.removeInline) {
-    font-size: 1.5em;
     position: relative;
     top: 2px;
     margin-left: 5px;
@@ -12,10 +11,6 @@
     overflow: hidden;
     transition: .3s all ease-in-out;
 
-    div {
-        padding: 2px 0;
-        > label {padding: 0 4px;}
-    }
     &:local(.open) {
         max-height: 80000px;
     }

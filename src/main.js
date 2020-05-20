@@ -6,6 +6,5 @@ import Legend from './components/Legend/Legend';
 
 import './Utils/icons';
 import './index.scss'
-import 'bootstrap/dist/css/bootstrap.min.css'
 
 export { ServicePanel, BackgroundChooser, MapComponent, MapContainer, Legend };

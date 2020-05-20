@@ -2,20 +2,18 @@ import React, { useState, useEffect } from "react"
 import PropTypes from 'prop-types'
 import queryString from "query-string"
 import setQuery from "set-query-string"
-
 import pin_orange from '../../assets/img/pin-md-orange.png'
 import pin_blue from '../../assets/img/pin-md-blueish.png'
-import { UpOutlined, DownOutlined } from "@ant-design/icons"
-import { Input } from 'antd';
+import { ExpandLess, ExpandMore } from "@material-ui/icons"
+import { makeStyles } from '@material-ui/core/styles'
+import { TextField, List, ListItem, ListItemText, Divider } from '@material-ui/core'
 import style from "./SearchBar.module.scss"
-
 import { transform } from 'ol/proj'
 import { Vector as VectorLayer } from 'ol/layer.js'
 import { Vector as VectorSource } from 'ol/source.js'
 import Feature from 'ol/Feature.js'
 import { Style, Icon } from 'ol/style'
 import Point from 'ol/geom/Point'
-
 import { generateAdresseSokUrl, generateSearchStedsnavnUrl } from "../../Utils/n3api"
 const parser = require('fast-xml-parser')
 
@@ -61,14 +59,17 @@ const SearchResult = (props) => {
   const constructPoint = (coord, epsgTo = 'EPSG:25833') => transform([Number(coord.lon), Number(coord.lat)], coord.epsg, epsgTo)
 
   return (
-    <div className="list-group">
+    <List component="nav" dense={true} aria-label="search results">
       {
         props.searchResult.searchResult && props.searchResult.searchResult.adresser.map((data, idx) => {
           showInfoMarker(constructPoint(data.representasjonspunkt))
           return (
-            <button type="button" key={ idx } className="list-group-item list-group-item-action" onClick={ () => { centerPosition(constructPoint(data.representasjonspunkt)) } }>
-              { data.adressetekst } , { data.kommunenavn }
-            </button>
+            <div key={ idx }>
+              <ListItem button onClick={ () => { centerPosition(constructPoint(data.representasjonspunkt)) } }>
+                <ListItemText primary={ data.adressetekst + ', ' + data.kommunenavn } />
+              </ListItem>
+              <Divider />
+            </div>
           )
         })
       }
@@ -76,15 +77,25 @@ const SearchResult = (props) => {
         props.searchResult.searchResultSSR && props.searchResult.searchResultSSR.sokRes.stedsnavn.map((data, idx) => {
           showInfoMarker(constructPoint({ lon: data.aust, lat: data.nord, epsg: 'EPSG:25833' }))
           return (
-            <button type="button" key={ idx } className="list-group-item list-group-item-action" onClick={ () => { centerPosition(constructPoint({ lon: data.aust, lat: data.nord, epsg: 'EPSG:25833' })) } }>
-              { data.stedsnavn } , { data.kommunenavn }
-            </button>
+            <div key={ idx }>
+              <ListItem button onClick={ () => { centerPosition(constructPoint({ lon: data.aust, lat: data.nord, epsg: 'EPSG:25833' })) } }>
+                <ListItemText primary={ data.stedsnavn + ', ' + data.kommunenavn } />
+              </ListItem>
+              <Divider />
+            </div>
           )
         })
       }
-    </div >
+    </List >
   )
 }
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(2,0),
+    },
+  },
+}));
 /**
  * SearchBar to be used in MapContainer
  * @param {*} props
@@ -97,7 +108,7 @@ const SearchBar = props => {
   const { placeholder } = props
   const [expandedAdress, setStateAdress] = useState(false)
   const [expandedSsr, setStateSsr] = useState(false)
-
+  const classes = useStyles();
   useEffect(() => {
     if (searchText) {
       vectorSource.clear()
@@ -144,15 +155,17 @@ const SearchBar = props => {
 
   return (
     <>
-      <Input placeholder={ placeholder } allowClear onChange={ onChangeBound } />
-      <div className={ style.searchResult }>
+      <form className={ classes.root } noValidate autoComplete="off">
+        <TextField id="standard-search" label="Search field" variant="outlined" size="small" fullWidth type="search" placeholder={ placeholder } onChange={ onChangeBound } />
+      </form>
+      <div >
         {
           searchResult && (
             <>
               <div>
                 <div onClick={ () => setStateAdress(!expandedAdress) } className={ style.expandBtn } >
                   <span className={ style.ellipsisToggle }>ADRESSER</span>
-                  { expandedAdress ? <UpOutlined /> : <DownOutlined /> }
+                  { expandedAdress ? <ExpandLess /> : <ExpandMore /> }
                 </div>
                 <div className={ expandedAdress ? `${style.selected} ${style.open}` : style.selected } >
                   <SearchResult searchResult={ { searchResult } }></SearchResult>
@@ -161,7 +174,7 @@ const SearchBar = props => {
               <div>
                 <div onClick={ () => setStateSsr(!expandedSsr) } className={ style.expandBtn } >
                   <span className={ style.ellipsisToggle }>STEDSNAVN</span>
-                  { expandedSsr ? <UpOutlined /> : <DownOutlined /> }
+                  { expandedSsr ? <ExpandLess /> : <ExpandMore /> }
                 </div>
                 <div className={ expandedSsr ? `${style.selected} ${style.open}` : style.selected } >
                   <SearchResult searchResult={ { searchResultSSR } }></SearchResult>

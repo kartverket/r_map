@@ -1,5 +1,4 @@
-@import '../../assets/sass/variables/_devVariables';
-@import '../../assets/sass/_main';
+@import '../../assets/sass/main';
 
 :local(.link) {
   text-decoration: underline;
@@ -49,7 +48,7 @@
 }
 
 :local(.container) {
-  transition: 0.3s all ease-in-out;
+  transition: 0.2s all ease-in-out;
   position: absolute;
   background: #fff;
   border: 2px solid #e5e5e5;
@@ -57,7 +56,6 @@
   z-index: 2;
   overflow: hidden;
   margin-top: 10px;
-  padding-top: 65px;
   border-left-color: white;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
@@ -70,17 +68,13 @@
     overflow: visible;
     overflow-x: hidden;
     overflow-y: auto;
-    width: 350px;
+    width: 300px;
     height: 100%;
-
-    > div {
-      margin: 15px 5px;
-    }
   }
 
   &:local(.closed) {
-    width: 76px;
-    height: 76px;
+    width: 46px;
+    height: 46px;
 
     &:hover {
       background: #e5e5e5;

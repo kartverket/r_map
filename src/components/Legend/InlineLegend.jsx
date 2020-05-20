@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import PropTypes from "prop-types"
 import Legend from "./Legend"
-import { UpOutlined, DownOutlined } from "@ant-design/icons"
+import { ExpandLess, ExpandMore } from "@material-ui/icons"
 import style from "./InlineLegend.module.scss"
 /**
  * Legend to be used in the ServicePanel
@@ -18,7 +18,7 @@ const InlineLegend = props => {
             <span className={ style.label }>
               { expanded ? "Skjul tegnforklaring" : "Vis tegnforklaring" }{ " " }
             </span>
-            { expanded ? <UpOutlined /> : <DownOutlined /> }
+            { expanded ? <ExpandLess /> : <ExpandMore /> }
           </div>
           <div className={ expanded ? style.legend : style.legend + " " + style.closed }>
             <Legend legendUrl={ props.legendUrl } legendAlternative="Legend" />
