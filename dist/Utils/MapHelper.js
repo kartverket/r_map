@@ -1,15 +1,15 @@
 "use strict";
 
-var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\babel-preset-react-app\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getImageSourceRatio = exports.getResolutionFromScale = exports.getWMSCapabilities = exports.parseWmsCapabilities = exports.mergeDefaultParams = exports.createOlWMSFromCap = exports.addWmsToMapFromConfig = exports.addWmsToMapFromCap = void 0;
 
-var _regenerator = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/regenerator"));
+var _regenerator = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\babel-preset-react-app\\node_modules\\@babel\\runtime/regenerator"));
 
-var _asyncToGenerator2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/asyncToGenerator"));
+var _asyncToGenerator2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\babel-preset-react-app\\node_modules\\@babel\\runtime/helpers/esm/asyncToGenerator"));
 
 var _queryString = _interopRequireDefault(require("query-string"));
 
@@ -133,7 +133,7 @@ var createOlWMSFromCap = function createOlWMSFromCap(map, getCapLayer) {
       if (Array.isArray(getCapLayer.MetadataURL)) {
           metadata = getCapLayer.MetadataURL[0].OnlineResource;
       }
-          layer = createOlWMS(map, layerParam, {
+            layer = createOlWMS(map, layerParam, {
             url: getCapLayer.url,
             label: getCapLayer.title,
             attribution: attribution,

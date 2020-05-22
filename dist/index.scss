@@ -1,4 +1,5 @@
 @import 'assets/sass/_main';
+@import 'assets/sass/oloverlays';
 
 body, html, #root, .App { height: 100% }
 
@@ -8,12 +9,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 // Overstyr noe av kvib
-nav{
+nav {
   display: block !important;
   background-color: white !important;
   color: $blaa_moerk;
 }
-img{
+img {
   border: none !important;
 }
 // Overstyr slutt
@@ -21,7 +22,6 @@ img{
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
-
 
 .node-label {
   padding-left: 5px;
