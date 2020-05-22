@@ -46,6 +46,4 @@ var _MapContainer = _interopRequireDefault(require("./components/MapContainer/Ma
 
 var _Legend = _interopRequireDefault(require("./components/Legend/Legend"));
 
-require("./Utils/icons");
-
 require("./index.scss");
