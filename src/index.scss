@@ -1,122 +1,25 @@
-@import 'assets/sass/main';
+@import 'assets/sass/_main';
 
 body, html, #root, .App { height: 100% }
 
 body {
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+// Overstyr noe av kvib
+nav {
+  display: block !important;
+  background-color: white !important;
+  color: $blaa_moerk;
+}
+img {
+  border: none !important;
+}
+// Overstyr slutt
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-}
-
-.ol-zoom {
-  top: 40% !important;
-
-  right: 16px;
-  padding: 0;
-}
-
-.ol-noembed {
-  bottom: 10px;
-  left: auto;
-  right: 16px;
-  top: auto;
-  z-index: 12;
-}
-
-.ol-geolocation {
-  bottom: auto;
-  left: auto;
-  right: 16px;
-  top: 100px;
-  z-index: 13;
-}
-
-.ol-mouse-position {
-  bottom: 5px;
-  left: 130px;
-  position: inherit;
-  padding-left: 5px;
-}
-
-#mouse-position {
-  border-radius: 1px;
-  z-index: 99;
-}
-
-.ol-control {
-  position: absolute;
-  background: none;
-  border-radius: 4px;
-  padding: 2px;
-
-  button {
-    display: block;
-    margin-bottom: 5px;
-    padding: 0;
-    color: #fff;
-    font-size: 1.4em;
-    font-weight: 700;
-    text-decoration: none;
-    text-align: center;
-    height: 50px;
-    width: 51px;
-    line-height: 0.4em;
-    background-color: $color-toggle-on;
-    opacity: 0.7;
-    border: none;
-    border-radius: 2px;
-
-    &:hover {
-      background-color: $color-toggle-on;
-      opacity: 0.9;
-      color: white;
-    }
-
-    &:focus {
-      outline: transparent;
-    }
-  }
-}
-
-.ol-scale-line {
-  bottom: 5px;
-  left: 50%;
-  position: absolute;
-  transform: translateX(-50%);
-  background: white;
-  opacity: 0.6;
-  border-radius: 0;
-
-  .ol-scale-line-inner {
-    background-color: white;
-    border-color: black;
-    border-style: solid;
-    border-width: 0 2px 2px 2px;
-    color: black;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 2px 0;
-    text-align: center;
-  }
-}
-
-.panel-title {
-  a:hover {
-    color: #333;
-  }
-}
-
-.react-dropdown-tree-select .dropdown .dropdown-trigger {
-  border: none;
-}
-
-.tag-item .search {
-  border: none;
 }
 
 .node-label {
@@ -125,12 +28,6 @@ code {
 
 #MapComponent{
   height: 100%;
-}
-button.close {
-  font-size: 2em;
-}
-.btn.btn-link {
-  font-size: 1em;
 }
 .modal-body {
   overflow: auto;

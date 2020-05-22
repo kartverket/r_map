@@ -49,5 +49,3 @@ var _Legend = _interopRequireDefault(require("./components/Legend/Legend"));
 require("./Utils/icons");
 
 require("./index.scss");
-
-require("bootstrap/dist/css/bootstrap.min.css");

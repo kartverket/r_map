@@ -11,9 +11,9 @@ exports.default = void 0;
 
 var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray"));
 
-var _react = _interopRequireWildcard(require("react"));
+var _objectWithoutProperties2 = _interopRequireDefault(require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/objectWithoutProperties"));
 
-var _Modal = _interopRequireDefault(require("react-bootstrap/Modal"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _FeatureInfoItemModule = _interopRequireDefault(require("./FeatureInfoItem.module.scss"));
 
@@ -21,7 +21,73 @@ var _uniqid = _interopRequireDefault(require("uniqid"));
 
 var _store = require("../../Utils/store.js");
 
+var _styles = require("@material-ui/core/styles");
+
+var _Dialog = _interopRequireDefault(require("@material-ui/core/Dialog"));
+
+var _DialogTitle = _interopRequireDefault(require("@material-ui/core/DialogTitle"));
+
+var _DialogContent = _interopRequireDefault(require("@material-ui/core/DialogContent"));
+
+var _IconButton = _interopRequireDefault(require("@material-ui/core/IconButton"));
+
+var _Close = _interopRequireDefault(require("@material-ui/icons/Close"));
+
+var _Typography = _interopRequireDefault(require("@material-ui/core/Typography"));
+
+var styles = function styles(theme) {
+  return {
+    root: {
+      margin: 0,
+      padding: theme.spacing(2)
+    },
+    closeButton: {
+      position: 'absolute',
+      right: theme.spacing(1),
+      top: theme.spacing(1),
+      color: theme.palette.grey[500]
+    }
+  };
+};
+
+var DialogTitle = (0, _styles.withStyles)(styles)(function (props) {
+  var children = props.children,
+      classes = props.classes,
+      onClose = props.onClose,
+      other = (0, _objectWithoutProperties2.default)(props, ["children", "classes", "onClose"]);
+  return /*#__PURE__*/_react.default.createElement(_DialogTitle.default, Object.assign({
+    disableTypography: true,
+    className: classes.root
+  }, other), /*#__PURE__*/_react.default.createElement(_Typography.default, {
+    variant: "h6"
+  }, children), onClose ? /*#__PURE__*/_react.default.createElement(_IconButton.default, {
+    "aria-label": "close",
+    className: classes.closeButton,
+    onClick: onClose
+  }, /*#__PURE__*/_react.default.createElement(_Close.default, null)) : null);
+});
+var DialogContent = (0, _styles.withStyles)(function (theme) {
+  return {
+    root: {
+      padding: theme.spacing(2)
+    }
+  };
+})(_DialogContent.default);
+
 var FeatureInfoItem = function FeatureInfoItem() {
+  var _React$useState = _react.default.useState(false),
+      _React$useState2 = (0, _slicedToArray2.default)(_React$useState, 2),
+      open = _React$useState2[0],
+      setOpen = _React$useState2[1];
+
+  var handleClose = function handleClose() {
+    setOpen(false);
+    dispatch({
+      type: "HIDE_FEATURES",
+      info: featureContext.state.info
+    });
+  };
+
   var featureContext = (0, _react.useContext)(_store.store);
   var dispatch = featureContext.dispatch;
 
@@ -165,17 +231,18 @@ var FeatureInfoItem = function FeatureInfoItem() {
     }
   };
 
-  return /*#__PURE__*/_react.default.createElement(_Modal.default, {
-    show: featureContext.state.show,
-    onHide: function onHide() {
-      return dispatch({
-        type: "HIDE_FEATURES",
-        info: featureContext.state.info
-      });
-    }
-  }, /*#__PURE__*/_react.default.createElement(_Modal.default.Header, {
-    closeButton: true
-  }, /*#__PURE__*/_react.default.createElement(_Modal.default.Title, null, "Egenskaper ", /*#__PURE__*/_react.default.createElement("span", null, " ( ", featureContext.state.info ? featureContext.state.info.length : 0, " )"), " ")), /*#__PURE__*/_react.default.createElement(_Modal.default.Body, null, featureContent()));
+  return /*#__PURE__*/_react.default.createElement(_Dialog.default, {
+    onClose: handleClose,
+    "aria-labelledby": "customized-dialog-title",
+    open: open
+  }, /*#__PURE__*/_react.default.createElement(DialogTitle, {
+    id: "customized-dialog-title",
+    onClose: handleClose
+  }, "Egenskaper ", /*#__PURE__*/_react.default.createElement("span", null, " ( ", featureContext.state.info ? featureContext.state.info.length : 0, " )")), /*#__PURE__*/_react.default.createElement(DialogContent, {
+    dividers: true
+  }, /*#__PURE__*/_react.default.createElement(_Typography.default, {
+    gutterBottom: true
+  }, featureContent())));
 };
 
 var _default = FeatureInfoItem;

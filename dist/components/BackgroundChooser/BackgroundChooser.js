@@ -15,7 +15,7 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _maplibHelper = require("../../MapUtil/maplibHelper");
 
-var _reactBootstrap = require("react-bootstrap");
+var _lab = require("@material-ui/lab");
 
 var _BackgroundChooserModule = _interopRequireDefault(require("./BackgroundChooser.module.scss"));
 
@@ -37,7 +37,7 @@ var BackgroundChooser = function BackgroundChooser() {
     return setBaseLayers(_maplibHelper.map.GetBaseLayers());
   });
 
-  var setAsBaseLayer = function setAsBaseLayer(baseLayer) {
+  var setAsBaseLayer = function setAsBaseLayer(event, baseLayer) {
     _maplibHelper.map.SetBaseLayer(baseLayer);
 
     _maplibHelper.map.ZoomToLayer(baseLayer);
@@ -50,7 +50,7 @@ var BackgroundChooser = function BackgroundChooser() {
       var iconClass = _BackgroundChooserModule.default["icon_".concat(baseLayer.id)];
 
       var activeClass = baseLayer.id === selectedBaseLayer.id ? _BackgroundChooserModule.default.active : '';
-      return /*#__PURE__*/_react.default.createElement(_reactBootstrap.ToggleButton, {
+      return /*#__PURE__*/_react.default.createElement(_lab.ToggleButton, {
         key: index,
         className: "".concat(iconClass, " ").concat(activeClass),
         value: baseLayer
@@ -58,9 +58,9 @@ var BackgroundChooser = function BackgroundChooser() {
     });
   };
 
-  return /*#__PURE__*/_react.default.createElement(_reactBootstrap.ToggleButtonGroup, {
-    type: "radio",
+  return /*#__PURE__*/_react.default.createElement(_lab.ToggleButtonGroup, {
     name: "Backgound",
+    exclusive: true,
     className: _BackgroundChooserModule.default.backgroundChooser,
     onChange: setAsBaseLayer,
     value: baseLayer

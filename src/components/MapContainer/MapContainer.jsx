@@ -13,7 +13,6 @@ import Position from '../Position/Position'
 import FeatureInfoItem from '../ServicePanel/FeatureInfoItem'
 import { StateProvider } from '../../Utils/store.js'
 import style from "./MapContainer.module.scss"
-import 'ol/ol.css'
 
 const ServiceListItem = (props) => <ServicePanel services={ props.listItem } removeMapItem={ props.removeMapItem } draggable />
 
@@ -99,11 +98,11 @@ const MapContainer = (props) => {
           </div>
 
         </div>
-        <div id="map"
+        <div id="map" className="map"
           style={ {
             position: "relative",
             width: "100%",
-            height: "100%",
+            height: "100vh",
             zIndex: 0
           } }
         />

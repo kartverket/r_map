@@ -13,9 +13,9 @@ var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Proje
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _icons = require("@ant-design/icons");
+var _icons = require("@material-ui/icons");
 
-var _antd = require("antd");
+var _core = require("@material-ui/core");
 
 var _LayerEntryModule = _interopRequireDefault(require("./LayerEntry.module.scss"));
 
@@ -28,6 +28,24 @@ var _style = require("ol/style");
 var _store = require("../../Utils/store.js");
 
 var _FeatureUtil = require("../../MapUtil/FeatureUtil");
+
+var _styles = require("@material-ui/core/styles");
+
+var _ListItem = _interopRequireDefault(require("@material-ui/core/ListItem"));
+
+var _ListItemIcon = _interopRequireDefault(require("@material-ui/core/ListItemIcon"));
+
+var _ListItemSecondaryAction = _interopRequireDefault(require("@material-ui/core/ListItemSecondaryAction"));
+
+var _ListItemText = _interopRequireDefault(require("@material-ui/core/ListItemText"));
+
+var _IconButton = _interopRequireDefault(require("@material-ui/core/IconButton"));
+
+var _TuneOutlined = _interopRequireDefault(require("@material-ui/icons/TuneOutlined"));
+
+var _Slider = _interopRequireDefault(require("@material-ui/core/Slider"));
+
+var _Typography = _interopRequireDefault(require("@material-ui/core/Typography"));
 
 //import { Messaging } from '../../Utils/communication'
 var LayerEntry = function LayerEntry(props) {
@@ -185,7 +203,7 @@ var LayerEntry = function LayerEntry(props) {
     }
   };
 
-  var setOpacity = function setOpacity(value) {
+  var setOpacity = function setOpacity(event, value) {
     setTransparency(value);
 
     if (olLayer) {
@@ -204,36 +222,41 @@ var LayerEntry = function LayerEntry(props) {
   window.olMap.getView().on('change:resolution', function (e) {
     checkResolution();
   });
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, layer.Name ? /*#__PURE__*/_react.default.createElement(_antd.Checkbox, {
-    id: layer.Name,
-    onChange: function onChange() {
-      return onSelectionChange(layer);
-    },
-    checked: checked
-  }, abstractTextSpan()) : /*#__PURE__*/_react.default.createElement("label", {
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_ListItem.default, {
+    key: layer.Name,
+    role: undefined,
+    button: true,
     onClick: function onClick() {
       return onSelectionChange(layer);
-    },
-    htmlFor: abstractTextSpan()
-  }, " "), layer.Name ? /*#__PURE__*/_react.default.createElement("label", {
+    }
+  }, /*#__PURE__*/_react.default.createElement(_ListItemIcon.default, null, /*#__PURE__*/_react.default.createElement(_core.Checkbox, {
+    edge: "start",
+    checked: checked,
+    tabIndex: -1,
+    color: "primary",
+    inputProps: {
+      'aria-labelledby': layer.Name
+    }
+  })), /*#__PURE__*/_react.default.createElement(_ListItemText.default, {
+    id: layer.Name,
+    primary: abstractTextSpan()
+  }), /*#__PURE__*/_react.default.createElement(_ListItemSecondaryAction.default, null, /*#__PURE__*/_react.default.createElement(_IconButton.default, {
+    edge: "end",
+    "aria-label": "options",
     onClick: function onClick() {
       return toggleOptions(!options);
     }
-  }, options ? /*#__PURE__*/_react.default.createElement(_icons.UpOutlined, null) : /*#__PURE__*/_react.default.createElement(_icons.DownOutlined, null)) : '', /*#__PURE__*/_react.default.createElement(_InlineLegend.default, {
-    legendUrl: layer.Style && layer.Style[0].LegendURL ? layer.Style[0].LegendURL[0].OnlineResource : ''
-  }), options ? /*#__PURE__*/_react.default.createElement("div", {
-    className: _LayerEntryModule.default.settings
-  }, /*#__PURE__*/_react.default.createElement("label", {
-    className: _LayerEntryModule.default.slider
-  }, "Gjennomsiktighet:", /*#__PURE__*/_react.default.createElement("input", {
-    type: "range",
-    min: 0,
-    max: 100,
+  }, /*#__PURE__*/_react.default.createElement(_TuneOutlined.default, null)))), options ? /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_Typography.default, {
+    id: "slider",
+    gutterBottom: true
+  }, "Gjennomsiktighet:"), /*#__PURE__*/_react.default.createElement(_Slider.default, {
+    defaultValue: 50,
+    "aria-labelledby": "transparenz",
     value: transparency,
-    onChange: function onChange(e) {
-      return setOpacity(e.target.value);
-    }
-  }))) : "", props.children, layer.Layer ? layer.Layer.map(function (subLayer, isub) {
+    onChange: setOpacity
+  })) : "", /*#__PURE__*/_react.default.createElement(_InlineLegend.default, {
+    legendUrl: layer.Style && layer.Style[0].LegendURL ? layer.Style[0].LegendURL[0].OnlineResource : ''
+  }), props.children, layer.Layer ? layer.Layer.map(function (subLayer, isub) {
     return /*#__PURE__*/_react.default.createElement("div", {
       className: _LayerEntryModule.default.facetSub,
       key: isub

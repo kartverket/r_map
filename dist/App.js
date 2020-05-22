@@ -23,17 +23,13 @@ var TEST_DATA = [
     addLayers: ['gp_dek_oversikt_wms', 'datasett_dekning']
   },
  */
-
-/*
-   {
-   'Uuid': '8c2c434b-07f7-4ebc-9bc6-9c15cdd75c4c',
-   'Title': 'Fastmerker & Basestajoner WMS',
-   'DistributionProtocol': 'OGC:WMS',
-   'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.fastmerker2?request=GetCapabilities&service=WMS',
-   addLayers: ['Niv_fastmerker', 'Landsnettpunkt']
- },
-*/
 {
+  'Uuid': '8c2c434b-07f7-4ebc-9bc6-9c15cdd75c4c',
+  'Title': 'Fastmerker & Basestajoner WMS',
+  'DistributionProtocol': 'OGC:WMS',
+  'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.fastmerker2?request=GetCapabilities&service=WMS',
+  addLayers: ['Niv_fastmerker', 'Landsnettpunkt']
+}, {
   'Title': 'Abas',
   'DistributionProtocol': 'OGC:WMS',
   'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.adm_enheter2?request=GetCapabilities&service=WMS',

@@ -21,9 +21,11 @@ var _pinMdOrange = _interopRequireDefault(require("../../assets/img/pin-md-orang
 
 var _pinMdBlueish = _interopRequireDefault(require("../../assets/img/pin-md-blueish.png"));
 
-var _icons = require("@ant-design/icons");
+var _icons = require("@material-ui/icons");
 
-var _antd = require("antd");
+var _styles = require("@material-ui/core/styles");
+
+var _core = require("@material-ui/core");
 
 var _SearchBarModule = _interopRequireDefault(require("./SearchBar.module.scss"));
 
@@ -99,28 +101,33 @@ var SearchResult = function SearchResult(props) {
     return (0, _proj.transform)([Number(coord.lon), Number(coord.lat)], coord.epsg, epsgTo);
   };
 
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "list-group"
+  return /*#__PURE__*/_react.default.createElement(_core.List, {
+    component: "nav",
+    dense: true,
+    "aria-label": "search results"
   }, props.searchResult.searchResult && props.searchResult.searchResult.adresser.map(function (data, idx) {
     showInfoMarker(constructPoint(data.representasjonspunkt));
-    return /*#__PURE__*/_react.default.createElement("button", {
-      type: "button",
-      key: idx,
-      className: "list-group-item list-group-item-action",
+    return /*#__PURE__*/_react.default.createElement("div", {
+      key: idx
+    }, /*#__PURE__*/_react.default.createElement(_core.ListItem, {
+      color: "primary",
+      button: true,
       onClick: function onClick() {
         centerPosition(constructPoint(data.representasjonspunkt));
       }
-    }, data.adressetekst, " , ", data.kommunenavn);
+    }, /*#__PURE__*/_react.default.createElement(_core.ListItemText, {
+      primary: data.adressetekst + ', ' + data.kommunenavn
+    })), /*#__PURE__*/_react.default.createElement(_core.Divider, null));
   }), props.searchResult.searchResultSSR && props.searchResult.searchResultSSR.sokRes.stedsnavn.map(function (data, idx) {
     showInfoMarker(constructPoint({
       lon: data.aust,
       lat: data.nord,
       epsg: 'EPSG:25833'
     }));
-    return /*#__PURE__*/_react.default.createElement("button", {
-      type: "button",
-      key: idx,
-      className: "list-group-item list-group-item-action",
+    return /*#__PURE__*/_react.default.createElement("div", {
+      key: idx
+    }, /*#__PURE__*/_react.default.createElement(_core.ListItem, {
+      button: true,
       onClick: function onClick() {
         centerPosition(constructPoint({
           lon: data.aust,
@@ -128,14 +135,25 @@ var SearchResult = function SearchResult(props) {
           epsg: 'EPSG:25833'
         }));
       }
-    }, data.stedsnavn, " , ", data.kommunenavn);
+    }, /*#__PURE__*/_react.default.createElement(_core.ListItemText, {
+      primary: data.stedsnavn + ', ' + data.kommunenavn
+    })), /*#__PURE__*/_react.default.createElement(_core.Divider, null));
   }));
 };
+
+var useStyles = (0, _styles.makeStyles)(function (theme) {
+  return {
+    root: {
+      '& > *': {
+        margin: theme.spacing(2, 0)
+      }
+    }
+  };
+});
 /**
  * SearchBar to be used in MapContainer
  * @param {*} props
  */
-
 
 var SearchBar = function SearchBar(props) {
   var queryValues = _queryString.default.parse(window.location.search);
@@ -167,6 +185,7 @@ var SearchBar = function SearchBar(props) {
       expandedSsr = _useState10[0],
       setStateSsr = _useState10[1];
 
+  var classes = useStyles();
   (0, _react.useEffect)(function () {
     if (searchText) {
       vectorSource.clear();
@@ -215,20 +234,27 @@ var SearchBar = function SearchBar(props) {
     setSearchText(event.target.value);
   };
 
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_antd.Input, {
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("form", {
+    className: classes.root,
+    noValidate: true,
+    autoComplete: "off"
+  }, /*#__PURE__*/_react.default.createElement(_core.TextField, {
+    id: "standard-search",
+    label: "Search field",
+    variant: "outlined",
+    size: "small",
+    fullWidth: true,
+    type: "search",
     placeholder: placeholder,
-    allowClear: true,
     onChange: onChangeBound
-  }), /*#__PURE__*/_react.default.createElement("div", {
-    className: _SearchBarModule.default.searchResult
-  }, searchResult && /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
+  })), /*#__PURE__*/_react.default.createElement("div", null, searchResult && /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
     onClick: function onClick() {
       return setStateAdress(!expandedAdress);
     },
     className: _SearchBarModule.default.expandBtn
   }, /*#__PURE__*/_react.default.createElement("span", {
     className: _SearchBarModule.default.ellipsisToggle
-  }, "ADRESSER"), expandedAdress ? /*#__PURE__*/_react.default.createElement(_icons.UpOutlined, null) : /*#__PURE__*/_react.default.createElement(_icons.DownOutlined, null)), /*#__PURE__*/_react.default.createElement("div", {
+  }, "ADRESSER"), expandedAdress ? /*#__PURE__*/_react.default.createElement(_icons.ExpandLess, null) : /*#__PURE__*/_react.default.createElement(_icons.ExpandMore, null)), /*#__PURE__*/_react.default.createElement("div", {
     className: expandedAdress ? "".concat(_SearchBarModule.default.selected, " ").concat(_SearchBarModule.default.open) : _SearchBarModule.default.selected
   }, /*#__PURE__*/_react.default.createElement(SearchResult, {
     searchResult: {
@@ -241,7 +267,7 @@ var SearchBar = function SearchBar(props) {
     className: _SearchBarModule.default.expandBtn
   }, /*#__PURE__*/_react.default.createElement("span", {
     className: _SearchBarModule.default.ellipsisToggle
-  }, "STEDSNAVN"), expandedSsr ? /*#__PURE__*/_react.default.createElement(_icons.UpOutlined, null) : /*#__PURE__*/_react.default.createElement(_icons.DownOutlined, null)), /*#__PURE__*/_react.default.createElement("div", {
+  }, "STEDSNAVN"), expandedSsr ? /*#__PURE__*/_react.default.createElement(_icons.ExpandLess, null) : /*#__PURE__*/_react.default.createElement(_icons.ExpandMore, null)), /*#__PURE__*/_react.default.createElement("div", {
     className: expandedSsr ? "".concat(_SearchBarModule.default.selected, " ").concat(_SearchBarModule.default.open) : _SearchBarModule.default.selected
   }, /*#__PURE__*/_react.default.createElement(SearchResult, {
     searchResult: {

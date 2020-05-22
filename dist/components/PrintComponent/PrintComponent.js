@@ -13,7 +13,7 @@ var _slicedToArray2 = _interopRequireDefault(require("/Users/carstenmielke/Proje
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _reactBootstrap = require("react-bootstrap");
+var _Button = _interopRequireDefault(require("@material-ui/core/Button"));
 
 var printCapabilitiesUrl = 'http://localhost:5000/capabilities'; //'https://ws.geonorge.no/print/kv/capabilities.json'
 
@@ -579,7 +579,7 @@ var Print = function Print(props) {
     return /*#__PURE__*/_react.default.createElement("option", {
       value: scale
     }, "1:", scale);
-  }))), /*#__PURE__*/_react.default.createElement(_reactBootstrap.Button, {
+  }))), /*#__PURE__*/_react.default.createElement(_Button.default, {
     onClick: function onClick() {
       return makePrint();
     }

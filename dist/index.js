@@ -44,8 +44,6 @@ var _reactDom = _interopRequireDefault(require("react-dom"));
 
 require("./index.scss");
 
-require("bootstrap/dist/css/bootstrap.min.css");
-
 var _App = _interopRequireDefault(require("./App"));
 
 var serviceWorker = _interopRequireWildcard(require("./serviceWorker"));

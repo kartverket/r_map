@@ -15,7 +15,7 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _Legend = _interopRequireDefault(require("./Legend"));
 
-var _icons = require("@ant-design/icons");
+var _icons = require("@material-ui/icons");
 
 var _InlineLegendModule = _interopRequireDefault(require("./InlineLegend.module.scss"));
 
@@ -38,7 +38,7 @@ var InlineLegend = function InlineLegend(props) {
         }
       }, /*#__PURE__*/_react.default.createElement("span", {
         className: _InlineLegendModule.default.label
-      }, expanded ? "Skjul tegnforklaring" : "Vis tegnforklaring", " "), expanded ? /*#__PURE__*/_react.default.createElement(_icons.UpOutlined, null) : /*#__PURE__*/_react.default.createElement(_icons.DownOutlined, null)), /*#__PURE__*/_react.default.createElement("div", {
+      }, expanded ? "Skjul tegnforklaring" : "Vis tegnforklaring", " "), expanded ? /*#__PURE__*/_react.default.createElement(_icons.ExpandLess, null) : /*#__PURE__*/_react.default.createElement(_icons.ExpandMore, null)), /*#__PURE__*/_react.default.createElement("div", {
         className: expanded ? _InlineLegendModule.default.legend : _InlineLegendModule.default.legend + " " + _InlineLegendModule.default.closed
       }, /*#__PURE__*/_react.default.createElement(_Legend.default, {
         legendUrl: props.legendUrl,

@@ -1,4 +1,4 @@
-@import '../../assets/sass/main';
+@import '../../assets/sass/_main';
 
 :local(.link) {
   text-decoration: underline;
@@ -68,7 +68,7 @@
     overflow: visible;
     overflow-x: hidden;
     overflow-y: auto;
-    width: 300px;
+    width: 350px;
     height: 100%;
   }
 

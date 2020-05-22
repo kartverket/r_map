@@ -65,7 +65,7 @@ const SearchResult = (props) => {
           showInfoMarker(constructPoint(data.representasjonspunkt))
           return (
             <div key={ idx }>
-              <ListItem button onClick={ () => { centerPosition(constructPoint(data.representasjonspunkt)) } }>
+              <ListItem color="primary" button onClick={ () => { centerPosition(constructPoint(data.representasjonspunkt)) } }>
                 <ListItemText primary={ data.adressetekst + ', ' + data.kommunenavn } />
               </ListItem>
               <Divider />

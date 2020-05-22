@@ -1,8 +1,8 @@
 "use strict";
 
-var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
-
 var _interopRequireWildcard = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireWildcard");
+
+var _interopRequireDefault = require("/Users/carstenmielke/Projekte/r_map.github/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -17,11 +17,13 @@ var _CapabilitiesUtil = require("../../MapUtil/CapabilitiesUtil");
 
 var _ServicePanelModule = _interopRequireDefault(require("./ServicePanel.module.scss"));
 
-var _icons = require("@ant-design/icons");
+var _icons = require("@material-ui/icons");
+
+var _IconButton = _interopRequireDefault(require("@material-ui/core/IconButton"));
+
+var _List = _interopRequireDefault(require("@material-ui/core/List"));
 
 var _LayerEntry = _interopRequireDefault(require("./LayerEntry"));
-
-var _this = void 0;
 
 var ServicePanel = function ServicePanel(props) {
   var _useState = (0, _react.useState)(),
@@ -94,10 +96,11 @@ var ServicePanel = function ServicePanel(props) {
 
   var renderRemoveButton = function renderRemoveButton() {
     if (props.removeMapItem) {
-      return /*#__PURE__*/_react.default.createElement(_icons.CloseOutlined, {
+      return /*#__PURE__*/_react.default.createElement(_IconButton.default, {
+        "aria-label": "close",
         className: _ServicePanelModule.default.removeInline,
-        onClick: _this.props.removeMapItem
-      });
+        onClick: props.removeMapItem
+      }, /*#__PURE__*/_react.default.createElement(_icons.Close, null));
     } else {
       return '';
     }
@@ -146,7 +149,7 @@ var ServicePanel = function ServicePanel(props) {
     className: _ServicePanelModule.default.expandLayersBtn
   }, /*#__PURE__*/_react.default.createElement("span", {
     className: _ServicePanelModule.default.ellipsisToggle
-  }, props.services.Title), expanded ? /*#__PURE__*/_react.default.createElement(_icons.UpOutlined, null) : /*#__PURE__*/_react.default.createElement(_icons.DownOutlined, null)), renderRemoveButton(), /*#__PURE__*/_react.default.createElement("div", {
+  }, props.services.Title), expanded ? /*#__PURE__*/_react.default.createElement(_icons.ExpandLess, null) : /*#__PURE__*/_react.default.createElement(_icons.ExpandMore, null)), renderRemoveButton(), /*#__PURE__*/_react.default.createElement(_List.default, {
     className: expanded ? "".concat(_ServicePanelModule.default.selectedlayers, " ").concat(_ServicePanelModule.default.open) : _ServicePanelModule.default.selectedlayers
   }, renderCapabilites()));
 };
