@@ -9,8 +9,6 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _icons = require("@material-ui/icons");
-
 var _core = require("@material-ui/core");
 
 var _LayerEntryModule = _interopRequireDefault(require("./LayerEntry.module.scss"));
@@ -24,8 +22,6 @@ var _style = require("ol/style");
 var _store = require("../../Utils/store.js");
 
 var _FeatureUtil = require("../../MapUtil/FeatureUtil");
-
-var _styles = require("@material-ui/core/styles");
 
 var _ListItem = _interopRequireDefault(require("@material-ui/core/ListItem"));
 
@@ -87,6 +83,11 @@ var LayerEntry = function LayerEntry(props) {
 
   var layer = props.layer;
   layer.Name = layer.name && typeof layer.name === 'object' ? layer.name.localPart : layer.Name;
+  (0, _react.useLayoutEffect)(function () {
+    if (props.meta && props.meta.isVisible) {
+      setChecked(true);
+    }
+  }, [props.meta]);
 
   var abstractTextSpan = function abstractTextSpan() {
     var textSpan = '';
@@ -143,7 +144,7 @@ var LayerEntry = function LayerEntry(props) {
             var formats = currentLayer.getProperties().getFeatureInfoFormats;
             var indexFormat = 0;
 
-            if (formats.indexOf('text/plain') > 0) {
+            if (formats.indexOf('text/plain') === 0) {
               indexFormat = formats.indexOf('text/plain');
             } else if (formats.indexOf('text/xml') > 0) {
               indexFormat = formats.indexOf('text/xml');
@@ -158,6 +159,10 @@ var LayerEntry = function LayerEntry(props) {
             var url = currentLayer.getSource().getFeatureInfoUrl(evt.coordinate, viewResolution, window.olMap.getView().getProjection(), {
               INFO_FORMAT: formats[indexFormat]
             });
+
+            if (url.startsWith('http://rin-te')) {
+              url = 'https://norgeskart.no/ws/px.py?' + url;
+            }
 
             if (url && currentLayer.getVisible()) {
               fetch(url).then(function (response) {

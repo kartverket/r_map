@@ -22,12 +22,33 @@ const TEST_DATA = [
      addLayers: ['Niv_fastmerker', 'Landsnettpunkt']
    },
   */
+  /*
+ {
+  'Title': 'Marine WMS',
+  'DistributionProtocol': 'OGC:WMS',
+  'GetCapabilitiesUrl': 'https://marine.discomap.eea.europa.eu/arcgis/services/Marine/EEA_coastline_v2017/MapServer/WMSServer?request=GetCapabilities&service=WMS',
+  addLayers: []
+  },
+  */
+  {
+    'Title': 'Romvær',
+    'DistributionProtocol': 'OGC:WMS',
+    'GetCapabilitiesUrl': 'https://norgeskart.no/ws/px.py?http://rin-te0031/cgi-bin/romvaer?request=GetCapabilities&service=WMS',
+    'addLayers': []
+},
   {
     'Title': 'Abas',
     'DistributionProtocol': 'OGC:WMS',
     'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.adm_enheter2?request=GetCapabilities&service=WMS',
-    addLayers: ['fylker_gjel', 'kommuner_gjel']
+    addLayers: []
+  },
+  {
+    'Title': 'Eox',
+    'DistributionProtocol': 'OGC:WMTS',
+    'GetCapabilitiesUrl': 'https://f.tiles.maps.eox.at/wmts/1.1.0?version=1.1.0&service=wmts&request=getcapabilities',
+    addLayers: []
   }
+  //https://f.tiles.maps.eox.at/wmts/1.0.0?
   /*
     {
       'Title': 'Dybdedata_dekning_dtm50_5',

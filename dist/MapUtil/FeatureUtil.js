@@ -150,11 +150,12 @@ var arrayToObject = function arrayToObject(array) {
 
 var parsePlainFeatureInfo = function parsePlainFeatureInfo(data) {
   var parsedFeatureInfo;
-  if (data === "no features were found") return '';
+  if (data === "no features were found" || data.includes('Search returned no results')) return '';
 
   if (data.includes('Layer')) {
     var featureInfo = data.split("\n\n");
     featureInfo.shift();
+    if (featureInfo[featureInfo.length - 1].length === 0) featureInfo.pop();
     parsedFeatureInfo = featureInfo.map(function (layer) {
       var r_layer = {};
       var subf = layer.split(/(Layer[^\r\n]*)/);

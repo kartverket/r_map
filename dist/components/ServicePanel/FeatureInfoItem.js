@@ -251,7 +251,7 @@ var FeatureInfoItem = function FeatureInfoItem() {
   return /*#__PURE__*/_react.default.createElement(_Dialog.default, {
     onClose: handleClose,
     "aria-labelledby": "customized-dialog-title",
-    open: open
+    open: featureContext.state.show
   }, /*#__PURE__*/_react.default.createElement(DialogTitle, {
     id: "customized-dialog-title",
     onClose: handleClose

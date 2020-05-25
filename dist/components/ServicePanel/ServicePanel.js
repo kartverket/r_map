@@ -67,6 +67,30 @@ var ServicePanel = function ServicePanel(props) {
           newMetaInfo = _CapabilitiesUtil.CapabilitiesUtil.getWMSMetaCapabilities(capa);
           newMetaInfo.Type = 'OGC:WMS';
           newMetaInfo.Params = props.services.customParams || '';
+
+          if (props.services.addLayers.length > 0) {
+            var layersToBeAdded = [];
+            layersToBeAdded = capa.Capability.Layer.Layer.filter(function (e) {
+              return props.services.addLayers.includes(e.Name);
+            });
+
+            if (layersToBeAdded.length === 0 || layersToBeAdded.length !== props.services.addLayers.length) {
+              layersToBeAdded = [];
+              props.services.addLayers.forEach(function (layerName) {
+                layersToBeAdded.push({
+                  Name: layerName
+                });
+              });
+            }
+
+            layersToBeAdded.forEach(function (layer) {
+              var laycapaLayerer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmsCapabilities(newMetaInfo, layer);
+
+              newMetaInfo.isVisible = true;
+              window.olMap.addLayer(laycapaLayerer);
+            });
+          }
+
           setMeta(newMetaInfo);
         }).catch(function (e) {
           return console.warn(e);
@@ -119,7 +143,7 @@ var ServicePanel = function ServicePanel(props) {
         console.warn('No service type specified');
         break;
     }
-  }, [props.services.DistributionProtocol, props.services.GetCapabilitiesUrl, props.services.url, props.services.ShowPropertyName, props.services.customParams, props.services.EPSG]);
+  }, [props.services.DistributionProtocol, props.services.GetCapabilitiesUrl, props.services.url, props.services.ShowPropertyName, props.services.customParams, props.services.EPSG, props.services.addLayers]);
 
   var renderRemoveButton = function renderRemoveButton() {
     if (props.removeMapItem) {
@@ -188,7 +212,7 @@ var ServicePanel = function ServicePanel(props) {
     className: _ServicePanelModule.default.expandLayersBtn
   }, /*#__PURE__*/_react.default.createElement("span", {
     className: _ServicePanelModule.default.ellipsisToggle
-  }, props.services.Title), expanded ? /*#__PURE__*/_react.default.createElement(_icons.ExpandLess, null) : /*#__PURE__*/_react.default.createElement(_icons.ExpandMore, null)), renderRemoveButton(), /*#__PURE__*/_react.default.createElement(_List.default, {
+  }, props.services.Title), /*#__PURE__*/_react.default.createElement("span", null, capabilities ? capabilities.Service ? capabilities.Service.Abstract : '' : ''), expanded ? /*#__PURE__*/_react.default.createElement(_icons.ExpandLess, null) : /*#__PURE__*/_react.default.createElement(_icons.ExpandMore, null)), renderRemoveButton(), /*#__PURE__*/_react.default.createElement(_List.default, {
     className: expanded ? "".concat(_ServicePanelModule.default.selectedlayers, " ").concat(_ServicePanelModule.default.open) : _ServicePanelModule.default.selectedlayers
   }, renderCapabilites()));
 };
