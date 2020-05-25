@@ -38,11 +38,11 @@ export let mapConfig = {
     name: 'Landkart',
     url: 'https://gatekeeper1.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?|https://gatekeeper2.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?',
     params: {
-      layers: 'norgeskart_bakgrunn',
+      layers: 'topo4',
       format: 'image/png'
     },
     matrixprefix: 'true',
-    guid: '0.norgeskart_bakgrunn',
+    guid: '0.topo4',
     options: {
       isbaselayer: 'true',
       singletile: 'false',
@@ -55,11 +55,11 @@ export let mapConfig = {
     name: 'Gråtone',
     url: 'https://gatekeeper1.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?|https://gatekeeper2.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?',
     params: {
-      layers: 'norges_grunnkart_graatone',
+      layers: 'topo4graatone',
       format: 'image/png'
     },
     matrixprefix: 'true',
-    guid: '0.norges_grunnkart_graatone',
+    guid: '0.topo4graatone',
     options: {
       isbaselayer: 'true',
       singletile: 'false',
@@ -68,10 +68,10 @@ export let mapConfig = {
   }, {
     type: 'map',
     gatekeeper: 'true',
-    name: 'Enkel',
+    name: 'Europa',
     url: 'https://gatekeeper1.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?|https://gatekeeper2.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?',
     params: {
-      layers: 'norges_grunnkart',
+      layers: 'europa_forenklet',
       format: 'image/png'
     },
     matrixprefix: 'true',
@@ -79,7 +79,7 @@ export let mapConfig = {
     options: {
       isbaselayer: 'true',
       singletile: 'false',
-      visibility: 'false'
+      visibility: 'true'
     }
   }, {
     type: 'map',
