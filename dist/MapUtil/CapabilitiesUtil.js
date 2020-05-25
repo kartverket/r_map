@@ -1,5 +1,7 @@
 "use strict";
 
+var _interopRequireWildcard = require("C:\\code_git\\r_map.github\\node_modules\\babel-preset-react-app\\node_modules\\@babel\\runtime/helpers/interopRequireWildcard");
+
 var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\babel-preset-react-app\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
@@ -16,6 +18,10 @@ var _WMSCapabilities = _interopRequireDefault(require("ol/format/WMSCapabilities
 var _WMTSCapabilities = _interopRequireDefault(require("ol/format/WMTSCapabilities.js"));
 
 var _ImageWMS = _interopRequireDefault(require("ol/source/ImageWMS"));
+
+var _WMTS = _interopRequireWildcard(require("ol/source/WMTS"));
+
+var _Tile = _interopRequireDefault(require("ol/layer/Tile"));
 
 var _Image = _interopRequireDefault(require("ol/layer/Image"));
 
@@ -483,6 +489,19 @@ var CapabilitiesUtil = /*#__PURE__*/function () {
           attributions: metaCapabilities.Attribution,
           params: params
         })
+      });
+    }
+  }, {
+    key: "getOlLayerFromWmtsCapabilities",
+    value: function getOlLayerFromWmtsCapabilities(metaCapabilities, layerCapabilities) {
+      var options = (0, _WMTS.optionsFromCapabilities)(metaCapabilities, {
+        layer: layerCapabilities.Identifier
+      });
+      return new _Tile.default({
+        opacity: 1,
+        title: layerCapabilities.Title,
+        abstract: layerCapabilities.Abstract,
+        source: new _WMTS.default(options)
       });
     }
   }]);

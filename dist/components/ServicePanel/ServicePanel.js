@@ -36,7 +36,7 @@ var ServicePanel = function ServicePanel(props) {
       meta = _useState4[0],
       setMeta = _useState4[1];
 
-  var _useState5 = (0, _react.useState)(false),
+  var _useState5 = (0, _react.useState)(true),
       _useState6 = (0, _slicedToArray2.default)(_useState5, 2),
       expanded = _useState6[0],
       setState = _useState6[1];
@@ -52,6 +52,19 @@ var ServicePanel = function ServicePanel(props) {
           setCapabilities(capa);
           newMetaInfo = _CapabilitiesUtil.CapabilitiesUtil.getWMSMetaCapabilities(capa);
           newMetaInfo.Type = 'OGC:WMS';
+          newMetaInfo.Params = props.services.customParams || '';
+          setMeta(newMetaInfo);
+        }).catch(function (e) {
+          return console.warn(e);
+        });
+
+        break;
+
+      case 'OGC:WMTS':
+        _CapabilitiesUtil.CapabilitiesUtil.parseWmtsCapabilities(props.services.GetCapabilitiesUrl).then(function (capa) {
+          setCapabilities(capa);
+          newMetaInfo = _CapabilitiesUtil.CapabilitiesUtil.getWMSMetaCapabilities(capa);
+          newMetaInfo.Type = 'OGC:WMTS';
           newMetaInfo.Params = props.services.customParams || '';
           setMeta(newMetaInfo);
         }).catch(function (e) {
@@ -136,6 +149,18 @@ var ServicePanel = function ServicePanel(props) {
         layer: capabilities,
         meta: meta
       }));
+    } else if (capabilities && capabilities.Contents) {
+      return capabilities.Contents.Layer.map(function (capaLayer, i) {
+        return /*#__PURE__*/_react.default.createElement("div", {
+          className: _ServicePanelModule.default.facet,
+          key: i
+        }, /*#__PURE__*/_react.default.createElement(_LayerEntry.default, {
+          layer: capaLayer,
+          meta: meta,
+          capa: capabilities,
+          key: i
+        }));
+      });
     } else {
       // console.warn(capabilities)
       return '';

@@ -98,10 +98,12 @@ var LayerEntry = function LayerEntry(props) {
   var onSelectionChange = function onSelectionChange(currentNode) {
     var isNewLayer = true;
 
-    if (layer.Name) {
+    if (layer.Name || layer.Title) {
       var currentLayer;
 
-      if (props.meta.Type === 'OGC:WMS' || props.meta.Type === 'WMS' || props.meta.Type === 'WMS-tjeneste') {
+      if (props.meta.Type === 'OGC:WMTS' || props.meta.Type === 'WMTS' || props.meta.Type === 'WMTS-tjeneste') {
+        currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmtsCapabilities(props.capa, currentNode);
+      } else if (props.meta.Type === 'OGC:WMS' || props.meta.Type === 'WMS' || props.meta.Type === 'WMS-tjeneste') {
         currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmsCapabilities(props.meta, currentNode);
       } else if (props.meta.Type === 'GEOJSON') {
         currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromGeoJson(props.meta, currentNode);
