@@ -1,7 +1,5 @@
 "use strict";
 
-var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\babel-preset-react-app\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -47,3 +45,5 @@ var _MapContainer = _interopRequireDefault(require("./components/MapContainer/Ma
 var _Legend = _interopRequireDefault(require("./components/Legend/Legend"));
 
 require("./index.scss");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

@@ -1,13 +1,13 @@
 "use strict";
 
-var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\babel-preset-react-app\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.generateCancelPrintUrl = exports.generateStatusPrintDownloadUrl = exports.generatePrintDownloadUrl = exports.generatePrintUrl = exports.generateUrlPrintCapabilities = exports.isNotOutOfBounds = exports.isOutOfBounds = exports.getCoordinateSystems = exports.getSOSIfromEPSG = exports.generateFaqUrl = exports.generateEiendomAddress = exports.generateMatrikkelWfsFilterUrl = exports._constructMarkingFilter = exports.generateSearchMatrikkelNummerUrl = exports.generateGeoJSONSaveUrl = exports.generateGeoJSONUrl = exports.generateEmergencyPosterPreviewImageUrl = exports.generateSearchStedsnavnBboxUrl = exports.generateEmergencyPosterPointUrl = exports.generateLagFargeleggingskartUrl = exports.generateLagTurkartUrl = exports.generateSeHavnivaaUrl = exports.generateKoordTransUrl = exports.generateFaktaarkUrl = exports.generateSeEiendomUrl = exports.generateMatrikkelInfoUrl = exports.generateAdressePunktsokUrl = exports.generateAdresseSokUrl = exports.generateElevationPointUrl = exports.generateSearchAdresseUrl = exports.generateSearchStedsnavnUrl = exports.generateSearchMatrikkelAdresseUrl = exports.generateSearchMatrikkelVegUrl = exports.generateEmergencyPosterServiceUrl = exports.generateMapLinkServiceUrl = exports.generateElevationChartServiceUrl = exports.uploadGpxFileService = exports.generateWhat3WordsServiceUrl = void 0;
 
 var _queryString = _interopRequireDefault(require("query-string"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var url = 'https://www.norgeskart.no/';
 var urlOpenWps = 'https://openwps.statkart.no/skwms1/';

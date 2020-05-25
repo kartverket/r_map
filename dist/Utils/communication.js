@@ -1,15 +1,9 @@
 "use strict";
 
-var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\babel-preset-react-app\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.Messaging = void 0;
-
-var _classCallCheck2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\babel-preset-react-app\\node_modules\\@babel\\runtime/helpers/esm/classCallCheck"));
-
-var _defineProperty2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\babel-preset-react-app\\node_modules\\@babel\\runtime/helpers/esm/defineProperty"));
 
 var _geom = require("ol/geom");
 
@@ -19,16 +13,24 @@ var _Overlay = _interopRequireDefault(require("ol/Overlay"));
 
 var _Feature = _interopRequireDefault(require("ol/Feature"));
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //import { Icon } from 'ol/style'
 var Messaging = function Messaging() {
-  (0, _classCallCheck2.default)(this, Messaging);
+  _classCallCheck(this, Messaging);
 };
 
 exports.Messaging = Messaging;
-(0, _defineProperty2.default)(Messaging, "postMessage", function (msg) {
+
+_defineProperty(Messaging, "postMessage", function (msg) {
   window.parent.postMessage(JSON.stringify(msg), '*');
 });
-(0, _defineProperty2.default)(Messaging, "listener", function (event) {
+
+_defineProperty(Messaging, "listener", function (event) {
   if (event.origin === "http://localhost:3000" || "http://skrivte57.statkart.no" || "http:://geonorge.no" || "http://labs.norgeskart.no" || "https://register.geonorge.no/" || "http://www.kartverket.no/" || "https://www.norgeskart.no/") {
     try {
       var json = JSON.parse(JSON.stringify(event.data));
@@ -250,7 +252,8 @@ exports.Messaging = Messaging;
     }
   }
 });
-(0, _defineProperty2.default)(Messaging, "parseParamsAndAddDataLayerFromUrl", function (params) {
+
+_defineProperty(Messaging, "parseParamsAndAddDataLayerFromUrl", function (params) {
   var type, url;
   type = params[0];
   url = params[1];
@@ -296,7 +299,8 @@ exports.Messaging = Messaging;
       break;
   }
 });
-(0, _defineProperty2.default)(Messaging, "getFeaturesInLayer", function (layer) {
+
+_defineProperty(Messaging, "getFeaturesInLayer", function (layer) {
   var features = [],
       feature;
 
@@ -309,7 +313,8 @@ exports.Messaging = Messaging;
 
   return features;
 });
-(0, _defineProperty2.default)(Messaging, "getVisibleFeaturesInLayer", function (layer) {
+
+_defineProperty(Messaging, "getVisibleFeaturesInLayer", function (layer) {
   var features = [],
       feature;
 

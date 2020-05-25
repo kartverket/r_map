@@ -1,15 +1,9 @@
 "use strict";
 
-var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\babel-preset-react-app\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-
-var _classCallCheck2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\babel-preset-react-app\\node_modules\\@babel\\runtime/helpers/esm/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("C:\\code_git\\r_map.github\\node_modules\\babel-preset-react-app\\node_modules\\@babel\\runtime/helpers/esm/createClass"));
 
 var _proj = _interopRequireDefault(require("proj4"));
 
@@ -19,6 +13,14 @@ var _proj3 = require("ol/proj/proj4.js");
 
 var _Units = require("ol/proj/Units");
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 /**
  * Helper class for projection handling. Makes use of
  * [Proj4js](http://proj4js.org/).
@@ -27,10 +29,10 @@ var _Units = require("ol/proj/Units");
  */
 var ProjectionUtil = /*#__PURE__*/function () {
   function ProjectionUtil() {
-    (0, _classCallCheck2.default)(this, ProjectionUtil);
+    _classCallCheck(this, ProjectionUtil);
   }
 
-  (0, _createClass2.default)(ProjectionUtil, null, [{
+  _createClass(ProjectionUtil, null, [{
     key: "loadCustomCrs",
     value: function loadCustomCrs() {
       // proj4 is on the global scope
@@ -151,6 +153,7 @@ var ProjectionUtil = /*#__PURE__*/function () {
       return roundScale;
     }
   }]);
+
   return ProjectionUtil;
 }();
 

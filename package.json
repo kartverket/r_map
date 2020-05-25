@@ -8,10 +8,11 @@
     "README.md"
   ],
   "dependencies": {
-    "@material-ui/core": "^4.9.14",
+    "@babel/runtime": "^7.9.6",
+    "@material-ui/core": "^4.10.0",
     "@material-ui/icons": "^4.9.1",
-    "@material-ui/lab": "^4.0.0-alpha.53",
-    "fast-xml-parser": "^3.17.1",
+    "@material-ui/lab": "^4.0.0-alpha.54",
+    "fast-xml-parser": "^3.17.2",
     "jquery": "^3.5.1",
     "node-sass": "^4.14.1",
     "ol": "^6.3.1",

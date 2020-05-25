@@ -1,7 +1,5 @@
 "use strict";
 
-var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\babel-preset-react-app\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -16,6 +14,8 @@ var _Categories = _interopRequireDefault(require("./Categories"));
 var _Groups = _interopRequireDefault(require("./Groups"));
 
 var _Layers = _interopRequireDefault(require("./Layers"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Map = function Map(mapImplementation, eventHandler, featureInfo) {
   /*

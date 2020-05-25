@@ -1,13 +1,15 @@
 "use strict";
 
-var _interopRequireDefault = require("C:\\code_git\\r_map.github\\node_modules\\babel-preset-react-app\\node_modules\\@babel\\runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Legend to be used in MapComponent
@@ -20,5 +22,9 @@ var Legend = function Legend(props) {
   });
 };
 
+Legend.propTypes = {
+  legendUrl: _propTypes.default.string.isRequired,
+  legendAlternative: _propTypes.default.string
+};
 var _default = Legend;
 exports.default = _default;
