@@ -93,10 +93,11 @@ const arrayToObject = (array) =>
 
 export const parsePlainFeatureInfo = (data) => {
   let parsedFeatureInfo
-  if (data === "no features were found") return ''
+  if (data === "no features were found" || data.includes('Search returned no results') ) return ''
   if (data.includes('Layer')) {
     let featureInfo = data.split("\n\n")
     featureInfo.shift()
+    if (featureInfo[featureInfo.length - 1].length === 0) featureInfo.pop()
     parsedFeatureInfo = featureInfo.map((layer) => {
       let r_layer = {}
       let subf = layer.split(/(Layer[^\r\n]*)/)

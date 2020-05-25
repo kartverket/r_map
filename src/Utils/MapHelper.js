@@ -178,12 +178,6 @@ export const mergeDefaultParams = (url, defaultParams) => {
     if (defaultParams.hasOwnProperty(p.toLowerCase()) && p !== p.toLowerCase()) {
       delete defaultParams[p.toLowerCase()]
     }
-    for (var p in urlParams) {
-      defaultParams[p] = urlParams[p]
-      if (defaultParams.hasOwnProperty(p.toLowerCase()) && p !== p.toLowerCase()) {
-        delete defaultParams[p.toLowerCase()]
-      }
-    }
   }
   if (urlObj.href === 'https://norgeskart.no/ws/px.py') {
     return url;

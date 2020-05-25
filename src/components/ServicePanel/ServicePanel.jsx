@@ -25,6 +25,23 @@ const ServicePanel = props => {
             newMetaInfo = CapabilitiesUtil.getWMSMetaCapabilities(capa)
             newMetaInfo.Type = 'OGC:WMS'
             newMetaInfo.Params = props.services.customParams || ''
+            if (props.services.addLayers.length > 0) {
+              let layersToBeAdded = []
+              layersToBeAdded = capa.Capability.Layer.Layer.filter(
+                e => props.services.addLayers.includes(e.Name)
+              )
+              if (layersToBeAdded.length === 0 || layersToBeAdded.length !== props.services.addLayers.length) {
+                layersToBeAdded = []
+                props.services.addLayers.forEach(layerName => {
+                  layersToBeAdded.push({ Name: layerName })
+                })
+              }
+              layersToBeAdded.forEach(layer => {
+                let laycapaLayerer = CapabilitiesUtil.getOlLayerFromWmsCapabilities(newMetaInfo, layer)
+                newMetaInfo.isVisible = true
+                window.olMap.addLayer(laycapaLayerer)
+              })
+            }
             setMeta(newMetaInfo)
           })
           .catch(e => console.warn(e))
@@ -68,7 +85,7 @@ const ServicePanel = props => {
         console.warn('No service type specified')
         break
     }
-  }, [props.services.DistributionProtocol, props.services.GetCapabilitiesUrl, props.services.url, props.services.ShowPropertyName, props.services.customParams, props.services.EPSG])
+  }, [props.services.DistributionProtocol, props.services.GetCapabilitiesUrl, props.services.url, props.services.ShowPropertyName, props.services.customParams, props.services.EPSG, props.services.addLayers])
 
   const renderRemoveButton = () => {
     if (props.removeMapItem) {
@@ -123,6 +140,7 @@ const ServicePanel = props => {
     <div>
       <div onClick={ () => setState(!expanded) } className={ style.expandLayersBtn } >
         <span className={ style.ellipsisToggle }>{ props.services.Title }</span>
+        <span>{ capabilities ? (capabilities.Service ? capabilities.Service.Abstract : '') : ''}</span>
         { expanded ? <ExpandLess /> : <ExpandMore /> }
       </div>
       { renderRemoveButton() }

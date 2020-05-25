@@ -1,16 +1,13 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useLayoutEffect } from "react"
 import PropTypes from "prop-types"
-import { ExpandLess, ExpandMore } from "@material-ui/icons"
 import { Checkbox } from '@material-ui/core'
 import style from './LayerEntry.module.scss'
 import InlineLegend from '../Legend/InlineLegend'
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
-
 //import { Messaging } from '../../Utils/communication'
 import { Fill, Stroke, Style, Text } from 'ol/style'
 import { store } from '../../Utils/store.js'
 import { parseFeatureInfo } from '../../MapUtil/FeatureUtil'
-import { makeStyles } from '@material-ui/core/styles'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
@@ -30,7 +27,11 @@ const LayerEntry = props => {
   const [transparency, setTransparency] = useState(50)
   const layer = props.layer
   layer.Name = (layer.name && typeof layer.name === 'object') ? layer.name.localPart : layer.Name
-
+  useLayoutEffect(() => {
+    if (props.meta && props.meta.isVisible) {
+      setChecked(true)
+    }
+  }, [props.meta])
   const abstractTextSpan = () => {
     let textSpan = ''
     if (layer.Name && layer.Name.length > 0) {
@@ -76,13 +77,16 @@ const LayerEntry = props => {
             const viewResolution = (window.olMap.getView().getResolution())
             const formats = currentLayer.getProperties().getFeatureInfoFormats
             let indexFormat = 0
-            if (formats.indexOf('text/plain') > 0) { indexFormat = formats.indexOf('text/plain') }
+            if (formats.indexOf('text/plain') === 0) { indexFormat = formats.indexOf('text/plain') }
             else if (formats.indexOf('text/xml') > 0) { indexFormat = formats.indexOf('text/xml') }
             else if (formats.indexOf('application/vnd.ogc.gml') > 0) { indexFormat = formats.indexOf('application/vnd.ogc.gml') }
             else if (formats.indexOf('application/json') > 0) { indexFormat = formats.indexOf('application/json') }
             else if (formats.indexOf('text/html') === 0) { indexFormat = 1 }
 
-            const url = currentLayer.getSource().getFeatureInfoUrl(evt.coordinate, viewResolution, window.olMap.getView().getProjection(), { INFO_FORMAT: formats[indexFormat] })
+            let url = currentLayer.getSource().getFeatureInfoUrl(evt.coordinate, viewResolution, window.olMap.getView().getProjection(), { INFO_FORMAT: formats[indexFormat] })
+            if (url.startsWith('http://rin-te')) {
+              url = 'https://norgeskart.no/ws/px.py?' + url
+            }
             if (url && currentLayer.getVisible()) {
               fetch(url)
                 .then((response) => response.text())

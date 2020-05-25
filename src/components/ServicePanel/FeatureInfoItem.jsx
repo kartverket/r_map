@@ -136,7 +136,7 @@ const FeatureInfoItem = () => {
   }
 
   return (
-    <Dialog onClose={ handleClose } aria-labelledby="customized-dialog-title" open={ open }>
+  <Dialog onClose={ handleClose } aria-labelledby="customized-dialog-title" open={ featureContext.state.show }>
       <DialogTitle id="customized-dialog-title" onClose={ handleClose }>
         Egenskaper <span> ( { featureContext.state.info ? featureContext.state.info.length : 0 } )</span>
       </DialogTitle>
