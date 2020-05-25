@@ -29,7 +29,18 @@ const ServicePanel = props => {
           })
           .catch(e => console.warn(e))
         break
-      case 'WFS':
+        case 'OGC:WMTS':
+          CapabilitiesUtil.parseWmtsCapabilities(props.services.GetCapabilitiesUrl)
+            .then((capa) => {
+              setCapabilities(capa)
+              newMetaInfo = CapabilitiesUtil.getWMSMetaCapabilities(capa)
+              newMetaInfo.Type = 'OGC:WMTS'
+              newMetaInfo.Params = props.services.customParams || ''
+              setMeta(newMetaInfo)
+            })
+            .catch(e => console.warn(e))
+          break
+        case 'WFS':
       case 'WFS-tjeneste':
       case 'OGC:WFS':
         CapabilitiesUtil.parseWFSCapabilities(props.services.GetCapabilitiesUrl)
@@ -94,6 +105,14 @@ const ServicePanel = props => {
           <LayerEntry layer={ capabilities } meta={ meta } />
         </div>
       )
+    } else if (capabilities && capabilities.Contents) {
+      return capabilities.Contents.Layer.map((capaLayer, i) => {
+        return (
+          <div className={ style.facet } key={ i }>
+            <LayerEntry layer={ capaLayer } meta={ meta } capa={ capabilities } key={ i } />
+          </div>
+        )
+      })
     } else {
       // console.warn(capabilities)
       return ''

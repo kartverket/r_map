@@ -1,6 +1,8 @@
 import OlWMSCapabilities from 'ol/format/WMSCapabilities'
 import WMTSCapabilities from 'ol/format/WMTSCapabilities.js'
 import OlSourceImageWMS from 'ol/source/ImageWMS'
+import WMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
+import TileLayer from 'ol/layer/Tile';
 import OlLayerImage from 'ol/layer/Image'
 import {
   GML as GMLFormat,
@@ -422,6 +424,15 @@ export class CapabilitiesUtil {
         attributions: metaCapabilities.Attribution,
         params: params
       })
+    })
+  }
+  static getOlLayerFromWmtsCapabilities(metaCapabilities, layerCapabilities) {
+    let options = optionsFromCapabilities(metaCapabilities, {layer: layerCapabilities.Identifier})
+    return new TileLayer({
+      opacity: 1,
+      title: layerCapabilities.Title,
+      abstract: layerCapabilities.Abstract,
+      source:new WMTS(options)
     })
   }
 }

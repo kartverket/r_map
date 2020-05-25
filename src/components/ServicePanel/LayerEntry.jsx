@@ -47,9 +47,11 @@ const LayerEntry = props => {
 
   const onSelectionChange = currentNode => {
     let isNewLayer = true
-    if (layer.Name) {
+    if (layer.Name || layer.Title) {
       let currentLayer
-      if (props.meta.Type === 'OGC:WMS' || props.meta.Type === 'WMS' || props.meta.Type === 'WMS-tjeneste') {
+      if (props.meta.Type === 'OGC:WMTS' || props.meta.Type === 'WMTS' || props.meta.Type === 'WMTS-tjeneste') {
+        currentLayer = CapabilitiesUtil.getOlLayerFromWmtsCapabilities(props.capa, currentNode)
+      } else if (props.meta.Type === 'OGC:WMS' || props.meta.Type === 'WMS' || props.meta.Type === 'WMS-tjeneste') {
         currentLayer = CapabilitiesUtil.getOlLayerFromWmsCapabilities(props.meta, currentNode)
       } else if (props.meta.Type === 'GEOJSON') {
         currentLayer = CapabilitiesUtil.getOlLayerFromGeoJson(props.meta, currentNode)
