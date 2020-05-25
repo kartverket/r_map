@@ -11,7 +11,7 @@ import LayerEntry from './LayerEntry'
 const ServicePanel = props => {
   const [capabilities, setCapabilities] = useState()
   const [meta, setMeta] = useState()
-  const [expanded, setState] = useState(false)
+  const [expanded, setState] = useState(true)
 
   useEffect(() => {
     let newMetaInfo = {}
