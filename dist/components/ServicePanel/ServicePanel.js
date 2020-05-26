@@ -212,7 +212,11 @@ var ServicePanel = function ServicePanel(props) {
     className: _ServicePanelModule.default.expandLayersBtn
   }, /*#__PURE__*/_react.default.createElement("span", {
     className: _ServicePanelModule.default.ellipsisToggle
-  }, props.services.Title), /*#__PURE__*/_react.default.createElement("span", null, capabilities ? capabilities.Service ? capabilities.Service.Abstract : '' : ''), expanded ? /*#__PURE__*/_react.default.createElement(_icons.ExpandLess, null) : /*#__PURE__*/_react.default.createElement(_icons.ExpandMore, null)), renderRemoveButton(), /*#__PURE__*/_react.default.createElement(_List.default, {
+  }, props.services.Title), /*#__PURE__*/_react.default.createElement("label", {
+    style: {
+      fontStyle: "italic"
+    }
+  }, capabilities ? capabilities.Service ? capabilities.Service.Abstract : '' : ''), expanded ? /*#__PURE__*/_react.default.createElement(_icons.ExpandLess, null) : /*#__PURE__*/_react.default.createElement(_icons.ExpandMore, null)), renderRemoveButton(), /*#__PURE__*/_react.default.createElement(_List.default, {
     className: expanded ? "".concat(_ServicePanelModule.default.selectedlayers, " ").concat(_ServicePanelModule.default.open) : _ServicePanelModule.default.selectedlayers
   }, renderCapabilites()));
 };
