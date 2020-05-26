@@ -16,9 +16,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {*} props
  */
 var Legend = function Legend(props) {
+  var width = '';
+
+  if (props.legendSize && props.legendSize[0] > 400) {
+    width = '100%';
+  }
+
   return /*#__PURE__*/_react.default.createElement("img", {
     src: props.legendUrl,
-    alt: props.legendAlternative
+    alt: props.legendAlternative,
+    style: {
+      width: width
+    }
   });
 };
 

@@ -275,6 +275,7 @@ var LayerEntry = function LayerEntry(props) {
     value: transparency,
     onChange: setOpacity
   })) : "", /*#__PURE__*/_react.default.createElement(_InlineLegend.default, {
+    legendSize: layer.Style && layer.Style[0].LegendURL ? layer.Style[0].LegendURL[0].size : '',
     legendUrl: layer.Style && layer.Style[0].LegendURL ? layer.Style[0].LegendURL[0].OnlineResource : ''
   }), props.children, layer.Layer ? layer.Layer.map(function (subLayer, isub) {
     return /*#__PURE__*/_react.default.createElement("div", {

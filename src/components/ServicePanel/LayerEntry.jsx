@@ -175,7 +175,7 @@ const LayerEntry = props => {
       ) : (
           ""
         ) }
-      <InlineLegend legendUrl={ ((layer.Style && layer.Style[0].LegendURL) ? layer.Style[0].LegendURL[0].OnlineResource : '') } />
+      <InlineLegend legendSize={layer.Style && layer.Style[0].LegendURL ? layer.Style[0].LegendURL[0].size : ''} legendUrl={ ((layer.Style && layer.Style[0].LegendURL) ? layer.Style[0].LegendURL[0].OnlineResource : '') } />
       { props.children }
       { layer.Layer ? (layer.Layer.map((subLayer, isub) => (<div className={ style.facetSub } key={ isub }><LayerEntry layer={ subLayer } meta={ props.meta } key={ isub } /></div>))) : ('') }
     </>

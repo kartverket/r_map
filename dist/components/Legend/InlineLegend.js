@@ -55,6 +55,7 @@ var InlineLegend = function InlineLegend(props) {
       }, expanded ? "Skjul tegnforklaring" : "Vis tegnforklaring", " "), expanded ? /*#__PURE__*/_react.default.createElement(_icons.ExpandLess, null) : /*#__PURE__*/_react.default.createElement(_icons.ExpandMore, null)), /*#__PURE__*/_react.default.createElement("div", {
         className: expanded ? _InlineLegendModule.default.legend : _InlineLegendModule.default.legend + " " + _InlineLegendModule.default.closed
       }, /*#__PURE__*/_react.default.createElement(_Legend.default, {
+        legendSize: props.legendSize ? props.legendSize : '',
         legendUrl: props.legendUrl,
         legendAlternative: "Legend"
       })));

@@ -21,7 +21,7 @@ const InlineLegend = props => {
             { expanded ? <ExpandLess /> : <ExpandMore /> }
           </div>
           <div className={ expanded ? style.legend : style.legend + " " + style.closed }>
-            <Legend legendUrl={ props.legendUrl } legendAlternative="Legend" />
+            <Legend legendSize={ props.legendSize ? props.legendSize : '' } legendUrl={ props.legendUrl } legendAlternative="Legend" />
           </div>
         </>
       )
