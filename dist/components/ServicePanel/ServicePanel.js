@@ -63,6 +63,12 @@ var ServicePanel = function ServicePanel(props) {
       case 'WMS-tjeneste':
       case 'OGC:WMS':
         _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(props.services.GetCapabilitiesUrl).then(function (capa) {
+          if (props.services.excludeLayers) {
+            capa.Capability.Layer.Layer = capa.Capability.Layer.Layer.filter(function (e) {
+              return !props.services.excludeLayers.includes(e.Name);
+            });
+          }
+
           setCapabilities(capa);
           newMetaInfo = _CapabilitiesUtil.CapabilitiesUtil.getWMSMetaCapabilities(capa);
           newMetaInfo.Type = 'OGC:WMS';

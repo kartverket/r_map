@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 import style from './ServicePanel.module.scss'
-import { ExpandLess, ExpandMore, Close} from "@material-ui/icons"
+import { ExpandLess, ExpandMore, Close } from "@material-ui/icons"
 import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
 import LayerEntry from './LayerEntry'
@@ -12,7 +12,6 @@ const ServicePanel = props => {
   const [capabilities, setCapabilities] = useState()
   const [meta, setMeta] = useState()
   const [expanded, setState] = useState(true)
-
   useEffect(() => {
     let newMetaInfo = {}
     switch (props.services.DistributionProtocol) {
@@ -21,6 +20,11 @@ const ServicePanel = props => {
       case 'OGC:WMS':
         CapabilitiesUtil.parseWmsCapabilities(props.services.GetCapabilitiesUrl)
           .then((capa) => {
+            if (props.services.excludeLayers) {
+              capa.Capability.Layer.Layer = capa.Capability.Layer.Layer.filter(
+                e => !props.services.excludeLayers.includes(e.Name)
+              )
+            }
             setCapabilities(capa)
             newMetaInfo = CapabilitiesUtil.getWMSMetaCapabilities(capa)
             newMetaInfo.Type = 'OGC:WMS'
@@ -46,18 +50,18 @@ const ServicePanel = props => {
           })
           .catch(e => console.warn(e))
         break
-        case 'OGC:WMTS':
-          CapabilitiesUtil.parseWmtsCapabilities(props.services.GetCapabilitiesUrl)
-            .then((capa) => {
-              setCapabilities(capa)
-              newMetaInfo = CapabilitiesUtil.getWMSMetaCapabilities(capa)
-              newMetaInfo.Type = 'OGC:WMTS'
-              newMetaInfo.Params = props.services.customParams || ''
-              setMeta(newMetaInfo)
-            })
-            .catch(e => console.warn(e))
-          break
-        case 'WFS':
+      case 'OGC:WMTS':
+        CapabilitiesUtil.parseWmtsCapabilities(props.services.GetCapabilitiesUrl)
+          .then((capa) => {
+            setCapabilities(capa)
+            newMetaInfo = CapabilitiesUtil.getWMSMetaCapabilities(capa)
+            newMetaInfo.Type = 'OGC:WMTS'
+            newMetaInfo.Params = props.services.customParams || ''
+            setMeta(newMetaInfo)
+          })
+          .catch(e => console.warn(e))
+        break
+      case 'WFS':
       case 'WFS-tjeneste':
       case 'OGC:WFS':
         CapabilitiesUtil.parseWFSCapabilities(props.services.GetCapabilitiesUrl)
@@ -140,7 +144,7 @@ const ServicePanel = props => {
     <div>
       <div onClick={ () => setState(!expanded) } className={ style.expandLayersBtn } >
         <span className={ style.ellipsisToggle }>{ props.services.Title }</span>
-        <label style={{ fontStyle: "italic"}}>{ capabilities ? (capabilities.Service ? capabilities.Service.Abstract : '') : ''}</label>
+        <label style={ { fontStyle: "italic" } }>{ capabilities ? (capabilities.Service ? capabilities.Service.Abstract : '') : '' }</label>
         { expanded ? <ExpandLess /> : <ExpandMore /> }
       </div>
       { renderRemoveButton() }
