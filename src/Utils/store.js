@@ -31,7 +31,9 @@ const StateProvider = ({ children }) => {
     };
   }, initialState)
 
-  return <Provider value={ { state, dispatch } }>{ children }</Provider>
+  return (
+    <Provider value={ { state, dispatch } }>{ children }</Provider>
+  )
 }
 
 export { store, StateProvider }

@@ -8,22 +8,18 @@ import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 import { Fill, Stroke, Style, Text } from 'ol/style'
 import { store } from '../../Utils/store.js'
 import { parseFeatureInfo } from '../../MapUtil/FeatureUtil'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
-import ListItemText from '@material-ui/core/ListItemText'
-import IconButton from '@material-ui/core/IconButton'
+import { ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, IconButton, Slider } from '@material-ui/core'
 import TuneOutlinedIcon from '@material-ui/icons/TuneOutlined'
-import Slider from '@material-ui/core/Slider'
-import Typography from '@material-ui/core/Typography'
+//import { ArrowUpwardIcon, ArrowDownwardIcon } from '@material-ui/icons'
+import Grid from '@material-ui/core/Grid'
 
 const LayerEntry = props => {
   const featureState = useContext(store)
   const { dispatch } = featureState
-
+  //const [index, setIndex] = useState(0)
   const [options, toggleOptions] = useState(false)
   const [olLayer, setLayer] = useState()
-  const [checked, setChecked] = useState(props.layer.isVisible)
+  const [checked, setChecked] = useState(false)
   const [transparency, setTransparency] = useState(50)
   const layer = props.layer
   layer.Name = (layer.name && typeof layer.name === 'object') ? layer.name.localPart : layer.Name
@@ -120,6 +116,7 @@ const LayerEntry = props => {
                   properties: content,
                   coordinates: coord
                 }
+                console.warn({ 'Feature selected': message })
                 //dispatch(setFeature(message))
               })
             }
@@ -134,7 +131,12 @@ const LayerEntry = props => {
       olLayer.setOpacity(Math.min(transparency / 100, 1))
     }
   }
-
+  /*
+     const setLayerIndex = newIndex => {
+      setIndex(newIndex)
+      olLayer.setZIndex(newIndex)
+    }
+   */
   const checkResolution = () => {
     const resolution = window.olMap.getView().getResolution()
     if (layer.MaxScaleDenominator <= resolution) {
@@ -167,15 +169,26 @@ const LayerEntry = props => {
       </ListItem>
       { options ? (
         <div>
-          <Typography id="slider" gutterBottom>
-            Gjennomsiktighet:
-          </Typography>
-          <Slider defaultValue={ 50 } aria-labelledby="transparenz" value={ transparency } onChange={ setOpacity } />
+          {/*
+           <div>
+            <button className={ style.movelayerBtn } onClick={ () => setLayerIndex(index + 1) }>Flytt fremover<ArrowUpwardIcon title="Vis laget lenger opp" /></button>
+            <button className={ style.movelayerBtn } onClick={ () => setLayerIndex(index - 1) }>Flytt bakover <ArrowDownwardIcon title="Vis laget lenger ned" /></button>
+            <span className={ style.priority }>Prioritet: { index }</span>
+          </div>
+ */}
+          <Grid container spacing={ 2 } alignItems="center">
+            <Grid item>
+              <button className={ style.movelayerBtn } >Gjennomsiktighet:</button>
+            </Grid>
+            <Grid item xs>
+              <Slider defaultValue={ 50 } aria-labelledby="transparenz" value={ transparency } onChange={ setOpacity } />
+            </Grid>
+          </Grid>
         </div>
       ) : (
           ""
         ) }
-      <InlineLegend legendSize={layer.Style && layer.Style[0].LegendURL ? layer.Style[0].LegendURL[0].size : ''} legendUrl={ ((layer.Style && layer.Style[0].LegendURL) ? layer.Style[0].LegendURL[0].OnlineResource : '') } />
+      <InlineLegend legendSize={ layer.Style && layer.Style[0].LegendURL ? layer.Style[0].LegendURL[0].size : '' } legendUrl={ ((layer.Style && layer.Style[0].LegendURL) ? layer.Style[0].LegendURL[0].OnlineResource : '') } />
       { props.children }
       { layer.Layer ? (layer.Layer.map((subLayer, isub) => (<div className={ style.facetSub } key={ isub }><LayerEntry layer={ subLayer } meta={ props.meta } key={ isub } /></div>))) : ('') }
     </>

@@ -23,27 +23,17 @@ var _store = require("../../Utils/store.js");
 
 var _FeatureUtil = require("../../MapUtil/FeatureUtil");
 
-var _ListItem = _interopRequireDefault(require("@material-ui/core/ListItem"));
-
-var _ListItemIcon = _interopRequireDefault(require("@material-ui/core/ListItemIcon"));
-
-var _ListItemSecondaryAction = _interopRequireDefault(require("@material-ui/core/ListItemSecondaryAction"));
-
-var _ListItemText = _interopRequireDefault(require("@material-ui/core/ListItemText"));
-
-var _IconButton = _interopRequireDefault(require("@material-ui/core/IconButton"));
-
 var _TuneOutlined = _interopRequireDefault(require("@material-ui/icons/TuneOutlined"));
 
-var _Slider = _interopRequireDefault(require("@material-ui/core/Slider"));
-
-var _Typography = _interopRequireDefault(require("@material-ui/core/Typography"));
+var _Grid = _interopRequireDefault(require("@material-ui/core/Grid"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -59,7 +49,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var LayerEntry = function LayerEntry(props) {
   var featureState = (0, _react.useContext)(_store.store);
-  var dispatch = featureState.dispatch;
+  var dispatch = featureState.dispatch; //const [index, setIndex] = useState(0)
 
   var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
@@ -71,7 +61,7 @@ var LayerEntry = function LayerEntry(props) {
       olLayer = _useState4[0],
       setLayer = _useState4[1];
 
-  var _useState5 = (0, _react.useState)(props.layer.isVisible),
+  var _useState5 = (0, _react.useState)(false),
       _useState6 = _slicedToArray(_useState5, 2),
       checked = _useState6[0],
       setChecked = _useState6[1];
@@ -82,7 +72,7 @@ var LayerEntry = function LayerEntry(props) {
       setTransparency = _useState8[1];
 
   var layer = props.layer;
-  layer.Name = layer.name && typeof layer.name === 'object' ? layer.name.localPart : layer.Name;
+  layer.Name = layer.name && _typeof(layer.name) === 'object' ? layer.name.localPart : layer.Name;
   (0, _react.useLayoutEffect)(function () {
     if (props.meta && props.meta.isVisible) {
       setChecked(true);
@@ -214,7 +204,10 @@ var LayerEntry = function LayerEntry(props) {
                   featureId: feature.getId(),
                   properties: content,
                   coordinates: coord
-                }; //dispatch(setFeature(message))
+                };
+                console.warn({
+                  'Feature selected': message
+                }); //dispatch(setFeature(message))
               });
             }
           });
@@ -230,6 +223,13 @@ var LayerEntry = function LayerEntry(props) {
       olLayer.setOpacity(Math.min(transparency / 100, 1));
     }
   };
+  /*
+     const setLayerIndex = newIndex => {
+      setIndex(newIndex)
+      olLayer.setZIndex(newIndex)
+    }
+   */
+
 
   var checkResolution = function checkResolution() {
     var resolution = window.olMap.getView().getResolution();
@@ -242,14 +242,14 @@ var LayerEntry = function LayerEntry(props) {
   window.olMap.getView().on('change:resolution', function (e) {
     checkResolution();
   });
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_ListItem.default, {
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_core.ListItem, {
     key: layer.Name,
     role: undefined,
     button: true,
     onClick: function onClick() {
       return onSelectionChange(layer);
     }
-  }, /*#__PURE__*/_react.default.createElement(_ListItemIcon.default, null, /*#__PURE__*/_react.default.createElement(_core.Checkbox, {
+  }, /*#__PURE__*/_react.default.createElement(_core.ListItemIcon, null, /*#__PURE__*/_react.default.createElement(_core.Checkbox, {
     edge: "start",
     checked: checked,
     tabIndex: -1,
@@ -257,24 +257,32 @@ var LayerEntry = function LayerEntry(props) {
     inputProps: {
       'aria-labelledby': layer.Name
     }
-  })), /*#__PURE__*/_react.default.createElement(_ListItemText.default, {
+  })), /*#__PURE__*/_react.default.createElement(_core.ListItemText, {
     id: layer.Name,
     primary: abstractTextSpan()
-  }), /*#__PURE__*/_react.default.createElement(_ListItemSecondaryAction.default, null, /*#__PURE__*/_react.default.createElement(_IconButton.default, {
+  }), /*#__PURE__*/_react.default.createElement(_core.ListItemSecondaryAction, null, /*#__PURE__*/_react.default.createElement(_core.IconButton, {
     edge: "end",
     "aria-label": "options",
     onClick: function onClick() {
       return toggleOptions(!options);
     }
-  }, /*#__PURE__*/_react.default.createElement(_TuneOutlined.default, null)))), options ? /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_Typography.default, {
-    id: "slider",
-    gutterBottom: true
-  }, "Gjennomsiktighet:"), /*#__PURE__*/_react.default.createElement(_Slider.default, {
+  }, /*#__PURE__*/_react.default.createElement(_TuneOutlined.default, null)))), options ? /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_Grid.default, {
+    container: true,
+    spacing: 2,
+    alignItems: "center"
+  }, /*#__PURE__*/_react.default.createElement(_Grid.default, {
+    item: true
+  }, /*#__PURE__*/_react.default.createElement("button", {
+    className: _LayerEntryModule.default.movelayerBtn
+  }, "Gjennomsiktighet:")), /*#__PURE__*/_react.default.createElement(_Grid.default, {
+    item: true,
+    xs: true
+  }, /*#__PURE__*/_react.default.createElement(_core.Slider, {
     defaultValue: 50,
     "aria-labelledby": "transparenz",
     value: transparency,
     onChange: setOpacity
-  })) : "", /*#__PURE__*/_react.default.createElement(_InlineLegend.default, {
+  })))) : "", /*#__PURE__*/_react.default.createElement(_InlineLegend.default, {
     legendSize: layer.Style && layer.Style[0].LegendURL ? layer.Style[0].LegendURL[0].size : '',
     legendUrl: layer.Style && layer.Style[0].LegendURL ? layer.Style[0].LegendURL[0].OnlineResource : ''
   }), props.children, layer.Layer ? layer.Layer.map(function (subLayer, isub) {

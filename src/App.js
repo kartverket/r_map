@@ -30,32 +30,129 @@ const TEST_DATA = [
   addLayers: []
   },
   */
-  {
+/*   {
     'Title': 'Romvær',
     'DistributionProtocol': 'OGC:WMS',
     'GetCapabilitiesUrl': 'https://norgeskart.no/ws/px.py?http://rin-te0031/cgi-bin/romvaer?request=GetCapabilities&service=WMS',
     'addLayers': []
-},
-{
+}, */
+/* {
   'Uuid': '8c2c434b-07f7-4ebc-9bc6-9c15cdd75c4c',
   'Title': 'Fastmerker & Basestajoner WMS',
   'DistributionProtocol': 'OGC:WMS',
   'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.fastmerker2?request=GetCapabilities&service=WMS',
   addLayers: [],
   excludeLayers: ['Niv_fastmerker', 'Landsnettpunkt','Stamnettpunkt','Trekantpunkt']
-},
+}, */
 {
     'Title': 'Abas',
     'DistributionProtocol': 'OGC:WMS',
     'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.adm_enheter2?request=GetCapabilities&service=WMS',
     addLayers: []
   },
+/*
   {
+    'Title': 'Not working',
+    'DistributionProtocol': 'OGC:WMS',
+    'GetCapabilitiesUrl': 'https://wms.geonorge.no/skwms1/wms.georef3?version=1.1.0&request=GetCapabilities&service=wms',
+    'customParams':
+    {
+'SLD_BODY': `<?xml version="1.0" encoding="utf-16"?>
+<StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">
+<NamedLayer>
+<Name>fkb_ABCD</Name>
+<UserStyle>
+<FeatureTypeStyle>
+<Rule>
+<Name>FKB-A</Name>
+<ogc:Filter>
+<ogc:PropertyIsEqualTo>
+<ogc:PropertyName>fkbstandar</ogc:PropertyName>
+<ogc:Literal>A</ogc:Literal>
+</ogc:PropertyIsEqualTo>
+</ogc:Filter>
+<PolygonSymbolizer>
+<Fill>
+<CssParameter name="fill">#fe96fe</CssParameter>
+<CssParameter name="fill-opacity">0.2</CssParameter>
+</Fill>
+<Stroke>
+<CssParameter name="stroke">#010101</CssParameter>
+<CssParameter name="stroke-width">0.2</CssParameter>
+</Stroke>
+</PolygonSymbolizer>
+</Rule>
+<Rule>
+<Name>FKB-B</Name>
+<ogc:Filter>
+<ogc:PropertyIsEqualTo>
+<ogc:PropertyName>fkbstandar</ogc:PropertyName>
+<ogc:Literal>B</ogc:Literal>
+</ogc:PropertyIsEqualTo>
+</ogc:Filter>
+<PolygonSymbolizer>
+<Fill>
+<CssParameter name="fill">#01fe01</CssParameter>
+<CssParameter name="fill-opacity">0.2</CssParameter>
+</Fill>
+<Stroke>
+<CssParameter name="stroke">#010101</CssParameter>
+<CssParameter name="stroke-width">0.2</CssParameter>
+</Stroke>
+</PolygonSymbolizer>
+</Rule>
+<Rule>
+<Name>FKB-C</Name>
+<ogc:Filter>
+<ogc:PropertyIsEqualTo>
+<ogc:PropertyName>fkbstandar</ogc:PropertyName>
+<ogc:Literal>C</ogc:Literal>
+</ogc:PropertyIsEqualTo>
+</ogc:Filter>
+<PolygonSymbolizer>
+<Fill>
+<CssParameter name="fill">#c8e07b</CssParameter>
+<CssParameter name="fill-opacity">0.2</CssParameter>
+</Fill>
+<Stroke>
+<CssParameter name="stroke">#010101</CssParameter>
+<CssParameter name="stroke-width">0.2</CssParameter>
+</Stroke>
+</PolygonSymbolizer>
+</Rule>
+<Rule>
+<Name>FKB-D</Name>
+<ogc:Filter>
+<ogc:PropertyIsEqualTo>
+<ogc:PropertyName>fkbstandar</ogc:PropertyName>
+<ogc:Literal>D</ogc:Literal>
+</ogc:PropertyIsEqualTo>
+</ogc:Filter>
+<PolygonSymbolizer>
+<Fill>
+<CssParameter name="fill">#feb049</CssParameter>
+<CssParameter name="fill-opacity">0.2</CssParameter>
+</Fill>
+<Stroke>
+<CssParameter name="stroke">#010101</CssParameter>
+<CssParameter name="stroke-width">0.2</CssParameter>
+</Stroke>
+</PolygonSymbolizer>
+</Rule>
+</FeatureTypeStyle>
+</UserStyle>
+</NamedLayer>
+</StyledLayerDescriptor>`,
+    },
+    'addLayers': ['Georef-ABCD']
+  },
+   */
+  /* {
     'Title': 'Eox',
     'DistributionProtocol': 'OGC:WMTS',
     'GetCapabilitiesUrl': 'https://f.tiles.maps.eox.at/wmts/1.1.0?version=1.1.0&service=wmts&request=getcapabilities',
     addLayers: []
-  }
+  } */
   //https://f.tiles.maps.eox.at/wmts/1.0.0?
   /*
     {

@@ -9,6 +9,8 @@ var _style = require("ol/style");
 
 var _xml = require("ol/xml");
 
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 var OLStylesDefault = function OLStylesDefault() {
   var styles = function styles() {
     var fill = new _style.Fill({
@@ -40,7 +42,7 @@ var OLStylesJson = function OLStylesJson(style) {
   var _zIndex = 0;
 
   function _createStyle(feature, jsonstyle, hover) {
-    var jsonobject = typeof jsonstyle === 'object' ? jsonstyle : JSON.parse(jsonstyle);
+    var jsonobject = _typeof(jsonstyle) === 'object' ? jsonstyle : JSON.parse(jsonstyle);
     var currentstyle = [];
     _zIndex++;
     currentstyle.push(new _style.Style({
@@ -1107,7 +1109,7 @@ var OLStylesSLD = function OLStylesSLD() {
     if (featurevalue) {
       switch (filter.operator) {
         case '==':
-          switch (typeof featurevalue) {
+          switch (_typeof(featurevalue)) {
             case 'string':
               value = filter.value;
               condition = featurevalue === value;
@@ -1145,7 +1147,7 @@ var OLStylesSLD = function OLStylesSLD() {
           break;
 
         case '!=':
-          switch (typeof featurevalue) {
+          switch (_typeof(featurevalue)) {
             case 'string':
               value = filter.value;
               condition = featurevalue !== value;
@@ -1163,7 +1165,7 @@ var OLStylesSLD = function OLStylesSLD() {
           break;
 
         case 'NULL':
-          switch (typeof featurevalue) {
+          switch (_typeof(featurevalue)) {
             case 'string':
               condition = featurevalue.length === 0;
               break;

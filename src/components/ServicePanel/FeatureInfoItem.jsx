@@ -42,10 +42,8 @@ const DialogContent = withStyles((theme) => ({
 }))(MuiDialogContent)
 
 const FeatureInfoItem = () => {
-  const [open, setOpen] = React.useState(false)
 
   const handleClose = () => {
-    setOpen(false)
     dispatch({
       type: "HIDE_FEATURES",
       info: featureContext.state.info
@@ -136,14 +134,12 @@ const FeatureInfoItem = () => {
   }
 
   return (
-  <Dialog onClose={ handleClose } aria-labelledby="customized-dialog-title" open={ featureContext.state.show }>
+    <Dialog onClose={ handleClose } aria-labelledby="customized-dialog-title" open={ featureContext.state.show || false }>
       <DialogTitle id="customized-dialog-title" onClose={ handleClose }>
         Egenskaper <span> ( { featureContext.state.info ? featureContext.state.info.length : 0 } )</span>
       </DialogTitle>
       <DialogContent dividers>
-        <Typography gutterBottom>
           { featureContent() }
-        </Typography>
       </DialogContent>
     </Dialog>
   )

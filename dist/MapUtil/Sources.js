@@ -37,7 +37,8 @@ var _proj = require("ol/proj.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//import GML3Format from 'ol/format/GML3'
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 var MaplibCustomMessageHandler = function MaplibCustomMessageHandler(eventHandler, _getIsySubLayerFromPool) {
   var olMap;
   var _message = 'Service down: ';
@@ -628,7 +629,7 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
     return fetch(url).then(function (response) {
       return response.text();
     }).then(function (response) {
-      if (typeof response === 'object') {
+      if (_typeof(response) === 'object') {
         if (response.firstChild.childElementCount === 0) {
           return;
         }

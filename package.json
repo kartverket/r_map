@@ -8,11 +8,11 @@
     "README.md"
   ],
   "dependencies": {
-    "@babel/runtime": "^7.9.6",
+    "@babel/runtime": "^7.10.0",
     "@material-ui/core": "^4.10.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.54",
-    "fast-xml-parser": "^3.17.2",
+    "fast-xml-parser": "^3.17.3",
     "jquery": "^3.5.1",
     "node-sass": "^4.14.1",
     "ol": "^6.3.1",
@@ -37,15 +37,15 @@
   "browserslist": [
     ">0.2%",
     "not dead",
-    "not ie <= 11",
+    "not ie < 11",
     "not op_mini all"
   ],
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
+    "@babel/cli": "^7.10.0",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "babel-polyfill": "^6.26.0",
-    "eslint-plugin-react-hooks": "^4.0.2",
-    "react-styleguidist": "^11.0.6",
+    "eslint-plugin-react-hooks": "^4.0.4",
+    "react-styleguidist": "^11.0.8",
     "rimraf": "^3.0.2"
   }
 }

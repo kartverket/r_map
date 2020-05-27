@@ -31,7 +31,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -44,6 +44,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -92,13 +94,7 @@ var DialogContent = (0, _styles.withStyles)(function (theme) {
 })(_DialogContent.default);
 
 var FeatureInfoItem = function FeatureInfoItem() {
-  var _React$useState = _react.default.useState(false),
-      _React$useState2 = _slicedToArray(_React$useState, 2),
-      open = _React$useState2[0],
-      setOpen = _React$useState2[1];
-
   var handleClose = function handleClose() {
-    setOpen(false);
     dispatch({
       type: "HIDE_FEATURES",
       info: featureContext.state.info
@@ -109,7 +105,7 @@ var FeatureInfoItem = function FeatureInfoItem() {
   var dispatch = featureContext.dispatch;
 
   var testFormat = function testFormat(s) {
-    if (typeof s === 'object') return 'isObject';
+    if (_typeof(s) === 'object') return 'isObject';
     var rX = /^((\d+)|(true|false)|(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\+\d{2})|([\w\W]+))$/i;
     var M = rX.exec(s);
     if (!M) return '';
@@ -198,8 +194,8 @@ var FeatureInfoItem = function FeatureInfoItem() {
               var items = feature[_key2];
 
               if (typeof items !== "string") {
-                for (var _i2 = 0, _Object$entries = Object.entries(items); _i2 < _Object$entries.length; _i2++) {
-                  var _Object$entries$_i = _slicedToArray(_Object$entries[_i2], 2),
+                for (var _i = 0, _Object$entries = Object.entries(items); _i < _Object$entries.length; _i++) {
+                  var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
                       _key3 = _Object$entries$_i[0],
                       value = _Object$entries$_i[1];
 
@@ -216,8 +212,8 @@ var FeatureInfoItem = function FeatureInfoItem() {
           }
         }
       } else {
-        for (var _i3 = 0, _Object$entries2 = Object.entries(layer); _i3 < _Object$entries2.length; _i3++) {
-          var _Object$entries2$_i = _slicedToArray(_Object$entries2[_i3], 2),
+        for (var _i2 = 0, _Object$entries2 = Object.entries(layer); _i2 < _Object$entries2.length; _i2++) {
+          var _Object$entries2$_i = _slicedToArray(_Object$entries2[_i2], 2),
               _key4 = _Object$entries2$_i[0],
               _value = _Object$entries2$_i[1];
 
@@ -251,15 +247,13 @@ var FeatureInfoItem = function FeatureInfoItem() {
   return /*#__PURE__*/_react.default.createElement(_Dialog.default, {
     onClose: handleClose,
     "aria-labelledby": "customized-dialog-title",
-    open: featureContext.state.show
+    open: featureContext.state.show || false
   }, /*#__PURE__*/_react.default.createElement(DialogTitle, {
     id: "customized-dialog-title",
     onClose: handleClose
   }, "Egenskaper ", /*#__PURE__*/_react.default.createElement("span", null, " ( ", featureContext.state.info ? featureContext.state.info.length : 0, " )")), /*#__PURE__*/_react.default.createElement(DialogContent, {
     dividers: true
-  }, /*#__PURE__*/_react.default.createElement(_Typography.default, {
-    gutterBottom: true
-  }, featureContent())));
+  }, featureContent()));
 };
 
 var _default = FeatureInfoItem;
