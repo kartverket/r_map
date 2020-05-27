@@ -134,7 +134,7 @@ var LayerEntry = function LayerEntry(props) {
             var formats = currentLayer.getProperties().getFeatureInfoFormats;
             var indexFormat = 0;
 
-            if (formats.indexOf('text/plain') === 0) {
+            if (formats.includes('text/plain')) {
               indexFormat = formats.indexOf('text/plain');
             } else if (formats.indexOf('text/xml') > 0) {
               indexFormat = formats.indexOf('text/xml');

@@ -1,25 +1,25 @@
 import {
   Category,
   MapConfig
-} from './Repository';
+} from './Repository'
 
 import {
   Layer
-} from './Domain';
+} from './Domain'
 import {
   EventHandler
-} from './EventHandler';
+} from './EventHandler'
 import {
   OLMap
-} from './OLMap';
+} from './OLMap'
 import {
   Map
 } from './Map'
 import { Messaging } from '../Utils/communication'
 
 
-let groupIds = [];
-let notDummyGroup = false;
+let groupIds = []
+let notDummyGroup = false
 export let mapConfig = {
   groups: [],
   coordinate_system: 'EPSG:25833',
@@ -97,23 +97,23 @@ export let mapConfig = {
       singletile: 'false',
       visibility: 'false'
     }
-    }],
-    wms: [{
-      type: "overlay",
-      name: "Europa",
-      url: "https://wms.geonorge.no/skwms1/wms.gebco_skyggerelieff2",
-      params: {
-        layers: "nasjonale_grenser,kystlinje",
-        format: "image/png"
-      },
-      guid: "0.kontur",
-      options: {
-        isbaselayer: "true",
-        singletile: "true",
-        visibility: "true"
-      },
-      ontop: 'true'
-    }],
+  }],
+  wms: [{
+    type: "overlay",
+    name: "Europa",
+    url: "https://wms.geonorge.no/skwms1/wms.gebco_skyggerelieff2",
+    params: {
+      layers: "nasjonale_grenser,kystlinje",
+      format: "image/png"
+    },
+    guid: "0.kontur",
+    options: {
+      isbaselayer: "true",
+      singletile: "true",
+      visibility: "true"
+    },
+    ontop: 'true'
+  }],
   maplayer: [{
     index: 3,
     name: 'fakta',
@@ -217,7 +217,7 @@ export let mapConfig = {
   },
   onlyOneGroup: false,
   isOffline: false
-};
+}
 
 export const createGroup = (groupId, groupNameLng1, groupNameLng2, visibleOnLoad) => {
   var newGroup = Category({
@@ -225,62 +225,62 @@ export const createGroup = (groupId, groupNameLng1, groupNameLng2, visibleOnLoad
     name: groupNameLng1,
     parentId: groupNameLng2,
     visibleOnLoad: visibleOnLoad
-  });
-  groupIds.push(groupId);
-  mapConfig.groups.push(newGroup);
-  mapConfig.languages.en[newGroup.groupId] = groupNameLng1; // has to be fix with correct value!
-  mapConfig.languages.no[newGroup.groupId] = groupNameLng2;
-};
+  })
+  groupIds.push(groupId)
+  mapConfig.groups.push(newGroup)
+  mapConfig.languages.en[newGroup.groupId] = groupNameLng1 // has to be fix with correct value!
+  mapConfig.languages.no[newGroup.groupId] = groupNameLng2
+}
 const updateMapConfigWithGroups = (mapConfig) => {
   if (mapConfig.maplayer !== undefined) {
     if (mapConfig.maplayer.length !== undefined) {
       mapConfig.maplayer.forEach(function (group) {
-        createGroup(group.groupid, group.name, group.namelng, group.display);
-      });
+        createGroup(group.groupid, group.name, group.namelng, group.display)
+      })
     } else {
-      createGroup(mapConfig.maplayer.groupid, mapConfig.maplayer.name, mapConfig.maplayer.namelng, mapConfig.maplayer.display);
+      createGroup(mapConfig.maplayer.groupid, mapConfig.maplayer.name, mapConfig.maplayer.namelng, mapConfig.maplayer.display)
     }
   }
-};
+}
 const findGroupExistance = (grpIds) => {
-  let notExistGroups = [];
+  let notExistGroups = []
   grpIds.forEach((grpId) => {
     if (groupIds.indexOf(grpId) === -1) {
-      notExistGroups.push(grpId);
+      notExistGroups.push(grpId)
     }
-  });
-  return notExistGroups;
-};
+  })
+  return notExistGroups
+}
 export const createNotExistGroup = (grpIds, groupNameLng1, groupNameLng2) => {
-  let notExistGroups = findGroupExistance(grpIds);
+  let notExistGroups = findGroupExistance(grpIds)
   notExistGroups.forEach((grpId) => {
-    createGroup(grpId, groupNameLng1, groupNameLng2);
-  });
-};
+    createGroup(grpId, groupNameLng1, groupNameLng2)
+  })
+}
 export const createDummyGroup = () => {
   // dummy category for layers without group id
   if (notDummyGroup === false) {
-    createGroup(999, 'Other layers', 'Andre lag');
-    notDummyGroup = true;
+    createGroup(999, 'Other layers', 'Andre lag')
+    notDummyGroup = true
   }
-};
+}
 export const getWmsUrl = (url) => {
   if (url.indexOf('|') >= 0) {
-    return url.split('|');
+    return url.split('|')
   } else {
-    return url;
+    return url
   }
-};
+}
 export const addLayer = (sourceType, source) => {
-  let catIds = [999];
+  let catIds = [999]
   if (source.groupid !== undefined) {
     catIds = source.groupid.toString().split(',').map((item) => {
-      return parseInt(item, 10);
-    });
-    createNotExistGroup(catIds, source.name, source.namelng);
+      return parseInt(item, 10)
+    })
+    createNotExistGroup(catIds, source.name, source.namelng)
   } else {
     if (source.options.isbaselayer === 'false') {
-      createDummyGroup();
+      createDummyGroup()
     }
   }
   const newIsyLayer = Layer({
@@ -337,41 +337,41 @@ export const addLayer = (sourceType, source) => {
     legendGraphicUrls: [],
     selectedLayerOpen: false,
     thumbnail: source.thumbnail
-  });
-  return newIsyLayer;
-};
+  })
+  return newIsyLayer
+}
 
 const addLayerToConfig = (newIsyLayer, source) => {
-  mapConfig.layers.push(newIsyLayer);
-  mapConfig.languages.en[newIsyLayer.id] = source.name;
-  mapConfig.languages.no[newIsyLayer.id] = source.namelng;
-};
+  mapConfig.layers.push(newIsyLayer)
+  mapConfig.languages.en[newIsyLayer.id] = source.name
+  mapConfig.languages.no[newIsyLayer.id] = source.namelng
+}
 const updateMapConfigWithImageLayers = (mapConfig) => {
   if (mapConfig.wmts !== undefined) {
     if (mapConfig.wmts.length !== undefined) {
       mapConfig.wmts.forEach((wmts) => {
-        addLayerToConfig(addLayer('WMTS', wmts), wmts);
-      });
+        addLayerToConfig(addLayer('WMTS', wmts), wmts)
+      })
     } else {
-      addLayerToConfig(addLayer('WMTS', mapConfig.wmts), mapConfig.wmts);
+      addLayerToConfig(addLayer('WMTS', mapConfig.wmts), mapConfig.wmts)
     }
   }
   if (mapConfig.wms !== undefined) {
     if (mapConfig.wms.length !== undefined) {
       mapConfig.wms.forEach((wms) => {
-        addLayerToConfig(addLayer('WMS', wms), wms);
-      });
+        addLayerToConfig(addLayer('WMS', wms), wms)
+      })
     } else {
-      addLayerToConfig(addLayer('WMS', mapConfig.wms), mapConfig.wms);
+      addLayerToConfig(addLayer('WMS', mapConfig.wms), mapConfig.wms)
     }
   }
   if (mapConfig.vector !== undefined) {
     if (mapConfig.vector.length !== undefined) {
       mapConfig.vector.forEach(function (vector) {
-        addLayerToConfig(addLayer('VECTOR', vector), vector);
-      });
+        addLayerToConfig(addLayer('VECTOR', vector), vector)
+      })
     } else {
-      addLayerToConfig(addLayer('VECTOR', mapConfig.vector), mapConfig.vector);
+      addLayerToConfig(addLayer('VECTOR', mapConfig.vector), mapConfig.vector)
     }
   }
 }

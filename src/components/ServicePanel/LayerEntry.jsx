@@ -72,7 +72,7 @@ const LayerEntry = props => {
             const viewResolution = (window.olMap.getView().getResolution())
             const formats = currentLayer.getProperties().getFeatureInfoFormats
             let indexFormat = 0
-            if (formats.indexOf('text/plain') === 0) { indexFormat = formats.indexOf('text/plain') }
+            if (formats.includes('text/plain') ) { indexFormat = formats.indexOf('text/plain') }
             else if (formats.indexOf('text/xml') > 0) { indexFormat = formats.indexOf('text/xml') }
             else if (formats.indexOf('application/vnd.ogc.gml') > 0) { indexFormat = formats.indexOf('application/vnd.ogc.gml') }
             else if (formats.indexOf('application/json') > 0) { indexFormat = formats.indexOf('application/json') }
