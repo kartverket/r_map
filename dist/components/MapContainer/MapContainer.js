@@ -69,7 +69,7 @@ var ServiceListItem = function ServiceListItem(props) {
   });
 };
 
-function TabPanel(props) {
+var TabPanel = function TabPanel(props) {
   var children = props.children,
       value = props.value,
       index = props.index,
@@ -84,7 +84,7 @@ function TabPanel(props) {
   }, other), /*#__PURE__*/_react.default.createElement(_Box.default, {
     p: 1
   }, children));
-}
+};
 
 TabPanel.propTypes = {
   children: _propTypes.default.node,

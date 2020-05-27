@@ -12,7 +12,7 @@ import GML32Format from 'ol/format/GML32'
 import Projection from 'ol/proj/Projection'
 import WMTSCapabilities from 'ol/format/WMTSCapabilities'
 import { Vector as VectorSource } from 'ol/source'
-import WMTS from 'ol/source/WMTS'
+import WMTS, {optionsFromCapabilities} from 'ol/source/WMTS'
 import $ from "jquery"
 
 import WMTSTileGrid from 'ol/tilegrid/WMTS'
@@ -316,7 +316,7 @@ export const Wmts = (isySubLayer, parameters) => {
         layer.WGS84BoundingBox = undefined
       }
     })
-    sourceOptions = WMTS.optionsFromCapabilities(capabilities, {
+    sourceOptions = optionsFromCapabilities(capabilities, {
       layer: isySubLayer.name,
       matrixSet: matrixSet,
       requestEncoding: 'KVP'

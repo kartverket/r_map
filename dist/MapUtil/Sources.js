@@ -21,7 +21,7 @@ var _Projection = _interopRequireDefault(require("ol/proj/Projection"));
 
 var _WMTSCapabilities = _interopRequireDefault(require("ol/format/WMTSCapabilities"));
 
-var _WMTS = _interopRequireDefault(require("ol/source/WMTS"));
+var _WMTS = _interopRequireWildcard(require("ol/source/WMTS"));
 
 var _jquery = _interopRequireDefault(require("jquery"));
 
@@ -34,6 +34,10 @@ var _extent = require("ol/extent");
 var _loadingstrategy = require("ol/loadingstrategy");
 
 var _proj = require("ol/proj.js");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -377,7 +381,7 @@ var Wmts = function Wmts(isySubLayer, parameters) {
         layer.WGS84BoundingBox = undefined;
       }
     });
-    sourceOptions = _WMTS.default.optionsFromCapabilities(capabilities, {
+    sourceOptions = (0, _WMTS.optionsFromCapabilities)(capabilities, {
       layer: isySubLayer.name,
       matrixSet: matrixSet,
       requestEncoding: 'KVP'

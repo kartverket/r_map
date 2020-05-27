@@ -42,14 +42,12 @@ var TEST_DATA = [
 addLayers: []
 },
 */
-
-/*   {
-    'Title': 'Romvær',
-    'DistributionProtocol': 'OGC:WMS',
-    'GetCapabilitiesUrl': 'https://norgeskart.no/ws/px.py?http://rin-te0031/cgi-bin/romvaer?request=GetCapabilities&service=WMS',
-    'addLayers': []
-}, */
-
+{
+  'Title': 'Romvær',
+  'DistributionProtocol': 'OGC:WMS',
+  'GetCapabilitiesUrl': 'https://norgeskart.no/ws/px.py?http://rin-te0031/cgi-bin/romvaer?request=GetCapabilities&service=WMS',
+  'addLayers': []
+}
 /* {
   'Uuid': '8c2c434b-07f7-4ebc-9bc6-9c15cdd75c4c',
   'Title': 'Fastmerker & Basestajoner WMS',
@@ -58,19 +56,23 @@ addLayers: []
   addLayers: [],
   excludeLayers: ['Niv_fastmerker', 'Landsnettpunkt','Stamnettpunkt','Trekantpunkt']
 }, */
-{
-  'Title': 'Abas',
-  'DistributionProtocol': 'OGC:WMS',
-  'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.adm_enheter2?request=GetCapabilities&service=WMS',
-  addLayers: []
-}
+
 /*
   {
-    'Title': 'Not working',
+    'Title': 'Abas',
     'DistributionProtocol': 'OGC:WMS',
-    'GetCapabilitiesUrl': 'https://wms.geonorge.no/skwms1/wms.georef3?version=1.1.0&request=GetCapabilities&service=wms',
-    'customParams':
-    {
+    'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.adm_enheter2?request=GetCapabilities&service=WMS',
+    addLayers: []
+  },
+  */
+
+/*
+{
+  'Title': 'Not working',
+  'DistributionProtocol': 'OGC:WMS',
+  'GetCapabilitiesUrl': 'https://wms.geonorge.no/skwms1/wms.georef3?version=1.1.0&request=GetCapabilities&service=wms',
+  'customParams':
+  {
 'SLD_BODY': `<?xml version="1.0" encoding="utf-16"?>
 <StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">
 <NamedLayer>
@@ -157,10 +159,19 @@ addLayers: []
 </UserStyle>
 </NamedLayer>
 </StyledLayerDescriptor>`,
-    },
-    'addLayers': ['Georef-ABCD']
   },
-   */
+  'addLayers': ['Georef-ABCD']
+},
+ */
+
+/*
+{
+  'Title': 'opencache',
+  'DistributionProtocol': 'OGC:WMS',
+  'GetCapabilitiesUrl': 'https://wms.geonorge.no/skwms1/wms.gebco_skyggerelieff2?request=GetCapabilities&service=WMS',
+  'addLayers': ['nasjonale_grenser', 'kystlinje']
+}
+*/
 
 /* {
   'Title': 'Eox',

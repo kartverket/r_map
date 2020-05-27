@@ -834,6 +834,10 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
         isySubLayer.minScale = _setLayerMinresolution(layer, _getResolutionByScale(isySubLayer.minScale), 'layer');
       }
 
+      if (isySubLayer.onTop) {
+        layer.setZIndex(999);
+      }
+
       if (returnlayer) {
         _addIsySubLayer(isySubLayer);
 
@@ -1987,7 +1991,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
 
       if (typeof layer.getSource().getExtent !== "undefined") {
         extent = layer.getSource().getExtent();
-      } else {
+      } else if (typeof layer.getSource().getTileGrid !== "undefined") {
         extent = layer.getSource().getTileGrid().getExtent();
       }
 

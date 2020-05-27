@@ -67,7 +67,6 @@ const LayerEntry = props => {
       if (isNewLayer) {
         window.olMap.addLayer(currentLayer)
         setChecked(currentLayer.getVisible())
-
         if (currentNode.queryable) {
           window.olMap.on('singleclick', function (evt) {
             const viewResolution = (window.olMap.getView().getResolution())

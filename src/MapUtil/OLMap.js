@@ -751,6 +751,9 @@ export const OLMap = (eventHandler, httpHelper, measure,
       if (isySubLayer.minScale) {
         isySubLayer.minScale = _setLayerMinresolution(layer, _getResolutionByScale(isySubLayer.minScale), 'layer')
       }
+      if (isySubLayer.onTop) {
+        layer.setZIndex(999)
+      }
       if (returnlayer) {
         _addIsySubLayer(isySubLayer)
         layerPool.push(layer)
@@ -1786,7 +1789,7 @@ export const OLMap = (eventHandler, httpHelper, measure,
       var extent
       if (typeof layer.getSource().getExtent !== "undefined") {
         extent = layer.getSource().getExtent()
-      } else {
+      } else if (typeof layer.getSource().getTileGrid !== "undefined") {
         extent = layer.getSource().getTileGrid().getExtent()
       }
       if (Array.isArray(extent) && extent[0] !== Infinity) {

@@ -67,22 +67,6 @@ var mapConfig = {
   }, {
     type: 'map',
     gatekeeper: 'true',
-    name: 'Europa',
-    url: 'https://gatekeeper1.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?|https://gatekeeper2.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?',
-    params: {
-      layers: 'europa_forenklet',
-      format: 'image/png'
-    },
-    matrixprefix: 'true',
-    guid: '0.norges_grunnkart',
-    options: {
-      isbaselayer: 'true',
-      singletile: 'false',
-      visibility: 'true'
-    }
-  }, {
-    type: 'map',
-    gatekeeper: 'true',
     name: 'Terreng',
     url: 'https://gatekeeper1.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?|https://gatekeeper2.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?',
     params: {
@@ -112,6 +96,22 @@ var mapConfig = {
       singletile: 'false',
       visibility: 'false'
     }
+  }],
+  wms: [{
+    type: "overlay",
+    name: "Europa",
+    url: "https://wms.geonorge.no/skwms1/wms.gebco_skyggerelieff2",
+    params: {
+      layers: "nasjonale_grenser,kystlinje",
+      format: "image/png"
+    },
+    guid: "0.kontur",
+    options: {
+      isbaselayer: "true",
+      singletile: "true",
+      visibility: "true"
+    },
+    ontop: 'true'
   }],
   maplayer: [{
     index: 3,
@@ -339,7 +339,8 @@ var addLayer = function addLayer(sourceType, source) {
       getCapabilities: source.getcapabilities === 'true',
       styles: source.params.styles,
       minResolution: source.minresolution,
-      maxResolution: source.maxresolution || 21664
+      maxResolution: source.maxresolution || 21664,
+      onTop: source.ontop || false
     }],
     guid: source.guid,
     name: source.name,

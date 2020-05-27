@@ -16,7 +16,7 @@ import style from "./MapContainer.module.scss"
 
 const ServiceListItem = (props) => <ServicePanel services={ props.listItem } removeMapItem={ props.removeMapItem } draggable />
 
-function TabPanel(props) {
+const TabPanel = (props) => {
   const { children, value, index, ...other } = props
 
   return (
