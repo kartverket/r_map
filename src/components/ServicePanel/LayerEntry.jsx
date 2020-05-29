@@ -124,10 +124,11 @@ const LayerEntry = props => {
       }
     }
   }
-  const setOpacity = (event, value) => {
+  const setOpacity = (event, value, currentLayer) => {
     setTransparency(value)
-    if (olLayer) {
-      olLayer.setOpacity(Math.min(transparency / 100, 1))
+    let oLayer = window.olMap.getLayers().getArray().find(layer => layer.get('name') == currentLayer.Name)
+    if (oLayer) {
+      oLayer.setOpacity(Math.min(transparency / 100, 1))
     }
   }
   /*
@@ -180,7 +181,7 @@ const LayerEntry = props => {
               <button className={ style.movelayerBtn } >Gjennomsiktighet:</button>
             </Grid>
             <Grid item xs>
-              <Slider defaultValue={ 50 } aria-labelledby="transparenz" value={ transparency } onChange={ setOpacity } />
+              <Slider defaultValue={ 50 } aria-labelledby="transparenz" value={ transparency } onChange={ (e, value) => setOpacity(e, value, layer)  } />
             </Grid>
           </Grid>
         </div>

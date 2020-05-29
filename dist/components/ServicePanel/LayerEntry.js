@@ -216,11 +216,14 @@ var LayerEntry = function LayerEntry(props) {
     }
   };
 
-  var setOpacity = function setOpacity(event, value) {
+  var setOpacity = function setOpacity(event, value, currentLayer) {
     setTransparency(value);
+    var oLayer = window.olMap.getLayers().getArray().find(function (layer) {
+      return layer.get('name') == currentLayer.Name;
+    });
 
-    if (olLayer) {
-      olLayer.setOpacity(Math.min(transparency / 100, 1));
+    if (oLayer) {
+      oLayer.setOpacity(Math.min(transparency / 100, 1));
     }
   };
   /*
@@ -281,7 +284,9 @@ var LayerEntry = function LayerEntry(props) {
     defaultValue: 50,
     "aria-labelledby": "transparenz",
     value: transparency,
-    onChange: setOpacity
+    onChange: function onChange(e, value) {
+      return setOpacity(e, value, layer);
+    }
   })))) : "", /*#__PURE__*/_react.default.createElement(_InlineLegend.default, {
     legendSize: layer.Style && layer.Style[0].LegendURL ? layer.Style[0].LegendURL[0].size : '',
     legendUrl: layer.Style && layer.Style[0].LegendURL ? layer.Style[0].LegendURL[0].OnlineResource : ''
