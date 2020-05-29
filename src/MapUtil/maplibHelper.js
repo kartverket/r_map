@@ -110,7 +110,7 @@ export let mapConfig = {
     options: {
       isbaselayer: "true",
       singletile: "true",
-      visibility: "true"
+      visibility: "false"
     },
     ontop: 'true'
   }],

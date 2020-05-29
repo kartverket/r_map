@@ -73,6 +73,11 @@ export const generateSearchStedsnavnUrl = (query, side, antall) => {
   return urlGeonorge + "SKWS3Index/v2/ssr/sok?navn=" + query + "*&eksakteForst=true&antPerSide=" + antall + "&epsgKode=32633&side=" + side
 }
 
+export const generateStedsnavnSokUrl = (query, side, antall) => {
+  side += 1
+  return `https://norgeskart.no/ws/px.py?https://wstest.geonorge.no/stedsnavn/v1/stedsnavn?sok=${query}&treffPerSide=${antall}&side=${side}`
+}
+
 export const generateSearchAdresseUrl = (query) => {
   return urlGeonorge + "AdresseWS/adresse/sok?sokestreng=" + encodeURIComponent(query) + "&antPerSide=100&side=0"
 }

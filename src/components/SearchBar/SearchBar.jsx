@@ -14,7 +14,7 @@ import { Vector as VectorSource } from 'ol/source.js'
 import Feature from 'ol/Feature.js'
 import { Style, Icon } from 'ol/style'
 import Point from 'ol/geom/Point'
-import { generateAdresseSokUrl, generateSearchStedsnavnUrl } from "../../Utils/n3api"
+import { generateAdresseSokUrl, generateSearchStedsnavnUrl, generateStedsnavnSokUrl } from "../../Utils/n3api"
 const parser = require('fast-xml-parser')
 
 const defaultZoom = 13
@@ -86,6 +86,32 @@ const SearchResult = (props) => {
           )
         })
       }
+      {
+        props.searchResult.searchResultStedsnavn && props.searchResult.searchResultStedsnavn.map((data, idx) => {
+          console.log(data)
+          let lon, lat
+          if (data.geometri.type === "Point") {
+            lon = data.geometri.coordinates[0]
+            lat = data.geometri.coordinates[1]
+          } else if (data.geometri.type === "MultiPoint") {
+            lon = data.geometri.coordinates[0][0]
+            lat = data.geometri.coordinates[0][1]
+          } else {
+            console.error('error! No yet supported geometri type')
+            return ('')
+          }
+          showInfoMarker(constructPoint({ lon: lon, lat: lat, epsg: 'EPSG:4326' }))
+          return (
+            <div key={ idx }>
+              <ListItem button onClick={ () => { centerPosition(constructPoint({ lon: lon, lat: lat, epsg: 'EPSG:4326' })) } }>
+                <ListItemText primary={ `${data.stedsnavn[0].skrivemte},  ${data.kommuner[0].kommunenavn }` } />
+              </ListItem>
+              <Divider />
+            </div>
+          )
+        })
+      }
+
     </List >
   )
 }
@@ -105,9 +131,11 @@ const SearchBar = props => {
   const [searchText, setSearchText] = useState(queryValues["search"])
   const [searchResult, setSearchResult] = useState()
   const [searchResultSSR, setSearchResultSSR] = useState()
+  const [searchResultStedsnavn, setSearchResultStedsnavn] = useState()
   const { placeholder } = props
   const [expandedAdress, setStateAdress] = useState(false)
   const [expandedSsr, setStateSsr] = useState(false)
+  const [expandedStedsnavn, setStateStedsnavn] = useState(false)
   const classes = useStyles();
   useEffect(() => {
     if (searchText) {
@@ -123,7 +151,23 @@ const SearchBar = props => {
         .then(result => { setSearchResult(result) })
         .catch(error => { console.warn(error) })
 
-      fetch(generateSearchStedsnavnUrl(searchText, 0, 15))
+      fetch(generateStedsnavnSokUrl(searchText, 0, 15))
+        .then(response => {
+          if (!response.ok) {
+            throw Error(response.statusText)
+          }
+          return response.json()
+        })
+        .then(result => {
+          if (result.navn) {
+            console.log(result.navn)
+            setSearchResultStedsnavn(result.navn)
+          } else {
+            setSearchResultStedsnavn(null)
+          }
+        })
+        .catch(error => { console.warn(error) })
+        fetch(generateSearchStedsnavnUrl(searchText, 0, 15))
         .then(response => {
           if (!response.ok) {
             throw Error(response.statusText)
@@ -144,6 +188,7 @@ const SearchBar = props => {
     } else {
       setSearchResult('')
       setSearchResultSSR('')
+      setSearchResultStedsnavn('')
       vectorSource.clear()
       setQuery()
     }
@@ -173,13 +218,23 @@ const SearchBar = props => {
               </div>
               <div>
                 <div onClick={ () => setStateSsr(!expandedSsr) } className={ style.expandBtn } >
-                  <span className={ style.ellipsisToggle }>STEDSNAVN</span>
+                  <span className={ style.ellipsisToggle }>SSR</span>
                   { expandedSsr ? <ExpandLess /> : <ExpandMore /> }
                 </div>
                 <div className={ expandedSsr ? `${style.selected} ${style.open}` : style.selected } >
                   <SearchResult searchResult={ { searchResultSSR } }></SearchResult>
                 </div>
               </div>
+              <div>
+                <div onClick={ () => setStateStedsnavn(!expandedStedsnavn) } className={ style.expandBtn } >
+                  <span className={ style.ellipsisToggle }>STEDSNAVN</span>
+                  { expandedStedsnavn ? <ExpandLess /> : <ExpandMore /> }
+                </div>
+                <div className={ expandedStedsnavn ? `${style.selected} ${style.open}` : style.selected } >
+                  <SearchResult searchResult={ { searchResultStedsnavn } }></SearchResult>
+                </div>
+              </div>
+
             </>
           )
         }

@@ -89,11 +89,11 @@ const MapContainer = (props) => {
                 { expanded ? <ExpandLess /> : <ExpandMore /> }
               </IconButton>
               <Tabs value={ value } variant="fullWidth" onChange={ handleChange } indicatorColor="primary" textColor="primary">
-                <Tab label="Søk" value={ 0 } />
-                <Tab label="Visning" value={ 1 } />
+                <Tab label="Søk" value={ 1 } />
+                <Tab label="Visning" value={ 0 } />
               </Tabs>
-              <TabPanel value={ value } index={ 0 }><SearchBar /></TabPanel>
-              <TabPanel value={ value } index={ 1 }>{ renderServiceList() }</TabPanel>
+              <TabPanel value={ value } index={ 1 }><SearchBar /></TabPanel>
+              <TabPanel value={ value } index={ 0 }>{ renderServiceList() }</TabPanel>
             </div>
           </div>
 
