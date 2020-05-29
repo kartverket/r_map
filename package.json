@@ -1,6 +1,6 @@
 {
   "name": "r_map",
-  "version": "2.3.20",
+  "version": "2.3.21",
   "private": true,
   "main": "dist/main.js",
   "files": [
