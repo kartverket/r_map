@@ -23,6 +23,10 @@ var _List = _interopRequireDefault(require("@material-ui/core/List"));
 
 var _LayerEntry = _interopRequireDefault(require("./LayerEntry"));
 
+var _store = require("../../Utils/store.js");
+
+var _FeatureUtil = require("../../MapUtil/FeatureUtil");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -42,6 +46,9 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var ServicePanel = function ServicePanel(props) {
+  var featureState = (0, _react.useContext)(_store.store);
+  var dispatch = featureState.dispatch;
+
   var _useState = (0, _react.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
       capabilities = _useState2[0],
@@ -96,6 +103,48 @@ var ServicePanel = function ServicePanel(props) {
 
               newMetaInfo.isVisible = true;
               window.olMap.addLayer(laycapaLayerer);
+
+              if (layer.queryable) {
+                window.olMap.on('singleclick', function (evt) {
+                  var viewResolution = window.olMap.getView().getResolution();
+                  var formats = laycapaLayerer.getProperties().getFeatureInfoFormats;
+                  var indexFormat = 0;
+
+                  if (formats.includes('text/plain')) {
+                    indexFormat = formats.indexOf('text/plain');
+                  } else if (formats.indexOf('text/xml') > 0) {
+                    indexFormat = formats.indexOf('text/xml');
+                  } else if (formats.indexOf('application/vnd.ogc.gml') > 0) {
+                    indexFormat = formats.indexOf('application/vnd.ogc.gml');
+                  } else if (formats.indexOf('application/json') > 0) {
+                    indexFormat = formats.indexOf('application/json');
+                  } else if (formats.indexOf('text/html') === 0) {
+                    indexFormat = 1;
+                  }
+
+                  var url = laycapaLayerer.getSource().getFeatureInfoUrl(evt.coordinate, viewResolution, window.olMap.getView().getProjection(), {
+                    INFO_FORMAT: formats[indexFormat]
+                  });
+
+                  if (url.startsWith('http://rin-te')) {
+                    url = 'https://norgeskart.no/ws/px.py?' + url;
+                  }
+
+                  if (url && laycapaLayerer.getVisible()) {
+                    fetch(url).then(function (response) {
+                      return response.text();
+                    }).then(function (data) {
+                      return dispatch({
+                        type: 'SET_FEATURES',
+                        show: true,
+                        info: (0, _FeatureUtil.parseFeatureInfo)(data, formats[indexFormat])
+                      });
+                    }).catch(function (error) {
+                      console.error('Error:', error);
+                    });
+                  }
+                });
+              }
             });
           }
 

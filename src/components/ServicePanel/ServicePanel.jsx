@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import PropTypes from "prop-types"
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 import style from './ServicePanel.module.scss'
@@ -6,9 +6,13 @@ import { ExpandLess, ExpandMore, Close } from "@material-ui/icons"
 import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
 import LayerEntry from './LayerEntry'
+import { store } from '../../Utils/store.js'
+import { parseFeatureInfo } from '../../MapUtil/FeatureUtil'
 
 
 const ServicePanel = props => {
+  const featureState = useContext(store)
+  const { dispatch } = featureState
   const [capabilities, setCapabilities] = useState()
   const [meta, setMeta] = useState()
   const [expanded, setState] = useState(true)
@@ -44,6 +48,29 @@ const ServicePanel = props => {
                 let laycapaLayerer = CapabilitiesUtil.getOlLayerFromWmsCapabilities(newMetaInfo, layer)
                 newMetaInfo.isVisible = true
                 window.olMap.addLayer(laycapaLayerer)
+                if (layer.queryable) {
+                  window.olMap.on('singleclick', function (evt) {
+                    const viewResolution = (window.olMap.getView().getResolution())
+                    const formats = laycapaLayerer.getProperties().getFeatureInfoFormats
+                    let indexFormat = 0
+                    if (formats.includes('text/plain') ) { indexFormat = formats.indexOf('text/plain') }
+                    else if (formats.indexOf('text/xml') > 0) { indexFormat = formats.indexOf('text/xml') }
+                    else if (formats.indexOf('application/vnd.ogc.gml') > 0) { indexFormat = formats.indexOf('application/vnd.ogc.gml') }
+                    else if (formats.indexOf('application/json') > 0) { indexFormat = formats.indexOf('application/json') }
+                    else if (formats.indexOf('text/html') === 0) { indexFormat = 1 }
+
+                    let url = laycapaLayerer.getSource().getFeatureInfoUrl(evt.coordinate, viewResolution, window.olMap.getView().getProjection(), { INFO_FORMAT: formats[indexFormat] })
+                    if (url.startsWith('http://rin-te')) {
+                      url = 'https://norgeskart.no/ws/px.py?' + url
+                    }
+                    if (url && laycapaLayerer.getVisible()) {
+                      fetch(url)
+                        .then((response) => response.text())
+                        .then((data) => dispatch({ type: 'SET_FEATURES', show: true, info: parseFeatureInfo(data, formats[indexFormat]) }))
+                        .catch((error) => { console.error('Error:', error) })
+                    }
+                  })
+                }
               })
             }
             setMeta(newMetaInfo)
