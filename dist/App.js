@@ -42,29 +42,33 @@ var TEST_DATA = [
 addLayers: []
 },
 */
-{
+
+/*
+ {
   'Title': 'Romvær',
   'DistributionProtocol': 'OGC:WMS',
   //'GetCapabilitiesUrl': 'https://norgeskart.no/ws/px.py?http://rin-te0031/cgi-bin/romvaer?request=GetCapabilities&service=WMS',
   'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wmstest.romvaer?request=GetCapabilities&service=WMS',
   'addLayers': ['romvaer_band2']
-}, {
-  'Uuid': '8c2c434b-07f7-4ebc-9bc6-9c15cdd75c4c',
-  'Title': 'Fastmerker & Basestajoner WMS',
-  'DistributionProtocol': 'OGC:WMS',
-  'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.fastmerker2?request=GetCapabilities&service=WMS',
-  addLayers: [],
-  excludeLayers: ['Niv_fastmerker', 'Landsnettpunkt', 'Stamnettpunkt', 'Trekantpunkt']
-}
-/*
-  {
-    'Title': 'Abas',
-    'DistributionProtocol': 'OGC:WMS',
-    'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.adm_enheter2?request=GetCapabilities&service=WMS',
-    addLayers: []
-  },
-  */
+},
+*/
 
+/*
+{
+'Uuid': '8c2c434b-07f7-4ebc-9bc6-9c15cdd75c4c',
+'Title': 'Fastmerker & Basestajoner WMS',
+'DistributionProtocol': 'OGC:WMS',
+'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.fastmerker2?request=GetCapabilities&service=WMS',
+addLayers: [],
+excludeLayers: ['Niv_fastmerker', 'Landsnettpunkt','Stamnettpunkt','Trekantpunkt']
+},
+*/
+{
+  'Title': 'Abas',
+  'DistributionProtocol': 'OGC:WMS',
+  'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.adm_enheter2?request=GetCapabilities&service=WMS',
+  addLayers: []
+}
 /*
 {
   'Title': 'Not working',

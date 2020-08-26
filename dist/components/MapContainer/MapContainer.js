@@ -166,16 +166,16 @@ var MapContainer = function MapContainer(props) {
     textColor: "primary"
   }, /*#__PURE__*/_react.default.createElement(_core.Tab, {
     label: "S\xF8k",
-    value: 0
+    value: 1
   }), /*#__PURE__*/_react.default.createElement(_core.Tab, {
     label: "Visning",
-    value: 1
+    value: 0
   })), /*#__PURE__*/_react.default.createElement(TabPanel, {
     value: value,
-    index: 0
+    index: 1
   }, /*#__PURE__*/_react.default.createElement(_SearchBar.default, null)), /*#__PURE__*/_react.default.createElement(TabPanel, {
     value: value,
-    index: 1
+    index: 0
   }, renderServiceList())))), /*#__PURE__*/_react.default.createElement("div", {
     id: "map",
     className: "map",

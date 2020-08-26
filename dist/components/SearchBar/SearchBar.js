@@ -19,6 +19,8 @@ var _pinMdOrange = _interopRequireDefault(require("../../assets/img/pin-md-orang
 
 var _pinMdBlueish = _interopRequireDefault(require("../../assets/img/pin-md-blueish.png"));
 
+var _pinMdRed = _interopRequireDefault(require("../../assets/img/pin-md-red.png"));
+
 var _icons = require("@material-ui/icons");
 
 var _styles = require("@material-ui/core/styles");
@@ -85,6 +87,14 @@ var SearchResult = function SearchResult(props) {
       src: _pinMdBlueish.default
     })
   });
+  var icon_red = new _style.Style({
+    image: new _style.Icon({
+      anchor: [0.5, 46],
+      anchorXUnits: 'fraction',
+      anchorYUnits: 'pixels',
+      src: _pinMdRed.default
+    })
+  });
   var features = [];
 
   var showInfoMarker = function showInfoMarker(coordinate) {
@@ -92,6 +102,14 @@ var SearchResult = function SearchResult(props) {
       geometry: new _Point.default(coordinate)
     });
     iconFeature.setStyle(icon_orange);
+    vectorSource.addFeature(iconFeature);
+  };
+
+  var showRedInfoMarker = function showRedInfoMarker(coordinate) {
+    var iconFeature = new _Feature.default({
+      geometry: new _Point.default(coordinate)
+    });
+    iconFeature.setStyle(icon_red);
     vectorSource.addFeature(iconFeature);
   };
 
@@ -154,6 +172,67 @@ var SearchResult = function SearchResult(props) {
     }, /*#__PURE__*/_react.default.createElement(_core.ListItemText, {
       primary: data.stedsnavn + ', ' + data.kommunenavn
     })), /*#__PURE__*/_react.default.createElement(_core.Divider, null));
+  }), props.searchResult.searchResultStedsnavn && props.searchResult.searchResultStedsnavn.map(function (data, idx) {
+    //console.log(data)
+    var lon, lat;
+
+    if (data.navneobjekttype !== 'adressenavn') {
+      if (data.geometri.type === "Point") {
+        lon = data.geometri.coordinates[0];
+        lat = data.geometri.coordinates[1];
+      } else if (data.geometri.type === "MultiPoint") {
+        lon = data.geometri.coordinates[0][0];
+        lat = data.geometri.coordinates[0][1];
+      } else {
+        console.error('error! No yet supported geometri type');
+        return '';
+      }
+
+      showRedInfoMarker(constructPoint({
+        lon: lon,
+        lat: lat,
+        epsg: 'EPSG:4326'
+      }));
+    } else if (data.navneobjekttype === 'adressenavn') {
+      if (data.geometri.type === "Point") {
+        lon = data.geometri.coordinates[0];
+        lat = data.geometri.coordinates[1];
+        showRedInfoMarker(constructPoint({
+          lon: lon,
+          lat: lat,
+          epsg: 'EPSG:4326'
+        }));
+      } else if (data.geometri.type === "MultiPoint") {
+        data.geometri.coordinates.forEach(function (coordinate) {
+          showRedInfoMarker(constructPoint({
+            lon: coordinate[0],
+            lat: coordinate[1],
+            epsg: 'EPSG:4326'
+          }));
+        }); // Menupunkt med bare første pkt
+
+        lon = data.geometri.coordinates[0][0];
+        lat = data.geometri.coordinates[0][1];
+      } else {
+        console.error('error! No yet supported geometri type');
+        return '';
+      }
+    }
+
+    return /*#__PURE__*/_react.default.createElement("div", {
+      key: idx
+    }, /*#__PURE__*/_react.default.createElement(_core.ListItem, {
+      button: true,
+      onClick: function onClick() {
+        centerPosition(constructPoint({
+          lon: lon,
+          lat: lat,
+          epsg: 'EPSG:4326'
+        }));
+      }
+    }, /*#__PURE__*/_react.default.createElement(_core.ListItemText, {
+      primary: "".concat(data.stedsnavn[0].skrivemte, ",  ").concat(data.kommuner[0].kommunenavn)
+    })), /*#__PURE__*/_react.default.createElement(_core.Divider, null));
   }));
 };
 
@@ -189,17 +268,27 @@ var SearchBar = function SearchBar(props) {
       searchResultSSR = _useState6[0],
       setSearchResultSSR = _useState6[1];
 
-  var placeholder = props.placeholder;
-
-  var _useState7 = (0, _react.useState)(false),
+  var _useState7 = (0, _react.useState)(),
       _useState8 = _slicedToArray(_useState7, 2),
-      expandedAdress = _useState8[0],
-      setStateAdress = _useState8[1];
+      searchResultStedsnavn = _useState8[0],
+      setSearchResultStedsnavn = _useState8[1];
+
+  var placeholder = props.placeholder;
 
   var _useState9 = (0, _react.useState)(false),
       _useState10 = _slicedToArray(_useState9, 2),
-      expandedSsr = _useState10[0],
-      setStateSsr = _useState10[1];
+      expandedAdress = _useState10[0],
+      setStateAdress = _useState10[1];
+
+  var _useState11 = (0, _react.useState)(false),
+      _useState12 = _slicedToArray(_useState11, 2),
+      expandedSsr = _useState12[0],
+      setStateSsr = _useState12[1];
+
+  var _useState13 = (0, _react.useState)(false),
+      _useState14 = _slicedToArray(_useState13, 2),
+      expandedStedsnavn = _useState14[0],
+      setStateStedsnavn = _useState14[1];
 
   var classes = useStyles();
   (0, _react.useEffect)(function () {
@@ -216,6 +305,22 @@ var SearchBar = function SearchBar(props) {
         return response.json();
       }).then(function (result) {
         setSearchResult(result);
+      }).catch(function (error) {
+        console.warn(error);
+      });
+      fetch((0, _n3api.generateStedsnavnSokUrl)(searchText, 0, 15)).then(function (response) {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+
+        return response.json();
+      }).then(function (result) {
+        if (result.navn) {
+          console.log(result.navn);
+          setSearchResultStedsnavn(result.navn);
+        } else {
+          setSearchResultStedsnavn(null);
+        }
       }).catch(function (error) {
         console.warn(error);
       });
@@ -241,6 +346,7 @@ var SearchBar = function SearchBar(props) {
     } else {
       setSearchResult('');
       setSearchResultSSR('');
+      setSearchResultStedsnavn('');
       vectorSource.clear();
       (0, _setQueryString.default)();
     }
@@ -283,11 +389,24 @@ var SearchBar = function SearchBar(props) {
     className: _SearchBarModule.default.expandBtn
   }, /*#__PURE__*/_react.default.createElement("span", {
     className: _SearchBarModule.default.ellipsisToggle
-  }, "STEDSNAVN"), expandedSsr ? /*#__PURE__*/_react.default.createElement(_icons.ExpandLess, null) : /*#__PURE__*/_react.default.createElement(_icons.ExpandMore, null)), /*#__PURE__*/_react.default.createElement("div", {
+  }, "SSR"), expandedSsr ? /*#__PURE__*/_react.default.createElement(_icons.ExpandLess, null) : /*#__PURE__*/_react.default.createElement(_icons.ExpandMore, null)), /*#__PURE__*/_react.default.createElement("div", {
     className: expandedSsr ? "".concat(_SearchBarModule.default.selected, " ").concat(_SearchBarModule.default.open) : _SearchBarModule.default.selected
   }, /*#__PURE__*/_react.default.createElement(SearchResult, {
     searchResult: {
       searchResultSSR: searchResultSSR
+    }
+  }))), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
+    onClick: function onClick() {
+      return setStateStedsnavn(!expandedStedsnavn);
+    },
+    className: _SearchBarModule.default.expandBtn
+  }, /*#__PURE__*/_react.default.createElement("span", {
+    className: _SearchBarModule.default.ellipsisToggle
+  }, "STEDSNAVN"), expandedStedsnavn ? /*#__PURE__*/_react.default.createElement(_icons.ExpandLess, null) : /*#__PURE__*/_react.default.createElement(_icons.ExpandMore, null)), /*#__PURE__*/_react.default.createElement("div", {
+    className: expandedStedsnavn ? "".concat(_SearchBarModule.default.selected, " ").concat(_SearchBarModule.default.open) : _SearchBarModule.default.selected
+  }, /*#__PURE__*/_react.default.createElement(SearchResult, {
+    searchResult: {
+      searchResultStedsnavn: searchResultStedsnavn
     }
   }))))));
 };

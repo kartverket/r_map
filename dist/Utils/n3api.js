@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.generateCancelPrintUrl = exports.generateStatusPrintDownloadUrl = exports.generatePrintDownloadUrl = exports.generatePrintUrl = exports.generateUrlPrintCapabilities = exports.isNotOutOfBounds = exports.isOutOfBounds = exports.getCoordinateSystems = exports.getSOSIfromEPSG = exports.generateFaqUrl = exports.generateEiendomAddress = exports.generateMatrikkelWfsFilterUrl = exports._constructMarkingFilter = exports.generateSearchMatrikkelNummerUrl = exports.generateGeoJSONSaveUrl = exports.generateGeoJSONUrl = exports.generateEmergencyPosterPreviewImageUrl = exports.generateSearchStedsnavnBboxUrl = exports.generateEmergencyPosterPointUrl = exports.generateLagFargeleggingskartUrl = exports.generateLagTurkartUrl = exports.generateSeHavnivaaUrl = exports.generateKoordTransUrl = exports.generateFaktaarkUrl = exports.generateSeEiendomUrl = exports.generateMatrikkelInfoUrl = exports.generateAdressePunktsokUrl = exports.generateAdresseSokUrl = exports.generateElevationPointUrl = exports.generateSearchAdresseUrl = exports.generateSearchStedsnavnUrl = exports.generateSearchMatrikkelAdresseUrl = exports.generateSearchMatrikkelVegUrl = exports.generateEmergencyPosterServiceUrl = exports.generateMapLinkServiceUrl = exports.generateElevationChartServiceUrl = exports.uploadGpxFileService = exports.generateWhat3WordsServiceUrl = void 0;
+exports.generateCancelPrintUrl = exports.generateStatusPrintDownloadUrl = exports.generatePrintDownloadUrl = exports.generatePrintUrl = exports.generateUrlPrintCapabilities = exports.isNotOutOfBounds = exports.isOutOfBounds = exports.getCoordinateSystems = exports.getSOSIfromEPSG = exports.generateFaqUrl = exports.generateEiendomAddress = exports.generateMatrikkelWfsFilterUrl = exports._constructMarkingFilter = exports.generateSearchMatrikkelNummerUrl = exports.generateGeoJSONSaveUrl = exports.generateGeoJSONUrl = exports.generateEmergencyPosterPreviewImageUrl = exports.generateSearchStedsnavnBboxUrl = exports.generateEmergencyPosterPointUrl = exports.generateLagFargeleggingskartUrl = exports.generateLagTurkartUrl = exports.generateSeHavnivaaUrl = exports.generateKoordTransUrl = exports.generateFaktaarkUrl = exports.generateSeEiendomUrl = exports.generateMatrikkelInfoUrl = exports.generateAdressePunktsokUrl = exports.generateAdresseSokUrl = exports.generateElevationPointUrl = exports.generateSearchAdresseUrl = exports.generateStedsnavnSokUrl = exports.generateSearchStedsnavnUrl = exports.generateSearchMatrikkelAdresseUrl = exports.generateSearchMatrikkelVegUrl = exports.generateEmergencyPosterServiceUrl = exports.generateMapLinkServiceUrl = exports.generateElevationChartServiceUrl = exports.uploadGpxFileService = exports.generateWhat3WordsServiceUrl = void 0;
 
 var _queryString = _interopRequireDefault(require("query-string"));
 
@@ -95,6 +95,13 @@ var generateSearchStedsnavnUrl = function generateSearchStedsnavnUrl(query, side
 };
 
 exports.generateSearchStedsnavnUrl = generateSearchStedsnavnUrl;
+
+var generateStedsnavnSokUrl = function generateStedsnavnSokUrl(query, side, antall) {
+  side += 1;
+  return "https://norgeskart.no/ws/px.py?https://wstest.geonorge.no/stedsnavn/v1/stedsnavn?sok=".concat(query, "&treffPerSide=").concat(antall, "&side=").concat(side);
+};
+
+exports.generateStedsnavnSokUrl = generateStedsnavnSokUrl;
 
 var generateSearchAdresseUrl = function generateSearchAdresseUrl(query) {
   return urlGeonorge + "AdresseWS/adresse/sok?sokestreng=" + encodeURIComponent(query) + "&antPerSide=100&side=0";

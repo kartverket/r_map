@@ -4,6 +4,7 @@ import queryString from "query-string"
 import setQuery from "set-query-string"
 import pin_orange from '../../assets/img/pin-md-orange.png'
 import pin_blue from '../../assets/img/pin-md-blueish.png'
+import pin_red from '../../assets/img/pin-md-red.png'
 import { ExpandLess, ExpandMore } from "@material-ui/icons"
 import { makeStyles } from '@material-ui/core/styles'
 import { TextField, List, ListItem, ListItemText, Divider } from '@material-ui/core'
@@ -39,11 +40,25 @@ const SearchResult = (props) => {
       src: pin_blue
     })
   })
+  const icon_red = new Style({
+    image: new Icon({
+      anchor: [0.5, 46],
+      anchorXUnits: 'fraction',
+      anchorYUnits: 'pixels',
+      src: pin_red
+    })
+  })
+
   let features = []
 
   const showInfoMarker = (coordinate) => {
     let iconFeature = new Feature({ geometry: new Point(coordinate) })
     iconFeature.setStyle(icon_orange)
+    vectorSource.addFeature(iconFeature)
+  }
+  const showRedInfoMarker = (coordinate) => {
+    let iconFeature = new Feature({ geometry: new Point(coordinate) })
+    iconFeature.setStyle(icon_red)
     vectorSource.addFeature(iconFeature)
   }
   const centerPosition = (coordinate) => {
@@ -88,19 +103,37 @@ const SearchResult = (props) => {
       }
       {
         props.searchResult.searchResultStedsnavn && props.searchResult.searchResultStedsnavn.map((data, idx) => {
-          console.log(data)
+          //console.log(data)
           let lon, lat
-          if (data.geometri.type === "Point") {
-            lon = data.geometri.coordinates[0]
-            lat = data.geometri.coordinates[1]
-          } else if (data.geometri.type === "MultiPoint") {
-            lon = data.geometri.coordinates[0][0]
-            lat = data.geometri.coordinates[0][1]
-          } else {
-            console.error('error! No yet supported geometri type')
-            return ('')
+          if (data.navneobjekttype !== 'adressenavn') {
+            if (data.geometri.type === "Point") {
+              lon = data.geometri.coordinates[0]
+              lat = data.geometri.coordinates[1]
+            } else if (data.geometri.type === "MultiPoint") {
+              lon = data.geometri.coordinates[0][0]
+              lat = data.geometri.coordinates[0][1]
+            } else {
+              console.error('error! No yet supported geometri type')
+              return ('')
+            }
+            showRedInfoMarker(constructPoint({ lon: lon, lat: lat, epsg: 'EPSG:4326' }))
+          } else if (data.navneobjekttype === 'adressenavn') {
+            if (data.geometri.type === "Point") {
+              lon = data.geometri.coordinates[0]
+              lat = data.geometri.coordinates[1]
+              showRedInfoMarker(constructPoint({ lon: lon, lat: lat, epsg: 'EPSG:4326' }))
+            } else if (data.geometri.type === "MultiPoint") {
+              data.geometri.coordinates.forEach(coordinate => {
+                showRedInfoMarker(constructPoint({ lon: coordinate[0], lat: coordinate[1], epsg: 'EPSG:4326' }))
+              });
+              // Menupunkt med bare første pkt
+              lon = data.geometri.coordinates[0][0]
+              lat = data.geometri.coordinates[0][1]
+            } else {
+              console.error('error! No yet supported geometri type')
+              return ('')
+            }
           }
-          showInfoMarker(constructPoint({ lon: lon, lat: lat, epsg: 'EPSG:4326' }))
           return (
             <div key={ idx }>
               <ListItem button onClick={ () => { centerPosition(constructPoint({ lon: lon, lat: lat, epsg: 'EPSG:4326' })) } }>
@@ -160,7 +193,7 @@ const SearchBar = props => {
         })
         .then(result => {
           if (result.navn) {
-            console.log(result.navn)
+            //console.log(result.navn)
             setSearchResultStedsnavn(result.navn)
           } else {
             setSearchResultStedsnavn(null)
