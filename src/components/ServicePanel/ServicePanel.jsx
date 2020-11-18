@@ -158,13 +158,22 @@ const ServicePanel = props => {
 
   const renderCapabilites = () => {
     if (capabilities && capabilities.Capability) {
-      return capabilities.Capability.Layer.Layer.map((capaLayer, i) => {
+      const capalayer = capabilities.Capability.Layer.Layer || capabilities.Capability.Layer
+      if (Array.isArray(capalayer)) {
+        return capalayer.map((capaLayer, i) => {
+          return (
+            <div className={ style.facet } key={ i }>
+              <LayerEntry layer={ capaLayer } meta={ meta } key={ i } />
+            </div>
+          )
+        })
+      } else {
         return (
-          <div className={ style.facet } key={ i }>
-            <LayerEntry layer={ capaLayer } meta={ meta } key={ i } />
+          <div className={ style.facet } key={ 0 }>
+            <LayerEntry layer={ capalayer } meta={ meta } key={ 0 } />
           </div>
         )
-      })
+      }
     } else if (capabilities && capabilities.value) {
       return capabilities.value.featureTypeList.featureType.map((capaLayer, i) => {
         return (
