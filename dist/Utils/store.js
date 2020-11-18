@@ -30,7 +30,7 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var initialState = {};
-var store = (0, _react.createContext)(initialState);
+var store = /*#__PURE__*/(0, _react.createContext)(initialState);
 exports.store = store;
 var Provider = store.Provider;
 

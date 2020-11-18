@@ -120,16 +120,29 @@ var ServicePanel = function ServicePanel(props) {
 
   var renderCapabilites = function renderCapabilites() {
     if (capabilities && capabilities.Capability) {
-      return capabilities.Capability.Layer.Layer.map(function (capaLayer, i) {
+      var capalayer = capabilities.Capability.Layer.Layer || capabilities.Capability.Layer;
+
+      if (Array.isArray(capalayer)) {
+        return capalayer.map(function (capaLayer, i) {
+          return /*#__PURE__*/_react.default.createElement("div", {
+            className: _ServicePanelModule.default.facet,
+            key: i
+          }, /*#__PURE__*/_react.default.createElement(_LayerEntry.default, {
+            layer: capaLayer,
+            meta: meta,
+            key: i
+          }));
+        });
+      } else {
         return /*#__PURE__*/_react.default.createElement("div", {
           className: _ServicePanelModule.default.facet,
-          key: i
+          key: 0
         }, /*#__PURE__*/_react.default.createElement(_LayerEntry.default, {
-          layer: capaLayer,
+          layer: capalayer,
           meta: meta,
-          key: i
+          key: 0
         }));
-      });
+      }
     } else if (capabilities && capabilities.value) {
       return capabilities.value.featureTypeList.featureType.map(function (capaLayer, i) {
         return /*#__PURE__*/_react.default.createElement("div", {
