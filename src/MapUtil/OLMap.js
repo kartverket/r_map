@@ -40,8 +40,9 @@ import {
 import GeometryCollection from 'ol/geom/GeometryCollection'
 import Feature from 'ol/Feature.js'
 import {
-    getCenter as OLGetCenterFromExtent,
-    containsCoordinate
+  getCenter as OLGetCenterFromExtent,
+  containsCoordinate,
+  getTopLeft as getExtentTopLeft
 } from 'ol/extent'
 import OlGeolocation from 'ol/Geolocation'
 import proj4 from 'proj4'
@@ -58,6 +59,8 @@ import Guid from './Utils'
 import { OLProgressBar } from './OLProgessBar'
 import { FORMATS, SOURCES } from './Domain'
 import { OLStylesJson, OLStylesSLD } from './OLStyles'
+import WMTS from 'ol/source/WMTS';
+import WMTSTileGrid from 'ol/tilegrid/WMTS'
 
 import $ from "jquery";
 
@@ -124,26 +127,46 @@ export const OLMap = (eventHandler, httpHelper, measure,
             altShiftDragRotate: false,
             pinchRotate: false
         });
-
-        map = new Map({
-            target: targetId,
-            renderer: mapConfig.renderer,
-            layers: [],
-            loadTilesWhileAnimating: true, // Improve user experience by loading tiles while animating. Will make animations stutter on mobile or slow devices.
-            loadTilesWhileInteracting: true,
-            view: new View({
-                projection: sm,
-                //constrainRotation: 4,
-                enableRotation: false,
-                center: mapConfig.center,
-                zoom: mapConfig.zoom,
-                resolutions: newMapRes,
-                maxResolution: mapConfig.newMaxRes,
-                numZoomLevels: numZoomLevels
+        var matrixIds = new Array(mapConfig.numZoomLevels);
+        var matrixSet = mapConfig.matrixSet;
+        for (var z = 0; z < mapConfig.numZoomLevels; ++z) {
+          matrixIds[z] = mapConfig.basemap.matrixprefix ? matrixSet + ":" + z : matrixIds[z] = z;
+        }
+        var baseLayer = mapConfig.basemap ? [ new TileLayer({
+          source: new WMTS({
+            url: mapConfig.basemap.url,
+            layer: mapConfig.basemap.layers,
+            matrixSet: 'EPSG:' + parseInt(mapConfig.coordinate_system.substr(mapConfig.coordinate_system.indexOf(':') + 1), 10),
+            format: mapConfig.basemap.format,
+            projection: sm,
+            tileGrid: new WMTSTileGrid({
+              origin: getExtentTopLeft(sm.getExtent()),
+              resolutions: newMapRes,
+              matrixIds: matrixIds
             }),
-            controls: [],
-            overlays: [],
-            interactions: interactions
+            style: 'default'
+          }),
+          zIndex: -1
+        }) ] : []
+        map = new Map({
+          target: targetId,
+          renderer: mapConfig.renderer,
+          layers: baseLayer,
+          loadTilesWhileAnimating: true, // Improve user experience by loading tiles while animating. Will make animations stutter on mobile or slow devices.
+          loadTilesWhileInteracting: true,
+          view: new View({
+            projection: sm,
+            //constrainRotation: 4,
+            enableRotation: false,
+            center: mapConfig.center,
+            zoom: mapConfig.zoom,
+            resolutions: newMapRes,
+            maxResolution: mapConfig.newMaxRes,
+            numZoomLevels: numZoomLevels
+          }),
+          controls: [],
+          overlays: [],
+          interactions: interactions
         });
         if (offline) {
             _initOffline();
