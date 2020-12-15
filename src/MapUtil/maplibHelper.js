@@ -32,6 +32,12 @@ export let mapConfig = {
   displayprojectionepsgcode: 'EPSG:25833',
   tokenHost: 'https://www.norgeskart.no/ws/gkt.py',
   projectName: 'norgeskart',
+  basemap: {
+    url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open_wmts?',
+    layers: 'europa_forenklet',
+    format: 'image/png',
+    matrixprefix: 'true',
+  },
   wmts: [{
     type: 'map',
     gatekeeper: 'true',
