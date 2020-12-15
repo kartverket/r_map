@@ -41,7 +41,8 @@ import GeometryCollection from 'ol/geom/GeometryCollection'
 import Feature from 'ol/Feature.js'
 import {
   getCenter as OLGetCenterFromExtent,
-  containsCoordinate
+  containsCoordinate,
+  getTopLeft as getExtentTopLeft
 } from 'ol/extent'
 import OlGeolocation from 'ol/Geolocation'
 import proj4 from 'proj4'
@@ -58,347 +59,478 @@ import Guid from './Utils'
 import { OLProgressBar } from './OLProgessBar'
 import { FORMATS, SOURCES } from './Domain'
 import { OLStylesJson, OLStylesSLD } from './OLStyles'
+import WMTS from 'ol/source/WMTS';
+import WMTSTileGrid from 'ol/tilegrid/WMTS'
 
 import $ from "jquery"
 
 export const OLMap = (eventHandler, httpHelper, measure,
-  featureInfo, mapExport, hoverInfo, measureLine, drawFeature,
-  offline, addLayerFeature, modifyFeature, addFeatureGps, printBoxSelect, addLayerUrl) => {
+    featureInfo, mapExport, hoverInfo, measureLine, drawFeature,
+    offline, addLayerFeature, modifyFeature, addFeatureGps, printBoxSelect, addLayerUrl) => {
 
-  var map
-  var layerPool = []
-  var isySubLayerPool = []
-  var sldstyles = []
-  var mapResolutions
-  var mapScales
-  var hoverOptions
-  var initialGeolocationChange = false
+    var map;
+    var layerPool = [];
+    var isySubLayerPool = [];
+    var sldstyles = [];
+    var mapResolutions;
+    var mapScales;
+    var hoverOptions;
+    var initialGeolocationChange = false;
 
-  var proxyHost = ""
-  var tokenHost = ""
-  var ticketHost = ""
-  var gktLifetime = 3000
-  var ticketLifetime = 3000
-  var lastGktCheck = 0
-  var lastTicketCheck = 0
-  var lastGlobalGktCheck = 0
-  var lastGlobalTicketCheck = 0
-  var globalGkt
-  var globalTicket
-  var geolocation
-  var translateOptions
-  var isyToken
+    var proxyHost = "";
+    var tokenHost = "";
+    var ticketHost = "";
+    var gktLifetime = 3000;
+    var ticketLifetime = 3000;
+    var lastGktCheck = 0;
+    var lastTicketCheck = 0;
+    var lastGlobalGktCheck = 0;
+    var lastGlobalTicketCheck = 0;
+    var globalGkt;
+    var globalTicket;
+    var geolocation;
+    var translateOptions;
+    var isyToken;
 
-  var describedSubLayer
-  var describedSource
-  var isyLayerGeometryType
+    var describedSubLayer;
+    var describedSource;
+    var isyLayerGeometryType;
 
-  var customMessageHandler
+    var customMessageHandler;
 
-  /*
-      Start up functions Start
-   */
+    /*
+        Start up functions Start
+     */
 
-  function initMap(targetId, mapConfig) {
-    proxyHost = mapConfig.proxyHost
-    tokenHost = mapConfig.tokenHost
-    ticketHost = mapConfig.ticketHost
-    hoverOptions = mapConfig.hoverOptions
-    var numZoomLevels = mapConfig.numZoomLevels
-    var newMapRes = []
-    newMapRes[0] = mapConfig.newMaxRes
-    mapScales = []
-    mapScales[0] = mapConfig.newMaxScale
-    for (var t = 1; t < numZoomLevels; t++) {
-      newMapRes[t] = newMapRes[t - 1] / 2
-      mapScales[t] = mapScales[t - 1] / 2
-    }
-    mapResolutions = newMapRes
-    var sm = new Projection({
-      code: mapConfig.coordinate_system,
-      extent: mapConfig.extent,
-      units: mapConfig.extentUnits
-    })
-
-    var interactions = defaultInteractions({
-      altShiftDragRotate: false,
-      pinchRotate: false
-    })
-
-    map = new Map({
-      target: targetId,
-      renderer: mapConfig.renderer,
-      layers: [],
-      loadTilesWhileAnimating: true, // Improve user experience by loading tiles while animating. Will make animations stutter on mobile or slow devices.
-      loadTilesWhileInteracting: true,
-      view: new View({
-        projection: sm,
-        //constrainRotation: 4,
-        enableRotation: false,
-        center: mapConfig.center,
-        zoom: mapConfig.zoom,
-        resolutions: newMapRes,
-        maxResolution: mapConfig.newMaxRes,
-        numZoomLevels: numZoomLevels
-      }),
-      controls: [],
-      overlays: [],
-      interactions: interactions
-    })
-    if (offline) {
-      _initOffline()
-    }
-    _registerMapCallbacks()
-
-    if (mapConfig.showProgressBar) {
-      _registerProgressBar()
-    }
-    if (mapConfig.showMousePosition) {
-      _registerMousePositionControl(mapConfig.mouseProjectionPrefix)
-    }
-    _registerMessageHandler()
-    return map
-  }
-
-  function _registerMapCallbacks() {
-    var view = map.getView()
-
-    var changeCenter = function () {
-      var mapViewChangedObj = _getUrlObject()
-      eventHandler.TriggerEvent(EventTypes.ChangeCenter, mapViewChangedObj)
-    }
-
-    var changeResolution = function () {
-      var mapViewChangedObj = _getUrlObject()
-      eventHandler.TriggerEvent(EventTypes.ChangeResolution, mapViewChangedObj)
-    }
-
-    var mapMoveend = function () {
-      _checkGktToken()
-      _checkTicket()
-      var mapViewChangedObj = _getUrlObject()
-      eventHandler.TriggerEvent(EventTypes.MapMoveend, mapViewChangedObj)
-    }
-
-    view.on('change:center', changeCenter)
-    view.on('change:resolution', changeResolution)
-    map.on('moveend', mapMoveend)
-  }
-
-  function _registerMessageHandler() {
-    var layerMessageHandler = MaplibCustomMessageHandler(eventHandler, _getIsySubLayerFromPool)
-    layerMessageHandler.Init(map)
-
-    customMessageHandler = MaplibCustomMessageHandler()
-    customMessageHandler.InitMessage('')
-  }
-
-  function _registerProgressBar() {
-    var progressBar = OLProgressBar(eventHandler)
-    progressBar.Init(map)
-  }
-
-  function _registerMousePositionControl(prefix) {
-    var element = document.getElementById('mouseposition')
-    if (element) {
-      var units = map.getView().getProjection().getUnits()
-      var epsg = getEpsgCode()
-      if (prefix === undefined) {
-        prefix = ''
-      }
-      var coordinate2string = function (coord) {
-        var mousehtml = '' + prefix
-        var geographic = false
-        if (mousehtml.length > 0) {
-          switch (units) {
-            case 'degrees':
-              mousehtml = ''
-              geographic = true
-              break
-            default:
-              switch (epsg) {
-                case 'EPSG:25831':
-                case 'EPSG:32631':
-                  mousehtml += '31 '
-                  break
-                case 'EPSG:25832':
-                case 'EPSG:32632':
-                  mousehtml += '32 '
-                  break
-                case 'EPSG:25833':
-                case 'EPSG:32633':
-                  mousehtml += '33 '
-                  break
-                case 'EPSG:25834':
-                case 'EPSG:32634':
-                  mousehtml += '34 '
-                  break
-                case 'EPSG:25835':
-                case 'EPSG:32635':
-                  mousehtml += '35 '
-                  break
-                case 'EPSG:25836':
-                case 'EPSG:32636':
-                  mousehtml += '36 '
-                  break
-                case 'EPSG:25837':
-                case 'EPSG:32637':
-                  mousehtml += '37 '
-                  break
-                case 'EPSG:25838':
-                case 'EPSG:32638':
-                  mousehtml += '38 '
-                  break
-                default:
-                  mousehtml += '33 '
-                  break
-              }
-              break
-          }
+    function initMap(targetId, mapConfig) {
+        proxyHost = mapConfig.proxyHost;
+        tokenHost = mapConfig.tokenHost;
+        ticketHost = mapConfig.ticketHost;
+        hoverOptions = mapConfig.hoverOptions;
+        var numZoomLevels = mapConfig.numZoomLevels;
+        var newMapRes = [];
+        newMapRes[0] = mapConfig.newMaxRes;
+        mapScales = [];
+        mapScales[0] = mapConfig.newMaxScale;
+        for (var t = 1; t < numZoomLevels; t++) {
+            newMapRes[t] = newMapRes[t - 1] / 2;
+            mapScales[t] = mapScales[t - 1] / 2;
         }
-        if (geographic) {
-          mousehtml += Math.round(coord[1] * 10000) / 10000 +
-            translateOptions['north'] + Math.round(coord[0] * 10000) / 10000 +
-            translateOptions['east']
-        } else {
-          mousehtml += parseInt(coord[1], 10) + translateOptions['north'] + parseInt(coord[0], 10) + translateOptions['east']
-        }
-        return mousehtml
-      }
-      var mousePositionControl = new MousePosition({
-        coordinateFormat: coordinate2string,
-        projection: epsg,
-        //undefinedHTML: '&nbsp;',
-        // comment the following two lines to have the mouse position
-        // be placed within the map.
-        className: 'mousePosition',
-        target: element
-      })
-      map.addControl(mousePositionControl)
-    }
-  }
+        mapResolutions = newMapRes;
+        var sm = new Projection({
+            code: mapConfig.coordinate_system,
+            extent: mapConfig.extent,
+            units: mapConfig.extentUnits
+        });
 
-  function _checkGktToken() {
-    var currentTime = (new Date()).getTime()
-    if (currentTime < (lastGktCheck + 60000)) {
-      // check if token has expired each minute
-      return
+        var interactions = defaultInteractions({
+            altShiftDragRotate: false,
+            pinchRotate: false
+        });
+        var matrixIds = new Array(mapConfig.numZoomLevels);
+        var matrixSet = mapConfig.matrixSet;
+        for (var z = 0; z < mapConfig.numZoomLevels; ++z) {
+          matrixIds[z] = mapConfig.basemap.matrixprefix ? matrixSet + ":" + z : matrixIds[z] = z;
+        }
+        var baseLayer = mapConfig.basemap ? [ new TileLayer({
+          source: new WMTS({
+            url: mapConfig.basemap.url,
+            layer: mapConfig.basemap.layers,
+            matrixSet: 'EPSG:' + parseInt(mapConfig.coordinate_system.substr(mapConfig.coordinate_system.indexOf(':') + 1), 10),
+            format: mapConfig.basemap.format,
+            projection: sm,
+            tileGrid: new WMTSTileGrid({
+              origin: getExtentTopLeft(sm.getExtent()),
+              resolutions: newMapRes,
+              matrixIds: matrixIds
+            }),
+            style: 'default'
+          }),
+          zIndex: -1
+        }) ] : []
+        map = new Map({
+          target: targetId,
+          renderer: mapConfig.renderer,
+          layers: baseLayer,
+          loadTilesWhileAnimating: true, // Improve user experience by loading tiles while animating. Will make animations stutter on mobile or slow devices.
+          loadTilesWhileInteracting: true,
+          view: new View({
+            projection: sm,
+            //constrainRotation: 4,
+            enableRotation: false,
+            center: mapConfig.center,
+            zoom: mapConfig.zoom,
+            resolutions: newMapRes,
+            maxResolution: mapConfig.newMaxRes,
+            numZoomLevels: numZoomLevels
+          }),
+          controls: [],
+          overlays: [],
+          interactions: interactions
+        });
+        if (offline) {
+            _initOffline();
+        }
+        _registerMapCallbacks();
+
+        if (mapConfig.showProgressBar) {
+            _registerProgressBar();
+        }
+        if (mapConfig.showMousePosition) {
+            _registerMousePositionControl(mapConfig.mouseProjectionPrefix);
+        }
+        _registerMessageHandler();
+        return map;
     }
-    lastGktCheck = currentTime
-    if (map.getLayers()) {
-      map.getLayers().forEach(function (layer) {
-        var source = layer.getSource()
-        if (source && source.getParams) {
-          var params = source.getParams()
-          if (params && params.GKT) {
-            //console.log(layer.typename + ' ' + params.GKT);
-            var initTime = source.get("timestamp")
-            if (initTime) {
-              var elapsedTime = Math.round((currentTime - initTime) / 1000)
-              if (elapsedTime > gktLifetime) {
-                _setToken(source)
-              }
+
+    function _registerMapCallbacks() {
+        var view = map.getView();
+
+        var changeCenter = function () {
+            var mapViewChangedObj = _getUrlObject();
+            eventHandler.TriggerEvent(EventTypes.ChangeCenter, mapViewChangedObj);
+        };
+
+        var changeResolution = function () {
+            var mapViewChangedObj = _getUrlObject();
+            eventHandler.TriggerEvent(EventTypes.ChangeResolution, mapViewChangedObj);
+        };
+
+        var mapMoveend = function () {
+            _checkGktToken();
+            _checkTicket();
+            var mapViewChangedObj = _getUrlObject();
+            eventHandler.TriggerEvent(EventTypes.MapMoveend, mapViewChangedObj);
+        };
+
+        view.on('change:center', changeCenter);
+        view.on('change:resolution', changeResolution);
+        map.on('moveend', mapMoveend);
+    }
+
+    function _registerMessageHandler() {
+        var layerMessageHandler =  MaplibCustomMessageHandler(eventHandler, _getIsySubLayerFromPool);
+        layerMessageHandler.Init(map);
+
+        customMessageHandler = MaplibCustomMessageHandler();
+        customMessageHandler.InitMessage('');
+    }
+
+    function _registerProgressBar() {
+        var progressBar = OLProgressBar(eventHandler);
+        progressBar.Init(map);
+    }
+
+    function _registerMousePositionControl(prefix) {
+        var element = document.getElementById('mouseposition');
+        if (element) {
+            var units = map.getView().getProjection().getUnits();
+            var epsg = getEpsgCode();
+            if (prefix === undefined) {
+                prefix = '';
             }
-          }
+            var coordinate2string = function (coord) {
+                var mousehtml = '' + prefix;
+                var geographic = false;
+                if (mousehtml.length > 0) {
+                    switch (units) {
+                        case 'degrees':
+                            mousehtml = '';
+                            geographic = true;
+                            break;
+                        default:
+                            switch (epsg) {
+                                case 'EPSG:25831':
+                                case 'EPSG:32631':
+                                    mousehtml += '31 ';
+                                    break;
+                                case 'EPSG:25832':
+                                case 'EPSG:32632':
+                                    mousehtml += '32 ';
+                                    break;
+                                case 'EPSG:25833':
+                                case 'EPSG:32633':
+                                    mousehtml += '33 ';
+                                    break;
+                                case 'EPSG:25834':
+                                case 'EPSG:32634':
+                                    mousehtml += '34 ';
+                                    break;
+                                case 'EPSG:25835':
+                                case 'EPSG:32635':
+                                    mousehtml += '35 ';
+                                    break;
+                                case 'EPSG:25836':
+                                case 'EPSG:32636':
+                                    mousehtml += '36 ';
+                                    break;
+                                case 'EPSG:25837':
+                                case 'EPSG:32637':
+                                    mousehtml += '37 ';
+                                    break;
+                                case 'EPSG:25838':
+                                case 'EPSG:32638':
+                                    mousehtml += '38 ';
+                                    break;
+                                default:
+                                  mousehtml += '33 ';
+                                  break;
+                        }
+                            break;
+                    }
+                }
+                if (geographic) {
+                    mousehtml += Math.round(coord[1] * 10000) / 10000 +
+                        translateOptions['north'] + Math.round(coord[0] * 10000) / 10000 +
+                        translateOptions['east'];
+                } else {
+                    mousehtml += parseInt(coord[1], 10) + translateOptions['north'] + parseInt(coord[0], 10) + translateOptions['east'];
+                }
+                return mousehtml;
+            };
+            var mousePositionControl = new MousePosition({
+                coordinateFormat: coordinate2string,
+                projection: epsg,
+                //undefinedHTML: '&nbsp;',
+                // comment the following two lines to have the mouse position
+                // be placed within the map.
+                className: 'mousePosition',
+                target: element
+            });
+            map.addControl(mousePositionControl);
         }
-      })
     }
-  }
 
-  function _checkTicket() {
-    var currentTime = (new Date()).getTime()
-    if (currentTime < (lastTicketCheck + 60000)) {
-      // check if token has expired each minute
-      return
+    function _checkGktToken() {
+        var currentTime = (new Date()).getTime();
+        if (currentTime < (lastGktCheck + 60000)) {
+            // check if token has expired each minute
+            return;
+        }
+        lastGktCheck = currentTime;
+        if (map.getLayers()) {
+            map.getLayers().forEach(function (layer) {
+                var source = layer.getSource();
+                if (source && source.getParams) {
+                    var params = source.getParams();
+                    if (params && params.GKT) {
+                        var initTime = source.get("timestamp");
+                        if (initTime) {
+                            var elapsedTime = Math.round((currentTime - initTime) / 1000);
+                            if (elapsedTime > gktLifetime) {
+                                _setToken(source);
+                            }
+                        }
+                    }
+                }
+            });
+        }
     }
-    lastTicketCheck = currentTime
-    if (map.getLayers()) {
-      map.getLayers().forEach(function (layer) {
-        var source = layer.getSource()
-        if (source && source.getParams) {
-          var params = source.getParams()
-          if (params && params.ticket) {
-            var initTime = source.get("timestamp")
-            if (initTime) {
-              var elapsedTime = Math.round((currentTime - initTime) / 1000)
-              if (elapsedTime > ticketLifetime) {
-                _setTicket(source)
-              }
+
+    function _checkTicket() {
+        var currentTime = (new Date()).getTime();
+        if (currentTime < (lastTicketCheck + 60000)) {
+            // check if token has expired each minute
+            return;
+        }
+        lastTicketCheck = currentTime;
+        if (map.getLayers()) {
+            map.getLayers().forEach(function (layer) {
+                var source = layer.getSource();
+                if (source && source.getParams) {
+                    var params = source.getParams();
+                    if (params && params.ticket) {
+                        var initTime = source.get("timestamp");
+                        if (initTime) {
+                            var elapsedTime = Math.round((currentTime - initTime) / 1000);
+                            if (elapsedTime > ticketLifetime) {
+                                _setTicket(source);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+    // Adds GKT-token to existing source
+    function _setToken(source) {
+        source.updateParams({
+            GKT: _getToken()
+        });
+        source.set("timestamp", (new Date()).getTime());
+    }
+
+    function _setTicket(source) {
+        source.updateParams({
+            ticket: _getTicket()
+        });
+        source.set("timestamp", (new Date()).getTime());
+    }
+
+    function changeView(viewPropertyObject) {
+        if (map !== undefined) {
+            var view = map.getView();
+            var lon, lat, zoom;
+            if (viewPropertyObject.lon) {
+                lon = viewPropertyObject.lon;
             }
-          }
+            if (viewPropertyObject.lat) {
+                lat = viewPropertyObject.lat;
+            }
+            if (viewPropertyObject.zoom) {
+                zoom = viewPropertyObject.zoom;
+            }
+
+            if (lon !== undefined && lat !== undefined) {
+                var latitude = typeof (lat) === 'number' ? lat : parseFloat(lat.replace(/,/g, '.'));
+                var longitude = typeof (lon) === 'number' ? lon : parseFloat(lon.replace(/,/g, '.'));
+                if (isFinite(latitude) && isFinite(longitude)) {
+                    view.setCenter([longitude, latitude]);
+                }
+            }
+
+            if (zoom !== undefined) {
+                view.setZoom(zoom);
+            }
         }
-      })
     }
-  }
-  // Adds GKT-token to existing source
-  function _setToken(source) {
-    //console.log(layer.typename + ' - ' + source.get("timestamp") + ' - ' + params.GKT);
-    source.updateParams({
-      GKT: _getToken()
-    })
-    source.set("timestamp", (new Date()).getTime())
-  }
+    /*
+        Start up functions End
+     */
 
-  function _setTicket(source) {
-    source.updateParams({
-      ticket: _getTicket()
-    })
-    source.set("timestamp", (new Date()).getTime())
-  }
+    /*
+        Layer functions Start
+        Functionality to be moved to ISY.MapImplementation.OL3.Layers
+     */
 
-  function changeView(viewPropertyObject) {
-    if (map !== undefined) {
-      var view = map.getView()
-      var lon, lat, zoom
-      if (viewPropertyObject.lon) {
-        lon = viewPropertyObject.lon
-      }
-      if (viewPropertyObject.lat) {
-        lat = viewPropertyObject.lat
-      }
-      if (viewPropertyObject.zoom) {
-        zoom = viewPropertyObject.zoom
-      }
+    function addDataToLayer(isySubLayer, data) {
+        var layer = _getLayerFromPool(isySubLayer);
+        if (isySubLayer.format === FORMATS.geoJson) {
+            var geoJson = JSON.parse(data);
+            var geoJsonParser = new GeoJSONFormat();
+            var features = geoJsonParser.readFeatures(geoJson);
 
-      if (lon !== undefined && lat !== undefined) {
-        var latitude = typeof (lat) === 'number' ? lat : parseFloat(lat.replace(/,/g, '.'))
-        var longitude = typeof (lon) === 'number' ? lon : parseFloat(lon.replace(/,/g, '.'))
-        if (isFinite(latitude) && isFinite(longitude)) {
-          view.setCenter([longitude, latitude])
+            //for (var i = 0; i < features.length; ++i) {
+            //    if (features[i].getProperties().Guid) {
+            //        features[i].setId(features[i].getProperties().Guid);
+            //    }
+            //}
+            if (isySubLayer.id && isySubLayer.name) {
+                for (var i = 0; i < features.length; ++i) {
+                    if (features[i].getProperties().Guid === undefined) {
+                        features[i].setProperties({
+                            Guid: Guid.newGuid()
+                        });
+                    }
+                    features[i].setId(isySubLayer.name + '.' + features[i].getProperties().Guid);
+                }
+            }
+
+            layer.getSource().addFeatures(features);
         }
-      }
-
-      if (zoom !== undefined) {
-        view.setZoom(zoom)
-      }
     }
-  }
-  /*
-      Start up functions End
-   */
 
-  /*
-      Layer functions Start
-      Functionality to be moved to ISY.MapImplementation.OL3.Layers
-   */
+    function removeDataFromLayer(isySubLayer, data) {
+        var layer = _getLayerFromPool(isySubLayer);
+        if (isySubLayer.format === FORMATS.geoJson) {
+            var geoJson = JSON.parse(data);
+            var geoJsonParser = new GeoJSONFormat();
+            var features = geoJsonParser.readFeatures(geoJson);
+            for (var i = 0; i < features.length; ++i) {
+                if (features[i].getProperties().Guid) {
+                    var feature = layer.getSource().getFeatureById(isySubLayer.name + '.' + features[i].getProperties().Guid);
+                    if (feature) {
+                        layer.getSource().removeFeature(feature);
+                    }
+                }
+            }
+        }
+    }
 
-  function addDataToLayer(isySubLayer, data) {
-    var layer = _getLayerFromPool(isySubLayer)
-    if (isySubLayer.format === FORMATS.geoJson) {
-      var geoJson = JSON.parse(data)
-      var geoJsonParser = new GeoJSONFormat()
-      var features = geoJsonParser.readFeatures(geoJson)
+    function clearLayer(isySubLayer) {
+        var layer = _getLayerFromPool(isySubLayer);
+        if (layer !== undefined) {
+            layer.getSource().clear();
+        }
+    }
 
-      //for (var i = 0; i < features.length; ++i) {
-      //    if (features[i].getProperties().Guid) {
-      //        features[i].setId(features[i].getProperties().Guid);
-      //    }
-      //}
-      if (isySubLayer.id && isySubLayer.name) {
-        for (var i = 0; i < features.length; ++i) {
-          if (features[i].getProperties().Guid === undefined) {
-            features[i].setProperties({
-              Guid: Guid.newGuid()
+    function _isLayerVisible(isySubLayer) {
+        var layerexists = false;
+        map.getLayers().forEach(function (maplayer) {
+            if (!layerexists && maplayer.guid === isySubLayer.id) {
+                layerexists = true;
+            }
+        });
+        return layerexists;
+    }
+
+    function showLayer(isySubLayer) {
+        if (!_isLayerVisible(isySubLayer)) {
+            var layer = _createLayer(isySubLayer);
+            if (layer) {
+                layer.sortingIndex = isySubLayer.sortingIndex;
+                map.addLayer(layer);
+                _trigLayersChanged();
+            }
+        }
+    }
+
+    function getLegendStyles(isySubLayer) {
+        var layer = _getLayerFromPool(isySubLayer);
+        if (layer !== null) {
+            return getLegendStyleFromLayer(layer);
+        }
+        return undefined;
+    }
+
+    function showBaseLayer(isySubLayer) {
+        if (!_isLayerVisible(isySubLayer)) {
+            var layer = _createLayer(isySubLayer);
+            if (layer) {
+                map.getLayers().insertAt(0, layer);
+                _trigLayersChanged();
+            }
+        }
+    }
+
+    function hideLayer(isySubLayer) {
+        if (_isLayerVisible(isySubLayer)) {
+            var layer = _getLayerByGuid(isySubLayer.id);
+            if (layer) {
+                map.removeLayer(layer);
+                _trigLayersChanged();
+            }
+        }
+    }
+
+    function _getProxyUrl(layerUrl, flattenproxy) {
+        if (Array.isArray(layerUrl)) {
+            layerUrl = layerUrl[0];
+        }
+        if (flattenproxy) {
+            if (Array.isArray(proxyHost)) {
+                return proxyHost[0] + layerUrl;
+            }
+            return proxyHost + layerUrl;
+        }
+        if (!Array.isArray(proxyHost)) {
+            return proxyHost + layerUrl;
+        }
+        var newLayerUrl = [];
+        for (var i = 0; i < proxyHost.length; i++) {
+            newLayerUrl.push(proxyHost[i] + layerUrl);
+        }
+        return newLayerUrl;
+    }
+
+    function _getToken() {
+        if (!tokenHost) {
+            return null;
+        } else if (!globalGkt || _checkGlobalGktTokenExpired()) {
+            // TODO: Fix ajax call without jQuery
+            /*globalGkt = await fetch(tokenHost, {
+                type: "GET",
+                async: false
             })
           }
           features[i].setId(isySubLayer.name + '.' + features[i].getProperties().Guid)
