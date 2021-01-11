@@ -55,6 +55,10 @@ var _Domain = require("./Domain");
 
 var _OLStyles = require("./OLStyles");
 
+var _WMTS = _interopRequireDefault(require("ol/source/WMTS"));
+
+var _WMTS2 = _interopRequireDefault(require("ol/tilegrid/WMTS"));
+
 var _jquery = _interopRequireDefault(require("jquery"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -116,10 +120,33 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
       altShiftDragRotate: false,
       pinchRotate: false
     });
+    var matrixIds = new Array(mapConfig.numZoomLevels);
+    var matrixSet = mapConfig.matrixSet;
+
+    for (var z = 0; z < mapConfig.numZoomLevels; ++z) {
+      matrixIds[z] = mapConfig.basemap.matrixprefix ? matrixSet + ":" + z : matrixIds[z] = z;
+    }
+
+    var baseLayer = mapConfig.basemap ? [new _layer.Tile({
+      source: new _WMTS.default({
+        url: mapConfig.basemap.url,
+        layer: mapConfig.basemap.layers,
+        matrixSet: 'EPSG:' + parseInt(mapConfig.coordinate_system.substr(mapConfig.coordinate_system.indexOf(':') + 1), 10),
+        format: mapConfig.basemap.format,
+        projection: sm,
+        tileGrid: new _WMTS2.default({
+          origin: (0, _extent.getTopLeft)(sm.getExtent()),
+          resolutions: newMapRes,
+          matrixIds: matrixIds
+        }),
+        style: 'default'
+      }),
+      zIndex: -1
+    })] : [];
     map = new _Map.default({
       target: targetId,
       renderer: mapConfig.renderer,
-      layers: [],
+      layers: baseLayer,
       loadTilesWhileAnimating: true,
       // Improve user experience by loading tiles while animating. Will make animations stutter on mobile or slow devices.
       loadTilesWhileInteracting: true,
