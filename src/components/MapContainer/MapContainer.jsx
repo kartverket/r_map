@@ -105,6 +105,7 @@ const MapContainer = (props) => {
             height: "100vh",
             zIndex: 0
           } }
+          tabIndex="0"
         />
         { internMap ? <Position map={ internMap } projection={ props.crs }></Position> : null }
         <div id="mapPopover">

@@ -12,21 +12,17 @@
 :local(.closeMap) {
   transition: 0.3s all ease-in-out;
   position: absolute;
-  background: #fff;
+  background-color: #f7f7f7;
   border: 1px solid #e5e5e5;
-  border-radius: 4px;
   z-index: 2;
   overflow: hidden;
   margin-top: 20px;
   right: 0;
-  border-right-color: white;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
   width: 76px;
   height: 76px;
 
   &:hover {
-    background: #e5e5e5;
+    background-color: #e5e5e5;
     width: 180px;
   }
 }
@@ -50,15 +46,12 @@
 :local(.container) {
   transition: 0.2s all ease-in-out;
   position: absolute;
-  background: #fff;
-  border: 2px solid #e5e5e5;
-  border-radius: 4px;
+  background-color: #f7f7f7;
+  border: 1px solid #f7f7f7;
   z-index: 2;
   overflow: hidden;
   margin-top: 10px;
-  border-left-color: white;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+  padding-top: 65px;
 
   > div {
     clear: both;
