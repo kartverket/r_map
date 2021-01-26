@@ -94,7 +94,8 @@ const MapContainer = (props) => {
           width: "100%",
           height: "100%",
           zIndex: 0
-        } }
+          } }
+          tabindex="0"
       />
       { internMap ? <Position map={ internMap } projection={ props.crs }></Position> : null }
       <div id="mapPopover">
