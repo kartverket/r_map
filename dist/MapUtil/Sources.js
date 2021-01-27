@@ -38,7 +38,7 @@ var _proj = require("ol/proj.js");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //import GML3Format from 'ol/format/GML3'
-var MaplibCustomMessageHandler = function MaplibCustomMessageHandler(eventHandler, _getIsySubLayerFromPool) {
+const MaplibCustomMessageHandler = (eventHandler, _getIsySubLayerFromPool) => {
   var olMap;
   var _message = 'Service down: ';
 
@@ -232,7 +232,7 @@ var MaplibCustomMessageHandler = function MaplibCustomMessageHandler(eventHandle
 
 exports.MaplibCustomMessageHandler = MaplibCustomMessageHandler;
 
-var Wms = function Wms(isySubLayer, parameters) {
+const Wms = (isySubLayer, parameters) => {
   var url;
   var urls;
 
@@ -316,7 +316,7 @@ var Wms = function Wms(isySubLayer, parameters) {
 
 exports.Wms = Wms;
 
-var Wmts = function Wmts(isySubLayer, parameters) {
+const Wmts = (isySubLayer, parameters) => {
   var projection = new _Projection.default({
     code: isySubLayer.coordinate_system,
     extent: isySubLayer.extent,
@@ -420,7 +420,7 @@ var Wmts = function Wmts(isySubLayer, parameters) {
 
 exports.Wmts = Wmts;
 
-var Vector = function Vector(isySubLayer) {
+const Vector = isySubLayer => {
   var source;
 
   switch (isySubLayer.format) {
@@ -441,7 +441,7 @@ var Vector = function Vector(isySubLayer) {
 
 exports.Vector = Vector;
 
-var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandler) {
+const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) => {
   var strategy;
 
   if (isySubLayer.tiled) {
@@ -465,7 +465,7 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
   var projection = (0, _proj.get)(isySubLayer.coordinate_system);
 
   var parseResponse = function parseResponse(response) {
-    var domparser = new DOMParser();
+    const domparser = new DOMParser();
     response = domparser.parseFromString(response, "text/xml");
     source.dispatchEvent('vectorloadend');
     var featureNamespace;
@@ -622,9 +622,7 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
       }
     }
 
-    return fetch(url).then(function (response) {
-      return response.text();
-    }).then(function (response) {
+    return fetch(url).then(response => response.text()).then(response => {
       if (typeof response === 'object') {
         if (response.firstChild.childElementCount === 0) {
           return;

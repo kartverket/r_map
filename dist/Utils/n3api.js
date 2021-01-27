@@ -9,35 +9,35 @@ var _queryString = _interopRequireDefault(require("query-string"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var url = 'https://www.norgeskart.no/';
-var urlOpenWps = 'https://openwps.statkart.no/skwms1/';
-var urlOpenWms = 'http://openwms.statkart.no/skwms1/';
-var urlGeonorge = 'https://ws.geonorge.no/';
-var urlSeEiendom = 'http://www.seeiendom.no/';
-var urlFaktaark = 'https://stadnamn.kartverket.no/fakta/';
-var urlHavnivaa = "http://api.sehavniva.no/";
-var urlAdresseSok = 'https://ws.geonorge.no/adresser/v1/sok';
-var urlAdressePunktsok = 'https://ws.geonorge.no/adresser/v1/punktsok';
+const url = 'https://www.norgeskart.no/';
+const urlOpenWps = 'https://openwps.statkart.no/skwms1/';
+const urlOpenWms = 'http://openwms.statkart.no/skwms1/';
+const urlGeonorge = 'https://ws.geonorge.no/';
+const urlSeEiendom = 'http://www.seeiendom.no/';
+const urlFaktaark = 'https://stadnamn.kartverket.no/fakta/';
+const urlHavnivaa = "http://api.sehavniva.no/";
+const urlAdresseSok = 'https://ws.geonorge.no/adresser/v1/sok';
+const urlAdressePunktsok = 'https://ws.geonorge.no/adresser/v1/punktsok';
 
-var generateWhat3WordsServiceUrl = function generateWhat3WordsServiceUrl() {
+const generateWhat3WordsServiceUrl = () => {
   return url + 'ws/w3w.py';
 };
 
 exports.generateWhat3WordsServiceUrl = generateWhat3WordsServiceUrl;
 
-var uploadGpxFileService = function uploadGpxFileService() {
+const uploadGpxFileService = () => {
   return url + 'ws/upload-gpx.py';
 };
 
 exports.uploadGpxFileService = uploadGpxFileService;
 
-var generateElevationChartServiceUrl = function generateElevationChartServiceUrl(gpxFile) {
+const generateElevationChartServiceUrl = gpxFile => {
   return urlOpenWps + "wps.elevation2?request=Execute&service=WPS&version=1.0.0&identifier=elevationChart&dataInputs=gpx=@xlink:href=" + gpxFile;
 };
 
 exports.generateElevationChartServiceUrl = generateElevationChartServiceUrl;
 
-var generateMapLinkServiceUrl = function generateMapLinkServiceUrl(config) {
+const generateMapLinkServiceUrl = config => {
   var service = encodeURIComponent(config.service);
   var request = encodeURIComponent(config.request);
   var crs = encodeURIComponent(config.CRS);
@@ -54,7 +54,7 @@ var generateMapLinkServiceUrl = function generateMapLinkServiceUrl(config) {
 
 exports.generateMapLinkServiceUrl = generateMapLinkServiceUrl;
 
-var generateEmergencyPosterServiceUrl = function generateEmergencyPosterServiceUrl(config) {
+const generateEmergencyPosterServiceUrl = config => {
   var locationName = encodeURIComponent(config.locationName);
   var position1 = encodeURIComponent(config.position1);
   var position2 = encodeURIComponent(config.position2);
@@ -69,19 +69,19 @@ var generateEmergencyPosterServiceUrl = function generateEmergencyPosterServiceU
 
 exports.generateEmergencyPosterServiceUrl = generateEmergencyPosterServiceUrl;
 
-var generateSearchMatrikkelVegUrl = function generateSearchMatrikkelVegUrl(query) {
+const generateSearchMatrikkelVegUrl = query => {
   return urlGeonorge + "norgeskart/v1/matrikkel/veg/" + encodeURIComponent(query);
 };
 
 exports.generateSearchMatrikkelVegUrl = generateSearchMatrikkelVegUrl;
 
-var generateSearchMatrikkelAdresseUrl = function generateSearchMatrikkelAdresseUrl(query) {
+const generateSearchMatrikkelAdresseUrl = query => {
   return urlGeonorge + "norgeskart/v1/matrikkel/adr/" + encodeURIComponent(query);
 };
 
 exports.generateSearchMatrikkelAdresseUrl = generateSearchMatrikkelAdresseUrl;
 
-var generateSearchStedsnavnUrl = function generateSearchStedsnavnUrl(query, side, antall) {
+const generateSearchStedsnavnUrl = (query, side, antall) => {
   if (query) {
     var testquery = query.split(',');
 
@@ -96,19 +96,19 @@ var generateSearchStedsnavnUrl = function generateSearchStedsnavnUrl(query, side
 
 exports.generateSearchStedsnavnUrl = generateSearchStedsnavnUrl;
 
-var generateSearchAdresseUrl = function generateSearchAdresseUrl(query) {
+const generateSearchAdresseUrl = query => {
   return urlGeonorge + "AdresseWS/adresse/sok?sokestreng=" + encodeURIComponent(query) + "&antPerSide=100&side=0";
 };
 
 exports.generateSearchAdresseUrl = generateSearchAdresseUrl;
 
-var generateElevationPointUrl = function generateElevationPointUrl(lat, lon, epsgNumber) {
+const generateElevationPointUrl = (lat, lon, epsgNumber) => {
   return url + 'ws/elev.py?lat=' + lat + '&lon=' + lon + '&epsg=' + epsgNumber;
 };
 
 exports.generateElevationPointUrl = generateElevationPointUrl;
 
-var generateAdresseSokUrl = function generateAdresseSokUrl(query) {
+const generateAdresseSokUrl = query => {
   query = typeof query === 'string' ? query : '';
   query = query.indexOf(',') !== -1 ? query.replace(',', '*') : query + '*';
   return urlAdresseSok + '?sok=' + encodeURIComponent(query) + '&treffPerSide=100';
@@ -116,31 +116,31 @@ var generateAdresseSokUrl = function generateAdresseSokUrl(query) {
 
 exports.generateAdresseSokUrl = generateAdresseSokUrl;
 
-var generateAdressePunktsokUrl = function generateAdressePunktsokUrl(radius, lat, lon) {
+const generateAdressePunktsokUrl = (radius, lat, lon) => {
   return urlAdressePunktsok + '?radius=' + radius + '&lat=' + lat + '&lon=' + lon + '&treffPerSide=10';
 };
 
 exports.generateAdressePunktsokUrl = generateAdressePunktsokUrl;
 
-var generateMatrikkelInfoUrl = function generateMatrikkelInfoUrl(minx, miny, maxx, maxy) {
+const generateMatrikkelInfoUrl = (minx, miny, maxx, maxy) => {
   return url + "ws/wfs.teig.py?bbox=" + minx + "," + miny + "," + maxx + "," + maxy;
 };
 
 exports.generateMatrikkelInfoUrl = generateMatrikkelInfoUrl;
 
-var generateSeEiendomUrl = function generateSeEiendomUrl(knr, gnr, bnr, fnr, snr) {
+const generateSeEiendomUrl = (knr, gnr, bnr, fnr, snr) => {
   return urlSeEiendom + "eiendom/" + knr + "/" + gnr + "/" + bnr + "/" + fnr + "/" + snr;
 };
 
 exports.generateSeEiendomUrl = generateSeEiendomUrl;
 
-var generateFaktaarkUrl = function generateFaktaarkUrl(stedsnummer) {
+const generateFaktaarkUrl = stedsnummer => {
   return urlFaktaark + stedsnummer;
 };
 
 exports.generateFaktaarkUrl = generateFaktaarkUrl;
 
-var generateKoordTransUrl = function generateKoordTransUrl(ost, nord, resSosiKoordSys, sosiKoordSys) {
+const generateKoordTransUrl = (ost, nord, resSosiKoordSys, sosiKoordSys) => {
   resSosiKoordSys = resSosiKoordSys || 84;
   sosiKoordSys = sosiKoordSys || 84;
   return urlGeonorge + 'transApi?ost=' + ost + '&nord=' + nord + '&fra=' + sosiKoordSys + '&til=' + resSosiKoordSys;
@@ -148,44 +148,44 @@ var generateKoordTransUrl = function generateKoordTransUrl(ost, nord, resSosiKoo
 
 exports.generateKoordTransUrl = generateKoordTransUrl;
 
-var generateSeHavnivaaUrl = function generateSeHavnivaaUrl(lat, lon) {
+const generateSeHavnivaaUrl = (lat, lon) => {
   return urlHavnivaa + "tideapi.php?lat=" + lat + "&lon=" + lon + "&lang=nb&year=" + new Date().getFullYear() + "&place=&tide_request=tidetable";
 };
 
 exports.generateSeHavnivaaUrl = generateSeHavnivaaUrl;
 
-var generateLagTurkartUrl = function generateLagTurkartUrl() {
+const generateLagTurkartUrl = () => {
   return urlGeonorge + "freeprint/getprint_sverige.py";
 };
 
 exports.generateLagTurkartUrl = generateLagTurkartUrl;
 
-var generateLagFargeleggingskartUrl = function generateLagFargeleggingskartUrl() {
+const generateLagFargeleggingskartUrl = () => {
   return urlGeonorge + "freeprint/getprint_f.py";
 };
 
 exports.generateLagFargeleggingskartUrl = generateLagFargeleggingskartUrl;
 
-var generateEmergencyPosterPointUrl = function generateEmergencyPosterPointUrl(lat, lon) {
+const generateEmergencyPosterPointUrl = (lat, lon) => {
   return url + 'ws/emergencyPoster.py?&lon=' + lon + ',lat=' + lat;
 };
 
 exports.generateEmergencyPosterPointUrl = generateEmergencyPosterPointUrl;
 
-var generateSearchStedsnavnBboxUrl = function generateSearchStedsnavnBboxUrl(minx, miny, maxx, maxy) {
+const generateSearchStedsnavnBboxUrl = (minx, miny, maxx, maxy) => {
   return urlGeonorge + 'SKWS3Index/ssr/sok?&nordLL=' + miny + '&ostLL=' + minx + '&nordUR=' + maxy + '&ostUR=' + maxx + '&epsgKode=32633';
 };
 
 exports.generateSearchStedsnavnBboxUrl = generateSearchStedsnavnBboxUrl;
 
-var generateEmergencyPosterPreviewImageUrl = function generateEmergencyPosterPreviewImageUrl(minx, miny, maxx, maxy) {
+const generateEmergencyPosterPreviewImageUrl = (minx, miny, maxx, maxy) => {
   return urlOpenWms + 'wms.topo4?service=WMS&request=GetMap&CRS=EPSG:32633&FORMAT=image%2Fjpeg&BGCOLOR=0xFFFFFF&TRANSPARENT=false&LAYERS=topo4_WMS&VERSION=1.3.0&WIDTH=' + window.innerWidth + '&HEIGHT=' + window.innerHeight + '&BBOX=' + minx + ',' + miny + ',' + maxx + ',' + maxy;
 };
 
 exports.generateEmergencyPosterPreviewImageUrl = generateEmergencyPosterPreviewImageUrl;
 
-var generateGeoJSONUrl = function generateGeoJSONUrl(hash, save) {
-  var params = {};
+const generateGeoJSONUrl = (hash, save) => {
+  let params = {};
   params.hash = hash;
 
   if (save) {
@@ -197,32 +197,32 @@ var generateGeoJSONUrl = function generateGeoJSONUrl(hash, save) {
 
 exports.generateGeoJSONUrl = generateGeoJSONUrl;
 
-var generateGeoJSONSaveUrl = function generateGeoJSONSaveUrl() {
+const generateGeoJSONSaveUrl = () => {
   return url + 'ws/upload-json.py';
 };
 
 exports.generateGeoJSONSaveUrl = generateGeoJSONSaveUrl;
 
-var generateSearchMatrikkelNummerUrl = function generateSearchMatrikkelNummerUrl(query) {
+const generateSearchMatrikkelNummerUrl = query => {
   return urlGeonorge + 'norgeskart/v1/matrikkel/eie/' + query;
 };
 
 exports.generateSearchMatrikkelNummerUrl = generateSearchMatrikkelNummerUrl;
 
-var _constructMarkingFilter = function _constructMarkingFilter(property) {
+const _constructMarkingFilter = property => {
   return property.kommunenr + '-' + property.gardsnr + '-' + property.bruksnr + '-' + property.festenr + '-' + property.seksjonsnr;
 };
 
 exports._constructMarkingFilter = _constructMarkingFilter;
 
-var generateMatrikkelWfsFilterUrl = function generateMatrikkelWfsFilterUrl(property) {
+const generateMatrikkelWfsFilterUrl = property => {
   return urlGeonorge + 'norgeskart/v1/teiger/' + _constructMarkingFilter(property) + '/';
 };
 
 exports.generateMatrikkelWfsFilterUrl = generateMatrikkelWfsFilterUrl;
 
-var generateEiendomAddress = function generateEiendomAddress(kommunenr, gardsnr, bruksnr, festnr, sectionsnr) {
-  var baseUrl = url + 'ws/eiendom.py?';
+const generateEiendomAddress = (kommunenr, gardsnr, bruksnr, festnr, sectionsnr) => {
+  let baseUrl = url + 'ws/eiendom.py?';
 
   if (festnr !== "0") {
     if (sectionsnr === "0") {
@@ -239,7 +239,7 @@ var generateEiendomAddress = function generateEiendomAddress(kommunenr, gardsnr,
 
 exports.generateEiendomAddress = generateEiendomAddress;
 
-var generateFaqUrl = function generateFaqUrl(code) {
+const generateFaqUrl = code => {
   return url + 'ws/faq.py?code=' + code;
 };
 /*
@@ -254,7 +254,7 @@ var generateFaqUrl = function generateFaqUrl(code) {
 
 
 exports.generateFaqUrl = generateFaqUrl;
-var sosiCodes = [{
+const sosiCodes = [{
   ESRI: null,
   EPSG: 4326,
   SOSI: 84,
@@ -591,26 +591,20 @@ var sosiCodes = [{
 //{'ESRI': 4326, 'EPSG': 4326, 'SOSI': 4326, 'name': 'EU89/WGS84 Geografisk, grader'}
 ];
 
-var getSOSIfromEPSG = function getSOSIfromEPSG(epsg) {
-  return sosiCodes.filter(function (el) {
-    return el.EPSG === epsg;
-  }).map(function (obj) {
-    return obj.SOSI;
-  })[0];
+const getSOSIfromEPSG = epsg => {
+  return sosiCodes.filter(el => el.EPSG === epsg).map(obj => obj.SOSI)[0];
 };
 
 exports.getSOSIfromEPSG = getSOSIfromEPSG;
 
-var getCoordinateSystems = function getCoordinateSystems(type) {
-  var result = {};
-  sosiCodes.filter(function (el) {
-    return el.type === type;
-  }).filter(Boolean).map(function (obj) {
-    var rObj = {};
+const getCoordinateSystems = type => {
+  let result = {};
+  sosiCodes.filter(el => el.type === type).filter(Boolean).map(obj => {
+    let rObj = {};
     rObj[obj.SOSI] = obj.key;
     return rObj;
-  }).forEach(function (element) {
-    for (var i in element) {
+  }).forEach(element => {
+    for (let i in element) {
       result[i] = element[i];
     }
   });
@@ -619,51 +613,47 @@ var getCoordinateSystems = function getCoordinateSystems(type) {
 
 exports.getCoordinateSystems = getCoordinateSystems;
 
-var isOutOfBounds = function isOutOfBounds(coordinates) {
-  return sosiCodes.filter(function (el) {
+const isOutOfBounds = coordinates => {
+  return sosiCodes.filter(el => {
     return coordinates.north.value < el.bbox.MinX || coordinates.north.value > el.bbox.MaxX || coordinates.east.value < el.bbox.MinY || coordinates.east.value > el.bbox.MaxY;
-  }).map(function (obj) {
-    return obj;
-  });
+  }).map(obj => obj);
 };
 
 exports.isOutOfBounds = isOutOfBounds;
 
-var isNotOutOfBounds = function isNotOutOfBounds(coordinates) {
-  return sosiCodes.filter(function (el) {
+const isNotOutOfBounds = coordinates => {
+  return sosiCodes.filter(el => {
     return coordinates.north.value > el.bbox.MinX && coordinates.north.value < el.bbox.MaxX && coordinates.east.value > el.bbox.MinY && coordinates.east.value < el.bbox.MaxY;
-  }).map(function (obj) {
-    return obj;
-  });
+  }).map(obj => obj);
 };
 
 exports.isNotOutOfBounds = isNotOutOfBounds;
 
-var generateUrlPrintCapabilities = function generateUrlPrintCapabilities(appId) {
+const generateUrlPrintCapabilities = appId => {
   return urlGeonorge + "print/" + appId + "/capabilities.json";
 };
 
 exports.generateUrlPrintCapabilities = generateUrlPrintCapabilities;
 
-var generatePrintUrl = function generatePrintUrl(appId) {
+const generatePrintUrl = appId => {
   return urlGeonorge + "print/" + appId + "/report.pdf";
 };
 
 exports.generatePrintUrl = generatePrintUrl;
 
-var generatePrintDownloadUrl = function generatePrintDownloadUrl(downloadUrl) {
+const generatePrintDownloadUrl = downloadUrl => {
   return urlGeonorge.slice(0, -1) + downloadUrl;
 };
 
 exports.generatePrintDownloadUrl = generatePrintDownloadUrl;
 
-var generateStatusPrintDownloadUrl = function generateStatusPrintDownloadUrl(statusUrl) {
+const generateStatusPrintDownloadUrl = statusUrl => {
   return urlGeonorge.slice(0, -1) + statusUrl;
 };
 
 exports.generateStatusPrintDownloadUrl = generateStatusPrintDownloadUrl;
 
-var generateCancelPrintUrl = function generateCancelPrintUrl(refNum) {
+const generateCancelPrintUrl = refNum => {
   return urlGeonorge + 'print/cancel/' + refNum;
 };
 

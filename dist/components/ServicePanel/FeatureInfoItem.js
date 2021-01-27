@@ -27,20 +27,20 @@ function _nonIterableRest() { throw new TypeError("Invalid attempt to destructur
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var FeatureInfoItem = function FeatureInfoItem() {
-  var featureContext = (0, _react.useContext)(_store.store);
-  var dispatch = featureContext.dispatch;
+const FeatureInfoItem = () => {
+  const featureContext = (0, _react.useContext)(_store.store);
+  const dispatch = featureContext.dispatch;
 
-  var testFormat = function testFormat(s) {
+  const testFormat = s => {
     if (typeof s === 'object') return 'isObject';
-    var rX = /^((\d+)|(true|false)|(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\+\d{2})|([\w\W]+))$/i;
-    var M = rX.exec(s);
+    const rX = /^((\d+)|(true|false)|(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\+\d{2})|([\w\W]+))$/i;
+    const M = rX.exec(s);
     if (!M) return '';
 
     switch (M[1]) {
@@ -73,8 +73,8 @@ var FeatureInfoItem = function FeatureInfoItem() {
     }
   };
 
-  var prepareItemFormat = function prepareItemFormat(v) {
-    var test = testFormat(v);
+  const prepareItemFormat = v => {
+    const test = testFormat(v);
 
     switch (test) {
       case 'isNumeric':
@@ -111,34 +111,34 @@ var FeatureInfoItem = function FeatureInfoItem() {
     }
   };
 
-  var prepareFeature = function prepareFeature(info) {
-    var layers = [];
+  const prepareFeature = info => {
+    let layers = [];
 
-    for (var key in info) {
-      var layer = info[key];
-      var featureRow = [];
+    for (const key in info) {
+      let layer = info[key];
+      let featureRow = [];
 
       if (Array.isArray(layer)) {
-        for (var _key in layer) {
-          if (_key !== 'name') {
-            var feature = layer[_key];
+        for (const key in layer) {
+          if (key !== 'name') {
+            const feature = layer[key];
 
-            for (var _key2 in feature) {
-              var items = feature[_key2];
+            for (const key in feature) {
+              const items = feature[key];
 
               if (typeof items !== "string") {
                 for (var _i = 0, _Object$entries = Object.entries(items); _i < _Object$entries.length; _i++) {
-                  var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
-                      _key3 = _Object$entries$_i[0],
+                  let _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+                      key = _Object$entries$_i[0],
                       value = _Object$entries$_i[1];
 
                   featureRow.push( /*#__PURE__*/_react.default.createElement("li", {
-                    key: (0, _uniqid.default)(_key3)
-                  }, /*#__PURE__*/_react.default.createElement("i", null, _key3, " "), " = ", /*#__PURE__*/_react.default.createElement("strong", null, prepareItemFormat(value)), " "));
+                    key: (0, _uniqid.default)(key)
+                  }, /*#__PURE__*/_react.default.createElement("i", null, key, " "), " = ", /*#__PURE__*/_react.default.createElement("strong", null, prepareItemFormat(value)), " "));
                 }
               } else {
                 featureRow.push( /*#__PURE__*/_react.default.createElement("li", {
-                  key: (0, _uniqid.default)(_key2)
+                  key: (0, _uniqid.default)(key)
                 }, /*#__PURE__*/_react.default.createElement("i", null, 'FeatureID', " "), " = ", /*#__PURE__*/_react.default.createElement("strong", null, prepareItemFormat(items)), " "));
               }
             }
@@ -146,13 +146,13 @@ var FeatureInfoItem = function FeatureInfoItem() {
         }
       } else {
         for (var _i2 = 0, _Object$entries2 = Object.entries(layer); _i2 < _Object$entries2.length; _i2++) {
-          var _Object$entries2$_i = _slicedToArray(_Object$entries2[_i2], 2),
-              _key4 = _Object$entries2$_i[0],
-              _value = _Object$entries2$_i[1];
+          let _Object$entries2$_i = _slicedToArray(_Object$entries2[_i2], 2),
+              key = _Object$entries2$_i[0],
+              value = _Object$entries2$_i[1];
 
           featureRow.push( /*#__PURE__*/_react.default.createElement("li", {
-            key: (0, _uniqid.default)(_key4)
-          }, /*#__PURE__*/_react.default.createElement("i", null, _key4, " "), " = ", /*#__PURE__*/_react.default.createElement("strong", null, prepareItemFormat(_value)), " "));
+            key: (0, _uniqid.default)(key)
+          }, /*#__PURE__*/_react.default.createElement("i", null, key, " "), " = ", /*#__PURE__*/_react.default.createElement("strong", null, prepareItemFormat(value)), " "));
         }
       }
 
@@ -167,11 +167,9 @@ var FeatureInfoItem = function FeatureInfoItem() {
     }, layers);
   };
 
-  var featureContent = function featureContent() {
+  const featureContent = () => {
     if (Array.isArray(featureContext.state.info)) {
-      return featureContext.state.info.map(function (info) {
-        return prepareFeature(info);
-      });
+      return featureContext.state.info.map(info => prepareFeature(info));
     } else {
       return /*#__PURE__*/_react.default.createElement("div", null, "No info");
     }
@@ -179,12 +177,10 @@ var FeatureInfoItem = function FeatureInfoItem() {
 
   return /*#__PURE__*/_react.default.createElement(_Modal.default, {
     show: featureContext.state.show,
-    onHide: function onHide() {
-      return dispatch({
-        type: "HIDE_FEATURES",
-        info: featureContext.state.info
-      });
-    }
+    onHide: () => dispatch({
+      type: "HIDE_FEATURES",
+      info: featureContext.state.info
+    })
   }, /*#__PURE__*/_react.default.createElement(_Modal.default.Header, {
     closeButton: true
   }, /*#__PURE__*/_react.default.createElement(_Modal.default.Title, null, "Egenskaper ", /*#__PURE__*/_react.default.createElement("span", null, " ( ", featureContext.state.info ? featureContext.state.info.length : 0, " )"), " ")), /*#__PURE__*/_react.default.createElement(_Modal.default.Body, null, featureContent()));

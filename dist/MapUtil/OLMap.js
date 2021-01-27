@@ -63,7 +63,7 @@ var _jquery = _interopRequireDefault(require("jquery"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapExport, hoverInfo, measureLine, drawFeature, offline, addLayerFeature, modifyFeature, addFeatureGps, printBoxSelect, addLayerUrl) {
+const OLMap = (eventHandler, httpHelper, measure, featureInfo, mapExport, hoverInfo, measureLine, drawFeature, offline, addLayerFeature, modifyFeature, addFeatureGps, printBoxSelect, addLayerUrl) => {
   var map;
   var layerPool = [];
   var isySubLayerPool = [];
@@ -1109,9 +1109,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
   }
 
   function _getLayersWithGuid() {
-    return map.getLayers().getArray().filter(function (elem) {
-      return elem.guid !== undefined;
-    });
+    return map.getLayers().getArray().filter(elem => elem.guid !== undefined);
   }
 
   function _getLayerByGuid(guid) {
@@ -2590,7 +2588,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
 };
 
 exports.OLMap = OLMap;
-var MapRENDERERS = {
+const MapRENDERERS = {
   canvas: 'canvas',
   webgl: 'webgl'
 };

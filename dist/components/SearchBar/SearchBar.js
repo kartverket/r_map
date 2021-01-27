@@ -47,23 +47,23 @@ function _nonIterableRest() { throw new TypeError("Invalid attempt to destructur
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var parser = require('fast-xml-parser');
+const parser = require('fast-xml-parser');
 
-var defaultZoom = 13;
-var vectorSource = new _source.Vector({});
+const defaultZoom = 13;
+const vectorSource = new _source.Vector({});
 
-var SearchResult = function SearchResult(props) {
-  var vectorLayer = new _layer.Vector({
+const SearchResult = props => {
+  const vectorLayer = new _layer.Vector({
     source: vectorSource
   });
   window.olMap.addLayer(vectorLayer);
-  var icon_orange = new _style.Style({
+  const icon_orange = new _style.Style({
     image: new _style.Icon({
       anchor: [0.5, 46],
       anchorXUnits: 'fraction',
@@ -71,7 +71,7 @@ var SearchResult = function SearchResult(props) {
       src: _pinMdOrange.default
     })
   });
-  var icon_blue = new _style.Style({
+  const icon_blue = new _style.Style({
     image: new _style.Icon({
       anchor: [0.5, 46],
       anchorXUnits: 'fraction',
@@ -79,51 +79,44 @@ var SearchResult = function SearchResult(props) {
       src: _pinMdBlueish.default
     })
   });
-  var features = [];
+  let features = [];
 
-  var showInfoMarker = function showInfoMarker(coordinate) {
-    var iconFeature = new _Feature.default({
+  const showInfoMarker = coordinate => {
+    let iconFeature = new _Feature.default({
       geometry: new _Point.default(coordinate)
     });
     iconFeature.setStyle(icon_orange);
     vectorSource.addFeature(iconFeature);
   };
 
-  var centerPosition = function centerPosition(coordinate) {
-    features.forEach(function (feature) {
-      return feature.setStyle(icon_orange);
-    });
+  const centerPosition = coordinate => {
+    features.forEach(feature => feature.setStyle(icon_orange));
     window.olMap.getView().setCenter(coordinate);
-    var activeZoom = window.olMap.getView().getZoom();
+    const activeZoom = window.olMap.getView().getZoom();
 
     if (activeZoom < defaultZoom) {
       window.olMap.getView().setZoom(defaultZoom);
     }
 
     features = vectorSource.getFeaturesAtCoordinate(coordinate);
-    features.forEach(function (feature) {
-      return feature.setStyle(icon_blue);
-    });
+    features.forEach(feature => feature.setStyle(icon_blue));
   };
 
-  var constructPoint = function constructPoint(coord) {
-    var epsgTo = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'EPSG:25833';
-    return (0, _proj.transform)([Number(coord.lon), Number(coord.lat)], coord.epsg, epsgTo);
-  };
+  const constructPoint = (coord, epsgTo = 'EPSG:25833') => (0, _proj.transform)([Number(coord.lon), Number(coord.lat)], coord.epsg, epsgTo);
 
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "list-group"
-  }, props.searchResult.searchResult && props.searchResult.searchResult.adresser.map(function (data, idx) {
+  }, props.searchResult.searchResult && props.searchResult.searchResult.adresser.map((data, idx) => {
     showInfoMarker(constructPoint(data.representasjonspunkt));
     return /*#__PURE__*/_react.default.createElement("button", {
       type: "button",
       key: idx,
       className: "list-group-item list-group-item-action",
-      onClick: function onClick() {
+      onClick: () => {
         centerPosition(constructPoint(data.representasjonspunkt));
       }
     }, data.adressetekst, " , ", data.kommunenavn);
-  }), props.searchResult.searchResultSSR && props.searchResult.searchResultSSR.sokRes.stedsnavn.map(function (data, idx) {
+  }), props.searchResult.searchResultSSR && props.searchResult.searchResultSSR.sokRes.stedsnavn.map((data, idx) => {
     showInfoMarker(constructPoint({
       lon: data.aust,
       lat: data.nord,
@@ -133,7 +126,7 @@ var SearchResult = function SearchResult(props) {
       type: "button",
       key: idx,
       className: "list-group-item list-group-item-action",
-      onClick: function onClick() {
+      onClick: () => {
         centerPosition(constructPoint({
           lon: data.aust,
           lat: data.nord,
@@ -149,61 +142,61 @@ var SearchResult = function SearchResult(props) {
  */
 
 
-var SearchBar = function SearchBar(props) {
-  var queryValues = _queryString.default.parse(window.location.search);
+const SearchBar = props => {
+  let queryValues = _queryString.default.parse(window.location.search);
 
-  var _useState = (0, _react.useState)(queryValues["search"]),
-      _useState2 = _slicedToArray(_useState, 2),
-      searchText = _useState2[0],
-      setSearchText = _useState2[1];
+  const _useState = (0, _react.useState)(queryValues["search"]),
+        _useState2 = _slicedToArray(_useState, 2),
+        searchText = _useState2[0],
+        setSearchText = _useState2[1];
 
-  var _useState3 = (0, _react.useState)(),
-      _useState4 = _slicedToArray(_useState3, 2),
-      searchResult = _useState4[0],
-      setSearchResult = _useState4[1];
+  const _useState3 = (0, _react.useState)(),
+        _useState4 = _slicedToArray(_useState3, 2),
+        searchResult = _useState4[0],
+        setSearchResult = _useState4[1];
 
-  var _useState5 = (0, _react.useState)(),
-      _useState6 = _slicedToArray(_useState5, 2),
-      searchResultSSR = _useState6[0],
-      setSearchResultSSR = _useState6[1];
+  const _useState5 = (0, _react.useState)(),
+        _useState6 = _slicedToArray(_useState5, 2),
+        searchResultSSR = _useState6[0],
+        setSearchResultSSR = _useState6[1];
 
-  var placeholder = props.placeholder;
+  const placeholder = props.placeholder;
 
-  var _useState7 = (0, _react.useState)(false),
-      _useState8 = _slicedToArray(_useState7, 2),
-      expandedAdress = _useState8[0],
-      setStateAdress = _useState8[1];
+  const _useState7 = (0, _react.useState)(false),
+        _useState8 = _slicedToArray(_useState7, 2),
+        expandedAdress = _useState8[0],
+        setStateAdress = _useState8[1];
 
-  var _useState9 = (0, _react.useState)(false),
-      _useState10 = _slicedToArray(_useState9, 2),
-      expandedSsr = _useState10[0],
-      setStateSsr = _useState10[1];
+  const _useState9 = (0, _react.useState)(false),
+        _useState10 = _slicedToArray(_useState9, 2),
+        expandedSsr = _useState10[0],
+        setStateSsr = _useState10[1];
 
-  (0, _react.useEffect)(function () {
+  (0, _react.useEffect)(() => {
     if (searchText) {
       vectorSource.clear();
       (0, _setQueryString.default)({
         search: searchText
       });
-      fetch((0, _n3api.generateAdresseSokUrl)(searchText)).then(function (response) {
+      fetch((0, _n3api.generateAdresseSokUrl)(searchText)).then(response => {
         if (!response.ok) {
           throw Error(response.statusText);
         }
 
         return response.json();
-      }).then(function (result) {
+      }).then(result => {
         setSearchResult(result);
-      }).catch(function (error) {
+      }).catch(error => {
         console.warn(error);
       });
-      fetch((0, _n3api.generateSearchStedsnavnUrl)(searchText, 0, 15)).then(function (response) {
+      fetch((0, _n3api.generateSearchStedsnavnUrl)(searchText, 0, 15)).then(response => {
         if (!response.ok) {
           throw Error(response.statusText);
         }
 
         return response.text();
-      }).then(function (result) {
-        var response = parser.parse(result);
+      }).then(result => {
+        let response = parser.parse(result);
 
         if (response.sokRes.stedsnavn) {
           response.sokRes.stedsnavn = response.sokRes.stedsnavn[response.sokRes.stedsnavn.length - 1] === "" ? response.sokRes.stedsnavn.slice(0, response.sokRes.stedsnavn.length - 1) : response.sokRes.stedsnavn;
@@ -212,7 +205,7 @@ var SearchBar = function SearchBar(props) {
         } else {
           setSearchResultSSR(null);
         }
-      }).catch(function (error) {
+      }).catch(error => {
         console.warn(error);
       });
     } else {
@@ -223,12 +216,12 @@ var SearchBar = function SearchBar(props) {
     }
   }, [searchText]);
 
-  var onChangeBound = function onChangeBound(event) {
+  const onChangeBound = event => {
     setSearchText(event.target.value);
   }; //const updateQuery = search_query => dispatch({ type: 'UPDATE_SEARCH_STRING', payload: search_query })
 
 
-  var resetSearch = function resetSearch() {
+  const resetSearch = () => {
     setSearchText("");
   };
 
@@ -247,17 +240,13 @@ var SearchBar = function SearchBar(props) {
     className: "btn btn-link",
     type: "button",
     id: "button-addon1",
-    onClick: function onClick() {
-      return resetSearch();
-    }
+    onClick: () => resetSearch()
   }, searchText ? /*#__PURE__*/_react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     icon: "times"
   }) : ''))), /*#__PURE__*/_react.default.createElement("div", {
     className: _SearchBarModule.default.searchResult
   }, searchResult && /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
-    onClick: function onClick() {
-      return setStateAdress(!expandedAdress);
-    },
+    onClick: () => setStateAdress(!expandedAdress),
     className: _SearchBarModule.default.expandBtn
   }, /*#__PURE__*/_react.default.createElement("span", {
     className: _SearchBarModule.default.ellipsisToggle
@@ -270,9 +259,7 @@ var SearchBar = function SearchBar(props) {
       searchResult
     }
   }))), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
-    onClick: function onClick() {
-      return setStateSsr(!expandedSsr);
-    },
+    onClick: () => setStateSsr(!expandedSsr),
     className: _SearchBarModule.default.expandBtn
   }, /*#__PURE__*/_react.default.createElement("span", {
     className: _SearchBarModule.default.ellipsisToggle

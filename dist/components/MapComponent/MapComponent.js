@@ -29,30 +29,30 @@ function _nonIterableRest() { throw new TypeError("Invalid attempt to destructur
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var MapComponent = function MapComponent(props) {
-  var _useState = (0, _react.useState)(),
-      _useState2 = _slicedToArray(_useState, 2),
-      wms = _useState2[0],
-      setWMS = _useState2[1];
+const MapComponent = props => {
+  const _useState = (0, _react.useState)(),
+        _useState2 = _slicedToArray(_useState, 2),
+        wms = _useState2[0],
+        setWMS = _useState2[1];
 
-  var queryValues = _queryString.default.parse(window.location.search);
+  const queryValues = _queryString.default.parse(window.location.search);
 
-  var internMap = _maplibHelper.map;
+  let internMap = _maplibHelper.map;
   _maplibHelper.mapConfig.coordinate_system = queryValues['crs'] || props.crs;
-  var lon = Number(queryValues["lon"] || props.lon);
-  var lat = Number(queryValues["lat"] || props.lat);
-  var zoom = Number(queryValues["zoom"] || props.zoom);
-  var newMapConfig = Object.assign({}, _maplibHelper.mapConfig, {
+  let lon = Number(queryValues["lon"] || props.lon);
+  let lat = Number(queryValues["lat"] || props.lat);
+  let zoom = Number(queryValues["zoom"] || props.zoom);
+  let newMapConfig = Object.assign({}, _maplibHelper.mapConfig, {
     center: [lon, lat],
     zoom: zoom
   });
-  (0, _react.useLayoutEffect)(function () {
+  (0, _react.useLayoutEffect)(() => {
     window.olMap = internMap.Init("map", newMapConfig);
     internMap.AddZoom();
     internMap.AddScaleLine();
@@ -61,14 +61,12 @@ var MapComponent = function MapComponent(props) {
 
     addWMS();
     window.olMap.on('click', function (evt) {
-      var feature = window.olMap.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
-        return feature;
-      });
+      const feature = window.olMap.forEachFeatureAtPixel(evt.pixel, (feature, layer) => feature);
 
       if (feature) {
-        var coord = feature.getGeometry().getCoordinates();
-        var content = feature.get('n');
-        var message = {
+        const coord = feature.getGeometry().getCoordinates();
+        let content = feature.get('n');
+        let message = {
           cmd: 'featureSelected',
           featureId: feature.getId(),
           properties: content,
@@ -80,10 +78,10 @@ var MapComponent = function MapComponent(props) {
     });
   }, [internMap]);
 
-  var updateMapInfoState = function updateMapInfoState() {
-    var center = _maplibHelper.map.GetCenter();
+  const updateMapInfoState = () => {
+    let center = _maplibHelper.map.GetCenter();
 
-    var queryValues = _queryString.default.parse(window.location.search); //this.props = { lon: center.lon, lat: center.lat, zoom: center.zoom }
+    const queryValues = _queryString.default.parse(window.location.search); //this.props = { lon: center.lon, lat: center.lat, zoom: center.zoom }
 
 
     queryValues.lon = center.lon;
@@ -92,64 +90,58 @@ var MapComponent = function MapComponent(props) {
     (0, _setQueryString.default)(queryValues);
   };
 
-  var addWMS = function addWMS() {
-    props.services.forEach(function (service) {
-      var meta = {};
+  const addWMS = () => {
+    props.services.forEach(service => {
+      let meta = {};
 
       switch (service.DistributionProtocol) {
         case 'WMS':
         case 'WMS-tjeneste':
         case 'OGC:WMS':
-          _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(service.GetCapabilitiesUrl).then(function (capa) {
+          _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(service.GetCapabilitiesUrl).then(capa => {
             meta = _CapabilitiesUtil.CapabilitiesUtil.getWMSMetaCapabilities(capa);
             meta.Type = 'OGC:WMS';
             meta.Params = service.customParams || '';
 
             if (service.addLayers.length > 0) {
-              var layersToBeAdded = [];
-              layersToBeAdded = capa.Capability.Layer.Layer.filter(function (e) {
-                return service.addLayers.includes(e.Name);
-              });
+              let layersToBeAdded = [];
+              layersToBeAdded = capa.Capability.Layer.Layer.filter(e => service.addLayers.includes(e.Name));
 
               if (layersToBeAdded.length === 0 || layersToBeAdded.length !== service.addLayers.length) {
                 layersToBeAdded = [];
-                service.addLayers.forEach(function (layerName) {
+                service.addLayers.forEach(layerName => {
                   layersToBeAdded.push({
                     Name: layerName
                   });
                 });
               }
 
-              layersToBeAdded.forEach(function (layer) {
-                var laycapaLayerer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmsCapabilities(meta, layer);
+              layersToBeAdded.forEach(layer => {
+                let laycapaLayerer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmsCapabilities(meta, layer);
 
                 window.olMap.addLayer(laycapaLayerer);
               });
             }
-          }).then(function (layers) {
+          }).then(layers => {
             console.log('Added wms layers ready');
-          }).catch(function (e) {
-            return console.warn(e);
-          });
+          }).catch(e => console.warn(e));
 
           break;
 
         case 'GEOJSON':
-          _CapabilitiesUtil.CapabilitiesUtil.getGeoJson(service.url).then(function (layers) {
+          _CapabilitiesUtil.CapabilitiesUtil.getGeoJson(service.url).then(layers => {
             meta.Type = 'GEOJSON';
             meta.ShowPropertyName = service.ShowPropertyName || 'id';
             meta.EPSG = service.EPSG || 'EPSG:4326';
 
             if (service.addLayers.length > 0) {
               if (layers.name === service.addLayers['0']) {
-                var currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromGeoJson(meta, layers);
+                let currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromGeoJson(meta, layers);
 
                 window.olMap.addLayer(currentLayer);
               }
             }
-          }).catch(function (e) {
-            return console.warn(e);
-          });
+          }).catch(e => console.warn(e));
 
           break;
 
@@ -167,7 +159,8 @@ var MapComponent = function MapComponent(props) {
       width: "100%",
       height: "100%",
       zIndex: 0
-    }
+    },
+    tabIndex: "0"
   });
 };
 

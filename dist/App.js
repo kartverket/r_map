@@ -11,7 +11,7 @@ var _MapContainer = _interopRequireDefault(require("./components/MapContainer/Ma
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var TEST_DATA = [
+const TEST_DATA = [
 /*
    {
     'Title': 'kv_adminomr_kommune',
@@ -34,6 +34,7 @@ var TEST_DATA = [
  },
 */
 {
+  'Uuid': '666e4559-60bf-4a1d-9e72-c43502a9a58b',
   'Title': 'Abas',
   'DistributionProtocol': 'OGC:WMS',
   'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.adm_enheter2?request=GetCapabilities&service=WMS',
@@ -125,7 +126,7 @@ var TEST_DATA = [
  }*/
 ];
 
-var App = function App() {
+const App = () => {
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "App"
   }, /*#__PURE__*/_react.default.createElement(_MapContainer.default, {

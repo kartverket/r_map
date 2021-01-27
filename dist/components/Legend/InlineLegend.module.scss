@@ -1,12 +1,14 @@
 :local(.legend) {
-    position: relative;    
+    position: relative;
     max-height: 1000px;
     display: block;
     overflow: hidden;
     transition: all .3s ease-in-out;
     &:local(.closed) {
         max-height: 0;
-    }    
+        margin-bottom: 2px;
+        padding: 0;
+    }
 }
 :local(.toggle) {
     font-size: .9em;
