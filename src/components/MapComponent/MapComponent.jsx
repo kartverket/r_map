@@ -118,7 +118,7 @@ const MapComponent = (props) => {
         height: "100%",
         zIndex: 0
       } }
-      tabindex="0"
+      tabIndex="0"
     />
   )
 }

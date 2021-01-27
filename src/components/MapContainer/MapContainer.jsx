@@ -1,6 +1,7 @@
 import React, { useState, useLayoutEffect } from "react"
-import { map, mapConfig } from "../../MapUtil/maplibHelper"
+import { map, eventHandler, mapConfig } from "../../MapUtil/maplibHelper"
 import queryString from "query-string"
+import setQuery from "set-query-string"
 import BackgroundChooser from "../BackgroundChooser/BackgroundChooser"
 import ServicePanel from "../ServicePanel/ServicePanel"
 import SearchBar from "../SearchBar/SearchBar"
@@ -21,19 +22,23 @@ const MapContainer = (props) => {
   const [wms, setWMS] = useState()
   const queryValues = queryString.parse(window.location.search)
   let internMap = map
-
   mapConfig.coordinate_system = queryValues['crs'] || props.crs
+
+  let lon = Number(queryValues["lon"] || props.lon)
+  let lat = Number(queryValues["lat"] || props.lat)
+  let zoom = Number(queryValues["zoom"] || props.zoom)
 
   let defaultConfig = JSON.parse(JSON.stringify(mapConfig))
   let newMapConfig = Object.assign({}, defaultConfig, {
-    center: [props.lon, props.lat],
-    zoom: props.zoom
+    center: [lon, lat],
+    zoom: zoom
   })
 
   useLayoutEffect(() => {
     window.olMap = internMap.Init("map", newMapConfig)
     internMap.AddZoom()
     internMap.AddScaleLine()
+    eventHandler.RegisterEvent("MapMoveend", updateMapInfoState)
   }, [internMap])
 
   const renderServiceList = () => {
@@ -50,6 +55,15 @@ const MapContainer = (props) => {
     return props.services.map((listItem, i) => (
       <ServiceListItem listItem={ listItem } removeMapItem={ props.removeMapItem ? props.removeMapItem : null } key={ i } map={ map } />
     ))
+  }
+
+  const updateMapInfoState = () => {
+    let center = map.GetCenter()
+    const queryValues = queryString.parse(window.location.search)
+    queryValues.lon = center.lon
+    queryValues.lat = center.lat
+    queryValues.zoom = center.zoom
+    setQuery(queryValues)
   }
 
   const showDefaultTab = () => {
@@ -95,7 +109,7 @@ const MapContainer = (props) => {
           height: "100%",
           zIndex: 0
           } }
-          tabindex="0"
+          tabIndex="0"
       />
       { internMap ? <Position map={ internMap } projection={ props.crs }></Position> : null }
       <div id="mapPopover">
