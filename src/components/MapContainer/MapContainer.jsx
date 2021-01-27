@@ -1,6 +1,7 @@
 import React, { useState, useLayoutEffect } from "react"
-import { map, mapConfig } from "../../MapUtil/maplibHelper"
+import { map, eventHandler, mapConfig } from "../../MapUtil/maplibHelper"
 import queryString from "query-string"
+import setQuery from "set-query-string"
 import BackgroundChooser from "../BackgroundChooser/BackgroundChooser"
 import ServicePanel from "../ServicePanel/ServicePanel"
 import SearchBar from "../SearchBar/SearchBar"
@@ -44,19 +45,23 @@ const MapContainer = (props) => {
   const [wms, setWMS] = useState()
   const queryValues = queryString.parse(window.location.search)
   let internMap = map
-
   mapConfig.coordinate_system = queryValues['crs'] || props.crs
+
+  let lon = Number(queryValues["lon"] || props.lon)
+  let lat = Number(queryValues["lat"] || props.lat)
+  let zoom = Number(queryValues["zoom"] || props.zoom)
 
   let defaultConfig = JSON.parse(JSON.stringify(mapConfig))
   let newMapConfig = Object.assign({}, defaultConfig, {
-    center: [props.lon, props.lat],
-    zoom: props.zoom
+    center: [lon, lat],
+    zoom: zoom
   })
 
   useLayoutEffect(() => {
     window.olMap = internMap.Init("map", newMapConfig)
     internMap.AddZoom()
     internMap.AddScaleLine()
+    eventHandler.RegisterEvent("MapMoveend", updateMapInfoState)
   }, [internMap])
 
   const renderServiceList = () => {
@@ -75,6 +80,26 @@ const MapContainer = (props) => {
     ))
   }
 
+  const updateMapInfoState = () => {
+    let center = map.GetCenter()
+    const queryValues = queryString.parse(window.location.search)
+    queryValues.lon = center.lon
+    queryValues.lat = center.lat
+    queryValues.zoom = center.zoom
+    setQuery(queryValues)
+  }
+
+  const showDefaultTab = () => {
+    if (props.services.length) {
+      return 'layers'
+    }
+    else return 'search'
+  }
+
+  const toogleMap = () => {
+    window.history.back()
+    // TODO: get paramtere to check for url til goto for closing map
+  }
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
@@ -89,11 +114,11 @@ const MapContainer = (props) => {
                 { expanded ? <ExpandLess /> : <ExpandMore /> }
               </IconButton>
               <Tabs value={ value } variant="fullWidth" onChange={ handleChange } indicatorColor="primary" textColor="primary">
-                <Tab label="Søk" value={ 1 } />
-                <Tab label="Visning" value={ 0 } />
+                <Tab label="Søk" value={ 0 } />
+                <Tab label="Visning" value={ 1 } />
               </Tabs>
-              <TabPanel value={ value } index={ 1 }><SearchBar /></TabPanel>
-              <TabPanel value={ value } index={ 0 }>{ renderServiceList() }</TabPanel>
+              <TabPanel value={ value } index={ 0 }><SearchBar /></TabPanel>
+              <TabPanel value={ value } index={ 1 }>{ renderServiceList() }</TabPanel>
             </div>
           </div>
 
@@ -106,12 +131,12 @@ const MapContainer = (props) => {
             zIndex: 0
           } }
           tabIndex="0"
-        />
-        { internMap ? <Position map={ internMap } projection={ props.crs }></Position> : null }
-        <div id="mapPopover">
-          <FeatureInfoItem info={ '' } show={ false }></FeatureInfoItem>
+      />
+      { internMap ? <Position map={ internMap } projection={ props.crs }></Position> : null }
+      <div id="mapPopover">
+        <FeatureInfoItem info={ '' } show={ false }></FeatureInfoItem>
         </div>
-      </div>
+    </div>
     </StateProvider>
   )
 }
