@@ -639,7 +639,6 @@ var Wfs = function Wfs(isySubLayer, offline, parameters, featureObj, eventHandle
         }
       } else {
         return parseResponse(response);
-        ;
       }
     });
   };

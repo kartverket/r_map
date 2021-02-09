@@ -131,7 +131,7 @@ var createOlWMSFromCap = function createOlWMSFromCap(map, getCapLayer) {
       if (Array.isArray(getCapLayer.MetadataURL)) {
           metadata = getCapLayer.MetadataURL[0].OnlineResource;
       }
-            layer = createOlWMS(map, layerParam, {
+          layer = createOlWMS(map, layerParam, {
             url: getCapLayer.url,
             label: getCapLayer.title,
             attribution: attribution,
@@ -202,7 +202,7 @@ var mergeDefaultParams = function mergeDefaultParams(url, defaultParams) {
   for (var p in urlParams) {
     defaultParams[p] = urlParams[p];
 
-    if (defaultParams.hasOwnProperty(p.toLowerCase()) && p !== p.toLowerCase()) {
+    if (Object.prototype.hasOwnProperty.call(defaultParams, p.toLowerCase()) && p !== p.toLowerCase()) {
       delete defaultParams[p.toLowerCase()];
     }
   }

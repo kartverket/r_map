@@ -45,11 +45,13 @@ var StateProvider = function StateProvider(_ref) {
 
     switch (action.type) {
       case 'SET_FEATURES':
-        var appendedAInfo = state.info ? state.info.concat(action.info) : action.info;
-        return _objectSpread(_objectSpread({}, state), {}, {
-          info: appendedAInfo,
-          show: true
-        });
+        {
+          var appendedAInfo = state.info ? state.info.concat(action.info) : action.info;
+          return _objectSpread(_objectSpread({}, state), {}, {
+            info: appendedAInfo,
+            show: true
+          });
+        }
 
       case 'SHOW_FEATURES':
         return _objectSpread(_objectSpread({}, state), {}, {
@@ -66,8 +68,6 @@ var StateProvider = function StateProvider(_ref) {
       default:
         throw new Error();
     }
-
-    ;
   }, initialState),
       _useReducer2 = _slicedToArray(_useReducer, 2),
       state = _useReducer2[0],

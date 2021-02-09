@@ -90,7 +90,6 @@ var SubLayer = function SubLayer(config) {
       url: instance.legendGraphicUrl,
       layer: instance.name
     });
-    ;
   }
 
   return instance;
