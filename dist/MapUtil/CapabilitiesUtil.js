@@ -149,14 +149,14 @@ var CapabilitiesUtil = /*#__PURE__*/function () {
 
   _createClass(CapabilitiesUtil, null, [{
     key: "parseWmsCapabilities",
-
+    value:
     /**
      * Parses the given WMS Capabilities string.
      *
      * @param {string} capabilitiesUrl Url to WMS capabilities document
      * @return {Object} An object representing the WMS capabilities.
      */
-    value: function parseWmsCapabilities(capabilitiesUrl) {
+    function parseWmsCapabilities(capabilitiesUrl) {
       var newUrl = (0, _MapHelper.mergeDefaultParams)(capabilitiesUrl, {
         service: "WMS",
         request: "GetCapabilities"

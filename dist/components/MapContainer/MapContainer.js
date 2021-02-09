@@ -108,8 +108,11 @@ var MapContainer = function MapContainer(props) {
       wms = _useState4[0],
       setWMS = _useState4[1];
 
-  var queryValues = _queryString.default.parse(window.location.search);
+  var queryValues = _queryString.default.parse(window.location.search, {
+    arrayFormat: 'comma'
+  });
 
+  console.log(queryValues);
   var internMap = _maplibHelper.map;
   _maplibHelper.mapConfig.coordinate_system = queryValues['crs'] || props.crs;
   var defaultConfig = JSON.parse(JSON.stringify(_maplibHelper.mapConfig));
@@ -118,6 +121,11 @@ var MapContainer = function MapContainer(props) {
     zoom: props.zoom
   });
   (0, _react.useLayoutEffect)(function () {
+    var queryValues = _queryString.default.parse(window.location.search, {
+      arrayFormat: 'comma'
+    });
+
+    console.log(queryValues);
     window.olMap = internMap.Init("map", newMapConfig);
     internMap.AddZoom();
     internMap.AddScaleLine();

@@ -42,7 +42,8 @@ const MapContainer = (props) => {
   const [value, setValue] = React.useState(1)
   const [expanded, toggleExpand] = useState(false)
   const [wms, setWMS] = useState()
-  const queryValues = queryString.parse(window.location.search)
+  const queryValues = queryString.parse(window.location.search, { arrayFormat: 'comma' })
+  console.log(queryValues)
   let internMap = map
 
   mapConfig.coordinate_system = queryValues['crs'] || props.crs
@@ -54,6 +55,8 @@ const MapContainer = (props) => {
   })
 
   useLayoutEffect(() => {
+    const queryValues = queryString.parse(window.location.search, { arrayFormat: 'comma' })
+    console.log(queryValues)
     window.olMap = internMap.Init("map", newMapConfig)
     internMap.AddZoom()
     internMap.AddScaleLine()
