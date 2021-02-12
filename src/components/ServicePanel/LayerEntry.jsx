@@ -108,6 +108,7 @@ const LayerEntry = props => {
                     text: feature.get(props.meta.ShowPropertyName)
                   })
                 }))
+                console.warn({ 'Feature selected': feature })
                 let content = feature.get(props.meta.ShowPropertyName)
                 let message = {
                   cmd: 'featureSelected',
@@ -115,7 +116,7 @@ const LayerEntry = props => {
                   properties: content,
                   coordinates: coord
                 }
-                console.warn({ 'Feature selected': message })
+                //console.warn({ 'Feature selected': message })
                 //dispatch(setFeature(message))
               })
             }

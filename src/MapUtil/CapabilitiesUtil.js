@@ -30,6 +30,7 @@ import {
 
 import { mergeDefaultParams } from '../Utils/MapHelper'
 import SwaggerParser from "@apidevtools/swagger-parser";
+import uniqid from 'uniqid'
 
 export const newMaplibLayer = (sourceType, source) => {
   let catIds = [999];
@@ -349,7 +350,7 @@ export class CapabilitiesUtil {
     return fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        data.Name = data.name || data.id || 'test'
+        data.Name = data.name || data.id || uniqid('Feature-tmpId-')
         return data
       })
   }
@@ -407,7 +408,7 @@ export class CapabilitiesUtil {
           })
         }
       },
-      name: layerCapabilities.name
+      name: layerCapabilities.name || layerCapabilities.Name
     })
   }
   static getWMSMetaCapabilities(capabilities) {
