@@ -168,6 +168,35 @@ var ServicePanel = function ServicePanel(props) {
 
         break;
 
+      case 'OGC:Features':
+        _CapabilitiesUtil.CapabilitiesUtil.parseFeaturesCapabilities(props.services.GetCapabilitiesUrl).then(function (capa) {
+          //console.log(capa)
+          capa.forEach(function (path) {
+            console.log(path);
+
+            _CapabilitiesUtil.CapabilitiesUtil.getGeoJson(path[0]).then(function (layers) {
+              setCapabilities(layers);
+              newMetaInfo.Type = 'GEOJSON';
+              newMetaInfo.ShowPropertyName = props.services.ShowPropertyName || 'id';
+              newMetaInfo.EPSG = props.services.EPSG || 'EPSG:4258';
+              setMeta(newMetaInfo);
+            }).catch(function (e) {
+              return console.warn(e);
+            });
+          });
+          /*
+          setCapabilities(capa)
+          newMetaInfo = CapabilitiesUtil.getWMSMetaCapabilities(capa)
+          newMetaInfo.Type = 'OGC:WMS'
+          newMetaInfo.Params = props.services.customParams || ''
+          setMeta(newMetaInfo)
+          */
+        }).catch(function (e) {
+          return console.warn(e);
+        });
+
+        break;
+
       case 'WFS':
       case 'WFS-tjeneste':
       case 'OGC:WFS':

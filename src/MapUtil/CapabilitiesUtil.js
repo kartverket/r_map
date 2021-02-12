@@ -29,6 +29,7 @@ import {
 } from './maplibHelper';
 
 import { mergeDefaultParams } from '../Utils/MapHelper'
+import SwaggerParser from "@apidevtools/swagger-parser";
 
 export const newMaplibLayer = (sourceType, source) => {
   let catIds = [999];
@@ -109,6 +110,36 @@ export const newMaplibLayer = (sourceType, source) => {
  * @class CapabilitiesUtil
  */
 export class CapabilitiesUtil {
+/**
+   * Parses the given WMS Capabilities string.
+   *
+   * @param {string} capabilitiesUrl Url to WMS capabilities document
+   * @return {Object} An object representing the WMS capabilities.
+   */
+  static parseFeaturesCapabilities(capabilitiesUrl) {
+/*
+    const newUrl = mergeDefaultParams(capabilitiesUrl, {
+      service: "WMS",
+      request: "GetCapabilities"
+    })
+*/
+    return fetch(capabilitiesUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        let api = SwaggerParser.dereference(data);
+        return api
+      })
+      .then((openapi) => {
+        console.log(openapi);
+        let paths =  []
+        const baseUrl = openapi.servers[0].url
+        Object.entries(openapi.paths).forEach(entry => {
+          const [key, value] = entry;
+          paths.push([baseUrl + key, value])
+        });
+        return paths
+    })
+  }
 
   /**
    * Parses the given WMS Capabilities string.
@@ -318,7 +349,7 @@ export class CapabilitiesUtil {
     return fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        data.Name = data.name
+        data.Name = data.name || data.id || 'test'
         return data
       })
   }

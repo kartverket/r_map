@@ -316,7 +316,7 @@ var SearchBar = function SearchBar(props) {
         return response.json();
       }).then(function (result) {
         if (result.navn) {
-          console.log(result.navn);
+          //console.log(result.navn)
           setSearchResultStedsnavn(result.navn);
         } else {
           setSearchResultStedsnavn(null);

@@ -22,34 +22,43 @@ const TEST_DATA = [
      addLayers: ['Niv_fastmerker', 'Landsnettpunkt']
    },
   */
-  /*
- {
-  'Title': 'Marine WMS',
-  'DistributionProtocol': 'OGC:WMS',
-  'GetCapabilitiesUrl': 'https://marine.discomap.eea.europa.eu/arcgis/services/Marine/EEA_coastline_v2017/MapServer/WMSServer?request=GetCapabilities&service=WMS',
-  addLayers: []
+ /* {
+  //'Uuid': '',
+  'Title': 'Geoserver OGC API',
+  'DistributionProtocol': 'OGC:Features',
+  'GetCapabilitiesUrl': 'http://rin-te0994:80/geoserver/Magnes_sandkasse/ogc/features/api?f=application%2Fvnd.oai.openapi%2Bjson%3Bversion%3D3.0',
+  //addLayers: ['fylker_gjel', 'kommuner_gjel']
   },
   */
-  /*
-   {
-    'Title': 'Romvær',
-    'DistributionProtocol': 'OGC:WMS',
-    //'GetCapabilitiesUrl': 'https://norgeskart.no/ws/px.py?http://rin-te0031/cgi-bin/romvaer?request=GetCapabilities&service=WMS',
-    'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wmstest.romvaer?request=GetCapabilities&service=WMS',
-    'addLayers': ['romvaer_band2']
-},
-*/
-  /*
- {
-  'Uuid': '8c2c434b-07f7-4ebc-9bc6-9c15cdd75c4c',
-  'Title': 'Fastmerker & Basestajoner WMS',
-  'DistributionProtocol': 'OGC:WMS',
-  'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.fastmerker2?request=GetCapabilities&service=WMS',
-  addLayers: [],
-  excludeLayers: ['Niv_fastmerker', 'Landsnettpunkt','Stamnettpunkt','Trekantpunkt']
-},
-*/
+
+/*   {
+    //'Uuid': '',
+    'Title': 'Pygeoapi OGC API',
+    'DistributionProtocol': 'OGC:Features',
+    'GetCapabilitiesUrl': 'https://ogcapitest.kartverket.no/pygeoapi/openapi?f=json',
+    //addLayers: ['fylker_gjel', 'kommuner_gjel']
+  },
+ */
   {
+    'Title': 'INSPIRE_buildings eksempel',
+    'DistributionProtocol': 'GEOJSON',
+    'ShowPropertyName': 'localid',
+    'EPSG': 'EPSG:4258',
+    'url': 'http://rin-te0994/geoserver/Magnes_sandkasse/ogc/features/collections/inspire40_buildingscore2d/items?limit=100&bbox=10.58511150598658723%2C59.90552916863839528%2C10.65430013917851859%2C59.93725670395636484&startIndex=16300&f=json',
+    addLayers: []
+  },
+  {
+    'Title': 'kirkebygg eksempel',
+    'DistributionProtocol': 'GEOJSON',
+    'ShowPropertyName': 'bygningsnavn',
+    'EPSG': 'EPSG:4258',
+    'url': 'https://ogcapitest.kartverket.no/pygeoapi/collections/kirkebygg/items?f=json&limit=100&bbox=10.58511150598658723%2C59.90552916863839528%2C10.65430013917851859%2C59.93725670395636484',
+    addLayers: []
+  }
+
+  /*
+{
+    'Uuid': '666e4559-60bf-4a1d-9e72-c43502a9a58b',
     'Title': 'Abas',
     'DistributionProtocol': 'OGC:WMS',
     'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.adm_enheter2?request=GetCapabilities&service=WMS',
@@ -160,13 +169,6 @@ const TEST_DATA = [
     'addLayers': ['nasjonale_grenser', 'kystlinje']
   }
   */
-  /* {
-    'Title': 'Eox',
-    'DistributionProtocol': 'OGC:WMTS',
-    'GetCapabilitiesUrl': 'https://f.tiles.maps.eox.at/wmts/1.1.0?version=1.1.0&service=wmts&request=getcapabilities',
-    addLayers: []
-  } */
-  //https://f.tiles.maps.eox.at/wmts/1.0.0?
   /*
     {
       'Title': 'Dybdedata_dekning_dtm50_5',

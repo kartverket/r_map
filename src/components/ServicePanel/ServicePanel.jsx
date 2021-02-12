@@ -88,6 +88,32 @@ const ServicePanel = props => {
           })
           .catch(e => console.warn(e))
         break
+      case 'OGC:Features':
+        CapabilitiesUtil.parseFeaturesCapabilities(props.services.GetCapabilitiesUrl)
+          .then((capa) => {
+            //console.log(capa)
+            capa.forEach(path => {
+              console.log(path)
+              CapabilitiesUtil.getGeoJson(path[0])
+              .then(layers => {
+                setCapabilities(layers)
+                newMetaInfo.Type = 'GEOJSON'
+                newMetaInfo.ShowPropertyName = props.services.ShowPropertyName || 'id'
+                newMetaInfo.EPSG = props.services.EPSG || 'EPSG:4258'
+                setMeta(newMetaInfo)
+              })
+              .catch(e => console.warn(e))
+            })
+            /*
+            setCapabilities(capa)
+            newMetaInfo = CapabilitiesUtil.getWMSMetaCapabilities(capa)
+            newMetaInfo.Type = 'OGC:WMS'
+            newMetaInfo.Params = props.services.customParams || ''
+            setMeta(newMetaInfo)
+          */
+        })
+          .catch(e => console.warn(e))
+        break
       case 'WFS':
       case 'WFS-tjeneste':
       case 'OGC:WFS':
