@@ -88,11 +88,11 @@ export const generateElevationPointUrl = (lat, lon, epsgNumber) => {
 export const generateAdresseSokUrl = (query) => {
   query = typeof query === 'string' ? query : ''
   query = query.indexOf(',') !== -1 ? query.replace(',', '*') : query + '*'
-  return urlAdresseSok + '?sok=' + encodeURIComponent(query) + '&treffPerSide=100'
+  return urlAdresseSok + '?sok=' + encodeURIComponent(query) + '&treffPerSide=2'
 }
 
 export const generateAdressePunktsokUrl = (radius, lat, lon) => {
-  return urlAdressePunktsok + '?radius=' + radius + '&lat=' + lat + '&lon=' + lon + '&treffPerSide=10'
+  return urlAdressePunktsok + '?radius=' + radius + '&lat=' + lat + '&lon=' + lon + '&treffPerSide=2'
 }
 
 export const generateMatrikkelInfoUrl = (minx, miny, maxx, maxy) => {

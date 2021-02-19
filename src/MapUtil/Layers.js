@@ -265,4 +265,4 @@ export default class Layers {
     return Math.max(indexes)
   }
 
-};
+}

@@ -76,7 +76,7 @@ export const SubLayer = (config) => {
     instance.legendGraphicUrl = LegendGraphic({
       url: instance.legendGraphicUrl,
       layer: instance.name
-    });;
+    });
   }
 
   return instance;

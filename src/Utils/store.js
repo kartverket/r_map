@@ -8,13 +8,14 @@ const StateProvider = ({ children }) => {
   const [state, dispatch] = useReducer((state = {}, action) => {
     switch (action.type) {
       case 'SET_FEATURES':
-        const appendedAInfo = state.info ? state.info.concat(action.info) : action.info
-        return {
-          ...state,
-          info: appendedAInfo,
-          show: true
-        }
-      case 'SHOW_FEATURES':
+        {
+          const appendedAInfo = state.info ? state.info.concat(action.info) : action.info
+          return {
+            ...state,
+            info: appendedAInfo,
+            show: true
+          }
+        } case 'SHOW_FEATURES':
         return {
           ...state,
           info: action.info,
@@ -28,7 +29,7 @@ const StateProvider = ({ children }) => {
         }
       default:
         throw new Error()
-    };
+    }
   }, initialState)
 
   return (

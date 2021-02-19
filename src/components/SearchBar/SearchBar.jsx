@@ -15,15 +15,93 @@ import { Vector as VectorSource } from 'ol/source.js'
 import Feature from 'ol/Feature.js'
 import { Style, Icon } from 'ol/style'
 import Point from 'ol/geom/Point'
+import MultiLineString from 'ol/geom/MultiLineString'
+import MultiPoint from 'ol/geom/MultiPoint'
+import MultiPolygon from 'ol/geom/MultiPolygon'
+import Polygon from 'ol/geom/Polygon'
+import LinearRing from 'ol/geom/LinearRing'
+import LineString from 'ol/geom/LineString'
+import Circle from 'ol/geom/Circle';
+import {Circle as CircleStyle, Fill, Stroke } from 'ol/style';
 import { generateAdresseSokUrl, generateSearchStedsnavnUrl, generateStedsnavnSokUrl } from "../../Utils/n3api"
 const parser = require('fast-xml-parser')
-
 const defaultZoom = 13
 const vectorSource = new VectorSource({})
-
 const SearchResult = (props) => {
+  // console.log('Search results...')
   const vectorLayer = new VectorLayer({ source: vectorSource })
   window.olMap.addLayer(vectorLayer)
+  const image = new CircleStyle({
+    radius: 5,
+    fill: new Fill({
+      color: 'rgba(255, 255, 0, 0.1)',
+    }),
+    stroke: new Stroke({color: 'red', width: 2}),
+  });
+  const styles = {
+    'Point': new Style({
+      image: image,
+    }),
+    'LineString': new Style({
+      stroke: new Stroke({
+        color: 'green',
+        width: 2,
+      }),
+    }),
+    'MultiLineString': new Style({
+      stroke: new Stroke({
+        color: 'green',
+        width: 2,
+      }),
+    }),
+    'MultiPoint': new Style({
+      image: image,
+    }),
+    'MultiPolygon': new Style({
+      stroke: new Stroke({
+        color: 'yellow',
+        width: 2,
+      }),
+      fill: new Fill({
+        color: 'rgba(255, 255, 0, 0.1)',
+      }),
+    }),
+    'Polygon': new Style({
+      stroke: new Stroke({
+        color: 'blue',
+        lineDash: [4],
+        width: 2,
+      }),
+      fill: new Fill({
+        color: 'rgba(0, 0, 255, 0.1)',
+      }),
+    }),
+    'GeometryCollection': new Style({
+      stroke: new Stroke({
+        color: 'magenta',
+        width: 2,
+      }),
+      fill: new Fill({
+        color: 'magenta',
+      }),
+      image: new CircleStyle({
+        radius: 10,
+        fill: null,
+        stroke: new Stroke({
+          color: 'magenta',
+        }),
+      }),
+    }),
+    'Circle': new Style({
+      stroke: new Stroke({
+        color: 'red',
+        width: 2,
+      }),
+      fill: new Fill({
+        color: 'rgba(255,0,0,0.2)',
+      }),
+    }),
+  };
   const icon_orange = new Style({
     image: new Icon({
       anchor: [0.5, 46],
@@ -48,13 +126,43 @@ const SearchResult = (props) => {
       src: pin_red
     })
   })
-
   let features = []
 
   const showInfoMarker = (coordinate) => {
     let iconFeature = new Feature({ geometry: new Point(coordinate) })
     iconFeature.setStyle(icon_orange)
     vectorSource.addFeature(iconFeature)
+  }
+  const setFeature = (geometry) => {
+    let feature;
+    switch (geometry.type) {
+      case 'MultiLineString':
+        feature = new Feature({ geometry: new MultiLineString(geometry.coordinates) })
+        break;
+      case 'MultiPoint':
+        feature = new Feature({ geometry: new MultiPoint(geometry.coordinates) })
+        break;
+      case 'MultiPolygon':
+        feature = new Feature({ geometry: new MultiPolygon(geometry.coordinates) })
+        break;
+      case 'Polygon':
+        feature = new Feature({ geometry: new Polygon(geometry.coordinates) })
+        break;
+      case 'LinearRing':
+        feature = new Feature({ geometry: new LinearRing(geometry.coordinates) })
+        break;
+      case 'LineString':
+        feature = new Feature({ geometry: new LineString(geometry.coordinates) })
+        break;
+      case 'Circle':
+        feature = new Feature({ geometry: new Circle(geometry.coordinates) })
+        break;
+      default:
+        break
+    }
+    feature.getGeometry().transform('EPSG:4326', 'EPSG:25833')
+    feature.setStyle(styles[geometry.type])
+    return feature
   }
   const showRedInfoMarker = (coordinate) => {
     let iconFeature = new Feature({ geometry: new Point(coordinate) })
@@ -72,7 +180,10 @@ const SearchResult = (props) => {
     features.forEach(feature => feature.setStyle(icon_blue))
   }
   const constructPoint = (coord, epsgTo = 'EPSG:25833') => transform([Number(coord.lon), Number(coord.lat)], coord.epsg, epsgTo)
-
+  const zoomToFeature = (feature) => {
+    const ext = feature.getGeometry().getExtent();
+    window.olMap.getView().fit(ext, window.olMap.getSize());
+  }
   return (
     <List component="nav" dense={true} aria-label="search results">
       {
@@ -103,40 +214,36 @@ const SearchResult = (props) => {
       }
       {
         props.searchResult.searchResultStedsnavn && props.searchResult.searchResultStedsnavn.map((data, idx) => {
-          //console.log(data)
-          let lon, lat
+          let lon, lat, ssrfeature
           if (data.navneobjekttype !== 'adressenavn') {
             if (data.geometri.type === "Point") {
               lon = data.geometri.coordinates[0]
               lat = data.geometri.coordinates[1]
-            } else if (data.geometri.type === "MultiPoint") {
-              lon = data.geometri.coordinates[0][0]
-              lat = data.geometri.coordinates[0][1]
+              showRedInfoMarker(constructPoint({ lon: lon, lat: lat, epsg: 'EPSG:4326' }))
             } else {
-              console.error('error! No yet supported geometri type')
-              return ('')
+              ssrfeature = setFeature(data.geometri)
+              vectorSource.addFeature(ssrfeature)
             }
-            showRedInfoMarker(constructPoint({ lon: lon, lat: lat, epsg: 'EPSG:4326' }))
           } else if (data.navneobjekttype === 'adressenavn') {
             if (data.geometri.type === "Point") {
               lon = data.geometri.coordinates[0]
               lat = data.geometri.coordinates[1]
               showRedInfoMarker(constructPoint({ lon: lon, lat: lat, epsg: 'EPSG:4326' }))
-            } else if (data.geometri.type === "MultiPoint") {
-              data.geometri.coordinates.forEach(coordinate => {
-                showRedInfoMarker(constructPoint({ lon: coordinate[0], lat: coordinate[1], epsg: 'EPSG:4326' }))
-              });
-              // Menupunkt med bare første pkt
-              lon = data.geometri.coordinates[0][0]
-              lat = data.geometri.coordinates[0][1]
             } else {
-              console.error('error! No yet supported geometri type')
-              return ('')
+              ssrfeature = setFeature(data.geometri)
+              vectorSource.addFeature(ssrfeature)
             }
           }
           return (
             <div key={ idx }>
-              <ListItem button onClick={ () => { centerPosition(constructPoint({ lon: lon, lat: lat, epsg: 'EPSG:4326' })) } }>
+              <ListItem button onClick={ () => {
+                if (ssrfeature) {
+                  console.log(ssrfeature.getId())
+                  zoomToFeature(ssrfeature)
+                } else {
+                  centerPosition(constructPoint({ lon: lon, lat: lat, epsg: 'EPSG:4326' }))
+                }
+              } }>
                 <ListItemText primary={ `${data.stedsnavn[0].skrivemte},  ${data.kommuner[0].kommunenavn }` } />
               </ListItem>
               <Divider />
@@ -172,6 +279,7 @@ const SearchBar = props => {
   const classes = useStyles();
   useEffect(() => {
     if (searchText) {
+      //console.log('New search...')
       vectorSource.clear()
       setQuery({ search: searchText })
       fetch(generateAdresseSokUrl(searchText))
@@ -193,7 +301,6 @@ const SearchBar = props => {
         })
         .then(result => {
           if (result.navn) {
-            //console.log(result.navn)
             setSearchResultStedsnavn(result.navn)
           } else {
             setSearchResultStedsnavn(null)
@@ -267,7 +374,6 @@ const SearchBar = props => {
                   <SearchResult searchResult={ { searchResultStedsnavn } }></SearchResult>
                 </div>
               </div>
-
             </>
           )
         }
