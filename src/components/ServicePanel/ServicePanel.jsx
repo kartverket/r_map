@@ -9,6 +9,7 @@ import LayerEntry from './LayerEntry'
 import { store } from '../../Utils/store.js'
 import { parseFeatureInfo } from '../../MapUtil/FeatureUtil'
 
+const language = navigator.language.split(/[-_]/)[0]
 
 const ServicePanel = props => {
   const featureState = useContext(store)
@@ -22,7 +23,7 @@ const ServicePanel = props => {
       case 'WMS':
       case 'WMS-tjeneste':
       case 'OGC:WMS':
-        CapabilitiesUtil.parseWmsCapabilities(props.services.GetCapabilitiesUrl)
+        CapabilitiesUtil.parseWmsCapabilities(props.services.GetCapabilitiesUrl, language)
           .then((capa) => {
             if (props.services.excludeLayers) {
               capa.Capability.Layer.Layer = capa.Capability.Layer.Layer.filter(
@@ -91,7 +92,7 @@ const ServicePanel = props => {
       case 'WFS':
       case 'WFS-tjeneste':
       case 'OGC:WFS':
-        CapabilitiesUtil.parseWFSCapabilities(props.services.GetCapabilitiesUrl)
+        CapabilitiesUtil.parseWFSCapabilities(props.services.GetCapabilitiesUrl, language)
           .then((capa) => {
             setCapabilities(capa)
             newMetaInfo = CapabilitiesUtil.getWFSMetaCapabilities(capa)

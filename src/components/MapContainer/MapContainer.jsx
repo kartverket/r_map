@@ -13,6 +13,7 @@ import Position from '../Position/Position'
 import FeatureInfoItem from '../ServicePanel/FeatureInfoItem'
 import { StateProvider } from '../../Utils/store.js'
 import style from "./MapContainer.module.scss"
+import { useIntl } from 'react-intl'
 
 const ServiceListItem = (props) => <ServicePanel services={ props.listItem } removeMapItem={ props.removeMapItem } draggable />
 
@@ -42,6 +43,7 @@ const MapContainer = (props) => {
   const [value, setValue] = React.useState(1)
   const [expanded, toggleExpand] = useState(false)
   const [wms, setWMS] = useState()
+  const intl = useIntl()
   const queryValues = queryString.parse(window.location.search, { arrayFormat: 'comma' })
   console.log(queryValues)
   let internMap = map
@@ -92,8 +94,8 @@ const MapContainer = (props) => {
                 { expanded ? <ExpandLess /> : <ExpandMore /> }
               </IconButton>
               <Tabs value={ value } variant="fullWidth" onChange={ handleChange } indicatorColor="primary" textColor="primary">
-                <Tab label="Søk" value={ 0 } />
-                <Tab label="Visning" value={ 1 } />
+                <Tab label={intl.formatMessage({ id: 'search' }) } value={ 0 } />
+                <Tab label={intl.formatMessage({ id: 'show' }) } value={ 1 } />
               </Tabs>
               <TabPanel value={ value } index={ 0 }><SearchBar /></TabPanel>
               <TabPanel value={ value } index={ 1 }>{ renderServiceList() }</TabPanel>

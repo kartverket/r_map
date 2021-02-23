@@ -45,6 +45,8 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+var language = navigator.language.split(/[-_]/)[0];
+
 var ServicePanel = function ServicePanel(props) {
   var featureState = (0, _react.useContext)(_store.store);
   var dispatch = featureState.dispatch;
@@ -71,7 +73,7 @@ var ServicePanel = function ServicePanel(props) {
       case 'WMS':
       case 'WMS-tjeneste':
       case 'OGC:WMS':
-        _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(props.services.GetCapabilitiesUrl).then(function (capa) {
+        _CapabilitiesUtil.CapabilitiesUtil.parseWmsCapabilities(props.services.GetCapabilitiesUrl, language).then(function (capa) {
           if (props.services.excludeLayers) {
             capa.Capability.Layer.Layer = capa.Capability.Layer.Layer.filter(function (e) {
               return !props.services.excludeLayers.includes(e.Name);
@@ -171,7 +173,7 @@ var ServicePanel = function ServicePanel(props) {
       case 'WFS':
       case 'WFS-tjeneste':
       case 'OGC:WFS':
-        _CapabilitiesUtil.CapabilitiesUtil.parseWFSCapabilities(props.services.GetCapabilitiesUrl).then(function (capa) {
+        _CapabilitiesUtil.CapabilitiesUtil.parseWFSCapabilities(props.services.GetCapabilitiesUrl, language).then(function (capa) {
           setCapabilities(capa);
           newMetaInfo = _CapabilitiesUtil.CapabilitiesUtil.getWFSMetaCapabilities(capa);
           newMetaInfo.Type = 'WFS';

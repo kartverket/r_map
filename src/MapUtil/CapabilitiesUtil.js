@@ -116,10 +116,11 @@ export class CapabilitiesUtil {
    * @param {string} capabilitiesUrl Url to WMS capabilities document
    * @return {Object} An object representing the WMS capabilities.
    */
-  static parseWmsCapabilities(capabilitiesUrl) {
+  static parseWmsCapabilities(capabilitiesUrl, language) {
     const newUrl = mergeDefaultParams(capabilitiesUrl, {
       service: "WMS",
-      request: "GetCapabilities"
+      request: "GetCapabilities",
+      language: language
     })
     return fetch(newUrl)
       .then((response) => response.text())

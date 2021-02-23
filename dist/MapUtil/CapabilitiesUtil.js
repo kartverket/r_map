@@ -156,10 +156,11 @@ var CapabilitiesUtil = /*#__PURE__*/function () {
      * @param {string} capabilitiesUrl Url to WMS capabilities document
      * @return {Object} An object representing the WMS capabilities.
      */
-    function parseWmsCapabilities(capabilitiesUrl) {
+    function parseWmsCapabilities(capabilitiesUrl, language) {
       var newUrl = (0, _MapHelper.mergeDefaultParams)(capabilitiesUrl, {
         service: "WMS",
-        request: "GetCapabilities"
+        request: "GetCapabilities",
+        language: language
       });
       return fetch(newUrl).then(function (response) {
         return response.text();

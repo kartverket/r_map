@@ -3,20 +3,22 @@ import PropTypes from "prop-types"
 import Legend from "./Legend"
 import { ExpandLess, ExpandMore } from "@material-ui/icons"
 import style from "./InlineLegend.module.scss"
+import { useIntl } from 'react-intl'
+
 /**
  * Legend to be used in the ServicePanel
  * @param {*} props
  */
 const InlineLegend = props => {
   const [expanded, toggleExpand] = useState(false)
-
+  const intl = useIntl()
   const legend = () => {
     if (props.legendUrl) {
       return (
         <>
           <div className={ style.toggle } onClick={ () => toggleExpand(!expanded) }>
             <span className={ style.label }>
-              { expanded ? "Skjul tegnforklaring" : "Vis tegnforklaring" }{ " " }
+              { expanded ? intl.formatMessage({ id: 'hide_legend' }) : intl.formatMessage({ id: 'show_legend' })  }{ " " }
             </span>
             { expanded ? <ExpandLess /> : <ExpandMore /> }
           </div>

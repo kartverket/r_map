@@ -33,8 +33,8 @@ const TEST_DATA = [
    {
     'Title': 'Romvær',
     'DistributionProtocol': 'OGC:WMS',
-    //'GetCapabilitiesUrl': 'https://norgeskart.no/ws/px.py?http://rin-te0031/cgi-bin/romvaer?request=GetCapabilities&service=WMS',
-    'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wmstest.romvaer?request=GetCapabilities&service=WMS',
+    'GetCapabilitiesUrl': 'http://rin-te0031/cgi-bin/romvaer?request=GetCapabilities&service=WMS',
+    // 'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wmstest.romvaer?request=GetCapabilities&service=WMS',
     'addLayers': ['romvaer_band2']
 },
  {

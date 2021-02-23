@@ -17,6 +17,8 @@ var _icons = require("@material-ui/icons");
 
 var _InlineLegendModule = _interopRequireDefault(require("./InlineLegend.module.scss"));
 
+var _reactIntl = require("react-intl");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -45,6 +47,8 @@ var InlineLegend = function InlineLegend(props) {
       expanded = _useState2[0],
       toggleExpand = _useState2[1];
 
+  var intl = (0, _reactIntl.useIntl)();
+
   var legend = function legend() {
     if (props.legendUrl) {
       return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
@@ -54,7 +58,11 @@ var InlineLegend = function InlineLegend(props) {
         }
       }, /*#__PURE__*/_react.default.createElement("span", {
         className: _InlineLegendModule.default.label
-      }, expanded ? "Skjul tegnforklaring" : "Vis tegnforklaring", " "), expanded ? /*#__PURE__*/_react.default.createElement(_icons.ExpandLess, null) : /*#__PURE__*/_react.default.createElement(_icons.ExpandMore, null)), /*#__PURE__*/_react.default.createElement("div", {
+      }, expanded ? intl.formatMessage({
+        id: 'hide_legend'
+      }) : intl.formatMessage({
+        id: 'show_legend'
+      }), " "), expanded ? /*#__PURE__*/_react.default.createElement(_icons.ExpandLess, null) : /*#__PURE__*/_react.default.createElement(_icons.ExpandMore, null)), /*#__PURE__*/_react.default.createElement("div", {
         className: expanded ? _InlineLegendModule.default.legend : _InlineLegendModule.default.legend + " " + _InlineLegendModule.default.closed
       }, /*#__PURE__*/_react.default.createElement(_Legend.default, {
         legendSize: props.legendSize ? props.legendSize : '',

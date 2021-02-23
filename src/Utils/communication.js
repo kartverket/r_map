@@ -6,10 +6,10 @@ import Feature from 'ol/Feature'
 
 export class Messaging {
 
-  static postMessage = function (msg) {
+  static postMessage(msg) {
     window.parent.postMessage(JSON.stringify(msg), '*')
   }
-  static listener = function (event) {
+  static listener(event) {
     if (event.origin === "http://localhost:3000" || "http://skrivte57.statkart.no" || "http:://geonorge.no" || "http://labs.norgeskart.no" || "https://register.geonorge.no/" || "http://www.kartverket.no/" || "https://www.norgeskart.no/") {
       try {
         let json = JSON.parse(JSON.stringify(event.data))
@@ -220,7 +220,7 @@ export class Messaging {
 
     }
   }
-  static parseParamsAndAddDataLayerFromUrl = function (params) {
+  static parseParamsAndAddDataLayerFromUrl(params) {
     var type, url
     type = params[0]
     url = params[1]

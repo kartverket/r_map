@@ -207,7 +207,9 @@ var mergeDefaultParams = function mergeDefaultParams(url, defaultParams) {
     }
   }
 
-  if (urlObj.href === 'https://norgeskart.no/ws/px.py') {
+  if (urlObj.href.startsWith('http://rin-')) {
+    //use proxy
+    url = 'https://norgeskart.no/ws/px.py?' + urlObj.href + "?" + _queryString.default.stringify(defaultParams);
     return url;
   } else {
     return urlObj.href + "?" + _queryString.default.stringify(defaultParams);

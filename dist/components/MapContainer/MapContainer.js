@@ -37,6 +37,8 @@ var _store = require("../../Utils/store.js");
 
 var _MapContainerModule = _interopRequireDefault(require("./MapContainer.module.scss"));
 
+var _reactIntl = require("react-intl");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -108,6 +110,8 @@ var MapContainer = function MapContainer(props) {
       wms = _useState4[0],
       setWMS = _useState4[1];
 
+  var intl = (0, _reactIntl.useIntl)();
+
   var queryValues = _queryString.default.parse(window.location.search, {
     arrayFormat: 'comma'
   });
@@ -173,10 +177,14 @@ var MapContainer = function MapContainer(props) {
     indicatorColor: "primary",
     textColor: "primary"
   }, /*#__PURE__*/_react.default.createElement(_core.Tab, {
-    label: "S\xF8k",
+    label: intl.formatMessage({
+      id: 'search'
+    }),
     value: 0
   }), /*#__PURE__*/_react.default.createElement(_core.Tab, {
-    label: "Visning",
+    label: intl.formatMessage({
+      id: 'show'
+    }),
     value: 1
   })), /*#__PURE__*/_react.default.createElement(TabPanel, {
     value: value,

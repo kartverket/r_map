@@ -179,7 +179,9 @@ export const mergeDefaultParams = (url, defaultParams) => {
       delete defaultParams[p.toLowerCase()]
     }
   }
-  if (urlObj.href === 'https://norgeskart.no/ws/px.py') {
+  if (urlObj.href.startsWith('http://rin-')) {
+    //use proxy
+    url = 'https://norgeskart.no/ws/px.py?' + urlObj.href + "?" + queryString.stringify(defaultParams)
     return url;
   } else {
     return urlObj.href + "?" + queryString.stringify(defaultParams);
