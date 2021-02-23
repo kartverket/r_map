@@ -171,7 +171,7 @@ const ServicePanel = props => {
   return (
     <div>
       <div onClick={ () => setState(!expanded) } className={ style.expandLayersBtn } >
-        <span className={ style.ellipsisToggle }>{ props.services.Title }</span>
+        <span className={ style.ellipsisToggle }>{ capabilities ? (capabilities.Service ? capabilities.Service.Title : props.services.Title) : '' }</span>
         <label style={ { fontStyle: "italic" } }>{ capabilities ? (capabilities.Service ? capabilities.Service.Abstract : '') : '' }</label>
         { expanded ? <ExpandLess /> : <ExpandMore /> }
       </div>
