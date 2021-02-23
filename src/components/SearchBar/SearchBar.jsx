@@ -307,7 +307,7 @@ const SearchBar = props => {
           }
         })
         .catch(error => { console.warn(error) })
-        fetch(generateSearchStedsnavnUrl(searchText, 0, 15))
+/*         fetch(generateSearchStedsnavnUrl(searchText, 0, 15))
         .then(response => {
           if (!response.ok) {
             throw Error(response.statusText)
@@ -325,7 +325,7 @@ const SearchBar = props => {
           }
         })
         .catch(error => { console.warn(error) })
-    } else {
+ */    } else {
       setSearchResult('')
       setSearchResultSSR('')
       setSearchResultStedsnavn('')
@@ -356,7 +356,7 @@ const SearchBar = props => {
                   <SearchResult searchResult={ { searchResult } }></SearchResult>
                 </div>
               </div>
-              <div>
+{/*               <div>
                 <div onClick={ () => setStateSsr(!expandedSsr) } className={ style.expandBtn } >
                   <span className={ style.ellipsisToggle }>SSR</span>
                   { expandedSsr ? <ExpandLess /> : <ExpandMore /> }
@@ -365,7 +365,7 @@ const SearchBar = props => {
                   <SearchResult searchResult={ { searchResultSSR } }></SearchResult>
                 </div>
               </div>
-              <div>
+ */}              <div>
                 <div onClick={ () => setStateStedsnavn(!expandedStedsnavn) } className={ style.expandBtn } >
                   <span className={ style.ellipsisToggle }>STEDSNAVN</span>
                   { expandedStedsnavn ? <ExpandLess /> : <ExpandMore /> }
