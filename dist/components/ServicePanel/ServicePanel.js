@@ -271,7 +271,7 @@ var ServicePanel = function ServicePanel(props) {
     className: _ServicePanelModule.default.expandLayersBtn
   }, /*#__PURE__*/_react.default.createElement("span", {
     className: _ServicePanelModule.default.ellipsisToggle
-  }, props.services.Title), /*#__PURE__*/_react.default.createElement("label", {
+  }, capabilities ? capabilities.Service ? capabilities.Service.Title : props.services.Title : ''), /*#__PURE__*/_react.default.createElement("label", {
     style: {
       fontStyle: "italic"
     }
