@@ -27,6 +27,8 @@ var _TuneOutlined = _interopRequireDefault(require("@material-ui/icons/TuneOutli
 
 var _Grid = _interopRequireDefault(require("@material-ui/core/Grid"));
 
+var _reactIntl = require("react-intl");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -49,6 +51,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var LayerEntry = function LayerEntry(props) {
   var featureState = (0, _react.useContext)(_store.store);
+  var intl = (0, _reactIntl.useIntl)();
   var dispatch = featureState.dispatch; //const [index, setIndex] = useState(0)
 
   var _useState = (0, _react.useState)(false),
@@ -277,7 +280,9 @@ var LayerEntry = function LayerEntry(props) {
     item: true
   }, /*#__PURE__*/_react.default.createElement("button", {
     className: _LayerEntryModule.default.movelayerBtn
-  }, "Gjennomsiktighet:")), /*#__PURE__*/_react.default.createElement(_Grid.default, {
+  }, " ", intl.formatMessage({
+    id: 'transparency'
+  }), ":")), /*#__PURE__*/_react.default.createElement(_Grid.default, {
     item: true,
     xs: true
   }, /*#__PURE__*/_react.default.createElement(_core.Slider, {
