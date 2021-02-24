@@ -216,21 +216,21 @@ const SearchResult = (props) => {
         props.searchResult.searchResultStedsnavn && props.searchResult.searchResultStedsnavn.map((data, idx) => {
           let lon, lat, ssrfeature
           if (data.navneobjekttype !== 'adressenavn') {
-            if (data.geometri.type === "Point") {
-              lon = data.geometri.coordinates[0]
-              lat = data.geometri.coordinates[1]
+            if (data.geojson.geometry.type === "Point") {
+              lon = data.geojson.geometry.coordinates[0]
+              lat = data.geojson.geometry.coordinates[1]
               showRedInfoMarker(constructPoint({ lon: lon, lat: lat, epsg: 'EPSG:4326' }))
             } else {
-              ssrfeature = setFeature(data.geometri)
+              ssrfeature = setFeature(data.geojson.geometry)
               vectorSource.addFeature(ssrfeature)
             }
           } else if (data.navneobjekttype === 'adressenavn') {
-            if (data.geometri.type === "Point") {
-              lon = data.geometri.coordinates[0]
-              lat = data.geometri.coordinates[1]
+            if (data.geojson.geometry.type === "Point") {
+              lon = data.geojson.geometry.coordinates[0]
+              lat = data.geojson.geometry.coordinates[1]
               showRedInfoMarker(constructPoint({ lon: lon, lat: lat, epsg: 'EPSG:4326' }))
             } else {
-              ssrfeature = setFeature(data.geometri)
+              ssrfeature = setFeature(data.geojson.geometry)
               vectorSource.addFeature(ssrfeature)
             }
           }
