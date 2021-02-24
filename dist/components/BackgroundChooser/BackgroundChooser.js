@@ -15,6 +15,8 @@ var _lab = require("@material-ui/lab");
 
 var _BackgroundChooserModule = _interopRequireDefault(require("./BackgroundChooser.module.scss"));
 
+var _reactIntl = require("react-intl");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -47,6 +49,8 @@ var BackgroundChooser = function BackgroundChooser() {
       baseLayer = _useState4[0],
       setBaseLayer = _useState4[1];
 
+  var intl = (0, _reactIntl.useIntl)();
+
   _maplibHelper.eventHandler.RegisterEvent("MapLoaded", function () {
     return setBaseLayers(_maplibHelper.map.GetBaseLayers());
   });
@@ -68,7 +72,9 @@ var BackgroundChooser = function BackgroundChooser() {
         key: index,
         className: "".concat(iconClass, " ").concat(activeClass),
         value: baseLayer
-      }, /*#__PURE__*/_react.default.createElement("span", null, " ", baseLayer.name, " "));
+      }, /*#__PURE__*/_react.default.createElement("span", null, " ", intl.formatMessage({
+        id: baseLayer.name
+      }), " "));
     });
   };
 
