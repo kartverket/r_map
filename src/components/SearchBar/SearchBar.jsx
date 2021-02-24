@@ -82,7 +82,7 @@ const SearchResult = (props) => {
         width: 2,
       }),
       fill: new Fill({
-        color: 'magenta',
+        color: 'rgba(255,0,255 ,0.1)',
       }),
       image: new CircleStyle({
         radius: 10,
