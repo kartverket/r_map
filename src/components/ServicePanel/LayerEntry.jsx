@@ -12,9 +12,11 @@ import { ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, IconButt
 import TuneOutlinedIcon from '@material-ui/icons/TuneOutlined'
 //import { ArrowUpwardIcon, ArrowDownwardIcon } from '@material-ui/icons'
 import Grid from '@material-ui/core/Grid'
+import { useIntl } from 'react-intl'
 
 const LayerEntry = props => {
   const featureState = useContext(store)
+  const intl = useIntl()
   const { dispatch } = featureState
   //const [index, setIndex] = useState(0)
   const [options, toggleOptions] = useState(false)
@@ -178,7 +180,7 @@ const LayerEntry = props => {
  */}
           <Grid container spacing={ 2 } alignItems="center">
             <Grid item>
-              <button className={ style.movelayerBtn } >Gjennomsiktighet:</button>
+              <button className={ style.movelayerBtn }> { intl.formatMessage({ id: 'transparency' }) }:</button>
             </Grid>
             <Grid item xs>
               <Slider defaultValue={ 50 } aria-labelledby="transparenz" value={ transparency } onChange={ (e, value) => setOpacity(e, value, layer)  } />
