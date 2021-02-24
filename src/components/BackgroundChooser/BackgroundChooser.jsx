@@ -2,12 +2,15 @@ import React, { useState } from "react"
 import { map, eventHandler } from "../../MapUtil/maplibHelper"
 import { ToggleButton, ToggleButtonGroup} from '@material-ui/lab'
 import style from "./BackgroundChooser.module.scss"
+import { useIntl } from 'react-intl'
+
 /**
  * Panel containing a list of backgroundLayers. To be used in MapContainer
  */
 const BackgroundChooser = () => {
   const [baseLayers, setBaseLayers] = useState([])
   const [baseLayer, setBaseLayer] = useState([])
+  const intl = useIntl()
 
   eventHandler.RegisterEvent("MapLoaded", () => setBaseLayers(map.GetBaseLayers()))
 
@@ -23,7 +26,7 @@ const BackgroundChooser = () => {
       const activeClass = baseLayer.id === selectedBaseLayer.id ? style.active : ''
       return (
         <ToggleButton key={ index } className={ `${iconClass} ${activeClass}` } value={ baseLayer }>
-          <span> { baseLayer.name } </span>
+          <span> { intl.formatMessage({ id: baseLayer.name}) } </span>
         </ToggleButton>
       )
     })

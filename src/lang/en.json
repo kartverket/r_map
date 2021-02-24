@@ -2,5 +2,11 @@
   "search": "Search",
   "show": "Visibility",
   "show_legend": "Show legend",
-  "hide_legend": "Hide legend"
+  "hide_legend": "Hide legend",
+  "Gråtone": "Grayscale",
+  "Europa": "Europe",
+  "Sjøkart": "Seamap",
+  "Terreng": "Terrain",
+  "Landkart": "Mainmap",
+  "Enkel": "Simplemap"
 }
