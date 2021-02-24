@@ -75,7 +75,7 @@ export const generateSearchStedsnavnUrl = (query, side, antall) => {
 
 export const generateStedsnavnSokUrl = (query, side, antall) => {
   side += 1
-  return `https://norgeskart.no/ws/px.py?https://wstest.geonorge.no/stedsnavn/v1/stedsnavn?sok=${query}&treffPerSide=${antall}&side=${side}`
+  return `https://wstest.geonorge.no/stedsnavn/v1/stedsnavn?sok=${query}&treffPerSide=${antall}&side=${side}`
 }
 
 export const generateSearchAdresseUrl = (query) => {
