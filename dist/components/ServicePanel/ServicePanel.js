@@ -112,7 +112,7 @@ const ServicePanel = props => {
 
   const renderCapabilites = () => {
     if (capabilities && capabilities.Capability) {
-      const capalayer = capabilities.Capability.Layer.Layer || capabilities.Capability.Layer;
+      const capalayer = capabilities.Capability.Layer || capabilities.Capability.Layer.Layer;
 
       if (Array.isArray(capalayer)) {
         return capalayer.map((capaLayer, i) => {

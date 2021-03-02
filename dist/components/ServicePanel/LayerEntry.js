@@ -83,9 +83,11 @@ const LayerEntry = props => {
       textSpan = textSpan.length === 0 ? layer.Abstract : textSpan + ' - ' + layer.Abstract;
     }
 
-    return /*#__PURE__*/_react.default.createElement("span", {
+    return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("span", {
       className: _LayerEntryModule.default.spanCheckbox
-    }, textSpan);
+    }, textSpan), /*#__PURE__*/_react.default.createElement("p", {
+      hidden: true
+    }, layer.Layer ? 'Group layer' : 'layer', " "));
   };
 
   const onSelectionChange = currentNode => {

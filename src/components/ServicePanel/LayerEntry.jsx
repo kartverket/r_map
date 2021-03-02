@@ -32,7 +32,12 @@ const LayerEntry = props => {
     if (layer.Abstract && layer.Abstract.length > 0 && layer.Abstract !== layer.Title && layer.Abstract !== layer.Name && textSpan.length === 0) {
       textSpan = textSpan.length === 0 ? (layer.Abstract) : (textSpan + ' - ' + layer.Abstract)
     }
-    return (<span className={ style.spanCheckbox }>{ textSpan }</span>)
+    return (
+      <>
+        <span className={style.spanCheckbox} >{textSpan}</span>
+        <p hidden>{(layer.Layer ? 'Group layer' : 'layer')} </p>
+      </>
+    )
   }
 
   const onSelectionChange = currentNode => {
@@ -135,23 +140,23 @@ const LayerEntry = props => {
     <>
       { layer.Name ? (
         <>
-          <input className="checkbox" id={ layer.Name } type="checkbox" />
-          <label onClick={ () => onSelectionChange(layer) } htmlFor={ layer.Title }>
-            <FontAwesomeIcon className="svg-checkbox" icon={ checked ? ["far", "check-square"] : ["far", "square"] } />
+          <input className="checkbox" id={layer.Name} type="checkbox" />
+          <label onClick={() => onSelectionChange(layer)} htmlFor={layer.Title}>
+            <FontAwesomeIcon className="svg-checkbox" icon={checked ? ["far", "check-square"] : ["far", "square"]} />
           </label>
         </>
       ) : (
-          <label onClick={ () => onSelectionChange(layer) } htmlFor={ layer.Title }> </label>
-        ) }
-      { abstractTextSpan() }
+        <label onClick={() => onSelectionChange(layer)} htmlFor={layer.Title}> </label>
+      )}
+      { abstractTextSpan()}
       { layer.Name ? (
-        <label onClick={ () => toggleOptions(!options) }>
-          <FontAwesomeIcon icon={ ["far", "sliders-h"] } color={ options ? "red" : "black" } />
+        <label onClick={() => toggleOptions(!options)}>
+          <FontAwesomeIcon icon={["far", "sliders-h"]} color={options ? "red" : "black"} />
         </label>
-      ) : ('') }
-      <InlineLegend legendUrl={ ((layer.Style && layer.Style[0].LegendURL) ? layer.Style[0].LegendURL[0].OnlineResource : '') } />
+      ) : ('')}
+      <InlineLegend legendUrl={((layer.Style && layer.Style[0].LegendURL) ? layer.Style[0].LegendURL[0].OnlineResource : '')} />
       { options ? (
-        <div className={ style.settings }>
+        <div className={style.settings}>
           {/** Tar ut prio buttone for nå *
           <div>
             <button className={style.movelayerBtn} onClick={() => setLayerIndex(index + 1)}>Flytt fremover<FontAwesomeIcon title="Vis laget over"  icon={['fas', 'arrow-up']} /></button>
@@ -159,23 +164,23 @@ const LayerEntry = props => {
             <span className={style.priority}>Prioritet: {index}</span>
           </div>
            */}
-          {/** TODO: STYLE the slider */ }
-          <label className={ style.slider }>
+          {/** TODO: STYLE the slider */}
+          <label className={style.slider}>
             Gjennomsiktighet:
             <input
               type="range"
-              min={ 0 }
-              max={ 100 }
-              value={ transparency }
-              onChange={ e => setOpacity(e.target.value) }
+              min={0}
+              max={100}
+              value={transparency}
+              onChange={e => setOpacity(e.target.value)}
             />
           </label>
         </div>
       ) : (
-          ""
-        ) }
-      { props.children }
-      { layer.Layer ? (layer.Layer.map((subLayer, isub) => (<div className={ style.facetSub } key={ isub }><LayerEntry layer={ subLayer } meta={ props.meta } key={ isub } /></div>))) : ('') }
+        ""
+      )}
+      { props.children}
+      { layer.Layer ? (layer.Layer.map((subLayer, isub) => (<div className={style.facetSub} key={isub}><LayerEntry layer={subLayer} meta={props.meta} key={isub} /></div>))) : ('')}
     </>
   )
 }

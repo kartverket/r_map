@@ -93,7 +93,7 @@ const arrayToObject = (array) =>
 
 export const parsePlainFeatureInfo = (data) => {
   let parsedFeatureInfo
-  if (data === "no features were found") return ''
+  if (data === "no features were found" || data.includes('Search returned no results')) return ''
   if (data.includes('Layer')) {
     let featureInfo = data.split("\n\n")
     featureInfo.shift()
