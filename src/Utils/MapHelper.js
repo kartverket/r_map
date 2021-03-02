@@ -175,7 +175,7 @@ export const mergeDefaultParams = (url, defaultParams) => {
   }
   for (var p in urlParams) {
     defaultParams[p] = urlParams[p]
-    if (defaultParams.hasOwnProperty(p.toLowerCase()) && p !== p.toLowerCase()) {
+    if (Object.prototype.hasOwnProperty.call(defaultParams, p.toLowerCase()) && p !== p.toLowerCase()) {
       delete defaultParams[p.toLowerCase()]
     }
   }

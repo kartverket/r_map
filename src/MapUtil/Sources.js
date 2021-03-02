@@ -551,7 +551,7 @@ export const Wfs = (isySubLayer, offline, parameters, featureObj, eventHandler) 
             return
           }
         } else {
-          return parseResponse(response);;
+          return parseResponse(response);
         }
       })
   }

@@ -105,4 +105,4 @@ export default class ProjectionUtil {
       }
       return roundScale;
     }
-};
+}

@@ -13,17 +13,20 @@
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
-    "fast-xml-parser": "^3.17.4",
+    "antd": "^4.13.0",
+    "bootstrap": "^4.6.0",
+    "fast-xml-parser": "^3.18.0",
     "jquery": "^3.5.1",
-    "node-sass": "^4.14.1",
-    "ol": "^6.4.3",
-    "proj4": "^2.6.2",
-    "query-string": "^6.13.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "^3.4.3",
+    "ol": "^6.5.0",
+    "proj4": "^2.7.0",
+    "query-string": "^6.14.1",
+    "react": "^17.0.1",
+    "react-bootstrap": "^1.5.0",
+    "react-dom": "^17.0.1",
+    "react-scripts": "^4.0.3",
+    "sass": "^1.32.8",
     "set-query-string": "^2.2.0",
-    "uniqid": "^5.2.0"
+    "uniqid": "^5.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -31,9 +34,7 @@
     "build-dist": "rm -rf dist && NODE_ENV=production babel src --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
     "windows-build": "rimraf -rf dist && SET NODE_ENV=production&& babel src --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "styleguide": "styleguidist server",
-    "styleguide:build": "styleguidist build"
+    "eject": "react-scripts eject"
   },
   "browserslist": [
     ">0.2%",
@@ -42,11 +43,12 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@babel/cli": "^7.11.6",
-    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/cli": "^7.13.0",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
     "babel-polyfill": "^6.26.0",
-    "eslint-plugin-react-hooks": "^4.1.2",
-    "react-styleguidist": "^11.1.0",
+    "eslint-plugin-html": "^6.1.1",
+    "eslint-plugin-markdown": "^2.0.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "rimraf": "^3.0.2"
   }
 }

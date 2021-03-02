@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react"
+import React, { useLayoutEffect } from "react"
 import queryString from "query-string"
 import setQuery from "set-query-string"
 
@@ -8,7 +8,6 @@ import { Messaging } from '../../Utils/communication'
 
 
 const MapComponent = (props) => {
-  const [wms, setWMS] = useState()
   const queryValues = queryString.parse(window.location.search)
   let internMap = map
   mapConfig.coordinate_system = queryValues['crs'] || props.crs

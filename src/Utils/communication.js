@@ -171,7 +171,7 @@ export class Messaging {
             }
           } else if (json.cmd === 'setBoundingBox') {
             var draw = window.olMap.getControlsByClass('OpenLayers.Control.Draw')[0]
-            if (!!draw) {
+            if (draw) {
               var l = json.bounds[0],
                 b = json.bounds[1],
                 r = json.bounds[2],
