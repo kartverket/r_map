@@ -67,10 +67,14 @@ const MapContainer = (props) => {
   }
 
   const showDefaultTab = () => {
+    return 'layers'
+    /*
     if (props.services.length) {
       return 'layers'
     }
-    else return 'search'
+    else
+      return 'search'
+    */
   }
 
   const toogleMap = () => {
@@ -91,10 +95,10 @@ const MapContainer = (props) => {
           <div className={ `${style.container} ${expanded ? style.closed : style.open}` }>
             <FontAwesomeIcon onClick={ () => toggleExpand(!expanded) } className={ style.toggleBtn } icon={ expanded ? ["far", "layer-group"] : "times" } />
             <Tabs className={ `${style.tabs} ${expanded ? style.closed : style.open}` } defaultActiveKey={ showDefaultTab() } id="tab">
-              <Tab className={ `${style.search} ${expanded ? style.closed : style.open}` } eventKey="search" title="Søk" >
+              <Tab eventKey="search" title="Søk" >
                 <SearchBar />
               </Tab>
-              <Tab eventKey="layers" title="Visning">
+              <Tab className={ `${style.search} ${expanded ? style.closed : style.open}` } eventKey="layers" title="Visning">
                 <div id="ServiceList">{ renderServiceList() }</div>
               </Tab>
             </Tabs>

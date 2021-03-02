@@ -46,7 +46,7 @@ const ServicePanel = props => {
         meta = _useState4[0],
         setMeta = _useState4[1];
 
-  const _useState5 = (0, _react.useState)(false),
+  const _useState5 = (0, _react.useState)(true),
         _useState6 = _slicedToArray(_useState5, 2),
         expanded = _useState6[0],
         setState = _useState6[1];

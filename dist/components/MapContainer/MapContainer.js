@@ -121,9 +121,14 @@ const MapContainer = props => {
   };
 
   const showDefaultTab = () => {
+    return 'layers';
+    /*
     if (props.services.length) {
-      return 'layers';
-    } else return 'search';
+      return 'layers'
+    }
+    else
+      return 'search'
+    */
   };
 
   const toogleMap = () => {
@@ -153,10 +158,10 @@ const MapContainer = props => {
     defaultActiveKey: showDefaultTab(),
     id: "tab"
   }, /*#__PURE__*/_react.default.createElement(_Tab.default, {
-    className: "".concat(_MapContainerModule.default.search, " ").concat(expanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open),
     eventKey: "search",
     title: "S\xF8k"
   }, /*#__PURE__*/_react.default.createElement(_SearchBar.default, null)), /*#__PURE__*/_react.default.createElement(_Tab.default, {
+    className: "".concat(_MapContainerModule.default.search, " ").concat(expanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open),
     eventKey: "layers",
     title: "Visning"
   }, /*#__PURE__*/_react.default.createElement("div", {
