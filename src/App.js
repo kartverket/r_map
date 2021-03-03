@@ -21,7 +21,6 @@ const TEST_DATA = [
      'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.fastmerker2?request=GetCapabilities&service=WMS',
      addLayers: ['Niv_fastmerker', 'Landsnettpunkt']
    },
-  */
   {
     'Uuid': '666e4559-60bf-4a1d-9e72-c43502a9a58b',
     'Title': 'Abas',
@@ -29,7 +28,6 @@ const TEST_DATA = [
     'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.adm_enheter2?request=GetCapabilities&service=WMS',
     addLayers: ['fylker_gjel', 'kommuner_gjel']
   }
-  /*
     {
       'Title': 'Dybdedata_dekning_dtm50_5',
       'DistributionProtocol': 'GEOJSON',
