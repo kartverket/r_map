@@ -17,7 +17,6 @@ import { Icon } from 'ol/style'
 import Point from 'ol/geom/Point'
 
 import { generateAdresseSokUrl, generateSearchStedsnavnUrl } from "../../Utils/n3api"
-const parser = require('fast-xml-parser')
 
 const defaultZoom = 13
 const vectorSource = new VectorSource({})
@@ -73,11 +72,11 @@ const SearchResult = (props) => {
         })
       }
       {
-        props.searchResult.searchResultSSR && props.searchResult.searchResultSSR.sokRes.stedsnavn.map((data, idx) => {
-          showInfoMarker(constructPoint({ lon: data.aust, lat: data.nord, epsg: 'EPSG:25833' }))
+        props.searchResult.searchResultSSR && props.searchResult.searchResultSSR.map((data, idx) => {
+          showInfoMarker(constructPoint({ lon: data.representasjonspunkt['øst'], lat: data.representasjonspunkt['nord'], epsg: 'EPSG:4258' }))
           return (
             <button type="button" key={ idx } className="list-group-item list-group-item-action" onClick={ () => { centerPosition(constructPoint({ lon: data.aust, lat: data.nord, epsg: 'EPSG:25833' })) } }>
-              { data.stedsnavn } , { data.kommunenavn }
+              { data['skrivemåte'] } , { data.kommuner[0].kommunenavn }
             </button>
           )
         })
@@ -112,19 +111,17 @@ const SearchBar = props => {
         .then(result => { setSearchResult(result) })
         .catch(error => { console.warn(error) })
 
-      fetch(generateSearchStedsnavnUrl(searchText, 0, 15))
+      fetch(generateSearchStedsnavnUrl(searchText, 1, 15))
         .then(response => {
           if (!response.ok) {
             throw Error(response.statusText)
           }
-          return response.text()
+          return response.json()
         })
         .then(result => {
-          let response = parser.parse(result)
-          if (response.sokRes.stedsnavn) {
-            response.sokRes.stedsnavn = response.sokRes.stedsnavn[response.sokRes.stedsnavn.length - 1] === "" ? response.sokRes.stedsnavn.slice(0, response.sokRes.stedsnavn.length - 1) : response.sokRes.stedsnavn
-            response.sokRes.stedsnavn = Array.isArray(response.sokRes.stedsnavn) ? response.sokRes.stedsnavn : new Array(response.sokRes.stedsnavn)
-            response.sokRes.stedsnavn ? setSearchResultSSR(response) : setSearchResultSSR('')
+          let ssr = result['navn']
+          if (ssr) {
+            ssr ? setSearchResultSSR(ssr) : setSearchResultSSR('')
           } else {
             setSearchResultSSR(null)
           }

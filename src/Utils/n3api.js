@@ -67,10 +67,10 @@ export const generateSearchStedsnavnUrl = (query, side, antall) => {
     var testquery = query.split(',')
     if (testquery.length >= 2) {
       query = testquery[0] + "*&fylkeKommuneNavnListe=+" + testquery[1].trim()
-      return urlGeonorge + "SKWS3Index/v2/ssr/sok?navn=" + query + "&eksakteForst=true&antPerSide=" + antall + "&epsgKode=32633&side=" + side
+      return urlGeonorge + "stedsnavn/v1/navn?sok=" + query + "&treffPerSide=" + antall + "&side=" + side
     }
   }
-  return urlGeonorge + "SKWS3Index/v2/ssr/sok?navn=" + query + "*&eksakteForst=true&antPerSide=" + antall + "&epsgKode=32633&side=" + side
+  return urlGeonorge + "stedsnavn/v1/navn?sok=" + query + "*&treffPerSide=" + antall + "&side=" + side
 }
 
 export const generateSearchAdresseUrl = (query) => {
@@ -122,10 +122,6 @@ export const generateLagFargeleggingskartUrl = () => {
 
 export const generateEmergencyPosterPointUrl = (lat, lon) => {
   return url + 'ws/emergencyPoster.py?&lon=' + lon + ',lat=' + lat
-}
-
-export const generateSearchStedsnavnBboxUrl = (minx, miny, maxx, maxy) => {
-  return urlGeonorge + 'SKWS3Index/ssr/sok?&nordLL=' + miny + '&ostLL=' + minx + '&nordUR=' + maxy + '&ostUR=' + maxx + '&epsgKode=32633'
 }
 
 export const generateEmergencyPosterPreviewImageUrl = (minx, miny, maxx, maxy) => {
