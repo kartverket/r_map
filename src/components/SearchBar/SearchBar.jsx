@@ -75,8 +75,8 @@ const SearchResult = (props) => {
         props.searchResult.searchResultSSR && props.searchResult.searchResultSSR.map((data, idx) => {
           showInfoMarker(constructPoint({ lon: data.representasjonspunkt['øst'], lat: data.representasjonspunkt['nord'], epsg: 'EPSG:4258' }))
           return (
-            <button type="button" key={ idx } className="list-group-item list-group-item-action" onClick={ () => { centerPosition(constructPoint({ lon: data.aust, lat: data.nord, epsg: 'EPSG:25833' })) } }>
-              { data['skrivemåte'] } , { data.kommuner[0].kommunenavn }
+            <button type="button" key={ idx } className="list-group-item list-group-item-action" onClick={ () => { centerPosition(constructPoint({lon: data.representasjonspunkt['øst'], lat: data.representasjonspunkt['nord'], epsg: 'EPSG:4258' })) } }>
+              { data['skrivemåte'] } , { data.kommuner ? data.kommuner[0].kommunenavn : '' }
             </button>
           )
         })
@@ -120,6 +120,7 @@ const SearchBar = props => {
         })
         .then(result => {
           let ssr = result['navn']
+          console.log(ssr)
           if (ssr) {
             ssr ? setSearchResultSSR(ssr) : setSearchResultSSR('')
           } else {
