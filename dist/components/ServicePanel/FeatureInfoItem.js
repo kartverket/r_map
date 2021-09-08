@@ -17,9 +17,9 @@ var _store = require("../../Utils/store.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -27,20 +27,22 @@ function _nonIterableRest() { throw new TypeError("Invalid attempt to destructur
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-const FeatureInfoItem = () => {
-  const featureContext = (0, _react.useContext)(_store.store);
-  const dispatch = featureContext.dispatch;
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-  const testFormat = s => {
-    if (typeof s === 'object') return 'isObject';
-    const rX = /^((\d+)|(true|false)|(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\+\d{2})|([\w\W]+))$/i;
-    const M = rX.exec(s);
+var FeatureInfoItem = function FeatureInfoItem() {
+  var featureContext = (0, _react.useContext)(_store.store);
+  var dispatch = featureContext.dispatch;
+
+  var testFormat = function testFormat(s) {
+    if (_typeof(s) === 'object') return 'isObject';
+    var rX = /^((\d+)|(true|false)|(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\+\d{2})|([\w\W]+))$/i;
+    var M = rX.exec(s);
     if (!M) return '';
 
     switch (M[1]) {
@@ -73,8 +75,8 @@ const FeatureInfoItem = () => {
     }
   };
 
-  const prepareItemFormat = v => {
-    const test = testFormat(v);
+  var prepareItemFormat = function prepareItemFormat(v) {
+    var test = testFormat(v);
 
     switch (test) {
       case 'isNumeric':
@@ -111,34 +113,34 @@ const FeatureInfoItem = () => {
     }
   };
 
-  const prepareFeature = info => {
-    let layers = [];
+  var prepareFeature = function prepareFeature(info) {
+    var layers = [];
 
-    for (const key in info) {
-      let layer = info[key];
-      let featureRow = [];
+    for (var key in info) {
+      var layer = info[key];
+      var featureRow = [];
 
       if (Array.isArray(layer)) {
-        for (const key in layer) {
-          if (key !== 'name') {
-            const feature = layer[key];
+        for (var _key in layer) {
+          if (_key !== 'name') {
+            var feature = layer[_key];
 
-            for (const key in feature) {
-              const items = feature[key];
+            for (var _key2 in feature) {
+              var items = feature[_key2];
 
               if (typeof items !== "string") {
                 for (var _i = 0, _Object$entries = Object.entries(items); _i < _Object$entries.length; _i++) {
-                  let _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
-                      key = _Object$entries$_i[0],
+                  var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+                      _key3 = _Object$entries$_i[0],
                       value = _Object$entries$_i[1];
 
                   featureRow.push( /*#__PURE__*/_react.default.createElement("li", {
-                    key: (0, _uniqid.default)(key)
-                  }, /*#__PURE__*/_react.default.createElement("i", null, key, " "), " = ", /*#__PURE__*/_react.default.createElement("strong", null, prepareItemFormat(value)), " "));
+                    key: (0, _uniqid.default)(_key3)
+                  }, /*#__PURE__*/_react.default.createElement("i", null, _key3, " "), " = ", /*#__PURE__*/_react.default.createElement("strong", null, prepareItemFormat(value)), " "));
                 }
               } else {
                 featureRow.push( /*#__PURE__*/_react.default.createElement("li", {
-                  key: (0, _uniqid.default)(key)
+                  key: (0, _uniqid.default)(_key2)
                 }, /*#__PURE__*/_react.default.createElement("i", null, 'FeatureID', " "), " = ", /*#__PURE__*/_react.default.createElement("strong", null, prepareItemFormat(items)), " "));
               }
             }
@@ -146,13 +148,13 @@ const FeatureInfoItem = () => {
         }
       } else {
         for (var _i2 = 0, _Object$entries2 = Object.entries(layer); _i2 < _Object$entries2.length; _i2++) {
-          let _Object$entries2$_i = _slicedToArray(_Object$entries2[_i2], 2),
-              key = _Object$entries2$_i[0],
-              value = _Object$entries2$_i[1];
+          var _Object$entries2$_i = _slicedToArray(_Object$entries2[_i2], 2),
+              _key4 = _Object$entries2$_i[0],
+              _value = _Object$entries2$_i[1];
 
           featureRow.push( /*#__PURE__*/_react.default.createElement("li", {
-            key: (0, _uniqid.default)(key)
-          }, /*#__PURE__*/_react.default.createElement("i", null, key, " "), " = ", /*#__PURE__*/_react.default.createElement("strong", null, prepareItemFormat(value)), " "));
+            key: (0, _uniqid.default)(_key4)
+          }, /*#__PURE__*/_react.default.createElement("i", null, _key4, " "), " = ", /*#__PURE__*/_react.default.createElement("strong", null, prepareItemFormat(_value)), " "));
         }
       }
 
@@ -167,9 +169,11 @@ const FeatureInfoItem = () => {
     }, layers);
   };
 
-  const featureContent = () => {
+  var featureContent = function featureContent() {
     if (Array.isArray(featureContext.state.info)) {
-      return featureContext.state.info.map(info => prepareFeature(info));
+      return featureContext.state.info.map(function (info) {
+        return prepareFeature(info);
+      });
     } else {
       return /*#__PURE__*/_react.default.createElement("div", null, "No info");
     }
@@ -177,10 +181,12 @@ const FeatureInfoItem = () => {
 
   return /*#__PURE__*/_react.default.createElement(_Modal.default, {
     show: featureContext.state.show,
-    onHide: () => dispatch({
-      type: "HIDE_FEATURES",
-      info: featureContext.state.info
-    })
+    onHide: function onHide() {
+      return dispatch({
+        type: "HIDE_FEATURES",
+        info: featureContext.state.info
+      });
+    }
   }, /*#__PURE__*/_react.default.createElement(_Modal.default.Header, {
     closeButton: true
   }, /*#__PURE__*/_react.default.createElement(_Modal.default.Title, null, "Egenskaper ", /*#__PURE__*/_react.default.createElement("span", null, " ( ", featureContext.state.info ? featureContext.state.info.length : 0, " )"), " ")), /*#__PURE__*/_react.default.createElement(_Modal.default.Body, null, featureContent()));

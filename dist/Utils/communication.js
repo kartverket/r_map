@@ -15,10 +15,14 @@ var _Feature = _interopRequireDefault(require("ol/Feature"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //import { Icon } from 'ol/style'
-class Messaging {}
+var Messaging = function Messaging() {
+  _classCallCheck(this, Messaging);
+};
 
 exports.Messaging = Messaging;
 
@@ -29,7 +33,7 @@ _defineProperty(Messaging, "postMessage", function (msg) {
 _defineProperty(Messaging, "listener", function (event) {
   if (event.origin === "http://localhost:3000" || "http://skrivte57.statkart.no" || "http:://geonorge.no" || "http://labs.norgeskart.no" || "https://register.geonorge.no/" || "http://www.kartverket.no/" || "https://www.norgeskart.no/") {
     try {
-      let json = JSON.parse(JSON.stringify(event.data));
+      var json = JSON.parse(JSON.stringify(event.data));
 
       if (json) {
         if (json.cmd === 'setCenter') {
@@ -65,19 +69,19 @@ _defineProperty(Messaging, "listener", function (event) {
         } else if (json.cmd === 'addDataSource') {
           this.parseParamsAndAddDataLayerFromUrl([json.type, json.url]);
         } else if (json.cmd === 'setVisibleVectorLayer') {
-          const vectorLayers = window.olMap.getLayersByClass("OpenLayers.Layer.Vector").slice();
+          var vectorLayers = window.olMap.getLayersByClass("OpenLayers.Layer.Vector").slice();
 
-          for (let i = 0, j = vectorLayers.length; i < j; i += 1) {
-            let layer = vectorLayers[i];
+          for (var i = 0, j = vectorLayers.length; i < j; i += 1) {
+            var layer = vectorLayers[i];
 
             if (layer.shortid === json.shortid) {
               layer.setVisibility(true);
 
               if (layer.preferredBackground) {
-                let rasterLayers = window.olMap.getLayersByClass("OpenLayers.Layer.WMTS");
+                var rasterLayers = window.olMap.getLayersByClass("OpenLayers.Layer.WMTS");
 
-                for (let k = 0, l = rasterLayers.length; k < l; k += 1) {
-                  let raster = rasterLayers[k];
+                for (var k = 0, _l = rasterLayers.length; k < _l; k += 1) {
+                  var raster = rasterLayers[k];
 
                   if (raster.shortid === layer.preferredBackground) {
                     raster.setVisibility(true);
@@ -92,14 +96,14 @@ _defineProperty(Messaging, "listener", function (event) {
           }
         } else if (json.cmd === 'getFeatures') {
           if (json.layer) {
-            let layers = window.olMap.getLayersBy('shortid', json.layer);
+            var layers = window.olMap.getLayersBy('shortid', json.layer);
 
             if (layers.length > 0) {
-              let layer = layers[0];
-              let features = this.getFeaturesInLayer(layer);
+              var _layer = layers[0];
+              var features = this.getFeaturesInLayer(_layer);
               this.postMessage({
                 "type": "layerFeatures",
-                "layer": layer.shortid,
+                "layer": _layer.shortid,
                 "features": features
               });
             } else {
@@ -109,33 +113,37 @@ _defineProperty(Messaging, "listener", function (event) {
               });
             }
           } else {
-            let vectorLayers = window.olMap.getLayersByClass("OpenLayers.Layer.Vector").slice();
-            let layers = [];
+            var _vectorLayers = window.olMap.getLayersByClass("OpenLayers.Layer.Vector").slice();
 
-            for (let i = 0, j = vectorLayers.length; i < j; i += 1) {
-              let layer = vectorLayers[i];
-              layers.push({
-                "layer": layer.shortid,
-                "features": this.getFeaturesInLayer(layer)
+            var _layers = [];
+
+            for (var _i = 0, _j = _vectorLayers.length; _i < _j; _i += 1) {
+              var _layer2 = _vectorLayers[_i];
+
+              _layers.push({
+                "layer": _layer2.shortid,
+                "features": this.getFeaturesInLayer(_layer2)
               });
             }
 
             this.postMessage({
               "type": "features",
-              "layers": layers
+              "layers": _layers
             });
           }
         } else if (json.cmd === 'getVisibleFeatures') {
           if (json.layer) {
-            let layers = window.olMap.getLayersBy('shortid', json.layer);
+            var _layers2 = window.olMap.getLayersBy('shortid', json.layer);
 
-            if (layers.length > 0) {
-              let layer = layers[0];
-              let features = this.getVisibleFeaturesInLayer(layer);
+            if (_layers2.length > 0) {
+              var _layer3 = _layers2[0];
+
+              var _features = this.getVisibleFeaturesInLayer(_layer3);
+
               this.postMessage({
                 "type": "layerVisibleFeatures",
-                "layer": layer.shortid,
-                "features": features
+                "layer": _layer3.shortid,
+                "features": _features
               });
             } else {
               this.postMessage({
@@ -144,39 +152,42 @@ _defineProperty(Messaging, "listener", function (event) {
               });
             }
           } else {
-            let vectorLayers = window.olMap.getLayersByClass("OpenLayers.Layer.Vector").slice();
-            let layers = [];
+            var _vectorLayers2 = window.olMap.getLayersByClass("OpenLayers.Layer.Vector").slice();
 
-            for (let i = 0, j = vectorLayers.length; i < j; i += 1) {
-              let layer = vectorLayers[i];
-              layers.push({
-                "layer": layer.shortid,
-                "features": this.getVisibleFeaturesInLayer(layer)
+            var _layers3 = [];
+
+            for (var _i2 = 0, _j2 = _vectorLayers2.length; _i2 < _j2; _i2 += 1) {
+              var _layer4 = _vectorLayers2[_i2];
+
+              _layers3.push({
+                "layer": _layer4.shortid,
+                "features": this.getVisibleFeaturesInLayer(_layer4)
               });
             }
 
             this.postMessage({
               "type": "visibleFeatures",
-              "layers": layers
+              "layers": _layers3
             });
           }
         } else if (json.cmd === 'selectFeature') {
-          let layers = window.olMap.getLayersBy('shortid', json.layer);
-          let feature = null;
-          let selector = null;
+          var _layers4 = window.olMap.getLayersBy('shortid', json.layer);
 
-          if (layers.length > 0) {
-            let layer = layers[0];
-            feature = layer.getFeatureByFid(json.feature);
+          var feature = null;
+          var selector = null;
+
+          if (_layers4.length > 0) {
+            var _layer5 = _layers4[0];
+            feature = _layer5.getFeatureByFid(json.feature);
 
             if (feature) {
-              let controls = layer.map.getControlsByClass('OpenLayers.Control.SelectFeature');
+              var controls = _layer5.map.getControlsByClass('OpenLayers.Control.SelectFeature');
 
-              for (let i = 0, j = controls.length; i < j && selector === null; i += 1) {
-                if (controls[i].layer.shortid === layer.shortid) {
-                  if (controls[i].click) {
+              for (var _i3 = 0, _j3 = controls.length; _i3 < _j3 && selector === null; _i3 += 1) {
+                if (controls[_i3].layer.shortid === _layer5.shortid) {
+                  if (controls[_i3].click) {
                     // ensure the correct control is used
-                    selector = controls[i];
+                    selector = controls[_i3];
                   }
                 }
               }
@@ -204,11 +215,13 @@ _defineProperty(Messaging, "listener", function (event) {
                 r = json.bounds[2],
                 t = json.bounds[3];
             var polygon = new _geom.Polygon([new _LinearRing.default([new _geom.Point(l, b), new _geom.Point(r, b), new _geom.Point(r, t), new _geom.Point(l, t), new _geom.Point(l, b)])]);
-            let feature = new _Feature.default(polygon);
-            draw.displayBBoxFeature(feature);
+
+            var _feature = new _Feature.default(polygon);
+
+            draw.displayBBoxFeature(_feature);
           }
         } else if (json.cmd === 'addMarker') {
-          const marker = new _Overlay.default({
+          var marker = new _Overlay.default({
             position: [json.x, json.y],
             positioning: 'center-center',
             element: document.getElementById('marker'),
@@ -223,14 +236,14 @@ _defineProperty(Messaging, "listener", function (event) {
         } else if (json.cmd === 'clearMarkers') {
           var markerLayersForClearing = window.olMap.getLayersByClass("OpenLayers.Layer.Markers").slice();
 
-          for (let i = 0, j = markerLayersForClearing.length; i < j; i += 1) {
-            markerLayersForClearing[i].destroy();
+          for (var _i4 = 0, _j4 = markerLayersForClearing.length; _i4 < _j4; _i4 += 1) {
+            markerLayersForClearing[_i4].destroy();
           }
         } else if (json.cmd === 'removeMarker') {
           var markerLayersForRemoving = window.olMap.getLayersByClass("OpenLayers.Layer.Markers").slice();
 
-          for (let i = 0, j = markerLayersForRemoving.length; i < j; i += 1) {
-            markerLayersForRemoving[i].removeMarker(json.x + ',' + json.y);
+          for (var _i5 = 0, _j5 = markerLayersForRemoving.length; _i5 < _j5; _i5 += 1) {
+            markerLayersForRemoving[_i5].removeMarker(json.x + ',' + json.y);
           }
         }
       }
@@ -287,11 +300,11 @@ _defineProperty(Messaging, "parseParamsAndAddDataLayerFromUrl", function (params
   }
 });
 
-_defineProperty(Messaging, "getFeaturesInLayer", layer => {
-  let features = [],
+_defineProperty(Messaging, "getFeaturesInLayer", function (layer) {
+  var features = [],
       feature;
 
-  for (let i = 0, j = layer.features.length; i < j; i += 1) {
+  for (var i = 0, j = layer.features.length; i < j; i += 1) {
     feature = {};
     feature.fid = layer.features[i].fid;
     feature['attributes'] = layer.features[i]['attributes'];
@@ -301,11 +314,11 @@ _defineProperty(Messaging, "getFeaturesInLayer", layer => {
   return features;
 });
 
-_defineProperty(Messaging, "getVisibleFeaturesInLayer", layer => {
-  let features = [],
+_defineProperty(Messaging, "getVisibleFeaturesInLayer", function (layer) {
+  var features = [],
       feature;
 
-  for (let i = 0, j = layer.features.length; i < j; i += 1) {
+  for (var i = 0, j = layer.features.length; i < j; i += 1) {
     if (layer.features[i].getVisibility() && layer.features[i].onScreen()) {
       feature = {};
       feature.fid = layer.features[i].fid;
