@@ -120,7 +120,6 @@ const SearchBar = props => {
         })
         .then(result => {
           let ssr = result['navn']
-          console.log(ssr)
           if (ssr) {
             ssr ? setSearchResultSSR(ssr) : setSearchResultSSR('')
           } else {

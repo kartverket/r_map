@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.MapRENDERERS = exports.OLMap = void 0;
+exports.OLMap = exports.MapRENDERERS = void 0;
 
 var _Map = _interopRequireDefault(require("ol/Map"));
 
@@ -63,9 +63,7 @@ var _jquery = _interopRequireDefault(require("jquery"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapExport, hoverInfo, measureLine, drawFeature, offline, addLayerFeature, modifyFeature, addFeatureGps, printBoxSelect, addLayerUrl) {
+const OLMap = (eventHandler, httpHelper, measure, featureInfo, mapExport, hoverInfo, measureLine, drawFeature, offline, addLayerFeature, modifyFeature, addFeatureGps, printBoxSelect, addLayerUrl) => {
   var map;
   var layerPool = [];
   var isySubLayerPool = [];
@@ -129,11 +127,15 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
       matrixIds[z] = mapConfig.basemap.matrixprefix ? matrixSet + ":" + z : matrixIds[z] = z;
     }
 
+    if (mapConfig.basemap.matrixSet === null || mapConfig.basemap.matrixSet === '' || mapConfig.basemap.matrixSet === undefined) {
+      mapConfig.basemap.matrixSet = mapConfig.basemap.matrixprefix ? mapConfig.coordinate_system : parseInt(mapConfig.coordinate_system.substr(mapConfig.coordinate_system.indexOf(':') + 1), 10);
+    }
+
     var baseLayer = mapConfig.basemap ? [new _layer.Tile({
       source: new _WMTS.default({
         url: mapConfig.basemap.url,
         layer: mapConfig.basemap.layers,
-        matrixSet: 'EPSG:' + parseInt(mapConfig.coordinate_system.substr(mapConfig.coordinate_system.indexOf(':') + 1), 10),
+        matrixSet: mapConfig.basemap.matrixSet,
         format: mapConfig.basemap.format,
         projection: sm,
         tileGrid: new _WMTS2.default({
@@ -189,19 +191,19 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
   function _registerMapCallbacks() {
     var view = map.getView();
 
-    var changeCenter = function changeCenter() {
+    var changeCenter = function () {
       var mapViewChangedObj = _getUrlObject();
 
       eventHandler.TriggerEvent(_EventHandler.EventTypes.ChangeCenter, mapViewChangedObj);
     };
 
-    var changeResolution = function changeResolution() {
+    var changeResolution = function () {
       var mapViewChangedObj = _getUrlObject();
 
       eventHandler.TriggerEvent(_EventHandler.EventTypes.ChangeResolution, mapViewChangedObj);
     };
 
-    var mapMoveend = function mapMoveend() {
+    var mapMoveend = function () {
       _checkGktToken();
 
       _checkTicket();
@@ -239,7 +241,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
         prefix = '';
       }
 
-      var coordinate2string = function coordinate2string(coord) {
+      var coordinate2string = function (coord) {
         var mousehtml = '' + prefix;
         var geographic = false;
 
@@ -680,7 +682,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
       };
     }
 
-    var styleCallback = function styleCallback(response) {
+    var styleCallback = function (response) {
       // For caching, remember layer config
       layer.set('config', isySubLayer);
       var scales = sldstyles[isySubLayer.id].ParseSld(response, parseInt(isySubLayer.id, 10));
@@ -773,11 +775,11 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
 
       if (isySubLayer.source === _Domain.SOURCES.vector) {
         if (isySubLayer.style) {
-          if (_typeof(isySubLayer.style) === "object" || isySubLayer.style.indexOf("http") < 0) {
+          if (typeof isySubLayer.style === "object" || isySubLayer.style.indexOf("http") < 0) {
             sldstyles[isySubLayer.id] = (0, _OLStyles.OLStylesJson)(isySubLayer.style);
             layer = new _layer.Vector({
               source: source,
-              style: function style(feature, resolution) {
+              style: function (feature, resolution) {
                 return sldstyles[isySubLayer.id].GetStyle(feature, _getScaleByResolution(resolution));
               }
             });
@@ -785,7 +787,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
             sldstyles[isySubLayer.id] = new _OLStyles.OLStylesSLD();
             layer = new _layer.Vector({
               source: source,
-              style: function style(feature, resolution) {
+              style: function (feature, resolution) {
                 return sldstyles[isySubLayer.id].GetStyle(feature, _getScaleByResolution(resolution));
               }
             });
@@ -811,7 +813,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
         sldstyles[isySubLayer.id] = new _OLStyles.OLStylesSLD();
         layer = new _layer.Vector({
           source: source,
-          style: function style(feature, resolution) {
+          style: function (feature, resolution) {
             return sldstyles[isySubLayer.id].GetStyle(feature, _getScaleByResolution(resolution));
           }
         });
@@ -900,8 +902,8 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
   }
 
   function _loadVectorLayer(isySubLayer, source) {
-    var callback = function callback(data) {
-      data = _typeof(data) === 'object' ? data : JSON.parse(data);
+    var callback = function (data) {
+      data = typeof data === 'object' ? data : JSON.parse(data);
       var format = new _format.GeoJSON();
 
       for (var i = 0; i < data.features.length; i++) {
@@ -1020,7 +1022,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     return null;
   }
 
-  var _getScaleByResolution = function _getScaleByResolution(resolution) {
+  var _getScaleByResolution = function (resolution) {
     if (resolution === undefined) {
       return;
     }
@@ -1037,7 +1039,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     return scale;
   };
 
-  var _getResolutionByScale = function _getResolutionByScale(scale) {
+  var _getResolutionByScale = function (scale) {
     if (scale === undefined) {
       scale = getScale();
     }
@@ -1111,9 +1113,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
   }
 
   function _getLayersWithGuid() {
-    return map.getLayers().getArray().filter(function (elem) {
-      return elem.guid !== undefined;
-    });
+    return map.getLayers().getArray().filter(elem => elem.guid !== undefined);
   }
 
   function _getLayerByGuid(guid) {
@@ -1268,7 +1268,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
    */
 
 
-  var _resizeEvent = function _resizeEvent() {
+  var _resizeEvent = function () {
     mapExport.WindowResized(map);
   };
 
@@ -1381,7 +1381,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     }
   }
 
-  var setIsyToken = function setIsyToken(token) {
+  var setIsyToken = function (token) {
     if (token.length === 0) {
       return;
     }
@@ -1441,7 +1441,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     }
   };
 
-  var removeIsyToken = function removeIsyToken() {
+  var removeIsyToken = function () {
     isyToken = undefined;
     var parameters = {
       isyToken: ''
@@ -1575,7 +1575,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     //Get elements and convert to array
     var elems = Array.prototype.slice.call(response.getElementsByTagName(tag), 0);
 
-    var matcher = function matcher(el) {
+    var matcher = function (el) {
       if (exactName) {
         return el.getAttribute(attr).toLowerCase() === attrValue.toLowerCase();
       } else {
@@ -1723,7 +1723,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
 
     var feature;
 
-    var featureAttribute = function featureAttribute(attr) {
+    var featureAttribute = function (attr) {
       for (var j = 0; j < feature.attributes.length; j++) {
         if (attr === feature.attributes[j][0]) {
           return feature.attributes[j][1];
@@ -1946,11 +1946,11 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
    */
 
 
-  var activatePrintBoxSelect = function activatePrintBoxSelect(options) {
+  var activatePrintBoxSelect = function (options) {
     printBoxSelect.Activate(map, options);
   };
 
-  var deactivatePrintBoxSelect = function deactivatePrintBoxSelect() {
+  var deactivatePrintBoxSelect = function () {
     printBoxSelect.Deactivate(map);
   };
   /*
@@ -1962,11 +1962,11 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
    */
 
 
-  var activateAddLayerUrl = function activateAddLayerUrl(options) {
+  var activateAddLayerUrl = function (options) {
     addLayerUrl.Activate(map, options);
   };
 
-  var deactivateAddLayerUrl = function deactivateAddLayerUrl() {
+  var deactivateAddLayerUrl = function () {
     addLayerUrl.Deactivate(map);
   };
   /*
@@ -1978,7 +1978,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
    */
 
 
-  var _getUrlObject = function _getUrlObject() {
+  var _getUrlObject = function () {
     if (map !== undefined) {
       var retVal = {
         layers: _getGuidsForVisibleLayers()
@@ -2000,7 +2000,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     }
   };
 
-  var zoomToLayer = function zoomToLayer(isySubLayer) {
+  var zoomToLayer = function (isySubLayer) {
     var layer = _getLayerFromPool(isySubLayer);
 
     if (layer) {
@@ -2020,10 +2020,10 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     }
   };
 
-  var zoomToLayers = function zoomToLayers(isySubLayers) {
+  var zoomToLayers = function (isySubLayers) {
     var layersExtent = [Infinity, Infinity, -Infinity, -Infinity];
 
-    var setNewExtent = function setNewExtent(newExtent) {
+    var setNewExtent = function (newExtent) {
       if (layersExtent[0] > newExtent[0]) {
         layersExtent[0] = newExtent[0];
       }
@@ -2058,11 +2058,11 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     }
   };
 
-  var fitExtent = function fitExtent(extent) {
+  var fitExtent = function (extent) {
     map.getView().fit(extent, map.getSize());
   };
 
-  var getCenter = function getCenter() {
+  var getCenter = function () {
     var retVal;
     var view = map.getView();
     var center = view.getCenter();
@@ -2075,7 +2075,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     return retVal;
   };
 
-  var setCenter = function setCenter(center) {
+  var setCenter = function (center) {
     var view = map.getView();
 
     if (center.epsg) {
@@ -2089,22 +2089,22 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     }
   };
 
-  var getZoom = function getZoom() {
+  var getZoom = function () {
     var view = map.getView();
     return view.getZoom();
   };
 
-  var setZoom = function setZoom(zoom) {
+  var setZoom = function (zoom) {
     var view = map.getView();
     return view.setZoom(zoom);
   };
 
-  var getRotation = function getRotation() {
+  var getRotation = function () {
     var view = map.getView();
     return view.getRotation();
   };
 
-  var setRotation = function setRotation(angle, anchor) {
+  var setRotation = function (angle, anchor) {
     var view = map.getView();
 
     if (anchor) {
@@ -2114,7 +2114,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     }
   };
 
-  var getEpsgCode = function getEpsgCode() {
+  var getEpsgCode = function () {
     var view = map.getView();
     var projection = view.getProjection();
     return projection.getCode();
@@ -2195,7 +2195,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     map.addControl(scaleLine);
   }
 
-  var getVectorLayers = function getVectorLayers(isySubLayer, data) {
+  var getVectorLayers = function (isySubLayer, data) {
     var vectors = [];
     var source = (0, _Sources.Vector)(isySubLayer.subLayers[0], map.getView().getProjection());
     var fromProj = (0, _proj.get)(isySubLayer.subLayers[0].coordinate_system);
@@ -2211,7 +2211,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     return vectors;
   };
 
-  var getLayerCount = function getLayerCount() {
+  var getLayerCount = function () {
     if (map) {
       return map.getLayers().getArray().length;
     }
@@ -2219,15 +2219,15 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     return 0;
   };
 
-  var getCenterFromExtent = function getCenterFromExtent(extent) {
+  var getCenterFromExtent = function (extent) {
     return (0, _extent.getCenter)(extent);
   };
 
-  var getScale = function getScale() {
+  var getScale = function () {
     return mapScales[map.getView().getZoom()];
   };
 
-  var getLegendStyleFromLayer = function getLegendStyleFromLayer(layer) {
+  var getLegendStyleFromLayer = function (layer) {
     if (sldstyles[layer.guid] !== undefined) {
       return sldstyles[layer.guid].GetStyleForLegend();
     } else {
@@ -2235,11 +2235,11 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     }
   };
 
-  var getExtent = function getExtent() {
+  var getExtent = function () {
     return map.getView().calculateExtent(map.getSize());
   };
 
-  var getUrlObject = function getUrlObject() {
+  var getUrlObject = function () {
     return _getUrlObject();
   };
 
@@ -2318,7 +2318,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     eventHandler.TriggerEvent(_EventHandler.EventTypes.GeolocationUpdated, geolocationObject);
   }
 
-  var getGeolocation = function getGeolocation() {
+  var getGeolocation = function () {
     var view = map.getView();
     var mapProjection = view.getProjection();
     geolocation = new _Geolocation.default({
@@ -2338,7 +2338,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     geolocation.on('change:accuracy', _geolocationChange);
   };
 
-  var removeGeolocation = function removeGeolocation() {
+  var removeGeolocation = function () {
     var geolocationLayer = _getLayerByGuid(99999);
 
     if (geolocationLayer !== null) {
@@ -2354,22 +2354,22 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     }
   };
 
-  var getProxyHost = function getProxyHost() {
+  var getProxyHost = function () {
     return proxyHost;
   };
 
-  var setTranslateOptions = function setTranslateOptions(translate) {
+  var setTranslateOptions = function (translate) {
     translateOptions = translate;
   };
 
-  var transformCoordinates = function transformCoordinates(fromEpsg, toEpsg, coordinates) {
+  var transformCoordinates = function (fromEpsg, toEpsg, coordinates) {
     if (_proj2.default.defs(fromEpsg) && _proj2.default.defs(toEpsg)) {
       var transformObject = (0, _proj2.default)(fromEpsg, toEpsg);
       return transformObject.forward(coordinates);
     }
   };
 
-  var transformFromGeographic = function transformFromGeographic(coordinates) {
+  var transformFromGeographic = function (coordinates) {
     // If no coordinates are given an object with two methods is returned,
     // its methods are forward which projects from the first projection to
     // the second and inverse which projects from the second to the first.
@@ -2381,7 +2381,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
     }
   };
 
-  var transformToGeographic = function transformToGeographic(coordinates) {
+  var transformToGeographic = function (coordinates) {
     // If no coordinates are given an object with two methods is returned,
     // its methods are forward which projects from the first projection to
     // the second and inverse which projects from the second to the first.
@@ -2592,7 +2592,7 @@ var OLMap = function OLMap(eventHandler, httpHelper, measure, featureInfo, mapEx
 };
 
 exports.OLMap = OLMap;
-var MapRENDERERS = {
+const MapRENDERERS = {
   canvas: 'canvas',
   webgl: 'webgl'
 };

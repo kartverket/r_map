@@ -33,16 +33,17 @@ export let mapConfig = {
   tokenHost: 'https://www.norgeskart.no/ws/gkt.py',
   projectName: 'norgeskart',
   basemap: {
-    url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open_wmts?',
+    url: 'https://cache.kartverket.no/wmts/1.0.0/europa_forenklet?',
     layers: 'europa_forenklet',
     format: 'image/png',
-    matrixprefix: 'true',
+    matrixprefix: false,
+    matrixSet: "utm33n",
   },
   wmts: [{
     type: 'map',
     gatekeeper: 'true',
     name: 'Landkart',
-    url: 'https://gatekeeper1.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?|https://gatekeeper2.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?',
+    url: 'https://cache.kartverket.no/wmts/1.0.0/norgeskart_bakgrunn?|https://cache.kartverket.no/wmts/1.0.0/norgeskart_bakgrunn',
     params: {
       layers: 'norgeskart_bakgrunn',
       format: 'image/png'

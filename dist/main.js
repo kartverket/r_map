@@ -3,34 +3,34 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-Object.defineProperty(exports, "ServicePanel", {
-  enumerable: true,
-  get: function get() {
-    return _ServicePanel.default;
-  }
-});
 Object.defineProperty(exports, "BackgroundChooser", {
   enumerable: true,
-  get: function get() {
+  get: function () {
     return _BackgroundChooser.default;
+  }
+});
+Object.defineProperty(exports, "Legend", {
+  enumerable: true,
+  get: function () {
+    return _Legend.default;
   }
 });
 Object.defineProperty(exports, "MapComponent", {
   enumerable: true,
-  get: function get() {
+  get: function () {
     return _MapComponent.default;
   }
 });
 Object.defineProperty(exports, "MapContainer", {
   enumerable: true,
-  get: function get() {
+  get: function () {
     return _MapContainer.default;
   }
 });
-Object.defineProperty(exports, "Legend", {
+Object.defineProperty(exports, "ServicePanel", {
   enumerable: true,
-  get: function get() {
-    return _Legend.default;
+  get: function () {
+    return _ServicePanel.default;
   }
 });
 

@@ -130,13 +130,16 @@ export const OLMap = (eventHandler, httpHelper, measure,
         var matrixIds = new Array(mapConfig.numZoomLevels);
         var matrixSet = mapConfig.matrixSet;
         for (var z = 0; z < mapConfig.numZoomLevels; ++z) {
-          matrixIds[z] = mapConfig.basemap.matrixprefix ? matrixSet + ":" + z : matrixIds[z] = z;
+          matrixIds[z] = mapConfig.basemap.matrixprefix ? matrixSet + ":" + z : matrixIds[z] = z
+        }
+        if (mapConfig.basemap.matrixSet === null || mapConfig.basemap.matrixSet === '' || mapConfig.basemap.matrixSet === undefined) {
+          mapConfig.basemap.matrixSet = mapConfig.basemap.matrixprefix ? mapConfig.coordinate_system : parseInt(mapConfig.coordinate_system.substr(mapConfig.coordinate_system.indexOf(':') + 1), 10)
         }
         var baseLayer = mapConfig.basemap ? [ new TileLayer({
           source: new WMTS({
             url: mapConfig.basemap.url,
             layer: mapConfig.basemap.layers,
-            matrixSet: 'EPSG:' + parseInt(mapConfig.coordinate_system.substr(mapConfig.coordinate_system.indexOf(':') + 1), 10),
+            matrixSet: mapConfig.basemap.matrixSet,
             format: mapConfig.basemap.format,
             projection: sm,
             tileGrid: new WMTSTileGrid({
