@@ -33,7 +33,7 @@ export let mapConfig = {
   tokenHost: 'https://www.norgeskart.no/ws/gkt.py',
   projectName: 'norgeskart',
   basemap: {
-    url: 'https://cache.kartverket.no/wmts/1.0.0/europa_forenklet?',
+    url: 'https://cache.kartverket.no/europa_forenklet/v1/wmts/1.0.0/',
     layers: 'europa_forenklet',
     format: 'image/png',
     matrixprefix: false,
@@ -43,12 +43,13 @@ export let mapConfig = {
     type: 'map',
     gatekeeper: 'true',
     name: 'Landkart',
-    url: 'https://gatekeeper1.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?|https://gatekeeper2.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?',
+    url: 'https://cache.kartverket.no/norgeskart_bakgrunn/v1/wmts/1.0.0/|https://cache.kartverket.no/norgeskart_bakgrunn/v1/wmts/1.0.0/',
     params: {
       layers: 'norgeskart_bakgrunn',
       format: 'image/png'
     },
-    matrixprefix: 'true',
+    matrixprefix: "false",
+    matrixset: "utm33n",
     guid: '0.norgeskart_bakgrunn',
     options: {
       isbaselayer: 'true',
@@ -60,12 +61,13 @@ export let mapConfig = {
     type: 'map',
     gatekeeper: 'true',
     name: 'Gråtone',
-    url: 'https://gatekeeper1.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?|https://gatekeeper2.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?',
+    url: 'https://cache.kartverket.no/norges_grunnkart_graatone/v1/wmts/1.0.0/|https://cache.kartverket.no/norges_grunnkart_graatone/v1/wmts/1.0.0/',
     params: {
       layers: 'norges_grunnkart_graatone',
       format: 'image/png'
     },
-    matrixprefix: 'true',
+    matrixprefix: "false",
+    matrixset: "utm33n",
     guid: '0.norges_grunnkart_graatone',
     options: {
       isbaselayer: 'true',
@@ -76,12 +78,13 @@ export let mapConfig = {
     type: 'map',
     gatekeeper: 'true',
     name: 'Enkel',
-    url: 'https://gatekeeper1.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?|https://gatekeeper2.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?',
+    url: 'https://cache.kartverket.no/norges_grunnkart/v1/wmts/1.0.0/|https://cache.kartverket.no/norges_grunnkart/v1/wmts/1.0.0/',
     params: {
       layers: 'norges_grunnkart',
       format: 'image/png'
     },
-    matrixprefix: 'true',
+    matrixprefix: "false",
+    matrixset: "utm33n",
     guid: '0.norges_grunnkart',
     options: {
       isbaselayer: 'true',
@@ -92,12 +95,13 @@ export let mapConfig = {
     type: 'map',
     gatekeeper: 'true',
     name: 'Terreng',
-    url: 'https://gatekeeper1.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?|https://gatekeeper2.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?',
+    url: 'https://cache.kartverket.no/terreng_norgeskart/v1/wmts/1.0.0/|https://cache.kartverket.no/terreng_norgeskart/v1/wmts/1.0.0/',
     params: {
       layers: 'terreng_norgeskart',
       format: 'image/png'
     },
-    matrixprefix: 'true',
+    matrixprefix: "false",
+    matrixset: "utm33n",
     guid: '0.terreng_norgeskart',
     options: {
       isbaselayer: 'true',
@@ -108,12 +112,13 @@ export let mapConfig = {
     type: 'map',
     gatekeeper: 'true',
     name: 'Sjøkart',
-    url: 'https://gatekeeper1.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?|https://gatekeeper2.geonorge.no/BaatGatekeeper/gk/gk.cache_wmts?',
+    url: 'https://cache.kartverket.no/sjokartraster/v1/wmts/1.0.0/|https://cache.kartverket.no/sjokartraster/v1/wmts/1.0.0/',
     params: {
       layers: 'sjokartraster',
       format: 'image/png'
     },
-    matrixprefix: 'true',
+    matrixprefix: "false",
+    matrixset: "utm33n",
     guid: '0.sjokartraster',
     options: {
       isbaselayer: 'true',
