@@ -25,25 +25,53 @@ var _FeatureUtil = require("../../MapUtil/FeatureUtil");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-//import { Messaging } from '../../Utils/communication'
-const LayerEntry = props => {
-  const featureState = (0, _react.useContext)(_store.store);
-  const {
-    dispatch
-  } = featureState;
-  const [options, toggleOptions] = (0, _react.useState)(false);
-  const [olLayer, setLayer] = (0, _react.useState)();
-  const [checked, setChecked] = (0, _react.useState)(props.layer.isVisible);
-  const [transparency, setTransparency] = (0, _react.useState)(50);
-  const layer = props.layer;
-  layer.Name = layer.name && typeof layer.name === 'object' ? layer.name.localPart : layer.Name;
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-  const abstractTextSpan = () => {
-    let textSpan = '';
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var LayerEntry = function LayerEntry(props) {
+  var featureState = (0, _react.useContext)(_store.store);
+  var dispatch = featureState.dispatch;
+
+  var _useState = (0, _react.useState)(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      options = _useState2[0],
+      toggleOptions = _useState2[1];
+
+  var _useState3 = (0, _react.useState)(),
+      _useState4 = _slicedToArray(_useState3, 2),
+      olLayer = _useState4[0],
+      setLayer = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(props.layer.isVisible),
+      _useState6 = _slicedToArray(_useState5, 2),
+      checked = _useState6[0],
+      setChecked = _useState6[1];
+
+  var _useState7 = (0, _react.useState)(50),
+      _useState8 = _slicedToArray(_useState7, 2),
+      transparency = _useState8[0],
+      setTransparency = _useState8[1];
+
+  var layer = props.layer;
+  layer.Name = layer.name && _typeof(layer.name) === 'object' ? layer.name.localPart : layer.Name;
+
+  var abstractTextSpan = function abstractTextSpan() {
+    var textSpan = '';
 
     if (layer.Name && layer.Name.length > 0) {
       textSpan = layer.Name;
@@ -64,11 +92,11 @@ const LayerEntry = props => {
     }, layer.Layer ? 'Group layer' : 'layer', " "));
   };
 
-  const onSelectionChange = currentNode => {
-    let isNewLayer = true;
+  var onSelectionChange = function onSelectionChange(currentNode) {
+    var isNewLayer = true;
 
     if (layer.Name) {
-      let currentLayer;
+      var currentLayer;
 
       if (props.meta.Type === 'OGC:WMS' || props.meta.Type === 'WMS' || props.meta.Type === 'WMS-tjeneste') {
         currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromWmsCapabilities(props.meta, currentNode);
@@ -93,9 +121,9 @@ const LayerEntry = props => {
 
         if (currentNode.queryable) {
           window.olMap.on('singleclick', function (evt) {
-            const viewResolution = window.olMap.getView().getResolution();
-            const formats = currentLayer.getProperties().getFeatureInfoFormats;
-            let indexFormat = 0;
+            var viewResolution = window.olMap.getView().getResolution();
+            var formats = currentLayer.getProperties().getFeatureInfoFormats;
+            var indexFormat = 0;
 
             if (formats.indexOf('text/plain') > 0) {
               indexFormat = formats.indexOf('text/plain');
@@ -109,16 +137,20 @@ const LayerEntry = props => {
               indexFormat = 1;
             }
 
-            const url = currentLayer.getSource().getFeatureInfoUrl(evt.coordinate, viewResolution, window.olMap.getView().getProjection(), {
+            var url = currentLayer.getSource().getFeatureInfoUrl(evt.coordinate, viewResolution, window.olMap.getView().getProjection(), {
               INFO_FORMAT: formats[indexFormat]
             });
 
             if (url && currentLayer.getVisible()) {
-              fetch(url).then(response => response.text()).then(data => dispatch({
-                type: 'SET_FEATURES',
-                show: true,
-                info: (0, _FeatureUtil.parseFeatureInfo)(data, formats[indexFormat])
-              })).catch(error => {
+              fetch(url).then(function (response) {
+                return response.text();
+              }).then(function (data) {
+                return dispatch({
+                  type: 'SET_FEATURES',
+                  show: true,
+                  info: (0, _FeatureUtil.parseFeatureInfo)(data, formats[indexFormat])
+                });
+              }).catch(function (error) {
                 console.error('Error:', error);
               });
             }
@@ -126,11 +158,13 @@ const LayerEntry = props => {
         } else {
           // Assume if not queryable then it could be geojson features
           window.olMap.on('click', function (evt) {
-            const features = window.olMap.getFeaturesAtPixel(evt.pixel, (feature, layer) => feature);
+            var features = window.olMap.getFeaturesAtPixel(evt.pixel, function (feature, layer) {
+              return feature;
+            });
 
             if (features) {
-              features.forEach(feature => {
-                const coord = feature.getGeometry().getCoordinates();
+              features.forEach(function (feature) {
+                var coord = feature.getGeometry().getCoordinates();
                 feature.setStyle(new _style.Style({
                   fill: new _style.Fill({
                     color: 'rgba(255, 255, 255, 0.5)'
@@ -151,8 +185,8 @@ const LayerEntry = props => {
                     text: feature.get(props.meta.ShowPropertyName)
                   })
                 }));
-                let content = feature.get(props.meta.ShowPropertyName);
-                let message = {
+                var content = feature.get(props.meta.ShowPropertyName);
+                var message = {
                   cmd: 'featureSelected',
                   featureId: feature.getId(),
                   properties: content,
@@ -166,7 +200,7 @@ const LayerEntry = props => {
     }
   };
 
-  const setOpacity = value => {
+  var setOpacity = function setOpacity(value) {
     setTransparency(value);
 
     if (olLayer) {
@@ -174,8 +208,8 @@ const LayerEntry = props => {
     }
   };
 
-  const checkResolution = () => {
-    const resolution = window.olMap.getView().getResolution();
+  var checkResolution = function checkResolution() {
+    var resolution = window.olMap.getView().getResolution();
 
     if (layer.MaxScaleDenominator <= resolution) {
       console.warn("Resolution mismatch, layer " + layer.Name + " doesn't show at this zoom level ");
@@ -190,16 +224,22 @@ const LayerEntry = props => {
     id: layer.Name,
     type: "checkbox"
   }), /*#__PURE__*/_react.default.createElement("label", {
-    onClick: () => onSelectionChange(layer),
+    onClick: function onClick() {
+      return onSelectionChange(layer);
+    },
     htmlFor: layer.Title
   }, /*#__PURE__*/_react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     className: "svg-checkbox",
     icon: checked ? ["far", "check-square"] : ["far", "square"]
   }))) : /*#__PURE__*/_react.default.createElement("label", {
-    onClick: () => onSelectionChange(layer),
+    onClick: function onClick() {
+      return onSelectionChange(layer);
+    },
     htmlFor: layer.Title
   }, " "), abstractTextSpan(), layer.Name ? /*#__PURE__*/_react.default.createElement("label", {
-    onClick: () => toggleOptions(!options)
+    onClick: function onClick() {
+      return toggleOptions(!options);
+    }
   }, /*#__PURE__*/_react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     icon: ["far", "sliders-h"],
     color: options ? "red" : "black"
@@ -214,15 +254,19 @@ const LayerEntry = props => {
     min: 0,
     max: 100,
     value: transparency,
-    onChange: e => setOpacity(e.target.value)
-  }))) : "", props.children, layer.Layer ? layer.Layer.map((subLayer, isub) => /*#__PURE__*/_react.default.createElement("div", {
-    className: _LayerEntryModule.default.facetSub,
-    key: isub
-  }, /*#__PURE__*/_react.default.createElement(LayerEntry, {
-    layer: subLayer,
-    meta: props.meta,
-    key: isub
-  }))) : '');
+    onChange: function onChange(e) {
+      return setOpacity(e.target.value);
+    }
+  }))) : "", props.children, layer.Layer ? layer.Layer.map(function (subLayer, isub) {
+    return /*#__PURE__*/_react.default.createElement("div", {
+      className: _LayerEntryModule.default.facetSub,
+      key: isub
+    }, /*#__PURE__*/_react.default.createElement(LayerEntry, {
+      layer: subLayer,
+      meta: props.meta,
+      key: isub
+    }));
+  }) : '');
 };
 
 LayerEntry.propTypes = {

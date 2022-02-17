@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.parseWmsCapabilities = exports.mergeDefaultParams = exports.getWMSCapabilities = exports.getResolutionFromScale = exports.getImageSourceRatio = exports.createOlWMSFromCap = exports.addWmsToMapFromConfig = exports.addWmsToMapFromCap = void 0;
+exports.getImageSourceRatio = exports.getResolutionFromScale = exports.getWMSCapabilities = exports.parseWmsCapabilities = exports.mergeDefaultParams = exports.createOlWMSFromCap = exports.addWmsToMapFromConfig = exports.addWmsToMapFromCap = void 0;
 
 var _queryString = _interopRequireDefault(require("query-string"));
 
@@ -11,7 +11,9 @@ var _fastXmlParser = _interopRequireDefault(require("fast-xml-parser"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//import proj4 from "proj4";
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 /**
  * @ngdoc method
@@ -25,8 +27,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {Object} getCapLayer object to convert
  * @param {string} style of the style to use
  */
-const addWmsToMapFromCap = function (map, getCapLayer) {
-  let style = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+var addWmsToMapFromCap = function addWmsToMapFromCap(map, getCapLayer) {
+  var style = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
   var isNewLayer = true;
   var returnLayer;
   map.getLayers().forEach(function (layer) {
@@ -54,7 +56,7 @@ const addWmsToMapFromCap = function (map, getCapLayer) {
 
 exports.addWmsToMapFromCap = addWmsToMapFromCap;
 
-const addWmsToMapFromConfig = (map, wmslayer, project) => {
+var addWmsToMapFromConfig = function addWmsToMapFromConfig(map, wmslayer, project) {
   var isNewLayer = true;
   var returnLayer;
   map.getLayers().forEach(function (layer) {
@@ -96,7 +98,7 @@ const addWmsToMapFromConfig = (map, wmslayer, project) => {
 
 exports.addWmsToMapFromConfig = addWmsToMapFromConfig;
 
-const createOlWMSFromCap = (map, getCapLayer, project) => {
+var createOlWMSFromCap = function createOlWMSFromCap(map, getCapLayer, project) {
   var layer,
       errors = [];
 
@@ -179,13 +181,13 @@ const createOlWMSFromCap = (map, getCapLayer, project) => {
 
 exports.createOlWMSFromCap = createOlWMSFromCap;
 
-const mergeDefaultParams = (url, defaultParams) => {
+var mergeDefaultParams = function mergeDefaultParams(url, defaultParams) {
   //merge URL parameters with default ones
-  const parsedUrl = _queryString.default.parseUrl(url);
+  var parsedUrl = _queryString.default.parseUrl(url);
 
-  const urlParams = parsedUrl.query;
-  const URLParser = typeof URL === 'undefined' ? require('url').URL : URL;
-  const urlObj = new URLParser(parsedUrl.url); //force https
+  var urlParams = parsedUrl.query;
+  var URLParser = typeof URL === 'undefined' ? require('url').URL : URL;
+  var urlObj = new URLParser(parsedUrl.url); //force https
 
   if (window.location.protocol === 'https:' && urlObj.protocol === 'http:') {
     urlObj.protocol = 'https:';
@@ -208,16 +210,16 @@ const mergeDefaultParams = (url, defaultParams) => {
 
 exports.mergeDefaultParams = mergeDefaultParams;
 
-const parseWmsCapabilities = data => {
+var parseWmsCapabilities = function parseWmsCapabilities(data) {
   if (data && _fastXmlParser.default.validate(data) === true) {
     //optional
     var parsed = parseCapabilities(data);
     var layers = [];
 
     if (parsed.WMS_Capabilities) {
-      let url = parsed.WMS_Capabilities.Capability.Request.GetMap.DCPType.HTTP.Get.OnlineResource["xlink:href"]; // Push all leaves into a flat array of Layers.
+      var url = parsed.WMS_Capabilities.Capability.Request.GetMap.DCPType.HTTP.Get.OnlineResource["xlink:href"]; // Push all leaves into a flat array of Layers.
 
-      var getFlatLayers = function (layer) {
+      var getFlatLayers = function getFlatLayers(layer) {
         if (Array.isArray(layer)) {
           for (var i = 0, len = layer.length; i < len; i++) {
             getFlatLayers(layer[i]);
@@ -231,7 +233,7 @@ const parseWmsCapabilities = data => {
       // there is only one element.
 
 
-      var setLayerAsArray = function (node) {
+      var setLayerAsArray = function setLayerAsArray(node) {
         if (node) {
           if (node.Layer && !Array.isArray(node.Layer)) {
             node.Layer = [node.Layer];
@@ -260,7 +262,7 @@ const parseWmsCapabilities = data => {
 
 exports.parseWmsCapabilities = parseWmsCapabilities;
 
-const parseCapabilities = xml => {
+var parseCapabilities = function parseCapabilities(xml) {
   return _fastXmlParser.default.parse(xml, {
     ignoreAttributes: false,
     attributeNamePrefix: "",
@@ -268,22 +270,40 @@ const parseCapabilities = xml => {
   });
 };
 
-const getWMSCapabilities = async url => {
-  if (url) {
-    let newUrl = mergeDefaultParams(url, {
-      service: "WMS",
-      request: "GetCapabilities"
-    });
-    fetch(newUrl).then(function (response) {
-      return Promise.resolve(response.text());
-    }).then(function (text) {
-      let resultText = parseWmsCapabilities(text);
-      return resultText;
-    });
-  } else {
-    console.warn("No wms parameter given");
-  }
-};
+var getWMSCapabilities = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(url) {
+    var newUrl;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            if (url) {
+              newUrl = mergeDefaultParams(url, {
+                service: "WMS",
+                request: "GetCapabilities"
+              });
+              fetch(newUrl).then(function (response) {
+                return Promise.resolve(response.text());
+              }).then(function (text) {
+                var resultText = parseWmsCapabilities(text);
+                return resultText;
+              });
+            } else {
+              console.warn("No wms parameter given");
+            }
+
+          case 1:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+
+  return function getWMSCapabilities(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
 /*
 export const getLayerExtentFromGetCap = (map, getCapLayer) => {
     var extent = null;
@@ -348,13 +368,13 @@ export const getLayerExtentFromGetCap = (map, getCapLayer) => {
 
 exports.getWMSCapabilities = getWMSCapabilities;
 
-const getResolutionFromScale = (projection, scale) => {
+var getResolutionFromScale = function getResolutionFromScale(projection, scale) {
   return scale && scale * 0.00028 / projection.getMetersPerUnit();
 };
 
 exports.getResolutionFromScale = getResolutionFromScale;
 
-const getImageSourceRatio = (map, maxWidth) => {
+var getImageSourceRatio = function getImageSourceRatio(map, maxWidth) {
   var width = map.getSize() && map.getSize()[0];
   var ratio = maxWidth / width;
   ratio = Math.floor(ratio * 100) / 100;
