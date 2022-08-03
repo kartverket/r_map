@@ -38,7 +38,7 @@ Object.defineProperty(exports, "Legend", {
 
 var _react = _interopRequireDefault(require("react"));
 
-var _reactDom = _interopRequireDefault(require("react-dom"));
+var _client = require("react-dom/client");
 
 require("./index.scss");
 
@@ -66,6 +66,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_reactDom.default.render( /*#__PURE__*/_react.default.createElement(_App.default, null), document.getElementById('root'));
-
+var container = document.getElementById('root');
+var root = (0, _client.createRoot)(container);
+root.render( /*#__PURE__*/_react.default.createElement(_App.default, null));
 serviceWorker.unregister();

@@ -319,9 +319,9 @@ var Layers = /*#__PURE__*/function () {
     }
   }, {
     key: "shouldBeVisible",
-    value: function shouldBeVisible()
-    /*isySubLayer*/
-    {
+    value: function
+      /*isySubLayer*/
+    shouldBeVisible() {
       return true;
     }
   }, {

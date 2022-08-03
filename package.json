@@ -14,16 +14,16 @@
     "@fortawesome/pro-solid-svg-icons": "^5.15.2",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "bootstrap": "^4.6.0",
-    "fast-xml-parser": "^4.0.3",
+    "fast-xml-parser": "^4.0.9",
     "jquery": "^3.6.0",
-    "ol": "^6.12.0",
-    "proj4": "^2.7.5",
+    "ol": "^6.15.1",
+    "proj4": "^2.8.0",
     "query-string": "^7.1.1",
-    "react": "^17.0.2",
+    "react": "^18.2.0",
     "react-bootstrap": "^1.5.0",
-    "react-dom": "^17.0.2",
+    "react-dom": "^18.2.0",
     "react-scripts": "^4.0.3",
-    "sass": "^1.49.7",
+    "sass": "^1.54.1",
     "set-query-string": "^2.2.0",
     "uniqid": "^5.4.0"
   },
@@ -45,10 +45,10 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@babel/cli": "^7.13.0",
-    "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@babel/cli": "^7.18.10",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
     "babel-polyfill": "^6.26.0",
-    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "rimraf": "^3.0.2"
   }
 }
