@@ -162,8 +162,7 @@ export const mergeDefaultParams = (url, defaultParams) => {
     //merge URL parameters with default ones
     const parsedUrl = queryString.parseUrl(url);
     const urlParams = parsedUrl.query;
-    const URLParser = typeof URL === 'undefined' ? require('url').URL : URL;
-    const urlObj = new URLParser(parsedUrl.url);
+    const urlObj = new URL(parsedUrl.url);
     //force https
     if (window.location.protocol === 'https:' && urlObj.protocol === 'http:') {
       urlObj.protocol = 'https:';
