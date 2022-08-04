@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Wfs = exports.Vector = exports.Wmts = exports.Wms = exports.MaplibCustomMessageHandler = void 0;
+exports.Wmts = exports.Wms = exports.Wfs = exports.Vector = exports.MaplibCustomMessageHandler = void 0;
 
 var _EventHandler = require("./EventHandler");
 
@@ -37,7 +37,7 @@ var _proj = require("ol/proj.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 var MaplibCustomMessageHandler = function MaplibCustomMessageHandler(eventHandler, _getIsySubLayerFromPool) {
   var olMap;

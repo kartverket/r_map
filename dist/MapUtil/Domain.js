@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Layer = exports.FORMATS = exports.SOURCES = exports.SubLayer = exports.LegendGraphic = exports.FeatureInfo = void 0;
+exports.SubLayer = exports.SOURCES = exports.LegendGraphic = exports.Layer = exports.FeatureInfo = exports.FORMATS = void 0;
 
 var _Utils = _interopRequireDefault(require("./Utils"));
 

@@ -3,13 +3,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.OLStylesMeasure = exports.OLStylesSLD = exports.OLStylesJson = exports.OLStylesDefault = void 0;
+exports.OLStylesSLD = exports.OLStylesMeasure = exports.OLStylesJson = exports.OLStylesDefault = void 0;
 
 var _style = require("ol/style");
 
 var _xml = require("ol/xml");
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 var OLStylesDefault = function OLStylesDefault() {
   var styles = function styles() {

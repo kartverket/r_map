@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.map = exports.mapImplementation = exports.eventHandler = exports.addLayer = exports.getWmsUrl = exports.createDummyGroup = exports.createNotExistGroup = exports.createGroup = exports.mapConfig = void 0;
+exports.mapImplementation = exports.mapConfig = exports.map = exports.getWmsUrl = exports.eventHandler = exports.createNotExistGroup = exports.createGroup = exports.createDummyGroup = exports.addLayer = void 0;
 
 var _Repository = require("./Repository");
 
