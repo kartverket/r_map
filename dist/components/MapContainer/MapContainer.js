@@ -162,7 +162,7 @@ var MapContainer = function MapContainer(props) {
       return toggleExpand(!expanded);
     },
     className: _MapContainerModule.default.toggleBtn,
-    icon: expanded ? ["far", "layer-group"] : "times"
+    icon: expanded ? ["fas", "layer-group"] : "times"
   }), /*#__PURE__*/_react.default.createElement(_Tabs.default, {
     className: "".concat(_MapContainerModule.default.tabs, " ").concat(expanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open),
     defaultActiveKey: showDefaultTab(),
