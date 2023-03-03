@@ -241,7 +241,7 @@ var LayerEntry = function LayerEntry(props) {
       return toggleOptions(!options);
     }
   }, /*#__PURE__*/_react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
-    icon: ["far", "sliders-h"],
+    icon: ["fas", "sliders-h"],
     color: options ? "red" : "black"
   })) : '', /*#__PURE__*/_react.default.createElement(_InlineLegend.default, {
     legendUrl: layer.Style && layer.Style[0].LegendURL ? layer.Style[0].LegendURL[0].OnlineResource : ''

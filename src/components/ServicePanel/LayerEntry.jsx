@@ -151,7 +151,7 @@ const LayerEntry = props => {
       { abstractTextSpan()}
       { layer.Name ? (
         <label onClick={() => toggleOptions(!options)}>
-          <FontAwesomeIcon icon={["far", "sliders-h"]} color={options ? "red" : "black"} />
+          <FontAwesomeIcon icon={["fas", "sliders-h"]} color={options ? "red" : "black"} />
         </label>
       ) : ('')}
       <InlineLegend legendUrl={((layer.Style && layer.Style[0].LegendURL) ? layer.Style[0].LegendURL[0].OnlineResource : '')} />

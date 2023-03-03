@@ -93,7 +93,7 @@ const MapContainer = (props) => {
             <span className={ style.closeButtonLabel }>Lukk kartet</span>
           </div>
           <div className={ `${style.container} ${expanded ? style.closed : style.open}` }>
-            <FontAwesomeIcon onClick={ () => toggleExpand(!expanded) } className={ style.toggleBtn } icon={ expanded ? ["far", "layer-group"] : "times" } />
+            <FontAwesomeIcon onClick={ () => toggleExpand(!expanded) } className={ style.toggleBtn } icon={ expanded ? ["fas", "layer-group"] : "times" } />
             <Tabs className={ `${style.tabs} ${expanded ? style.closed : style.open}` } defaultActiveKey={ showDefaultTab() } id="tab">
               <Tab eventKey="search" title="Søk" >
                 <SearchBar />
