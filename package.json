@@ -8,10 +8,9 @@
     "README.md"
   ],
   "dependencies": {
-    "@fortawesome/fontawesome-pro": "^5.15.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
-    "@fortawesome/pro-regular-svg-icons": "^5.15.2",
-    "@fortawesome/pro-solid-svg-icons": "^5.15.2",
+    "@fortawesome/free-regular-svg-icons": "^5.15.2",
+    "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "bootstrap": "^4.6.0",
     "fast-xml-parser": "^4.0.9",
