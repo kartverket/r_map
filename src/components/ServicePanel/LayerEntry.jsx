@@ -9,6 +9,7 @@ import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 import { Fill, Stroke, Style, Text } from 'ol/style'
 import { store } from '../../Utils/store.js'
 import { parseFeatureInfo } from '../../MapUtil/FeatureUtil'
+import queryString from 'query-string'
 
 const LayerEntry = props => {
   const featureState = useContext(store)
@@ -136,6 +137,27 @@ const LayerEntry = props => {
     checkResolution()
   })
 
+  const legendHandling = (layer) => {
+    const legends = []
+    const Layerstyle = layer.Style
+    const layerName = layer.Name
+
+    Layerstyle.forEach( style => {
+      if (style.Name.includes('inspire_common:DEFAULT') || style.Name.includes('DEFAULT')) {
+        const parsedUrl = queryString.parseUrl(style.LegendURL[0].OnlineResource);
+        if (parsedUrl.query['layer'] === layerName) {
+          legends.push(style.LegendURL[0].OnlineResource)
+        }
+      }
+    })
+    if (legends.length === 0) {
+      Layerstyle.forEach(style  => {
+        legends.push(style.LegendURL[0].OnlineResource)
+      })
+    }
+    return legends
+  }
+
   return (
     <>
       { layer.Name ? (
@@ -153,8 +175,13 @@ const LayerEntry = props => {
         <label onClick={() => toggleOptions(!options)}>
           <FontAwesomeIcon icon={["fas", "sliders-h"]} color={options ? "red" : "black"} />
         </label>
-      ) : ('')}
-      <InlineLegend legendUrl={((layer.Style && layer.Style[0].LegendURL) ? layer.Style[0].LegendURL[0].OnlineResource : '')} />
+      ) : ('') }
+      {
+        layer.Style ? (legendHandling(layer).map((legend, index) => {
+          return ( <InlineLegend key={index} legendUrl={legend} />)
+          })
+        ) : ('')
+      }
       { options ? (
         <div className={style.settings}>
           {/** Tar ut prio buttone for nå *
