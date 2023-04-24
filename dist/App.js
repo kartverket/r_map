@@ -13,6 +13,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var TEST_DATA = [
   /*
+  {
+    'Uuid': '30369f29-e21a-464f-97f7-a202ca7c97e7',
+    'Title': 'Kulturminner WMS',
+    'DistributionProtocol': 'OGC:WMS',
+    'GetCapabilitiesUrl': 'https://kart.ra.no/wms/kulturminner?REQUEST=GetCapabilities&SERVICE=WMS&VERSION=1.3.0',
+    addLayers: []
+  },
+  */
+
+  /*
      {
       'Title': 'kv_adminomr_kommune',
       'DistributionProtocol': 'OGC:WMS',
@@ -80,13 +90,6 @@ var TEST_DATA = [
      'GetCapabilitiesUrl': 'https://wms.geonorge.no/skwms1/wms.sfkb-transaksjoner?request=GetCapabilities&service=WMS',
      'addLayers': ['bygning']
   },
-     {
-     'Uuid': '8c2c434b-07f7-4ebc-9bc6-9c15cdd75c4c',
-     'Title': 'Kulturminner20180301',
-     'DistributionProtocol': 'OGC:WMS',
-     'GetCapabilitiesUrl': ' https://kart.ra.no/arcgis/services/Distribusjon/Kulturminner20180301/MapServer/WMSServer?request=GetCapabilities&service=WMS',
-     addLayers: []
-     },
   {
      'Uuid': '8045628b-230a-4ba4-a6e0-xxxxx',
      'Title': 'ssr2',

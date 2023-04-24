@@ -23,6 +23,8 @@ var _store = require("../../Utils/store.js");
 
 var _FeatureUtil = require("../../MapUtil/FeatureUtil");
 
+var _queryString = _interopRequireDefault(require("query-string"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -219,6 +221,30 @@ var LayerEntry = function LayerEntry(props) {
   window.olMap.getView().on('change:resolution', function (e) {
     checkResolution();
   });
+
+  var legendHandling = function legendHandling(layer) {
+    var legends = [];
+    var Layerstyle = layer.Style;
+    var layerName = layer.Name;
+    Layerstyle.forEach(function (style) {
+      if (style.Name.includes('inspire_common:DEFAULT') || style.Name.includes('DEFAULT')) {
+        var parsedUrl = _queryString.default.parseUrl(style.LegendURL[0].OnlineResource);
+
+        if (parsedUrl.query['layer'] === layerName) {
+          legends.push(style.LegendURL[0].OnlineResource);
+        }
+      }
+    });
+
+    if (legends.length === 0) {
+      Layerstyle.forEach(function (style) {
+        legends.push(style.LegendURL[0].OnlineResource);
+      });
+    }
+
+    return legends;
+  };
+
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, layer.Name ? /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("input", {
     className: "checkbox",
     id: layer.Name,
@@ -243,9 +269,12 @@ var LayerEntry = function LayerEntry(props) {
   }, /*#__PURE__*/_react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     icon: ["fas", "sliders-h"],
     color: options ? "red" : "black"
-  })) : '', /*#__PURE__*/_react.default.createElement(_InlineLegend.default, {
-    legendUrl: layer.Style && layer.Style[0].LegendURL ? layer.Style[0].LegendURL[0].OnlineResource : ''
-  }), options ? /*#__PURE__*/_react.default.createElement("div", {
+  })) : '', layer.Style ? legendHandling(layer).map(function (legend, index) {
+    return /*#__PURE__*/_react.default.createElement(_InlineLegend.default, {
+      key: index,
+      legendUrl: legend
+    });
+  }) : '', options ? /*#__PURE__*/_react.default.createElement("div", {
     className: _LayerEntryModule.default.settings
   }, /*#__PURE__*/_react.default.createElement("label", {
     className: _LayerEntryModule.default.slider
