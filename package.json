@@ -1,6 +1,6 @@
 {
   "name": "r_map",
-  "version": "2.4.9",
+  "version": "2.4.10",
   "private": true,
   "main": "dist/main.js",
   "files": [
@@ -15,8 +15,8 @@
     "bootstrap": "^4.6.0",
     "fast-xml-parser": "^4.0.9",
     "jquery": "^3.6.0",
-    "ol": "^6.15.1",
-    "proj4": "^2.8.0",
+    "ol": "^7.5.1",
+    "proj4": "^2.9.0",
     "query-string": "^7.1.1",
     "react": "^18.2.0",
     "react-bootstrap": "^1.5.0",
