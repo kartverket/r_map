@@ -65,6 +65,8 @@ var FeatureInfoItem = function FeatureInfoItem() {
             return 'isBboxJsonPolygon';
           } else if (M[5].startsWith('BOX(')) {
             return 'isBboxSimple';
+          } else if (M[5].startsWith('http')) {
+            return 'isLink';
           } else {
             return 'isString';
           }
@@ -104,6 +106,13 @@ var FeatureInfoItem = function FeatureInfoItem() {
       case 'isBboxSimple':
         return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, v);
       // TODO: klikke for å vise?
+
+      case 'isLink':
+        return /*#__PURE__*/_react.default.createElement("a", {
+          href: v,
+          target: "_blank",
+          rel: "noreferrer"
+        }, v);
 
       case 'isString':
         return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, v);
