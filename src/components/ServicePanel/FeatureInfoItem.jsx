@@ -26,6 +26,8 @@ const FeatureInfoItem = () => {
           return 'isBboxJsonPolygon'
         } else if (M[5].startsWith('BOX(')) {
           return 'isBboxSimple'
+        } else if (M[5].startsWith('http')){
+          return 'isLink'
         } else {
           return 'isString'
         }
@@ -44,6 +46,7 @@ const FeatureInfoItem = () => {
       case 'isBboxJsonPoint': return <>BBOX point</> // TODO: klikke for å vise?
       case 'isBboxJsonPolygon': return <>BBOX polygon</> // TODO: klikke for å vise?
       case 'isBboxSimple': return <>{ v }</> // TODO: klikke for å vise?
+      case 'isLink': return <a href={ v } target='_blank' rel="noreferrer" >{ v }</a>
       case 'isString': return <>{ v }</>
       default: return <></>
     }
