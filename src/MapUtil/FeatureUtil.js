@@ -108,7 +108,7 @@ export const parsePlainFeatureInfo = (data) => {
         let feature1 = feature.splice(0, 1)[0].split('Feature ')[1].replace(/:/g, '').trim()
         if (Array.isArray(feature) && (feature[0].length > 1)) {
           feature = feature.map((item) => {
-            item = item.trim().replace(/=/g, ':').split('\n')
+            item = item.trim().replace(/=(?=\s)/g, ':').split('\n');
             return arrayToObject(item)
           })
           return arrayToObject(feature)
