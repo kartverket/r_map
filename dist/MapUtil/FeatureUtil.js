@@ -167,7 +167,7 @@ var parsePlainFeatureInfo = function parsePlainFeatureInfo(data) {
 
         if (Array.isArray(feature) && feature[0].length > 1) {
           feature = feature.map(function (item) {
-            item = item.trim().replace(/=/g, ':').split('\n');
+            item = item.trim().replace(/=(?=\s)/g, ':').split('\n');
             return arrayToObject(item);
           });
           return arrayToObject(feature);
