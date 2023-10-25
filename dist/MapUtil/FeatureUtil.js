@@ -133,7 +133,9 @@ var arrayToObject = function arrayToObject(array) {
           key = _item$trim$split2[0],
           value = _item$trim$split2[1];
 
-      obj[key] = value.replace(/'/g, '').trim();
+      if (value !== undefined) {
+        obj[key] = value.replace(/'/g, '').trim();
+      }
     } else {
       if (item.objid) {
         obj[item.objid] = item;
@@ -159,7 +161,12 @@ var parsePlainFeatureInfo = function parsePlainFeatureInfo(data) {
       var r_layer = {};
       var subf = layer.split(/(Layer[^\r\n]*)/);
       subf.shift();
-      var layerName = subf.splice(0, 1)[0].split('Layer ')[1].replace(/'/g, '');
+      var layerName = '';
+
+      if (subf && subf.length > 0) {
+        layerName = subf.splice(0, 1)[0].split('Layer ')[1].replace(/'/g, '');
+      }
+
       r_layer[layerName] = subf.map(function (f) {
         var feature = f.split(/(Feature[^\r\n]*)/);
         feature.shift();
