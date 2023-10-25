@@ -238,7 +238,9 @@ var LayerEntry = function LayerEntry(props) {
 
     if (legends.length === 0) {
       Layerstyle.forEach(function (style) {
-        legends.push(style.LegendURL[0].OnlineResource);
+        if (style.LegendURL && style.LegendURL.length > 0) {
+          legends.push(style.LegendURL[0].OnlineResource);
+        }
       });
     }
 
