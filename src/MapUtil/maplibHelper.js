@@ -43,14 +43,14 @@ export let mapConfig = {
     type: 'map',
     gatekeeper: 'true',
     name: 'Landkart',
-    url: 'https://cache.kartverket.no/norgeskart_bakgrunn/v1/wmts/1.0.0/|https://cache.kartverket.no/norgeskart_bakgrunn/v1/wmts/1.0.0/',
+    url: 'https://cache.kartverket.no/topo/v1/wmts/1.0.0/|https://cache.kartverket.no/topo/v1/wmts/1.0.0/',
     params: {
-      layers: 'norgeskart_bakgrunn',
+      layers: 'topo',
       format: 'image/png'
     },
     matrixprefix: "false",
     matrixset: "utm33n",
-    guid: '0.norgeskart_bakgrunn',
+    guid: '0.topo',
     options: {
       isbaselayer: 'true',
       singletile: 'false',
@@ -61,14 +61,14 @@ export let mapConfig = {
     type: 'map',
     gatekeeper: 'true',
     name: 'Gråtone',
-    url: 'https://cache.kartverket.no/norges_grunnkart_graatone/v1/wmts/1.0.0/|https://cache.kartverket.no/norges_grunnkart_graatone/v1/wmts/1.0.0/',
+    url: 'https://cache.kartverket.no/topograatone/v1/wmts/1.0.0/|https://cache.kartverket.no/topograatone/v1/wmts/1.0.0/',
     params: {
-      layers: 'norges_grunnkart_graatone',
+      layers: 'topograatone',
       format: 'image/png'
     },
     matrixprefix: "false",
     matrixset: "utm33n",
-    guid: '0.norges_grunnkart_graatone',
+    guid: '0.topograatone',
     options: {
       isbaselayer: 'true',
       singletile: 'false',
