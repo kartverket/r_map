@@ -78,7 +78,9 @@ const arrayToObject = (array) =>
   array.reduce((obj, item) => {
     if (typeof item === 'string' && item.length > 0) {
       let [key, value] = item.trim().split(' :')
-      obj[key] = value.replace(/'/g, '').trim()
+      if (value !== undefined) {
+        obj[key] = value.replace(/'/g, '').trim()
+      }
     } else {
       if (item.objid) {
         obj[item.objid] = item
@@ -101,8 +103,11 @@ export const parsePlainFeatureInfo = (data) => {
       let r_layer = {}
       let subf = layer.split(/(Layer[^\r\n]*)/)
       subf.shift()
-      let layerName = subf.splice(0, 1)[0].split('Layer ')[1].replace(/'/g, '')
-      r_layer[layerName] = subf.map((f) => {
+      let layerName = '';
+      if (subf && subf.length > 0) {
+        layerName = subf.splice(0, 1)[0].split('Layer ')[1].replace(/'/g, '');
+      }
+        r_layer[layerName] = subf.map((f) => {
         let feature = f.split(/(Feature[^\r\n]*)/)
         feature.shift()
         let feature1 = feature.splice(0, 1)[0].split('Feature ')[1].replace(/:/g, '').trim()
