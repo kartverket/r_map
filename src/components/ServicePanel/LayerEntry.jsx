@@ -151,8 +151,10 @@ const LayerEntry = props => {
       }
     })
     if (legends.length === 0) {
-      Layerstyle.forEach(style  => {
-        legends.push(style.LegendURL[0].OnlineResource)
+      Layerstyle.forEach(style => {
+        if (style.LegendURL && style.LegendURL.length > 0 ) {
+          legends.push(style.LegendURL[0].OnlineResource)
+        }
       })
     }
     return legends
