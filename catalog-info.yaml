@@ -1,0 +1,38 @@
+# nonk8s
+apiVersion: "backstage.io/v1alpha1"
+kind: "Component"
+metadata:
+  name: "r_map"
+  tags:
+  - "public"
+spec:
+  type: "website"
+  lifecycle: "production"
+  owner: "datadeling_og_distribusjon"
+  system: "geonorge"
+---
+apiVersion: "backstage.io/v1alpha1"
+kind: "Group"
+metadata:
+  name: "security_champion_r_map"
+  title: "Security Champion r_map"
+spec:
+  type: "security_champion"
+  parent: "land_security_champions"
+  members:
+  - "carsmie"
+  children:
+  - "resource:r_map"
+---
+apiVersion: "backstage.io/v1alpha1"
+kind: "Resource"
+metadata:
+  name: "r_map"
+  links:
+  - url: "https://github.com/kartverket/r_map"
+    title: "r_map på GitHub"
+spec:
+  type: "repo"
+  owner: "security_champion_r_map"
+  dependencyOf:
+  - "component:r_map"
