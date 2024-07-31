@@ -55,7 +55,7 @@ const LayerEntry = props => {
       setLayer(currentLayer)
 
       window.olMap.getLayers().forEach(function (maplayer) {
-        if (maplayer.get('name') === (currentNode.Name || currentNode.Title)) {
+        if (maplayer.get('name') === (currentNode.Name + '_' + props.meta.uuid || currentNode.Title + '_' + props.meta.uuid)) {
           isNewLayer = false
           maplayer.getVisible() ? maplayer.setVisible(false) : maplayer.setVisible(true)
           setChecked(maplayer.getVisible())

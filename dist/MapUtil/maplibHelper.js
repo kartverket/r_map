@@ -4,22 +4,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.mapImplementation = exports.mapConfig = exports.map = exports.getWmsUrl = exports.eventHandler = exports.createNotExistGroup = exports.createGroup = exports.createDummyGroup = exports.addLayer = void 0;
-
 var _Repository = require("./Repository");
-
 var _Domain = require("./Domain");
-
 var _EventHandler = require("./EventHandler");
-
 var _OLMap = require("./OLMap");
-
 var _Map = require("./Map");
-
 var _communication = require("../Utils/communication");
-
-var groupIds = [];
-var notDummyGroup = false;
-var mapConfig = {
+let groupIds = [];
+let notDummyGroup = false;
+let mapConfig = {
   groups: [],
   coordinate_system: 'EPSG:25833',
   center: [396722, 7197860],
@@ -230,8 +223,7 @@ var mapConfig = {
   isOffline: false
 };
 exports.mapConfig = mapConfig;
-
-var createGroup = function createGroup(groupId, groupNameLng1, groupNameLng2, visibleOnLoad) {
+const createGroup = (groupId, groupNameLng1, groupNameLng2, visibleOnLoad) => {
   var newGroup = (0, _Repository.Category)({
     groupId: groupId,
     name: groupNameLng1,
@@ -241,13 +233,10 @@ var createGroup = function createGroup(groupId, groupNameLng1, groupNameLng2, vi
   groupIds.push(groupId);
   mapConfig.groups.push(newGroup);
   mapConfig.languages.en[newGroup.groupId] = groupNameLng1; // has to be fix with correct value!
-
   mapConfig.languages.no[newGroup.groupId] = groupNameLng2;
 };
-
 exports.createGroup = createGroup;
-
-var updateMapConfigWithGroups = function updateMapConfigWithGroups(mapConfig) {
+const updateMapConfigWithGroups = mapConfig => {
   if (mapConfig.maplayer !== undefined) {
     if (mapConfig.maplayer.length !== undefined) {
       mapConfig.maplayer.forEach(function (group) {
@@ -258,51 +247,42 @@ var updateMapConfigWithGroups = function updateMapConfigWithGroups(mapConfig) {
     }
   }
 };
-
-var findGroupExistance = function findGroupExistance(grpIds) {
-  var notExistGroups = [];
-  grpIds.forEach(function (grpId) {
+const findGroupExistance = grpIds => {
+  let notExistGroups = [];
+  grpIds.forEach(grpId => {
     if (groupIds.indexOf(grpId) === -1) {
       notExistGroups.push(grpId);
     }
   });
   return notExistGroups;
 };
-
-var createNotExistGroup = function createNotExistGroup(grpIds, groupNameLng1, groupNameLng2) {
-  var notExistGroups = findGroupExistance(grpIds);
-  notExistGroups.forEach(function (grpId) {
+const createNotExistGroup = (grpIds, groupNameLng1, groupNameLng2) => {
+  let notExistGroups = findGroupExistance(grpIds);
+  notExistGroups.forEach(grpId => {
     createGroup(grpId, groupNameLng1, groupNameLng2);
   });
 };
-
 exports.createNotExistGroup = createNotExistGroup;
-
-var createDummyGroup = function createDummyGroup() {
+const createDummyGroup = () => {
   // dummy category for layers without group id
   if (notDummyGroup === false) {
     createGroup(999, 'Other layers', 'Andre lag');
     notDummyGroup = true;
   }
 };
-
 exports.createDummyGroup = createDummyGroup;
-
-var getWmsUrl = function getWmsUrl(url) {
+const getWmsUrl = url => {
   if (url.indexOf('|') >= 0) {
     return url.split('|');
   } else {
     return url;
   }
 };
-
 exports.getWmsUrl = getWmsUrl;
-
-var addLayer = function addLayer(sourceType, source) {
-  var catIds = [999];
-
+const addLayer = (sourceType, source) => {
+  let catIds = [999];
   if (source.groupid !== undefined) {
-    catIds = source.groupid.toString().split(',').map(function (item) {
+    catIds = source.groupid.toString().split(',').map(item => {
       return parseInt(item, 10);
     });
     createNotExistGroup(catIds, source.name, source.namelng);
@@ -311,8 +291,7 @@ var addLayer = function addLayer(sourceType, source) {
       createDummyGroup();
     }
   }
-
-  var newIsyLayer = (0, _Domain.Layer)({
+  const newIsyLayer = (0, _Domain.Layer)({
     subLayers: [{
       title: source.name,
       name: source.params.layers || source.name,
@@ -368,36 +347,31 @@ var addLayer = function addLayer(sourceType, source) {
   });
   return newIsyLayer;
 };
-
 exports.addLayer = addLayer;
-
-var addLayerToConfig = function addLayerToConfig(newIsyLayer, source) {
+const addLayerToConfig = (newIsyLayer, source) => {
   mapConfig.layers.push(newIsyLayer);
   mapConfig.languages.en[newIsyLayer.id] = source.name;
   mapConfig.languages.no[newIsyLayer.id] = source.namelng;
 };
-
-var updateMapConfigWithImageLayers = function updateMapConfigWithImageLayers(mapConfig) {
+const updateMapConfigWithImageLayers = mapConfig => {
   if (mapConfig.wmts !== undefined) {
     if (mapConfig.wmts.length !== undefined) {
-      mapConfig.wmts.forEach(function (wmts) {
+      mapConfig.wmts.forEach(wmts => {
         addLayerToConfig(addLayer('WMTS', wmts), wmts);
       });
     } else {
       addLayerToConfig(addLayer('WMTS', mapConfig.wmts), mapConfig.wmts);
     }
   }
-
   if (mapConfig.wms !== undefined) {
     if (mapConfig.wms.length !== undefined) {
-      mapConfig.wms.forEach(function (wms) {
+      mapConfig.wms.forEach(wms => {
         addLayerToConfig(addLayer('WMS', wms), wms);
       });
     } else {
       addLayerToConfig(addLayer('WMS', mapConfig.wms), mapConfig.wms);
     }
   }
-
   if (mapConfig.vector !== undefined) {
     if (mapConfig.vector.length !== undefined) {
       mapConfig.vector.forEach(function (vector) {
@@ -408,19 +382,17 @@ var updateMapConfigWithImageLayers = function updateMapConfigWithImageLayers(map
     }
   }
 };
-
 updateMapConfigWithGroups(mapConfig);
 updateMapConfigWithImageLayers(mapConfig);
 exports.mapConfig = mapConfig = (0, _Repository.MapConfig)(mapConfig);
 mapConfig.instance = 'geoportal';
 mapConfig.proxyHost = '';
-var eventHandler = (0, _EventHandler.EventHandler)();
+const eventHandler = (0, _EventHandler.EventHandler)();
 exports.eventHandler = eventHandler;
-var mapImplementation = (0, _OLMap.OLMap)(eventHandler);
+const mapImplementation = (0, _OLMap.OLMap)(eventHandler);
 exports.mapImplementation = mapImplementation;
-var map = (0, _Map.Map)(mapImplementation, eventHandler, null);
+const map = (0, _Map.Map)(mapImplementation, eventHandler, null);
 exports.map = map;
-
 if (window.addEventListener) {
   window.addEventListener("message", _communication.Messaging.listener, false);
 } else {

@@ -4,14 +4,26 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-
 var _react = _interopRequireDefault(require("react"));
-
 var _MapContainer = _interopRequireDefault(require("./components/MapContainer/MapContainer"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var TEST_DATA = [
+const TEST_DATA = [
+  /*
+  {
+    'uuid': '30369f29-e21a-464f-97f7-a202ca7c97e7',
+    'Title': 'Met',
+    'DistributionProtocol': 'OGC:WMS',
+    'GetCapabilitiesUrl': 'https://fastapi.s-enda.k8s.met.no/api/get_quicklook/2024/07/30/metopc-avhrr-20240730140530-20240730141232.nc?request=GetCapabilities&service=WMS&version=1.3.0',
+    'addLayers': []
+  },
+  {
+    'uuid': '30369f29-e21a-464f-97f7-a202ca7c97e7_',
+    'Title': 'Met',
+    'DistributionProtocol': 'OGC:WMS',
+    'GetCapabilitiesUrl': 'https://fastapi.s-enda.k8s.met.no/api/get_quicklook/2024/07/29/metopc-avhrr-20240729173948-20240729175123.nc?request=GetCapabilities&service=WMS&version=1.3.0',
+    'addLayers': []
+  }
+  */
   /*
   {
     'Uuid': '30369f29-e21a-464f-97f7-a202ca7c97e7',
@@ -21,7 +33,6 @@ var TEST_DATA = [
     addLayers: []
   },
   */
-
   /*
      {
       'Title': 'kv_adminomr_kommune',
@@ -33,7 +44,6 @@ var TEST_DATA = [
       addLayers: ['gp_dek_oversikt_wms', 'datasett_dekning']
     },
    */
-
   /*
      {
      'Uuid': '8c2c434b-07f7-4ebc-9bc6-9c15cdd75c4c',
@@ -57,7 +67,6 @@ var TEST_DATA = [
       addLayers: ['dcells_05m']
     },
    */
-
   /*
    {
       'Title': 'Ruter_entinelSkyfritt2018Uint16',
@@ -67,7 +76,6 @@ var TEST_DATA = [
       addLayers: ['Ruteinndeling_SatellittdataSentinelSkyfritt2018Uint16']
     }
    */
-
   /*
    {
      'Title': 'ssr2',
@@ -126,14 +134,12 @@ var TEST_DATA = [
      "GetCapabilitiesUrl":"https://wfs.geonorge.no/skwms1/wfs.brannstasjoner?service=wfs&request=getcapabilities"
    }*/
 ];
-
-var App = function App() {
+const App = () => {
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "App"
   }, /*#__PURE__*/_react.default.createElement(_MapContainer.default, {
     services: TEST_DATA
   }));
 };
-
 var _default = App;
 exports.default = _default;

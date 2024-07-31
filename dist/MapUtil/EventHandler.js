@@ -4,17 +4,14 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.EventTypes = exports.EventHandler = void 0;
-
-var EventHandler = function EventHandler() {
+const EventHandler = () => {
   var callBacks = [];
-
   function registerEvent(eventType, callBack) {
     callBacks.push({
       eventType: eventType,
       callBack: callBack
     });
   }
-
   function unRegisterEvent(eventType, callBack) {
     for (var i = 0; i < callBacks.length; i++) {
       if (callBacks[i].eventType === eventType && callBacks[i].callBack === callBack) {
@@ -23,26 +20,22 @@ var EventHandler = function EventHandler() {
       }
     }
   }
-
   function triggerEvent(eventType, args) {
     for (var i = 0; i < callBacks.length; i++) {
       var callBack = callBacks[i];
-
       if (callBack.eventType === eventType) {
         callBack.callBack(args);
       }
     }
   }
-
   return {
     RegisterEvent: registerEvent,
     UnRegisterEvent: unRegisterEvent,
     TriggerEvent: triggerEvent
   };
 };
-
 exports.EventHandler = EventHandler;
-var EventTypes = {
+const EventTypes = {
   ChangeCenter: "ChangeCenter",
   ChangeResolution: "ChangeResolution",
   ChangeLayers: "ChangeLayers",

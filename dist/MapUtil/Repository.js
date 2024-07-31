@@ -4,8 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.MapConfig = exports.Category = void 0;
-
-var Category = function Category(config) {
+const Category = config => {
   var defaults = {
     catId: "",
     name: "",
@@ -15,10 +14,8 @@ var Category = function Category(config) {
   };
   return Object.assign({}, defaults, config);
 };
-
 exports.Category = Category;
-
-var MapConfig = function MapConfig(config) {
+const MapConfig = config => {
   var defaults = {
     name: "",
     comment: "",
@@ -40,5 +37,4 @@ var MapConfig = function MapConfig(config) {
   };
   return Object.assign({}, defaults, config); // mapConfigInstance
 };
-
 exports.MapConfig = MapConfig;

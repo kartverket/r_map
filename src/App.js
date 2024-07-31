@@ -4,6 +4,22 @@ import MapContainer from './components/MapContainer/MapContainer'
 const TEST_DATA = [
   /*
   {
+    'uuid': '30369f29-e21a-464f-97f7-a202ca7c97e7',
+    'Title': 'Met',
+    'DistributionProtocol': 'OGC:WMS',
+    'GetCapabilitiesUrl': 'https://fastapi.s-enda.k8s.met.no/api/get_quicklook/2024/07/30/metopc-avhrr-20240730140530-20240730141232.nc?request=GetCapabilities&service=WMS&version=1.3.0',
+    'addLayers': []
+  },
+  {
+    'uuid': '30369f29-e21a-464f-97f7-a202ca7c97e7_',
+    'Title': 'Met',
+    'DistributionProtocol': 'OGC:WMS',
+    'GetCapabilitiesUrl': 'https://fastapi.s-enda.k8s.met.no/api/get_quicklook/2024/07/29/metopc-avhrr-20240729173948-20240729175123.nc?request=GetCapabilities&service=WMS&version=1.3.0',
+    'addLayers': []
+  }
+  */
+  /*
+  {
     'Uuid': '30369f29-e21a-464f-97f7-a202ca7c97e7',
     'Title': 'Kulturminner WMS',
     'DistributionProtocol': 'OGC:WMS',

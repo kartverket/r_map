@@ -4,14 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.SubLayer = exports.SOURCES = exports.LegendGraphic = exports.Layer = exports.FeatureInfo = exports.FORMATS = void 0;
-
 var _Utils = _interopRequireDefault(require("./Utils"));
-
 var _MapHelper = require("../Utils/MapHelper");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var FeatureInfo = function FeatureInfo(config) {
+const FeatureInfo = config => {
   var defaults = {
     // single select via WMS GetFeatureInfo
     supportsGetFeatureInfo: true,
@@ -25,15 +21,12 @@ var FeatureInfo = function FeatureInfo(config) {
   };
   return Object.assign({}, defaults, config);
 };
-
 exports.FeatureInfo = FeatureInfo;
-
-var LegendGraphic = function LegendGraphic(config) {
+const LegendGraphic = config => {
   if (config.url === '' || config.url === '?') {
     return null;
   }
-
-  var defaults = {
+  const defaults = {
     width: '20',
     height: '20',
     format: 'image/png',
@@ -44,13 +37,10 @@ var LegendGraphic = function LegendGraphic(config) {
   };
   return (0, _MapHelper.mergeDefaultParams)(config.url, defaults);
 };
-
 exports.LegendGraphic = LegendGraphic;
-
-var SubLayer = function SubLayer(config) {
-  var id = _Utils.default.newGuid();
-
-  var defaults = {
+const SubLayer = config => {
+  const id = _Utils.default.newGuid();
+  const defaults = {
     name: '',
     providerName: '',
     //f.eks Fiskeridirektoratet
@@ -79,12 +69,11 @@ var SubLayer = function SubLayer(config) {
     featureNS: '',
     geometryName: 'geometry'
   };
-  var instance = Object.assign({}, defaults, config); // subLayerInstance
+  let instance = Object.assign({}, defaults, config); // subLayerInstance
 
   if (instance.legendGraphicUrl.indexOf('?') === -1) {
     instance.legendGraphicUrl += '?';
   }
-
   if (instance.legendGraphicUrl !== '') {
     instance.legendGraphicUrl = LegendGraphic({
       url: instance.legendGraphicUrl,
@@ -92,12 +81,10 @@ var SubLayer = function SubLayer(config) {
     });
     ;
   }
-
   return instance;
 };
-
 exports.SubLayer = SubLayer;
-var SOURCES = {
+const SOURCES = {
   wmts: 'WMTS',
   wms: 'WMS',
   vector: 'VECTOR',
@@ -107,15 +94,14 @@ var SOURCES = {
   wfs: 'WFS'
 };
 exports.SOURCES = SOURCES;
-var FORMATS = {
+const FORMATS = {
   imagepng: 'image/png',
   imagejpeg: 'image/jpeg',
   geoJson: 'application/json'
 };
 exports.FORMATS = FORMATS;
-
-var Layer = function Layer(config) {
-  var defaults = {
+const Layer = config => {
+  const defaults = {
     guid: '',
     subLayers: [],
     name: '',
@@ -132,17 +118,13 @@ var Layer = function Layer(config) {
     maxResolution: 21664,
     legendGraphicUrls: [],
     selectedLayerOpen: false //todo johben temp
-
   };
-  var layerInstance = Object.assign({}, defaults, config);
-  var subLayers = [];
-
-  for (var i = 0; i < config.subLayers.length; i++) {
+  let layerInstance = Object.assign({}, defaults, config);
+  let subLayers = [];
+  for (let i = 0; i < config.subLayers.length; i++) {
     subLayers.push(SubLayer(config.subLayers[i]));
   }
-
   layerInstance.subLayers = subLayers;
   return layerInstance;
 };
-
 exports.Layer = Layer;

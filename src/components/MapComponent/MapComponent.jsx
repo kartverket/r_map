@@ -5,6 +5,7 @@ import setQuery from "set-query-string"
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 import { map, eventHandler, mapConfig } from "../../MapUtil/maplibHelper"
 import { Messaging } from '../../Utils/communication'
+import uniqid from 'uniqid';
 
 
 const MapComponent = (props) => {
@@ -65,6 +66,7 @@ const MapComponent = (props) => {
               meta = CapabilitiesUtil.getWMSMetaCapabilities(capa)
               meta.Type = 'OGC:WMS'
               meta.Params = service.customParams || ''
+              meta.uuid = props.services.uuid || uniqid()
               if (service.addLayers.length > 0) {
                 let layersToBeAdded = []
                 layersToBeAdded = capa.Capability.Layer.Layer.filter(
@@ -93,6 +95,7 @@ const MapComponent = (props) => {
               meta.Type = 'GEOJSON'
               meta.ShowPropertyName = service.ShowPropertyName || 'id'
               meta.EPSG = service.EPSG || 'EPSG:4326'
+              meta.uuid = props.services.uuid || uniqid()
               if (service.addLayers.length > 0) {
                 if (layers.name === service.addLayers['0']) {
                   let currentLayer = CapabilitiesUtil.getOlLayerFromGeoJson(meta, layers)

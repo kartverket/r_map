@@ -410,8 +410,8 @@ export class CapabilitiesUtil {
     params['VERSION'] = metaCapabilities.Version
     return new OlLayerImage({
       opacity: 1,
-      title: layerCapabilities.Title,
-      name: layerCapabilities.Name,
+      title: layerCapabilities.Title + '_' + metaCapabilities.uuid,
+      name: layerCapabilities.Name + '_' + metaCapabilities.uuid,
       abstract: layerCapabilities.Abstract,
       getFeatureInfoUrl: metaCapabilities.FeatureInfoUrl,
       getFeatureInfoFormats: get(metaCapabilities.FeatureInfoConfig, 'Format'),

@@ -4,7 +4,7 @@ import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 import style from './ServicePanel.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import LayerEntry from './LayerEntry'
-
+import uniqid from 'uniqid';
 
 const ServicePanel = props => {
   const [capabilities, setCapabilities] = useState()
@@ -23,6 +23,7 @@ const ServicePanel = props => {
             newMetaInfo = CapabilitiesUtil.getWMSMetaCapabilities(capa)
             newMetaInfo.Type = 'OGC:WMS'
             newMetaInfo.Params = props.services.customParams || ''
+            newMetaInfo.uuid = props.services.uuid || uniqid()
             setMeta(newMetaInfo)
           })
           .catch(e => console.warn(e))
@@ -36,6 +37,7 @@ const ServicePanel = props => {
             newMetaInfo = CapabilitiesUtil.getWFSMetaCapabilities(capa)
             newMetaInfo.Type = 'WFS'
             newMetaInfo.Params = props.services.customParams || ''
+            newMetaInfo.uuid = props.services.uuid || uniqid()
             setMeta(newMetaInfo)
           })
           .catch(e => console.warn(e))
@@ -47,6 +49,7 @@ const ServicePanel = props => {
             newMetaInfo.Type = 'GEOJSON'
             newMetaInfo.ShowPropertyName = props.services.ShowPropertyName || 'id'
             newMetaInfo.EPSG = props.services.EPSG || 'EPSG:4326'
+            newMetaInfo.uuid = props.services.uuid || uniqid()
             setMeta(newMetaInfo)
           })
           .catch(e => console.warn(e))
