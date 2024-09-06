@@ -33,7 +33,7 @@ export let mapConfig = {
   tokenHost: 'https://www.norgeskart.no/ws/gkt.py',
   projectName: 'norgeskart',
   basemap: {
-    url: 'https://cache.kartverket.no/europa_forenklet/v1/wmts/1.0.0/',
+    url: 'https://cache.kartverket.no/test/wmts?',
     layers: 'europa_forenklet',
     format: 'image/png',
     matrixprefix: false,
@@ -43,7 +43,7 @@ export let mapConfig = {
     type: 'map',
     gatekeeper: 'true',
     name: 'Landkart',
-    url: 'https://cache.kartverket.no/topo/v1/wmts/1.0.0/|https://cache.kartverket.no/topo/v1/wmts/1.0.0/',
+    url: 'https://cache.kartverket.no/v1/wmts/1.0.0/|https://cache.kartverket.no/v1/wmts/1.0.0/',
     params: {
       layers: 'topo',
       format: 'image/png'
@@ -61,7 +61,7 @@ export let mapConfig = {
     type: 'map',
     gatekeeper: 'true',
     name: 'Gråtone',
-    url: 'https://cache.kartverket.no/topograatone/v1/wmts/1.0.0/|https://cache.kartverket.no/topograatone/v1/wmts/1.0.0/',
+    url: 'https://cache.kartverket.no/v1/wmts/1.0.0/|https://cache.kartverket.no/v1/wmts/1.0.0/',
     params: {
       layers: 'topograatone',
       format: 'image/png'
@@ -78,7 +78,7 @@ export let mapConfig = {
     type: 'map',
     gatekeeper: 'true',
     name: 'Enkel',
-    url: 'https://cache.kartverket.no/norges_grunnkart/v1/wmts/1.0.0/|https://cache.kartverket.no/norges_grunnkart/v1/wmts/1.0.0/',
+    url: 'https://cache.kartverket.no/test/wmts?|https://cache.kartverket.no/test/wmts?',
     params: {
       layers: 'norges_grunnkart',
       format: 'image/png'
@@ -95,7 +95,7 @@ export let mapConfig = {
     type: 'map',
     gatekeeper: 'true',
     name: 'Terreng',
-    url: 'https://cache.kartverket.no/terreng_norgeskart/v1/wmts/1.0.0/|https://cache.kartverket.no/terreng_norgeskart/v1/wmts/1.0.0/',
+    url: 'https://cache.kartverket.no/test/wmts?|https://cache.kartverket.no/test/wmts?',
     params: {
       layers: 'terreng_norgeskart',
       format: 'image/png'
@@ -112,7 +112,7 @@ export let mapConfig = {
     type: 'map',
     gatekeeper: 'true',
     name: 'Sjøkart',
-    url: 'https://cache.kartverket.no/sjokartraster/v1/wmts/1.0.0/|https://cache.kartverket.no/sjokartraster/v1/wmts/1.0.0/',
+    url: 'https://cache.kartverket.no/test/wmts?|https://cache.kartverket.no/test/wmts?',
     params: {
       layers: 'sjokartraster',
       format: 'image/png'
