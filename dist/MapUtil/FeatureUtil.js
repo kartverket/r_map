@@ -77,7 +77,20 @@ const parseGmlFeatureInfo = data => {
   } else if (parsedGml.FeatureCollection) {
     returnValue = parsedGml.FeatureCollection.featureMember;
   }
-  return [returnValue];
+  // Transform the object to a more readable format, the same type as the plain text
+  let r_layer = {};
+  for (let layer in returnValue) {
+    console.log(layer, returnValue[layer]);
+    let layername = layer.split('_')[0];
+    let feature = {};
+    for (let feaute in returnValue[layer]) {
+      let featurename = feaute.split('_')[0];
+      let value = returnValue[layer][feaute];
+      feature[featurename] = value;
+    }
+    r_layer[layername] = [feature];
+  }
+  return [r_layer];
 };
 exports.parseGmlFeatureInfo = parseGmlFeatureInfo;
 const mergeArrayToObject = (array_1, array_2) => {
