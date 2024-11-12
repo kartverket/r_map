@@ -69,7 +69,7 @@ export const parseGmlFeatureInfo = (data) => {
   let r_layer = {}
   for (let layer in returnValue) {
     console.log(layer, returnValue[layer]);
-    let layername = layer.split('_')[0]
+    let layername = layer.split('_layer')[0]
     let feature = {}
     for (let feaute in returnValue[layer]) {
       let featurename = feaute.split('_')[0]
