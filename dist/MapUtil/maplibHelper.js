@@ -104,7 +104,7 @@ let mapConfig = {
     type: 'map',
     gatekeeper: 'true',
     name: 'Sjøkart',
-    url: 'https://cache.kartverket.no/test/wmts?|https://cache.kartverket.no/test/wmts?',
+    url: 'https://cache.kartverket.no/v1/wmts?|https://cache.kartverket.no/v1/wmts?',
     params: {
       layers: 'sjokartraster',
       format: 'image/png'
