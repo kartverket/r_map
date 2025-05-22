@@ -43,7 +43,7 @@ export let mapConfig = {
     type: 'map',
     gatekeeper: 'true',
     name: 'Landkart',
-    url: 'https://cache.kartverket.no/v1/wmts/1.0.0/|https://cache.kartverket.no/v1/wmts/1.0.0/',
+    url: 'https://cache.kartverket.no/v1/service/|https://cache.kartverket.no/v1/service/',
     params: {
       layers: 'topo',
       format: 'image/png'
@@ -61,7 +61,7 @@ export let mapConfig = {
     type: 'map',
     gatekeeper: 'true',
     name: 'Gråtone',
-    url: 'https://cache.kartverket.no/v1/wmts/1.0.0/|https://cache.kartverket.no/v1/wmts/1.0.0/',
+    url: 'https://cache.kartverket.no/v1/service/|https://cache.kartverket.no/v1/service/',
     params: {
       layers: 'topograatone',
       format: 'image/png'
