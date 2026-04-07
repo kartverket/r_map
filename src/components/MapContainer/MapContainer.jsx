@@ -8,8 +8,6 @@ import SearchBar from "../SearchBar/SearchBar"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import style from "./MapContainer.module.scss"
 import Position from '../Position/Position'
-import Tabs from 'react-bootstrap/Tabs'
-import Tab from 'react-bootstrap/Tab'
 import FeatureInfoItem from '../ServicePanel/FeatureInfoItem'
 import 'ol/ol.css'
 
@@ -17,16 +15,24 @@ import { StateProvider } from '../../Utils/store.js'
 
 const ServiceListItem = (props) => <ServicePanel services={ props.listItem } removeMapItem={ props.removeMapItem } draggable />
 
-const MapContainer = (props) => {
+const MapContainer = ({
+  crs = 'EPSG:25833',
+  lat = 7197860,
+  lon = 396722,
+  removeMapItem = null,
+  services = [],
+  zoom = 4
+}) => {
   const [expanded, toggleExpand] = useState(false)
   const [wms, setWMS] = useState()
+  const [activeTab, setActiveTab] = useState('layers')
   const queryValues = queryString.parse(window.location.search)
   let internMap = map
-  mapConfig.coordinate_system = queryValues['crs'] || props.crs
+  mapConfig.coordinate_system = queryValues['crs'] || crs
 
-  let lon = Number(queryValues["lon"] || props.lon)
-  let lat = Number(queryValues["lat"] || props.lat)
-  let zoom = Number(queryValues["zoom"] || props.zoom)
+  lon = Number(queryValues["lon"] || lon)
+  lat = Number(queryValues["lat"] || lat)
+  zoom = Number(queryValues["zoom"] || zoom)
 
   let defaultConfig = JSON.parse(JSON.stringify(mapConfig))
   let newMapConfig = Object.assign({}, defaultConfig, {
@@ -42,6 +48,7 @@ const MapContainer = (props) => {
   }, [internMap])
 
   const renderServiceList = () => {
+    let servicesToRender = services
     if (wms) {
       const addedWms = {
         'Title': 'Added WMS from url',
@@ -49,11 +56,11 @@ const MapContainer = (props) => {
         'GetCapabilitiesUrl': wms,
         addLayers: []
       }
-      props.services.push(addedWms)
+      servicesToRender = services.concat(addedWms)
     }
 
-    return props.services.map((listItem, i) => (
-      <ServiceListItem listItem={ listItem } removeMapItem={ props.removeMapItem ? props.removeMapItem : null } key={ i } map={ map } />
+    return servicesToRender.map((listItem, i) => (
+      <ServiceListItem listItem={ listItem } removeMapItem={ removeMapItem } key={ i } map={ map } />
     ))
   }
 
@@ -64,17 +71,6 @@ const MapContainer = (props) => {
     queryValues.lat = center.lat
     queryValues.zoom = center.zoom
     setQuery(queryValues)
-  }
-
-  const showDefaultTab = () => {
-    return 'layers'
-    /*
-    if (props.services.length) {
-      return 'layers'
-    }
-    else
-      return 'search'
-    */
   }
 
   const toogleMap = () => {
@@ -94,14 +90,34 @@ const MapContainer = (props) => {
           </div>
           <div className={ `${style.container} ${expanded ? style.closed : style.open}` }>
             <FontAwesomeIcon onClick={ () => toggleExpand(!expanded) } className={ style.toggleBtn } icon={ expanded ? ["fas", "layer-group"] : "times" } />
-            <Tabs className={ `${style.tabs} ${expanded ? style.closed : style.open}` } defaultActiveKey={ showDefaultTab() } id="tab">
-              <Tab eventKey="search" title="Søk" >
+            <div className={ `${style.tabs} ${expanded ? style.closed : style.open}` }>
+              <div className={ style.tabList } role="tablist" aria-label="Kartfaner">
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={ activeTab === 'search' }
+                  className={ `${style.tabButton} ${activeTab === 'search' ? style.active : ''}` }
+                  onClick={ () => setActiveTab('search') }
+                >
+                  Søk
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={ activeTab === 'layers' }
+                  className={ `${style.tabButton} ${activeTab === 'layers' ? style.active : ''}` }
+                  onClick={ () => setActiveTab('layers') }
+                >
+                  Visning
+                </button>
+              </div>
+              <div className={ activeTab === 'search' ? style.tabPanel : style.hiddenPanel }>
                 <SearchBar />
-              </Tab>
-              <Tab className={ `${style.search} ${expanded ? style.closed : style.open}` } eventKey="layers" title="Visning">
+              </div>
+              <div className={ `${style.search} ${activeTab === 'layers' ? style.tabPanel : style.hiddenPanel}` }>
                 <div id="ServiceList">{ renderServiceList() }</div>
-              </Tab>
-            </Tabs>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -115,7 +131,7 @@ const MapContainer = (props) => {
           } }
           tabIndex="0"
       />
-      { internMap ? <Position map={ internMap } projection={ props.crs }></Position> : null }
+      { internMap ? <Position map={ internMap } projection={ crs }></Position> : null }
       <div id="mapPopover">
         <FeatureInfoItem info={ '' } show={ false }></FeatureInfoItem>
       </div>
@@ -123,11 +139,4 @@ const MapContainer = (props) => {
     </StateProvider>
   )
 }
-MapContainer.defaultProps = {
-  lon: 396722,
-  lat: 7197860,
-  zoom: 4,
-  crs: 'EPSG:25833'
-}
-
 export default MapContainer

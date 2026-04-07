@@ -14,14 +14,21 @@ var _uniqid = _interopRequireDefault(require("uniqid"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-const MapComponent = props => {
+const MapComponent = _ref => {
+  let {
+    crs = 'EPSG:25833',
+    lat = 7197860,
+    lon = 396722,
+    services = [],
+    zoom = 4
+  } = _ref;
   const [wms, setWMS] = (0, _react.useState)();
   const queryValues = _queryString.default.parse(window.location.search);
   let internMap = _maplibHelper.map;
-  _maplibHelper.mapConfig.coordinate_system = queryValues['crs'] || props.crs;
-  let lon = Number(queryValues["lon"] || props.lon);
-  let lat = Number(queryValues["lat"] || props.lat);
-  let zoom = Number(queryValues["zoom"] || props.zoom);
+  _maplibHelper.mapConfig.coordinate_system = queryValues['crs'] || crs;
+  lon = Number(queryValues["lon"] || lon);
+  lat = Number(queryValues["lat"] || lat);
+  zoom = Number(queryValues["zoom"] || zoom);
   let newMapConfig = Object.assign({}, _maplibHelper.mapConfig, {
     center: [lon, lat],
     zoom: zoom
@@ -57,7 +64,7 @@ const MapComponent = props => {
     (0, _setQueryString.default)(queryValues);
   };
   const addWMS = () => {
-    props.services.forEach(service => {
+    services.forEach(service => {
       let meta = {};
       switch (service.DistributionProtocol) {
         case 'WMS':
@@ -67,7 +74,7 @@ const MapComponent = props => {
             meta = _CapabilitiesUtil.CapabilitiesUtil.getWMSMetaCapabilities(capa);
             meta.Type = 'OGC:WMS';
             meta.Params = service.customParams || '';
-            meta.uuid = props.services.uuid || (0, _uniqid.default)();
+            meta.uuid = services.uuid || (0, _uniqid.default)();
             if (service.addLayers.length > 0) {
               let layersToBeAdded = [];
               layersToBeAdded = capa.Capability.Layer.Layer.filter(e => service.addLayers.includes(e.Name));
@@ -93,7 +100,7 @@ const MapComponent = props => {
             meta.Type = 'GEOJSON';
             meta.ShowPropertyName = service.ShowPropertyName || 'id';
             meta.EPSG = service.EPSG || 'EPSG:4326';
-            meta.uuid = props.services.uuid || (0, _uniqid.default)();
+            meta.uuid = services.uuid || (0, _uniqid.default)();
             if (service.addLayers.length > 0) {
               if (layers.name === service.addLayers['0']) {
                 let currentLayer = _CapabilitiesUtil.CapabilitiesUtil.getOlLayerFromGeoJson(meta, layers);
@@ -118,12 +125,6 @@ const MapComponent = props => {
     },
     tabIndex: "0"
   });
-};
-MapComponent.defaultProps = {
-  lon: 396722,
-  lat: 7197860,
-  zoom: 4,
-  crs: 'EPSG:25833'
 };
 var _default = MapComponent;
 exports.default = _default;

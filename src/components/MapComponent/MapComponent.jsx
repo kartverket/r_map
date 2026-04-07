@@ -8,15 +8,21 @@ import { Messaging } from '../../Utils/communication'
 import uniqid from 'uniqid';
 
 
-const MapComponent = (props) => {
+const MapComponent = ({
+  crs = 'EPSG:25833',
+  lat = 7197860,
+  lon = 396722,
+  services = [],
+  zoom = 4
+}) => {
   const [wms, setWMS] = useState()
   const queryValues = queryString.parse(window.location.search)
   let internMap = map
-  mapConfig.coordinate_system = queryValues['crs'] || props.crs
+  mapConfig.coordinate_system = queryValues['crs'] || crs
 
-  let lon = Number(queryValues["lon"] || props.lon)
-  let lat = Number(queryValues["lat"] || props.lat)
-  let zoom = Number(queryValues["zoom"] || props.zoom)
+  lon = Number(queryValues["lon"] || lon)
+  lat = Number(queryValues["lat"] || lat)
+  zoom = Number(queryValues["zoom"] || zoom)
   let newMapConfig = Object.assign({}, mapConfig, {
     center: [lon, lat],
     zoom: zoom
@@ -55,7 +61,7 @@ const MapComponent = (props) => {
   }
 
   const addWMS = () => {
-    props.services.forEach(service => {
+    services.forEach(service => {
       let meta = {}
       switch (service.DistributionProtocol) {
         case 'WMS':
@@ -66,7 +72,7 @@ const MapComponent = (props) => {
               meta = CapabilitiesUtil.getWMSMetaCapabilities(capa)
               meta.Type = 'OGC:WMS'
               meta.Params = service.customParams || ''
-              meta.uuid = props.services.uuid || uniqid()
+              meta.uuid = services.uuid || uniqid()
               if (service.addLayers.length > 0) {
                 let layersToBeAdded = []
                 layersToBeAdded = capa.Capability.Layer.Layer.filter(
@@ -95,7 +101,7 @@ const MapComponent = (props) => {
               meta.Type = 'GEOJSON'
               meta.ShowPropertyName = service.ShowPropertyName || 'id'
               meta.EPSG = service.EPSG || 'EPSG:4326'
-              meta.uuid = props.services.uuid || uniqid()
+              meta.uuid = services.uuid || uniqid()
               if (service.addLayers.length > 0) {
                 if (layers.name === service.addLayers['0']) {
                   let currentLayer = CapabilitiesUtil.getOlLayerFromGeoJson(meta, layers)
@@ -126,10 +132,4 @@ const MapComponent = (props) => {
   )
 }
 
-MapComponent.defaultProps = {
-  lon: 396722,
-  lat: 7197860,
-  zoom: 4,
-  crs: 'EPSG:25833'
-}
 export default MapComponent

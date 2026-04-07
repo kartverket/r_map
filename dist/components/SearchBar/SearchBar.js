@@ -103,14 +103,14 @@ const SearchResult = props => {
  * SearchBar to be used in MapContainer
  * @param {*} props
  */
-const SearchBar = props => {
+const SearchBar = _ref => {
+  let {
+    placeholder = 'Søk etter steder eller adresser'
+  } = _ref;
   let queryValues = _queryString.default.parse(window.location.search);
   const [searchText, setSearchText] = (0, _react.useState)(queryValues["search"]);
   const [searchResult, setSearchResult] = (0, _react.useState)();
   const [searchResultSSR, setSearchResultSSR] = (0, _react.useState)();
-  const {
-    placeholder
-  } = props;
   const [expandedAdress, setStateAdress] = (0, _react.useState)(false);
   const [expandedSsr, setStateSsr] = (0, _react.useState)(false);
   (0, _react.useEffect)(() => {
@@ -207,18 +207,7 @@ const SearchBar = props => {
   }))))));
 };
 SearchBar.propTypes = {
-  searchText: _propTypes.default.string,
-  placeholder: _propTypes.default.string,
-  onChange: _propTypes.default.func,
-  onEnter: _propTypes.default.func,
-  onSearchClick: _propTypes.default.func
-};
-SearchBar.defaultProps = {
-  searchText: '',
-  placeholder: 'Søk etter steder eller adresser',
-  onChange: null,
-  onEnter: null,
-  onSearchClick: null
+  placeholder: _propTypes.default.string
 };
 var _default = SearchBar;
 exports.default = _default;

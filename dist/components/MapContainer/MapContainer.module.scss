@@ -107,6 +107,31 @@
     display: none;
   }
 }
+
+:local(.tabList) {
+  display: flex;
+}
+
+:local(.tabButton) {
+  width: 50%;
+  text-align: center;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  padding: 0.75rem 1rem;
+}
+
+:local(.active) {
+  border-bottom: 2px solid $color-toggle-on;
+}
+
+:local(.tabPanel) {
+  display: block;
+}
+
+:local(.hiddenPanel) {
+  display: none;
+}
 :local(.search) {
   border: none;
   &.closed {

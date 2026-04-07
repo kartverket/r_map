@@ -88,12 +88,13 @@ const SearchResult = (props) => {
  * SearchBar to be used in MapContainer
  * @param {*} props
  */
-const SearchBar = props => {
+const SearchBar = ({
+  placeholder = 'Søk etter steder eller adresser'
+}) => {
   let queryValues = queryString.parse(window.location.search)
   const [searchText, setSearchText] = useState(queryValues["search"])
   const [searchResult, setSearchResult] = useState()
   const [searchResultSSR, setSearchResultSSR] = useState()
-  const { placeholder } = props
   const [expandedAdress, setStateAdress] = useState(false)
   const [expandedSsr, setStateSsr] = useState(false)
 
@@ -182,19 +183,7 @@ const SearchBar = props => {
 }
 
 SearchBar.propTypes = {
-  searchText: PropTypes.string,
-  placeholder: PropTypes.string,
-  onChange: PropTypes.func,
-  onEnter: PropTypes.func,
-  onSearchClick: PropTypes.func
-}
-
-SearchBar.defaultProps = {
-  searchText: '',
-  placeholder: 'Søk etter steder eller adresser',
-  onChange: null,
-  onEnter: null,
-  onSearchClick: null,
+  placeholder: PropTypes.string
 }
 
 export default SearchBar

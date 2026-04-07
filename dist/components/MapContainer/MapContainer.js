@@ -14,8 +14,6 @@ var _SearchBar = _interopRequireDefault(require("../SearchBar/SearchBar"));
 var _reactFontawesome = require("@fortawesome/react-fontawesome");
 var _MapContainerModule = _interopRequireDefault(require("./MapContainer.module.scss"));
 var _Position = _interopRequireDefault(require("../Position/Position"));
-var _Tabs = _interopRequireDefault(require("react-bootstrap/Tabs"));
-var _Tab = _interopRequireDefault(require("react-bootstrap/Tab"));
 var _FeatureInfoItem = _interopRequireDefault(require("../ServicePanel/FeatureInfoItem"));
 require("ol/ol.css");
 var _store = require("../../Utils/store.js");
@@ -27,15 +25,24 @@ const ServiceListItem = props => /*#__PURE__*/_react.default.createElement(_Serv
   removeMapItem: props.removeMapItem,
   draggable: true
 });
-const MapContainer = props => {
+const MapContainer = _ref => {
+  let {
+    crs = 'EPSG:25833',
+    lat = 7197860,
+    lon = 396722,
+    removeMapItem = null,
+    services = [],
+    zoom = 4
+  } = _ref;
   const [expanded, toggleExpand] = (0, _react.useState)(false);
   const [wms, setWMS] = (0, _react.useState)();
+  const [activeTab, setActiveTab] = (0, _react.useState)('layers');
   const queryValues = _queryString.default.parse(window.location.search);
   let internMap = _maplibHelper.map;
-  _maplibHelper.mapConfig.coordinate_system = queryValues['crs'] || props.crs;
-  let lon = Number(queryValues["lon"] || props.lon);
-  let lat = Number(queryValues["lat"] || props.lat);
-  let zoom = Number(queryValues["zoom"] || props.zoom);
+  _maplibHelper.mapConfig.coordinate_system = queryValues['crs'] || crs;
+  lon = Number(queryValues["lon"] || lon);
+  lat = Number(queryValues["lat"] || lat);
+  zoom = Number(queryValues["zoom"] || zoom);
   let defaultConfig = JSON.parse(JSON.stringify(_maplibHelper.mapConfig));
   let newMapConfig = Object.assign({}, defaultConfig, {
     center: [lon, lat],
@@ -48,6 +55,7 @@ const MapContainer = props => {
     _maplibHelper.eventHandler.RegisterEvent("MapMoveend", updateMapInfoState);
   }, [internMap]);
   const renderServiceList = () => {
+    let servicesToRender = services;
     if (wms) {
       const addedWms = {
         'Title': 'Added WMS from url',
@@ -55,11 +63,11 @@ const MapContainer = props => {
         'GetCapabilitiesUrl': wms,
         addLayers: []
       };
-      props.services.push(addedWms);
+      servicesToRender = services.concat(addedWms);
     }
-    return props.services.map((listItem, i) => /*#__PURE__*/_react.default.createElement(ServiceListItem, {
+    return servicesToRender.map((listItem, i) => /*#__PURE__*/_react.default.createElement(ServiceListItem, {
       listItem: listItem,
-      removeMapItem: props.removeMapItem ? props.removeMapItem : null,
+      removeMapItem: removeMapItem,
       key: i,
       map: _maplibHelper.map
     }));
@@ -71,16 +79,6 @@ const MapContainer = props => {
     queryValues.lat = center.lat;
     queryValues.zoom = center.zoom;
     (0, _setQueryString.default)(queryValues);
-  };
-  const showDefaultTab = () => {
-    return 'layers';
-    /*
-    if (props.services.length) {
-      return 'layers'
-    }
-    else
-      return 'search'
-    */
   };
   const toogleMap = () => {
     window.history.back();
@@ -104,17 +102,28 @@ const MapContainer = props => {
     onClick: () => toggleExpand(!expanded),
     className: _MapContainerModule.default.toggleBtn,
     icon: expanded ? ["fas", "layer-group"] : "times"
-  }), /*#__PURE__*/_react.default.createElement(_Tabs.default, {
-    className: "".concat(_MapContainerModule.default.tabs, " ").concat(expanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open),
-    defaultActiveKey: showDefaultTab(),
-    id: "tab"
-  }, /*#__PURE__*/_react.default.createElement(_Tab.default, {
-    eventKey: "search",
-    title: "S\xF8k"
-  }, /*#__PURE__*/_react.default.createElement(_SearchBar.default, null)), /*#__PURE__*/_react.default.createElement(_Tab.default, {
-    className: "".concat(_MapContainerModule.default.search, " ").concat(expanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open),
-    eventKey: "layers",
-    title: "Visning"
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "".concat(_MapContainerModule.default.tabs, " ").concat(expanded ? _MapContainerModule.default.closed : _MapContainerModule.default.open)
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: _MapContainerModule.default.tabList,
+    role: "tablist",
+    "aria-label": "Kartfaner"
+  }, /*#__PURE__*/_react.default.createElement("button", {
+    type: "button",
+    role: "tab",
+    "aria-selected": activeTab === 'search',
+    className: "".concat(_MapContainerModule.default.tabButton, " ").concat(activeTab === 'search' ? _MapContainerModule.default.active : ''),
+    onClick: () => setActiveTab('search')
+  }, "S\xF8k"), /*#__PURE__*/_react.default.createElement("button", {
+    type: "button",
+    role: "tab",
+    "aria-selected": activeTab === 'layers',
+    className: "".concat(_MapContainerModule.default.tabButton, " ").concat(activeTab === 'layers' ? _MapContainerModule.default.active : ''),
+    onClick: () => setActiveTab('layers')
+  }, "Visning")), /*#__PURE__*/_react.default.createElement("div", {
+    className: activeTab === 'search' ? _MapContainerModule.default.tabPanel : _MapContainerModule.default.hiddenPanel
+  }, /*#__PURE__*/_react.default.createElement(_SearchBar.default, null)), /*#__PURE__*/_react.default.createElement("div", {
+    className: "".concat(_MapContainerModule.default.search, " ").concat(activeTab === 'layers' ? _MapContainerModule.default.tabPanel : _MapContainerModule.default.hiddenPanel)
   }, /*#__PURE__*/_react.default.createElement("div", {
     id: "ServiceList"
   }, renderServiceList())))))), /*#__PURE__*/_react.default.createElement("div", {
@@ -128,19 +137,13 @@ const MapContainer = props => {
     tabIndex: "0"
   }), internMap ? /*#__PURE__*/_react.default.createElement(_Position.default, {
     map: internMap,
-    projection: props.crs
+    projection: crs
   }) : null, /*#__PURE__*/_react.default.createElement("div", {
     id: "mapPopover"
   }, /*#__PURE__*/_react.default.createElement(_FeatureInfoItem.default, {
     info: '',
     show: false
   }))));
-};
-MapContainer.defaultProps = {
-  lon: 396722,
-  lat: 7197860,
-  zoom: 4,
-  crs: 'EPSG:25833'
 };
 var _default = MapContainer;
 exports.default = _default;
