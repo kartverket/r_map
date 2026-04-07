@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.uploadGpxFileService = exports.isOutOfBounds = exports.isNotOutOfBounds = exports.getSOSIfromEPSG = exports.getCoordinateSystems = exports.generateWhat3WordsServiceUrl = exports.generateUrlPrintCapabilities = exports.generateStatusPrintDownloadUrl = exports.generateSearchStedsnavnUrl = exports.generateSearchMatrikkelVegUrl = exports.generateSearchMatrikkelNummerUrl = exports.generateSearchMatrikkelAdresseUrl = exports.generateSearchAdresseUrl = exports.generateSeHavnivaaUrl = exports.generateSeEiendomUrl = exports.generatePrintUrl = exports.generatePrintDownloadUrl = exports.generateMatrikkelWfsFilterUrl = exports.generateMatrikkelInfoUrl = exports.generateMapLinkServiceUrl = exports.generateLagTurkartUrl = exports.generateLagFargeleggingskartUrl = exports.generateKoordTransUrl = exports.generateGeoJSONUrl = exports.generateGeoJSONSaveUrl = exports.generateFaqUrl = exports.generateFaktaarkUrl = exports.generateEmergencyPosterServiceUrl = exports.generateEmergencyPosterPreviewImageUrl = exports.generateEmergencyPosterPointUrl = exports.generateElevationPointUrl = exports.generateElevationChartServiceUrl = exports.generateEiendomAddress = exports.generateCancelPrintUrl = exports.generateAdresseSokUrl = exports.generateAdressePunktsokUrl = exports._constructMarkingFilter = void 0;
 var _queryString = _interopRequireDefault(require("query-string"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-const url = 'https://www.norgeskart.no/';
+const url = 'https://ws.geonorge.no/';
 const urlOpenWps = 'https://openwps.statkart.no/skwms1/';
 const urlOpenWms = 'http://openwms.statkart.no/skwms1/';
 const urlGeonorge = 'https://ws.geonorge.no/';

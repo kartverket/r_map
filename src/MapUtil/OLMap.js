@@ -78,15 +78,10 @@ export const OLMap = (eventHandler, httpHelper, measure,
     var initialGeolocationChange = false;
 
     var proxyHost = "";
-    var tokenHost = "";
     var ticketHost = "";
-    var gktLifetime = 3000;
     var ticketLifetime = 3000;
-    var lastGktCheck = 0;
     var lastTicketCheck = 0;
-    var lastGlobalGktCheck = 0;
     var lastGlobalTicketCheck = 0;
-    var globalGkt;
     var globalTicket;
     var geolocation;
     var translateOptions;
@@ -104,7 +99,6 @@ export const OLMap = (eventHandler, httpHelper, measure,
 
     function initMap(targetId, mapConfig) {
         proxyHost = mapConfig.proxyHost;
-        tokenHost = mapConfig.tokenHost;
         ticketHost = mapConfig.ticketHost;
         hoverOptions = mapConfig.hoverOptions;
         var numZoomLevels = mapConfig.numZoomLevels;
@@ -200,7 +194,6 @@ export const OLMap = (eventHandler, httpHelper, measure,
         };
 
         var mapMoveend = function () {
-            _checkGktToken();
             _checkTicket();
             var mapViewChangedObj = _getUrlObject();
             eventHandler.TriggerEvent(EventTypes.MapMoveend, mapViewChangedObj);
@@ -304,32 +297,6 @@ export const OLMap = (eventHandler, httpHelper, measure,
         }
     }
 
-    function _checkGktToken() {
-        var currentTime = (new Date()).getTime();
-        if (currentTime < (lastGktCheck + 60000)) {
-            // check if token has expired each minute
-            return;
-        }
-        lastGktCheck = currentTime;
-        if (map.getLayers()) {
-            map.getLayers().forEach(function (layer) {
-                var source = layer.getSource();
-                if (source && source.getParams) {
-                    var params = source.getParams();
-                    if (params && params.GKT) {
-                        var initTime = source.get("timestamp");
-                        if (initTime) {
-                            var elapsedTime = Math.round((currentTime - initTime) / 1000);
-                            if (elapsedTime > gktLifetime) {
-                                _setToken(source);
-                            }
-                        }
-                    }
-                }
-            });
-        }
-    }
-
     function _checkTicket() {
         var currentTime = (new Date()).getTime();
         if (currentTime < (lastTicketCheck + 60000)) {
@@ -355,14 +322,6 @@ export const OLMap = (eventHandler, httpHelper, measure,
             });
         }
     }
-    // Adds GKT-token to existing source
-    function _setToken(source) {
-        source.updateParams({
-            GKT: _getToken()
-        });
-        source.set("timestamp", (new Date()).getTime());
-    }
-
     function _setTicket(source) {
         source.updateParams({
             ticket: _getTicket()
@@ -526,28 +485,6 @@ export const OLMap = (eventHandler, httpHelper, measure,
         return newLayerUrl;
     }
 
-    function _getToken() {
-        if (!tokenHost) {
-            return null;
-        } else if (!globalGkt || _checkGlobalGktTokenExpired()) {
-            // TODO: Fix ajax call without jQuery
-            /*globalGkt = await fetch(tokenHost, {
-                type: "GET",
-                async: false
-            })
-            .then(res => res.json());*/
-
-            globalGkt = $.ajax({
-                type: "GET",
-                url: tokenHost,
-                async: false
-            }).responseText.trim().replace(/"/g, "");
-
-            lastGlobalGktCheck = (new Date()).getTime();
-        }
-        return globalGkt;
-    }
-
     function _getTicket() {
         if (!ticketHost) {
             return null;
@@ -570,15 +507,6 @@ export const OLMap = (eventHandler, httpHelper, measure,
         return globalTicket;
     }
 
-
-    function _checkGlobalGktTokenExpired() {
-        var currentTime = (new Date()).getTime();
-        if (currentTime < (lastGlobalGktCheck + (gktLifetime * 1000))) {
-            lastGlobalGktCheck = currentTime;
-            return false;
-        }
-        return true;
-    }
 
     function _checkGlobalTicketExpired() {
         var currentTime = (new Date()).getTime();
@@ -642,15 +570,6 @@ export const OLMap = (eventHandler, httpHelper, measure,
         } else {
             switch (isySubLayer.source) {
                 case SOURCES.wmts:
-                    if (isySubLayer.gatekeeper && isySubLayer.tiled && ((offline === undefined) ? true : !offline.IsActive())) {
-                        if (parameters) {
-                            parameters['gkt'] = _getToken();
-                        } else {
-                            parameters = {
-                                gkt: _getToken()
-                            };
-                        }
-                    }
                     source = MaplibWMTSSource(isySubLayer, parameters);
                     break;
                 case SOURCES.proxyWmts:
@@ -659,9 +578,6 @@ export const OLMap = (eventHandler, httpHelper, measure,
                     break;
                 case SOURCES.wms:
                     source = MaplibWMSSource(isySubLayer, parameters);
-                    if (isySubLayer.gatekeeper && isySubLayer.tiled && ((offline === undefined) ? true : !offline.IsActive())) {
-                        _setToken(source);
-                    }
                     if (isySubLayer.ticket && ((offline === undefined) ? true : !offline.IsActive())) {
                         _setTicket(source);
                     }
@@ -1182,18 +1098,12 @@ export const OLMap = (eventHandler, httpHelper, measure,
         switch (isySubLayer.source) {
             case SOURCES.wmts:
                 source = new MaplibWMTSSource(isySubLayer, parameters);
-                if (isySubLayer.gatekeeper && ((offline === undefined) ? true : !offline.IsActive())) {
-                    _setToken(source);
-                }
                 break;
             case SOURCES.proxyWmts:
                 source = new MaplibWMTSSource(isySubLayer, parameters);
                 break;
             case SOURCES.wms:
                 source = new MaplibWMSSource(isySubLayer, parameters);
-                if (isySubLayer.gatekeeper && isySubLayer.tiled && ((offline === undefined) ? true : !offline.IsActive())) {
-                    _setToken(source);
-                }
                 break;
             case SOURCES.proxyWms:
                 source = new MaplibWMSSource(isySubLayer, parameters);

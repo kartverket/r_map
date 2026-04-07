@@ -53,22 +53,6 @@ const TEST_DATA = [
     'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.adm_enheter2?request=GetCapabilities&service=WMS',
     addLayers: ['fylker_gjel', 'kommuner_gjel']
   }
-    {
-      'Title': 'Dybdedata_dekning_dtm50_5',
-      'DistributionProtocol': 'GEOJSON',
-      'ShowPropertyName': 'n',
-      'url': 'https://norgeskart.no/json/dekning/sjo/celler/dtm50_5.geojson',
-      addLayers: ['dcells_05m']
-    },
-   */
-  /*
-   {
-      'Title': 'Ruter_entinelSkyfritt2018Uint16',
-      'DistributionProtocol': 'GEOJSON',
-      'ShowPropertyName': 'n',
-      'url': 'https://norgeskart.no/json/tema/Ruter_entinelSkyfritt2018Uint16.geojson',
-      addLayers: ['Ruteinndeling_SatellittdataSentinelSkyfritt2018Uint16']
-    }
    */
   /*
    {
@@ -98,11 +82,6 @@ const TEST_DATA = [
      'DistributionProtocol': 'OGC:WMS',
      'GetCapabilitiesUrl': 'https://openwms.statkart.no/skwms1/wms.ssr2?request=GetCapabilities&service=WMS',
      addLayers: []
-   }, {
-     'Title': 'Dybdedata_dekning_dtm50_5',
-     'DistributionProtocol': 'GEOJSON',
-     'url': 'https://norgeskart.no/json/dekning/sjo/celler/dtm50_5.geojson',
-     addLayers: ['dcells_05m']
    },
    {
      "Uuid": "test-07f7-4ebc-9bc6-9c15cdd75c",
@@ -138,4 +117,3 @@ const App = () => {
 }
 
 export default App
-

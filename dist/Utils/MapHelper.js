@@ -169,7 +169,7 @@ const mergeDefaultParams = (url, defaultParams) => {
       delete defaultParams[p.toLowerCase()];
     }
   }
-  if (urlObj.href === 'https://norgeskart.no/ws/px.py') {
+  if (urlObj.pathname === '/ws/px.py') {
     return url;
   } else {
     return urlObj.href + "?" + _queryString.default.stringify(defaultParams);

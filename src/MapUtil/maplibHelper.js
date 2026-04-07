@@ -30,7 +30,6 @@ export let mapConfig = {
   displaycenterepsgcode: 'EPSG:25833',
   displayCenter: '396722,7197864',
   displayprojectionepsgcode: 'EPSG:25833',
-  tokenHost: 'https://www.norgeskart.no/ws/gkt.py',
   projectName: 'norgeskart',
   basemap: {
     url: 'https://cache.kartverket.no/v1/service?',

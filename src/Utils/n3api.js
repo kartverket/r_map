@@ -1,6 +1,6 @@
 import queryString from "query-string"
 
-const url = 'https://www.norgeskart.no/'
+const url = 'https://ws.geonorge.no/'
 const urlOpenWps = 'https://openwps.statkart.no/skwms1/'
 const urlOpenWms = 'http://openwms.statkart.no/skwms1/'
 const urlGeonorge = 'https://ws.geonorge.no/'
