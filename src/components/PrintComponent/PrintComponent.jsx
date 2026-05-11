@@ -521,14 +521,14 @@ const Print = props => {
     <>
       <label htmlFor="inputGroupSelect02">Maltype</label>
       <div className="input-group mb-3">
-        <select className="custom-select" id="inputGroupSelect02" value={ maltype } onChange={ e => setLayoutType(e.target.value) }>
+        <select className="form-select" id="inputGroupSelect02" value={ maltype } onChange={ e => setLayoutType(e.target.value) }>
           <option>Velg...</option>
           { printCapabilities ? printCapabilities.layouts.map((layout, i) => <option value={ layout.name }>{ layout.name }</option>) : '' }
         </select>
       </div>
       <label htmlFor="inputGroupSelect02">Målestokk</label>
       <div className="input-group mb-3">
-        <select className="custom-select" id="inputGroupSelect02" value={ selectedPrintScale } onChange={ e => setPrintScale(e.target.value) }>
+        <select className="form-select" id="inputGroupSelect02" value={ selectedPrintScale } onChange={ e => setPrintScale(e.target.value) }>
           <option>Velg...</option>
           { printScales.map((scale, i) => <option value={ scale }>1:{ scale }</option>) }
         </select>
