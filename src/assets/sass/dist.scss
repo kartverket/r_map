@@ -1,2 +1,2 @@
-@import 'variables/distVariables';
-@import 'main';
+@use 'variables/distVariables' as *;
+@use 'main' as *;

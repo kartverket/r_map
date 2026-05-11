@@ -1,6 +1,6 @@
 //import proj4 from "proj4";
 import queryString from 'query-string'
-import parser from "fast-xml-parser";
+import { XMLParser, XMLValidator } from "fast-xml-parser";
 /**
  * @ngdoc method
  * @name addWmsToMapFromCap
@@ -180,7 +180,7 @@ export const mergeDefaultParams = (url, defaultParams) => {
   }
 };
 export const parseWmsCapabilities = (data) => {
-    if (data && parser.validate(data) === true) { //optional
+    if (data && XMLValidator.validate(data) === true) { //optional
         var parsed = parseCapabilities(data);
 
         var layers = [];
@@ -230,11 +230,12 @@ export const parseWmsCapabilities = (data) => {
     }
 };
 const parseCapabilities = xml => {
-    return parser.parse(xml, {
+    const parser = new XMLParser({
         ignoreAttributes: false,
         attributeNamePrefix: "",
         allowBooleanAttributes: true
     });
+    return parser.parse(xml);
 };
 
 export const getWMSCapabilities = async (url) => {

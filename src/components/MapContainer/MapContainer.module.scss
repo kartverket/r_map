@@ -1,5 +1,5 @@
-@import '../../assets/sass/variables/_devVariables';
-@import '../../assets/sass/_main';
+@use '../../assets/sass/variables/_devVariables' as *;
+@use '../../assets/sass/_main' as *;
 
 :local(.link) {
   text-decoration: underline;

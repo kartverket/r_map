@@ -1,4 +1,11 @@
-import parser from "fast-xml-parser"
+import { XMLParser } from "fast-xml-parser"
+
+const parser = new XMLParser({
+  ignoreAttributes: false,
+  attributeNamePrefix: "",
+  allowBooleanAttributes: true,
+  transformTagName: (tagName) => tagName.includes(':') ? tagName.split(':')[1] : tagName
+})
 
 export const parseFeatureInfo = (data, format) => {
   switch (format) {
@@ -54,12 +61,7 @@ export const parseCSV = (data) => {
 
 export const parseGmlFeatureInfo = (data) => {
   let returnValue = ''
-  const parsedGml = parser.parse(data, {
-    ignoreAttributes: false,
-    ignoreNameSpace: true,
-    attributeNamePrefix: "",
-    allowBooleanAttributes: true
-  })
+  const parsedGml = parser.parse(data)
   if (parsedGml.msGMLOutput) {
     returnValue = parsedGml.msGMLOutput
   } else if (parsedGml.FeatureCollection) {

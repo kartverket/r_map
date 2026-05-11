@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react"
-import PropTypes from "prop-types"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import style from './LayerEntry.module.scss'
 import InlineLegend from '../Legend/InlineLegend'
@@ -7,7 +6,7 @@ import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 
 //import { Messaging } from '../../Utils/communication'
 import { Fill, Stroke, Style, Text } from 'ol/style'
-import { store } from '../../Utils/store.js'
+import { store } from '../../Utils/store.jsx'
 import { parseFeatureInfo } from '../../MapUtil/FeatureUtil'
 import queryString from 'query-string'
 
@@ -212,11 +211,6 @@ const LayerEntry = props => {
       { layer.Layer ? (layer.Layer.map((subLayer, isub) => (<div className={style.facetSub} key={isub}><LayerEntry layer={subLayer} meta={props.meta} key={isub} /></div>))) : ('')}
     </>
   )
-}
-
-LayerEntry.propTypes = {
-  layer: PropTypes.object,
-  meta: PropTypes.object
 }
 
 export default LayerEntry

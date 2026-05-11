@@ -1,2 +1,2 @@
-@import 'variables/devVariables';
-@import 'main';
+@use 'variables/devVariables' as *;
+@use 'main' as *;

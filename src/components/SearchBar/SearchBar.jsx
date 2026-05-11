@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react"
-import PropTypes from 'prop-types'
 import queryString from "query-string"
 import setQuery from "set-query-string"
 
@@ -180,10 +179,6 @@ const SearchBar = ({
       </div>
     </>
   )
-}
-
-SearchBar.propTypes = {
-  placeholder: PropTypes.string
 }
 
 export default SearchBar

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from 'prop-types';
 import Legend from "./Legend";
 import style from "./InlineLegend.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -31,10 +30,6 @@ const InlineLegend = props => {
   };
 
   return <div>{legend()}</div>;
-};
-
-InlineLegend.propTypes = {
-  legendUrl: PropTypes.string
 };
 
 export default InlineLegend;
