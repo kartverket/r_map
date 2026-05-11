@@ -8,6 +8,7 @@
     "README.md"
   ],
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
