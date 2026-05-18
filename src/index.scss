@@ -1,5 +1,5 @@
-@use 'assets/sass/variables/_devVariables' as *;
-@use 'assets/sass/_main' as *;
+@use 'assets/sass/variables' as *;
+@use 'assets/sass/main' as *;
 
 body, html, #root, .App { height: 100% }
 
