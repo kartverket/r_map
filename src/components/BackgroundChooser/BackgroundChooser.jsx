@@ -22,7 +22,7 @@ const BackgroundChooser = () => {
       const iconClass = style[`icon_${baseLayer.id}`]
       const activeClass = baseLayer.id === selectedBaseLayer.id ? style.active : ''
       return (
-        <ToggleButton key={ index } className={ `${iconClass} ${activeClass}` } value={ baseLayer }>
+        <ToggleButton key={ index } id={ `bg-layer-${index}` } className={ `${iconClass} ${activeClass}` } value={ baseLayer }>
           <span> { baseLayer.name } </span>
         </ToggleButton>
       )

@@ -11,7 +11,7 @@ import Position from '../Position/Position'
 import FeatureInfoItem from '../ServicePanel/FeatureInfoItem'
 import 'ol/ol.css'
 
-import { StateProvider } from '../../Utils/store.js'
+import { StateProvider } from '../../Utils/store.jsx'
 
 const ServiceListItem = (props) => <ServicePanel services={ props.listItem } removeMapItem={ props.removeMapItem } draggable />
 

@@ -14,7 +14,16 @@
   opacity: 0.7;
   border: none;
   border-radius: 2px;
-  @extend .transitionBtn;
+  transition: color 0.15s linear;
+  /* vendorless fallback */
+  -o-transition: color 0.15s linear;
+  /* opera */
+  -ms-transition: color 0.15s linear;
+  /* IE 10 */
+  -moz-transition: color 0.15s linear;
+  /* Firefox */
+  -webkit-transition: color 0.15s linear;
+  /*safari and chrome */
 
 }
 

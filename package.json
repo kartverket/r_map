@@ -2,37 +2,40 @@
   "name": "r_map",
   "version": "2.4.24",
   "private": true,
+  "type": "module",
   "main": "dist/main.js",
+  "exports": "./dist/main.js",
   "files": [
     "dist",
     "README.md"
   ],
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "fast-xml-parser": "^5.7.0",
+    "jquery": "^3.7.0",
+    "lodash": "^4.18.1",
+    "proj4": "^2.14.0",
+    "query-string": "^7.1.1",
+    "set-query-string": "^2.2.0",
+    "uniqid": "^5.4.0"
+  },
+  "peerDependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "bootstrap": "^4.6.2",
-    "fast-xml-parser": "^3.12.3",
-    "jquery": "^3.7.0",
-    "ol": "^10.2.1",
-    "proj4": "^2.14.0",
-    "query-string": "^7.1.1",
+    "bootstrap": "^5.3.8",
+    "ol": "^10.9.0",
     "react": "^18.2.0",
-    "react-bootstrap": "^1.5.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
-    "sass": "^1.66.1",
-    "set-query-string": "^2.2.0",
-    "uniqid": "^5.4.0"
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^18.2.0"
   },
   "scripts": {
-    "start": "react-scripts --openssl-legacy-provider start",
-    "build-demo": "react-scripts build",
-    "build": "rm -rf dist && NODE_ENV=production babel src --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
-    "windows-build": "rimraf -rf dist && SET NODE_ENV=production&& babel src --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "vite",
+    "build-demo": "vite build",
+    "build": "vite build --config vite.lib.config.js",
+    "test": "vitest run",
+    "preview": "vite preview"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -44,10 +47,20 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@babel/cli": "^7.22.10",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "babel-polyfill": "^6.26.0",
+    "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-regular-svg-icons": "^6.1.1",
+    "@fortawesome/free-solid-svg-icons": "^6.1.1",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@vitejs/plugin-react": "^6.0.1",
+    "bootstrap": "^5.3.8",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "rimraf": "^3.0.2"
+    "jsdom": "^29.1.1",
+    "ol": "^10.9.0",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^18.2.0",
+    "sass": "^1.66.1",
+    "vite": "^8.0.10",
+    "vitest": "^4.1.5"
   }
 }

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react"
-import PropTypes from "prop-types"
 import { CapabilitiesUtil } from "../../MapUtil/CapabilitiesUtil"
 import style from './ServicePanel.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -121,16 +120,6 @@ const ServicePanel = props => {
       </div>
     </div>
   )
-}
-
-ServicePanel.propTypes = {
-  /**
-   * The services to be parsed and shown in the panel
-   * @type {Object} -- required
-   */
-  services: PropTypes.object.isRequired,
-  removeMapItem: PropTypes.object
-
 }
 
 export default ServicePanel

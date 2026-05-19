@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import style from './FeatureInfoItem.module.scss'
 import uniqid from 'uniqid'
-import { store } from '../../Utils/store.js'
+import { store } from '../../Utils/store.jsx'
 
 const FeatureInfoItem = () => {
   const featureContext = useContext(store)
