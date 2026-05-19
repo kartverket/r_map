@@ -12,15 +12,12 @@ export default defineConfig({
     },
     rollupOptions: {
       external: [
-        'react',
-        'react-dom',
-        'ol',
-        'react-bootstrap',
-        'bootstrap',
-        '@fortawesome/fontawesome-svg-core',
-        '@fortawesome/free-regular-svg-icons',
-        '@fortawesome/free-solid-svg-icons',
-        '@fortawesome/react-fontawesome',
+        /^react(\/.*)?$/,
+        /^react-dom(\/.*)?$/,
+        /^ol(\/.*)?$/,
+        /^react-bootstrap(\/.*)?$/,
+        /^bootstrap(\/.*)?$/,
+        /^@fortawesome\/.*/,
       ],
       output: {
         globals: {
