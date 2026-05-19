@@ -47,11 +47,9 @@ import He from "ol/geom/Point";
 import { format as Ue } from "ol/coordinate.js";
 import We from "ol/control/MousePosition";
 import Ge from "react-bootstrap/Modal";
-import "ol/ol.css";
 import { library as Ke } from "@fortawesome/fontawesome-svg-core";
 import { faAngleDown as qe, faAngleUp as Je, faLayerGroup as Ye, faSlidersH as Xe, faTimes as Ze } from "@fortawesome/free-solid-svg-icons";
 import { faCheckSquare as Qe, faSquare as $e } from "@fortawesome/free-regular-svg-icons";
-import "bootstrap/dist/css/bootstrap.min.css";
 //#region \0rolldown/runtime.js
 var et = Object.create, tt = Object.defineProperty, nt = Object.getOwnPropertyDescriptor, rt = Object.getOwnPropertyNames, it = Object.getPrototypeOf, at = Object.prototype.hasOwnProperty, R = (e, t) => () => (t || (e((t = { exports: {} }).exports, t), e = null), t.exports), ot = (e, t, n, r) => {
 	if (t && typeof t == "object" || typeof t == "function") for (var i = rt(t), a = 0, o = i.length, s; a < o; a++) s = i[a], !at.call(e, s) && s !== n && tt(e, s, {

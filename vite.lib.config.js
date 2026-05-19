@@ -11,14 +11,17 @@ export default defineConfig({
       formats: ['es'],
     },
     rollupOptions: {
-      external: [
-        /^react(\/.*)?$/,
-        /^react-dom(\/.*)?$/,
-        /^ol(\/.*)?$/,
-        /^react-bootstrap(\/.*)?$/,
-        /^bootstrap(\/.*)?$/,
-        /^@fortawesome\/.*/,
-      ],
+      external: (id) => {
+        if (id.endsWith('.css')) return false;
+        return [
+          /^react(\/.*)?$/,
+          /^react-dom(\/.*)?$/,
+          /^ol(\/.*)?$/,
+          /^react-bootstrap(\/.*)?$/,
+          /^bootstrap(\/.*)?$/,
+          /^@fortawesome\/.*/,
+        ].some(pattern => pattern.test(id));
+      },
       output: {
         globals: {
           react: 'React',
