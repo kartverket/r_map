@@ -1,8 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), cssInjectedByJsPlugin()],
   build: {
     lib: {
       entry: 'src/main.js',
@@ -11,17 +12,11 @@ export default defineConfig({
       formats: ['es'],
     },
     rollupOptions: {
-      external: (id) => {
-        if (id.endsWith('.css')) return false;
-        return [
-          /^react(\/.*)?$/,
-          /^react-dom(\/.*)?$/,
-          /^ol(\/.*)?$/,
-          /^react-bootstrap(\/.*)?$/,
-          /^bootstrap(\/.*)?$/,
-          /^@fortawesome\/.*/,
-        ].some(pattern => pattern.test(id));
-      },
+      external: [
+        /^react(\/.*)?$/,
+        /^react-dom(\/.*)?$/,
+        /^@fortawesome\/.*/,
+      ],
       output: {
         globals: {
           react: 'React',
