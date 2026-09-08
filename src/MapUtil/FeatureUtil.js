@@ -1,10 +1,17 @@
 import { XMLParser } from "fast-xml-parser"
 
 const parser = new XMLParser({
+  // attributes are kept because some services carry the feature id (fid/gml:id) there,
+  // and with no prefix they read like any other field further down
   ignoreAttributes: false,
   attributeNamePrefix: "",
   allowBooleanAttributes: true,
-  transformTagName: (tagName) => tagName.includes(':') ? tagName.split(':')[1] : tagName
+  // v5 name for the ignoreNameSpace option we used before the Vite rewrite (af82016):
+  // strips the prefix from both tag AND attribute names, and drops xmlns:* attributes
+  // entirely. Without it the xmlns declarations on the GML root survive as sibling keys
+  // of the layer nodes and get rendered as bogus "layers" in the feature info panel.
+  // A transformTagName callback is not enough - it never sees attribute names.
+  removeNSPrefix: true
 })
 
 export const parseFeatureInfo = (data, format) => {
@@ -59,26 +66,63 @@ export const parseCSV = (data) => {
   return [layer]
 }
 
+// GML responses nest inconsistently, so both helpers below are about not trusting the
+// shape: fast-xml-parser gives a bare object for one child and an array for several,
+// and mixes scalar attributes in among the element children.
+const isObject = (v) => typeof v === 'object' && v !== null
+const toArray = (v) => (Array.isArray(v) ? v : [v])
+
 export const parseGmlFeatureInfo = (data) => {
-  let returnValue = ''
   const parsedGml = parser.parse(data)
+  let root = null
   if (parsedGml.msGMLOutput) {
-    returnValue = parsedGml.msGMLOutput
+    // MapServer: <msGMLOutput><x_layer><x_feature><field>...
+    root = parsedGml.msGMLOutput
   } else if (parsedGml.FeatureCollection) {
-    returnValue = parsedGml.FeatureCollection.featureMember
+    // WFS/GML: <FeatureCollection><featureMember><x><field>... - no layer level,
+    // and featureMember is an array as soon as the click hits more than one feature
+    root = parsedGml.FeatureCollection.featureMember
   }
+  // an empty or unrecognised response parses to '' or undefined - bail out with the
+  // same shape we return otherwise, so callers never have to special-case it
+  if (!isObject(root)) return [{}]
+
   // Transform the object to a more readable format, the same type as the plain text
-  let r_layer = {}
-  for (let layer in returnValue) {
-    console.log(layer, returnValue[layer]);
-    let layername = layer.split('_layer')[0]
-    let feature = {}
-    for (let feaute in returnValue[layer]) {
-      let featurename = feaute.split('_')[0]
-      let value = returnValue[layer][feaute]
-      feature[featurename] = value
+  const r_layer = {}
+  // push rather than assign: a layer with several hits used to overwrite itself and
+  // only ever showed the last feature
+  const addFeature = (layername, featurename, fields) => {
+    if (!r_layer[layername]) r_layer[layername] = []
+    r_layer[layername].push({ [featurename]: fields })
+  }
+
+  // one iteration for msGMLOutput, one per featureMember for a FeatureCollection.
+  // Iterating the array directly (rather than for..in over its indices) keeps us from
+  // inventing layers named "0", "1", ...
+  for (const node of toArray(root)) {
+    if (!isObject(node)) continue
+    for (const [key, content] of Object.entries(node)) {
+      // attributes of the root element parse to scalars alongside the layer nodes.
+      // Treating one as a layer would walk a string character by character and list
+      // every letter as a separate field, so anything not an object is not a layer.
+      if (!isObject(content)) continue
+      const layername = key.split('_layer')[0]
+      // element children are the features; scalar children are this node's own fields
+      const children = Object.entries(content).filter(([, v]) => isObject(v))
+      if (children.length) {
+        // msGMLOutput: the layer wraps one or more <x_feature> elements
+        for (const [childKey, child] of children) {
+          for (const feature of toArray(child)) {
+            addFeature(layername, childKey.split('_')[0], feature)
+          }
+        }
+      } else {
+        // FeatureCollection: the featureMember child already holds the fields, so it is
+        // both the layer and the feature. Wrapping it the same way keeps the output
+        // shape uniform for FeatureInfoItem, which expects layer -> [ { name: fields } ]
+        addFeature(layername, layername, content)
+      }
     }
-    r_layer[layername] = [feature]
   }
   return [r_layer]
 }
